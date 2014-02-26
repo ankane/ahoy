@@ -1,5 +1,6 @@
 module Ahoy
   class VisitsController < ActionController::Base
+    before_filter :halt_bots
 
     def create
       visit =
@@ -23,7 +24,6 @@ module Ahoy
         visit.campaign = (landing_uri.query_values || {})["utm_campaign"]
       end
 
-      browser = Browser.new(ua: request.user_agent)
       visit.browser = browser.name
 
       # TODO add more
@@ -69,6 +69,18 @@ module Ahoy
 
       visit.save!
       render json: {id: visit.id}
+    end
+
+    protected
+
+    def browser
+      @browser ||= Browser.new(ua: request.user_agent)
+    end
+
+    def halt_bots
+      if browser.bot?
+        render json: {}
+      end
     end
 
   end
