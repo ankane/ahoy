@@ -65,14 +65,6 @@ Order.joins(:ahoy_visits).group("device_type").count
 - Gracefully degrades when cookies are disabled
 - Gets campaign from utm_campaign parameter
 
-# How It Works
-
-When a user visits your website for the first time, the Javascript library generates a unique visit and visitor id.
-
-It sends the event to the server.
-
-A visit cookie is set for 4 hours, and a visitor cookie is set for 2 years.
-
 ## TODO
 
 - better readme
