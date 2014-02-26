@@ -8,7 +8,7 @@ In under a minute, start learning more about your visitors.
 - location - country, region, and city
 - technology - browser, OS, and device type
 
-It’s all stored in **your** database so you can easily combine it with other models.
+It’s all stored in **your database** so you can easily combine it with other models.
 
 ## Ready, Set, Go!
 
@@ -78,7 +78,7 @@ A visit cookie is set for 4 hours, and a visitor cookie is set for 2 years.
 - better readme
 - model integration
 - update visit when user logs in
-- better browser / os detection
+- better browser / OS detection
 - set ahoy_visit_id automatically on `visitable` models
 
 ## Contributing
