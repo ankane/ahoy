@@ -5,7 +5,6 @@ Simple, powerful visit tracking for Rails.
 ## TODO
 
 - better readme
-- controller integration
 - model integration
 - update visit when user logs in
 - better browser / os detection

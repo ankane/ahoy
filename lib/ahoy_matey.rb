@@ -1,4 +1,5 @@
 require "ahoy/version"
+require "ahoy/controller_extensions"
 require "addressable/uri"
 require "browser"
 require "geocoder"
@@ -8,3 +9,5 @@ module Ahoy
     isolate_namespace Ahoy
   end
 end
+
+ActionController::Base.send :include, Ahoy::ControllerExtensions
