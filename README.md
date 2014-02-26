@@ -52,9 +52,9 @@ Order.create!(
 When you want to explore where most orders are coming from, you can do a number of queries.
 
 ```ruby
-Order.joins(:ahoy_visits).group("referring_domain").count
-Order.joins(:ahoy_visits).group("city").count
-Order.joins(:ahoy_visits).group("device_type").count
+Order.joins(:visits).group("referring_domain").count
+Order.joins(:visits).group("device_type").count
+Order.joins(:visits).group("city").count
 ```
 
 ## Features
@@ -69,7 +69,7 @@ Order.joins(:ahoy_visits).group("device_type").count
 - model integration
 - update visit when user logs in
 - better browser / OS detection
-- set ahoy_visit_id automatically on `visitable` models
+- set visit_id automatically on `visitable` models
 
 ## Contributing
 
