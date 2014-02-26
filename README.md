@@ -43,11 +43,12 @@ The information is great on it’s own, but super powerful when combined with ot
 You can store the visit id on any model. For instance, when someone places an order:
 
 ```ruby
-Order.create!(
-  visit_id: current_visit.id,
-  # ... more attributes ...
-)
+class Order < ActiveRecord::Base
+  visitable # needs better name
+end
 ```
+
+The visit_id column will be automatically set. Magic!
 
 When you want to explore where most orders are coming from, you can do a number of queries.
 
