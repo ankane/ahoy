@@ -1,16 +1,16 @@
 # Ahoy
 
-Simple, powerful visit tracking for Rails.
+:fire: Simple, powerful visit tracking for Rails.
 
-## TODO
+In under a minute, start learning more about your visitors.
 
-- better readme
-- model integration
-- update visit when user logs in
-- better browser / os detection
-- set ahoy_visit_id automatically on `visitable` models
+- traffic source - referrer, referring domain, campaign, landing page
+- location - country, region, and city
+- technology - browser, OS, and device type
 
-## Get Started
+It’s all stored in **your** database so you can easily combine it with other models.
+
+## Ready, Set, Go!
 
 Add this line to your application’s Gemfile:
 
@@ -25,14 +25,12 @@ rails generate ahoy:install
 rake db:migrate
 ```
 
-Next, include the javascript file in your `app/assets/javascripts/application.js` after jQuery.
+Lastly, include the javascript file in `app/assets/javascripts/application.js` after jQuery.
 
 ```javascript
 //= require jquery
 //= require ahoy
 ```
-
-That’s it.
 
 ## What You Get
 
@@ -74,6 +72,14 @@ When a user visits your website for the first time, the Javascript library gener
 It sends the event to the server.
 
 A visit cookie is set for 4 hours, and a visitor cookie is set for 2 years.
+
+## TODO
+
+- better readme
+- model integration
+- update visit when user logs in
+- better browser / os detection
+- set ahoy_visit_id automatically on `visitable` models
 
 ## Contributing
 
