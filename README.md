@@ -8,7 +8,13 @@ In under a minute, start learning more about your visitors.
 - location - country, region, and city
 - technology - browser, OS, and device type
 
-It’s all stored in **your database** so you can easily combine it with other models.
+It’s all stored in **your database** so you can easily combine it with other data.
+
+See which campaigns generate the most revenue effortlessly.
+
+```ruby
+Order.joins(:visit).group("campaign").sum(:revenue)
+```
 
 ## Ready, Set, Go
 
