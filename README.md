@@ -8,6 +8,7 @@ Simple, powerful visit tracking for Rails.
 - model integration
 - update visit when user logs in
 - better browser / os detection
+- set ahoy_visit_id automatically on `visitable` models
 
 ## Get Started
 
