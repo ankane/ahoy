@@ -8,6 +8,7 @@ Simple, powerful visit tracking for Rails.
 - controller integration
 - model integration
 - update visit when user logs in
+- better browser / os detection
 
 ## Get Started
 
@@ -37,7 +38,7 @@ That’s it.
 
 When a person visits your website, Ahoy creates a visit with lots of useful information.
 
-- source (referrer, referring domain, campaign, landing page)
+- traffic source (referrer, referring domain, campaign, landing page)
 - location (country, region, and city)
 - technology (browser, OS, and device type)
 

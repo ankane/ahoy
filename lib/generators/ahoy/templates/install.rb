@@ -8,13 +8,10 @@ class <%= migration_class_name %> < ActiveRecord::Migration
       t.string :ip
       t.text :user_agent
 
-      # acquisition
+      # traffic source
       t.text :referrer
       t.string :referring_domain
       t.string :campaign
-      # t.string :social_network
-      # t.string :search_engine
-      # t.string :search_keyword
       t.text :landing_page
 
       # technology
