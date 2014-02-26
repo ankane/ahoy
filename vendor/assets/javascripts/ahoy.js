@@ -1,10 +1,12 @@
 /*jslint browser: true, indent: 2, plusplus: true, vars: true */
 
-(function () {
+(function (window) {
   "use strict";
 
   var debugMode = false;
   var visitTtl, visitorTtl;
+  var $ = window.jQuery || window.Zepto || window.$;
+  var visitToken, visitorToken;
 
   if (debugMode) {
     visitTtl = 0.2;
@@ -18,22 +20,27 @@
 
   // http://www.quirksmode.org/js/cookies.html
   function setCookie(name, value, ttl) {
+    var expires = "";
     if (ttl) {
       var date = new Date();
-      date.setTime(date.getTime()+(ttl*60*1000));
-      var expires = "; expires="+date.toGMTString();
+      date.setTime(date.getTime() + (ttl * 60 * 1000));
+      expires = "; expires=" + date.toGMTString();
     }
-    else var expires = "";
-    document.cookie = name+"="+value+expires+"; path=/";
+    document.cookie = name + "=" + value + expires + "; path=/";
   }
 
   function getCookie(name) {
+    var i, c;
     var nameEQ = name + "=";
     var ca = document.cookie.split(';');
-    for(var i=0;i < ca.length;i++) {
-      var c = ca[i];
-      while (c.charAt(0)==' ') c = c.substring(1,c.length);
-      if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    for (i = 0; i < ca.length; i++) {
+      c = ca[i];
+      while (c.charAt(0) === ' ') {
+        c = c.substring(1, c.length);
+      }
+      if (c.indexOf(nameEQ) === 0) {
+        return c.substring(nameEQ.length, c.length);
+      }
     }
     return null;
   }
@@ -45,9 +52,10 @@
     var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghiklmnopqrstuvwxyz';
     var length = 32;
     var string = '';
+    var i, randomNumber;
 
-    for (var i = 0; i < length; i++) {
-      var randomNumber = Math.floor(Math.random() * chars.length);
+    for (i = 0; i < length; i++) {
+      randomNumber = Math.floor(Math.random() * chars.length);
       string += chars.substring(randomNumber, randomNumber + 1);
     }
 
@@ -55,13 +63,13 @@
   }
 
   function debug(message) {
-    console.log(message, visitToken, visitorToken);
+    window.console.log(message, visitToken, visitorToken);
   }
 
   // main
 
-  var visitToken = getCookie("ahoy_visit");
-  var visitorToken = getCookie("ahoy_visitor");
+  visitToken = getCookie("ahoy_visit");
+  visitorToken = getCookie("ahoy_visitor");
 
   if (visitToken && visitorToken) {
     // TODO keep visit alive?
@@ -99,4 +107,4 @@
     }
   }
 
-}());
+}(window));
