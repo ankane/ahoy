@@ -1,6 +1,6 @@
 # Ahoy
 
-:fire: Simple, powerful visit tracking for Rails.
+:fire: Simple, powerful visit tracking for Rails
 
 In under a minute, start learning more about your visitors.
 
@@ -10,7 +10,7 @@ In under a minute, start learning more about your visitors.
 
 It’s all stored in **your database** so you can easily combine it with other models.
 
-## Ready, Set, Go!
+## Ready, Set, Go
 
 Add this line to your application’s Gemfile:
 
