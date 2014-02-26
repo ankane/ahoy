@@ -2,6 +2,12 @@
 
 Simple, powerful visit tracking for Rails.
 
+## TODO
+
+- better readme
+- controller integration
+- model integration
+
 ## Get Started
 
 Add this line to your application’s Gemfile:
