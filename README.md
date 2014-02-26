@@ -7,6 +7,7 @@ Simple, powerful visit tracking for Rails.
 - better readme
 - controller integration
 - model integration
+- update visit when user logs in
 
 ## Get Started
 
