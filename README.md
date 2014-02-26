@@ -52,9 +52,9 @@ Order.create!(
 When you want to explore where most orders are coming from, you can do a number of queries.
 
 ```ruby
-Order.joins(:visits).group("referring_domain").count
-Order.joins(:visits).group("device_type").count
-Order.joins(:visits).group("city").count
+Order.joins(:visit).group("referring_domain").count
+Order.joins(:visit).group("device_type").count
+Order.joins(:visit).group("city").count
 ```
 
 ## Features
