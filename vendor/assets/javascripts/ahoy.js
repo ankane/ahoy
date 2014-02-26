@@ -1,14 +1,9 @@
-/*
- * Ahoy.js - 0.0.1
- * Super simple visit tracking
- * https://github.com/ankane/ahoy
- * MIT License
- */
+/*jslint browser: true, indent: 2, plusplus: true, vars: true */
 
 (function () {
   "use strict";
 
-  var debugMode = true;
+  var debugMode = false;
   var visitTtl, visitorTtl;
 
   if (debugMode) {
