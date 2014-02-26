@@ -36,17 +36,15 @@ Lastly, include the javascript file in `app/assets/javascripts/application.js` a
 
 When a person visits your website, Ahoy creates a visit with lots of useful information.
 
-- traffic source (referrer, referring domain, campaign, landing page)
-- location (country, region, and city)
-- technology (browser, OS, and device type)
+Use the `current_visit` method to access it.
 
-This information is great on it’s own, but super powerful when combined with other models.
+The information is great on it’s own, but super powerful when combined with other models.
 
 You can store the visit id on any model. For instance, when someone places an order:
 
 ```ruby
 Order.create!(
-  ahoy_visit_id: ahoy_visit.id,
+  visit_id: current_visit.id,
   # ... more attributes ...
 )
 ```
