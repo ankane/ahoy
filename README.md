@@ -4,7 +4,7 @@
 
 In under a minute, start learning more about your visitors.
 
-- traffic source - referrer, referring domain, landing page
+- traffic source - referrer, referring domain, landing page, search keywords
 - location - country, region, and city
 - technology - browser, OS, and device type
 - utm parameters - source, medium, term, content, campaign
@@ -14,7 +14,7 @@ It’s all stored in **your database** so you can easily combine it with other d
 See which campaigns generate the most revenue effortlessly.
 
 ```ruby
-Order.joins(:visit).group("campaign").sum(:revenue)
+Order.joins(:visit).group("utm_campaign").sum(:revenue)
 ```
 
 ## Ready, Set, Go
