@@ -76,7 +76,6 @@ Order.joins(:visit).group("city").count
 - better readme
 - model integration
 - update visit when user logs in
-- better browser / OS detection
 - set visit_id automatically on `visitable` models
 - simple dashboard
 - hook to store additional fields
