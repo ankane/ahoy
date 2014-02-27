@@ -8,15 +8,16 @@ class <%= migration_class_name %> < ActiveRecord::Migration
       # standard
       t.string :ip
       t.text :user_agent
+      t.text :referrer
+      t.text :landing_page
 
       # user
       t.integer :user_id
       t.string :user_type
 
       # traffic source
-      t.text :referrer
       t.string :referring_domain
-      t.text :landing_page
+      t.string :search_keyword
 
       # technology
       t.string :browser

@@ -21,6 +21,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "addressable"
   spec.add_dependency "browser", ">= 0.4.0"
   spec.add_dependency "geocoder"
+  spec.add_dependency "referer-parser"
 
   spec.add_development_dependency "bundler", "~> 1.5"
   spec.add_development_dependency "rake"

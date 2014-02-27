@@ -14,61 +14,10 @@ module Ahoy
           v.user = current_user if respond_to?(:current_user)
         end
 
-      referring_uri = Addressable::URI.parse(params[:referrer]) rescue nil
-      if referring_uri
-        visit.referring_domain = referring_uri.host
-      end
-
-      landing_uri = Addressable::URI.parse(params[:landing_page]) rescue nil
-      if landing_uri
-        query_values = landing_uri.query_values || {}
-        %w[utm_source utm_medium utm_term utm_content utm_campaign].each do |name|
-          visit[name] = query_values[name]
-        end
-      end
-
-      visit.browser = browser.name
-
-      # TODO add more
-      visit.os =
-        if browser.android?
-          "Android"
-        elsif browser.ios?
-          "iOS"
-        elsif browser.windows_phone?
-          "Windows Phone"
-        elsif browser.blackberry?
-          "Blackberry"
-        elsif browser.chrome_os?
-          "Chrome OS"
-        elsif browser.mac?
-          "Mac"
-        elsif browser.windows?
-          "Windows"
-        elsif browser.linux?
-          "Linux"
-        end
-
-      visit.device_type =
-        if browser.tv?
-          "TV"
-        elsif browser.console?
-          "Console"
-        elsif browser.tablet?
-          "Tablet"
-        elsif browser.mobile?
-          "Mobile"
-        else
-          "Desktop"
-        end
-
-      # location
-      location = Geocoder.search(request.remote_ip).first rescue nil
-      if location
-        visit.country = location.country.presence
-        visit.region = location.state.presence
-        visit.city = location.city.presence
-      end
+      visit.set_traffic_source
+      visit.set_technology
+      visit.set_location
+      visit.set_utm_parameters
 
       visit.save!
       render json: {id: visit.id}
