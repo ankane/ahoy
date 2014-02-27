@@ -1,12 +1,17 @@
 class <%= migration_class_name %> < ActiveRecord::Migration
   def change
     create_table :ahoy_visits do |t|
+      # cookies
       t.string :visit_token
       t.string :visitor_token
-      t.integer :user_id
-      t.string :user_type
+
+      # standard
       t.string :ip
       t.text :user_agent
+
+      # user
+      t.integer :user_id
+      t.string :user_type
 
       # traffic source
       t.text :referrer

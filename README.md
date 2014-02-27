@@ -78,7 +78,6 @@ Order.joins(:visit).group("city").count
 - update visit when user logs in
 - better browser / OS detection
 - set visit_id automatically on `visitable` models
-- store all utm params?
 - simple dashboard
 - hook to store additional fields
 - turn off modules
