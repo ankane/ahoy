@@ -4,9 +4,10 @@
 
 In under a minute, start learning more about your visitors.
 
-- traffic source - referrer, referring domain, campaign, landing page
+- traffic source - referrer, referring domain, landing page
 - location - country, region, and city
 - technology - browser, OS, and device type
+- utm parameters - source, medium, term, content, campaign
 
 It’s all stored in **your database** so you can easily combine it with other data.
 
@@ -80,6 +81,7 @@ Order.joins(:visit).group("city").count
 - store all utm params?
 - simple dashboard
 - hook to store additional fields
+- turn off modules
 
 ## Contributing
 

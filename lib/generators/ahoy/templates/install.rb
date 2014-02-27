@@ -11,7 +11,6 @@ class <%= migration_class_name %> < ActiveRecord::Migration
       # traffic source
       t.text :referrer
       t.string :referring_domain
-      t.string :campaign
       t.text :landing_page
 
       # technology
@@ -23,6 +22,13 @@ class <%= migration_class_name %> < ActiveRecord::Migration
       t.string :country
       t.string :region
       t.string :city
+
+      # utm parameters
+      t.string :utm_source
+      t.string :utm_medium
+      t.string :utm_term
+      t.string :utm_content
+      t.string :utm_campaign
 
       t.timestamp :created_at
     end

@@ -21,7 +21,10 @@ module Ahoy
 
       landing_uri = Addressable::URI.parse(params[:landing_page]) rescue nil
       if landing_uri
-        visit.campaign = (landing_uri.query_values || {})["utm_campaign"]
+        query_values = landing_uri.query_values || {}
+        %w[utm_source utm_medium utm_term utm_content utm_campaign].each do |name|
+          visit[name] = query_values[name]
+        end
       end
 
       visit.browser = browser.name
