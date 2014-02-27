@@ -66,8 +66,8 @@ Order.joins(:visit).group("city").count
 
 ## Features
 
-- Excludes search engines
-- Gracefully degrades when cookies are disabled
+- Excludes bots
+- Degrades gracefully when cookies are disabled
 - Gets campaign from utm_campaign parameter
 
 ## TODO
@@ -77,6 +77,9 @@ Order.joins(:visit).group("city").count
 - update visit when user logs in
 - better browser / OS detection
 - set visit_id automatically on `visitable` models
+- store all utm params?
+- simple dashboard
+- hook to store additional fields
 
 ## Contributing
 
