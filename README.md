@@ -4,7 +4,7 @@
 
 In under a minute, start learning more about your visitors.
 
-- traffic source - referrer, referring domain, landing page, search keywords
+- traffic source - referrer, referring domain, landing page, search keyword
 - location - country, region, and city
 - technology - browser, OS, and device type
 - utm parameters - source, medium, term, content, campaign
