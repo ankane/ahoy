@@ -58,13 +58,13 @@ Order.create(
 )
 ```
 
+To get the visit for the order, use:
+
 ```ruby
 class Order < ActiveRecord::Base
   belongs_to :visit, class_name: "Ahoy::Visit"
 end
 ```
-
-The visit_id column will be automatically set. Magic!
 
 When you want to explore where most orders are coming from, you can do a number of queries.
 
