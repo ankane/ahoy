@@ -43,7 +43,7 @@ Lastly, include the javascript file in `app/assets/javascripts/application.js` a
 
 ## What You Get
 
-When a person visits your website, Ahoy creates a visit with lots of useful information.
+When someone visits your website, Ahoy creates a visit with lots of useful information.
 
 Use the `current_visit` method to access it.
 
