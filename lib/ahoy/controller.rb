@@ -1,5 +1,5 @@
 module Ahoy
-  module ControllerExtensions
+  module Controller
 
     def self.included(base)
       base.helper_method :current_visit
