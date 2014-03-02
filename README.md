@@ -2,6 +2,8 @@
 
 :fire: Simple, powerful visit tracking for Rails
 
+:exclamation: Not ready for production just yet
+
 In under a minute, start learning more about your visitors.
 
 - traffic source - referrer, referring domain, landing page, search keyword
