@@ -4,10 +4,9 @@ module Ahoy
 
     def set_traffic_source
       referring_uri = Addressable::URI.parse(referrer) rescue nil
-      if referring_uri
-        self.referring_domain = referring_uri.host
-        self.search_keyword = (RefererParser::Referer.new(referrer).search_term.to_s.presence rescue nil)
-      end
+      self.referring_domain = referring_uri.try(:host)
+      search_keyword = RefererParser::Referer.new(referrer).search_term rescue nil
+      self.search_keyword = search_keyword.present? ? search_keyword : nil
     end
 
     def set_utm_parameters
