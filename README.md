@@ -50,8 +50,15 @@ The information is great on it’s own, but super powerful when combined with ot
 You can store the visit id on any model. For instance, when someone places an order:
 
 ```ruby
+Order.create(
+  visit_id: current_visit.id,
+  # ... other attributes ...
+)
+```
+
+```ruby
 class Order < ActiveRecord::Base
-  visitable # needs better name
+  belongs_to :visit, class_name: "Ahoy::Visit"
 end
 ```
 
