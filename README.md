@@ -74,12 +74,25 @@ Order.joins(:visit).group("device_type").count
 Order.joins(:visit).group("city").count
 ```
 
-## User Model
+## Users
+
+Ahoy automatically attaches the `current_user` to the `current_visit`.
+
+With Devise, it will attach the user even if he / she signs in after the visit starts.
+
+To see the visits for a given user, create an association:
 
 ```ruby
 class User < ActiveRecord::Base
   has_many :visits, class_name: "Ahoy::Visit"
 end
+```
+
+And use:
+
+```ruby
+user = User.first
+user.visits
 ```
 
 ## Features
@@ -92,7 +105,6 @@ end
 
 - better readme
 - model integration
-- update visit when user logs in
 - set visit_id automatically on `visitable` models
 - simple dashboard
 - hook to store additional fields
