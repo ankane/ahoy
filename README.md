@@ -117,12 +117,9 @@ http://datakick.org/?utm_medium=twitter&utm_campaign=social&utm_source=tweet123
 
 - Excludes bots
 - Degrades gracefully when cookies are disabled
-- Gets campaign from utm_campaign parameter
 
 ## TODO
 
-- better readme
-- model integration
 - set visit_id automatically on `visitable` models
 - simple dashboard
 - hook to store additional fields
