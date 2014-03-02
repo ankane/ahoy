@@ -63,7 +63,9 @@
   }
 
   function debug(message) {
-    window.console.log(message, visitToken, visitorToken);
+    if (debugMode) {
+      window.console.log(message, visitToken, visitorToken);
+    }
   }
 
   // main
