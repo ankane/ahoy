@@ -78,7 +78,7 @@ Order.joins(:visit).group("city").count
 
 Ahoy automatically attaches the `current_user` to the `current_visit`.
 
-With Devise, it will attach the user even if he / she signs in after the visit starts.
+With [Devise](https://github.com/plataformatec/devise), it will attach the user even if he / she signs in after the visit starts.
 
 To see the visits for a given user, create an association:
 
@@ -94,6 +94,10 @@ And use:
 user = User.first
 user.visits
 ```
+
+## Location
+
+Ahoy uses [Geocoder](https://github.com/alexreisner/geocoder) for IP-based geocoding.
 
 ## Features
 
