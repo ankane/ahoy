@@ -15,14 +15,13 @@ ActionController::Base.send :include, Ahoy::Controller
 
 if defined?(Warden)
   Warden::Manager.after_authentication do |user, auth, opts|
-    p user
-    p auth.env
-    p opts
     request = Rack::Request.new(auth.env)
     if request.cookies["ahoy_visit"]
       visit = Ahoy::Visit.where(visit_token: request.cookies["ahoy_visit"]).first
-      visit.user = user
-      visit.save!
+      if visit
+        visit.user = user
+        visit.save!
+      end
     end
   end
 end

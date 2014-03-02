@@ -51,7 +51,7 @@ You can store the visit id on any model. For instance, when someone places an or
 
 ```ruby
 Order.create(
-  visit_id: current_visit.id,
+  visit_id: current_visit.try(:id),
   # ... other attributes ...
 )
 ```
