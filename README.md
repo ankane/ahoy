@@ -65,6 +65,14 @@ Order.joins(:visit).group("device_type").count
 Order.joins(:visit).group("city").count
 ```
 
+## User Model
+
+```ruby
+class User < ActiveRecord::Base
+  has_many :visits, class_name: "Ahoy::Visit"
+end
+```
+
 ## Features
 
 - Excludes bots
