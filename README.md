@@ -4,7 +4,7 @@
 
 :exclamation: Not ready for production just yet
 
-In under a minute, start learning more about your visitors.
+You get:
 
 - traffic source - referrer, referring domain, landing page, search keyword
 - location - country, region, and city
@@ -41,15 +41,31 @@ Lastly, include the javascript file in `app/assets/javascripts/application.js` a
 //= require ahoy
 ```
 
-## What You Get
+## How It Works
 
 When someone visits your website, Ahoy creates a visit with lots of useful information.
 
 Use the `current_visit` method to access it.
 
-The information is great on it’s own, but super powerful when combined with other models.
+Explore your visits with queries like:
 
-You can store the visit id on any model. For instance, when someone places an order:
+```ruby
+Visit.group(:search_keyword).count
+Visit.group(:country).count
+Visit.group(:referring_domain).count
+```
+
+[Chartkick](http://chartkick.com/) and [Groupdate](https://github.com/ankane/groupdate) make it super easy to visualize the data.
+
+```erb
+<%= line_chart Visit.group_by_day(:created_at).count %>
+```
+
+## The Power
+
+This information is great on its own, but super powerful when combined with other models.
+
+You can associate the visit with any model. For instance, when someone places an order:
 
 ```ruby
 Order.create(
@@ -58,15 +74,15 @@ Order.create(
 )
 ```
 
-To get the visit for the order, use:
+When you want to explore where most orders are coming from, create an association:
 
 ```ruby
 class Order < ActiveRecord::Base
-  belongs_to :visit, class_name: "Ahoy::Visit"
+  belongs_to :visit
 end
 ```
 
-When you want to explore where most orders are coming from, you can do a number of queries.
+And query away:
 
 ```ruby
 Order.joins(:visit).group("referring_domain").count
@@ -84,7 +100,7 @@ To see the visits for a given user, create an association:
 
 ```ruby
 class User < ActiveRecord::Base
-  has_many :visits, class_name: "Ahoy::Visit"
+  has_many :visits
 end
 ```
 

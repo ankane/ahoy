@@ -4,7 +4,7 @@ module Ahoy
 
     def create
       visit =
-        Ahoy::Visit.new do |v|
+        Ahoy.visit_model.new do |v|
           v.visit_token = params[:visit_token]
           v.visitor_token = params[:visitor_token]
           v.ip = request.remote_ip
@@ -13,11 +13,6 @@ module Ahoy
           v.landing_page = params[:landing_page]
           v.user = current_user if respond_to?(:current_user)
         end
-
-      visit.set_traffic_source
-      visit.set_technology
-      visit.set_location
-      visit.set_utm_parameters
 
       visit.save!
       render json: {id: visit.id}

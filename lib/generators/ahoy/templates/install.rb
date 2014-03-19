@@ -1,6 +1,6 @@
 class <%= migration_class_name %> < ActiveRecord::Migration
   def change
-    create_table :ahoy_visits do |t|
+    create_table :visits do |t|
       # cookies
       t.string :visit_token
       t.string :visitor_token
@@ -39,7 +39,7 @@ class <%= migration_class_name %> < ActiveRecord::Migration
       t.timestamp :created_at
     end
 
-    add_index :ahoy_visits, [:visit_token], unique: true
-    add_index :ahoy_visits, [:user_id, :user_type]
+    add_index :visits, [:visit_token], unique: true
+    add_index :visits, [:user_id, :user_type]
   end
 end

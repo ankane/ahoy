@@ -24,6 +24,15 @@ module Ahoy
       def copy_migration
         migration_template "install.rb", "db/migrate/install_ahoy.rb"
       end
+
+      def generate_model
+        invoke "active_record:model", ["Visit"], migration: false
+      end
+
+      def inject_ahoy_content
+        inject_into_class "app/models/visit.rb", "Visit", "  ahoy_visit\n"
+      end
+
     end
   end
 end
