@@ -71,22 +71,14 @@ class Order < ActiveRecord::Base
 end
 ```
 
-When a visitor places an order, the `visit_id` column will be automatically set. Magic!
+When a visitor places an order, the `visit_id` column is automatically set. Magic!
 
-To see where most of your orders are coming from, create an association:
-
-```ruby
-class Order < ActiveRecord::Base
-  belongs_to :visit
-end
-```
-
-And query away:
+To see where your orders are coming from, use:
 
 ```ruby
 Order.joins(:visit).group("referring_domain").count
-Order.joins(:visit).group("device_type").count
 Order.joins(:visit).group("city").count
+Order.joins(:visit).group("device_type").count
 ```
 
 ## Users
