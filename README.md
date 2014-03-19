@@ -71,7 +71,9 @@ class Order < ActiveRecord::Base
 end
 ```
 
-When a visitor places an order, the `visit_id` column is automatically set. Magic!
+When a visitor places an order, the `visit_id` column is automatically set.
+
+:tada: Magic!
 
 To see where your orders are coming from, use:
 
