@@ -74,7 +74,7 @@ Order.create(
 )
 ```
 
-When you want to explore where most orders are coming from, create an association:
+To see where most of your orders are coming from, create an association:
 
 ```ruby
 class Order < ActiveRecord::Base
