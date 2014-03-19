@@ -79,5 +79,21 @@ module Ahoy
       end # end class_eval
     end
 
+    def visitable
+      class_eval do
+        belongs_to :visit
+
+        before_create :set_visit
+
+        def set_visit
+          if !self.class.column_names.include?("visit_id")
+            raise "Add a visit_id column to this table to use visitable"
+          else
+            self.visit ||= RequestStore.store[:ahoy_controller].try(:send, :current_visit)
+          end
+        end
+      end
+    end
+
   end
 end

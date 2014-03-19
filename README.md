@@ -65,14 +65,15 @@ Visit.group(:referring_domain).count
 
 This information is great on its own, but super powerful when combined with other models.
 
-You can associate the visit with any model. For instance, when someone places an order:
+Let’s associate orders with visits.
 
 ```ruby
-Order.create(
-  visit_id: current_visit.try(:id),
-  # ... other attributes ...
-)
+class Order < ActiveRecord::Base
+  visitable
+end
 ```
+
+When a visitor places an order, the `visit_id` column will be automatically set. Magic!
 
 To see where most of your orders are coming from, create an association:
 
@@ -136,7 +137,6 @@ http://datakick.org/?utm_medium=twitter&utm_campaign=social&utm_source=tweet123
 
 ## TODO
 
-- set visit_id automatically on `visitable` models
 - simple dashboard
 - hook to store additional fields
 - turn off modules

@@ -3,6 +3,9 @@ module Ahoy
 
     def self.included(base)
       base.helper_method :current_visit
+      base.before_filter do
+        RequestStore.store[:ahoy_controller] ||= self
+      end
     end
 
     protected
