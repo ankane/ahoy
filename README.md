@@ -4,14 +4,12 @@
 
 :exclamation: Not ready for production just yet
 
-You get:
+It’s all stored in **your database** so you can easily combine it with other data.
 
 - traffic source - referrer, referring domain, landing page, search keyword
 - location - country, region, and city
 - technology - browser, OS, and device type
 - utm parameters - source, medium, term, content, campaign
-
-It’s all stored in **your database** so you can easily combine it with other data.
 
 See which campaigns generate the most revenue effortlessly.
 
