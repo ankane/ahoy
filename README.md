@@ -122,7 +122,7 @@ or
 http://datakick.org/?utm_medium=twitter&utm_campaign=social&utm_source=tweet123
 ```
 
-## Features
+## More Features
 
 - Excludes bots
 - Degrades gracefully when cookies are disabled
