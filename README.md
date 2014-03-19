@@ -2,8 +2,6 @@
 
 :fire: Simple, powerful visit tracking for Rails
 
-:exclamation: Not ready for production just yet
-
 You get:
 
 - traffic source - referrer, referring domain, landing page, search keyword
