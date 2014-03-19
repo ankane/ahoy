@@ -8,7 +8,11 @@ require "ahoy/model"
 require "ahoy/engine"
 
 module Ahoy
-  mattr_accessor :visit_model
+
+  def self.visit_model
+    ::Visit
+  end
+
 end
 
 ActionController::Base.send :include, Ahoy::Controller
