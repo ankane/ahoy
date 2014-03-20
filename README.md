@@ -127,6 +127,8 @@ Lastly, include the javascript file in `app/assets/javascripts/application.js` a
 //= require ahoy
 ```
 
+We recommend using traditional analytics services like [Google Analytics](http://www.google.com/analytics/) as well.
+
 ## TODO
 
 - simple dashboard
