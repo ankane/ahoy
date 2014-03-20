@@ -1,9 +1,12 @@
 class <%= migration_class_name %> < ActiveRecord::Migration
   def change
     create_table :visits do |t|
-      # cookies
+      # cookies *required*
       t.string :visit_token
       t.string :visitor_token
+
+      # the rest are recommended but optional
+      # simply remove the columns you don't want
 
       # standard
       t.string :ip
