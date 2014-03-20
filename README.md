@@ -37,7 +37,7 @@ Visit.group(:referring_domain).count
 <%= line_chart Visit.group_by_day(:created_at).count %>
 ```
 
-## The Power
+### The Power
 
 This information is great on its own, but super powerful when combined with other models.
 
@@ -53,7 +53,7 @@ When a visitor places an order, the `visit_id` column is automatically set.
 
 :tada: Magic!
 
-To see where your orders are coming from, use:
+See where orders are coming from with simple joins:
 
 ```ruby
 Order.joins(:visit).group("referring_domain").count
@@ -61,7 +61,7 @@ Order.joins(:visit).group("city").count
 Order.joins(:visit).group("device_type").count
 ```
 
-## Users
+### Users
 
 Ahoy automatically attaches the `current_user` to the `current_visit`.
 
@@ -82,7 +82,7 @@ user = User.first
 user.visits
 ```
 
-## UTM Parameters
+### UTM Parameters
 
 Use UTM Parameters to track campaigns. [This is great for emails and social media](http://www.thunderseo.com/blog/utm-parameters/). Just add them to your links and Ahoy will pick them up.
 
@@ -96,11 +96,11 @@ or
 http://datakick.org/?utm_medium=twitter&utm_campaign=social&utm_source=tweet123
 ```
 
-## Location
+### Location
 
 Ahoy uses [Geocoder](https://github.com/alexreisner/geocoder) for IP-based geocoding.
 
-## More
+### More
 
 - Excludes bots
 - Degrades gracefully when cookies are disabled
