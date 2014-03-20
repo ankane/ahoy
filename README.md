@@ -84,7 +84,7 @@ user.visits
 
 ### UTM Parameters
 
-Use UTM Parameters to track campaigns. [This is great for emails and social media](http://www.thunderseo.com/blog/utm-parameters/). Just add them to your links and Ahoy will pick them up.
+Use UTM parameters to track campaigns. [This is great for emails and social media](http://www.thunderseo.com/blog/utm-parameters/). Just add them to your links and Ahoy will pick them up.
 
 ```
 http://datakick.org/?utm_medium=email&utm_campaign=newsletter&utm_source=newsletter-2014-03
