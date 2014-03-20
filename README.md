@@ -2,6 +2,8 @@
 
 :fire: Simple, powerful visit tracking for Rails
 
+Visits are stored in **your database** so you can easily combine them with other data.
+
 You get:
 
 - traffic source - referrer, referring domain, landing page, search keyword
@@ -9,23 +11,23 @@ You get:
 - technology - browser, OS, and device type
 - utm parameters - source, medium, term, content, campaign
 
-It’s all stored in **your database** so you can easily combine it with other data.
-
 See which campaigns generate the most revenue effortlessly.
 
 ```ruby
 Order.joins(:visit).group("utm_campaign").sum(:revenue)
 ```
 
+Goes great with services like [Google Analytics](http://www.google.com/analytics/)
+
 ## Ready, Set, Go
 
 Add this line to your application’s Gemfile:
 
 ```ruby
-gem "ahoy_matey"
+gem 'ahoy_matey'
 ```
 
-And run the generator. This creates a migration to store visits.
+And run the generator. This creates a model to store visits.
 
 ```sh
 rails generate ahoy:install
