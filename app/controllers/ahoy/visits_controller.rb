@@ -1,5 +1,5 @@
 module Ahoy
-  class VisitsController < ActionController::Base
+  class VisitsController < ApplicationController
     before_filter :halt_bots
 
     def create
