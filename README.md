@@ -67,6 +67,15 @@ Ahoy automatically attaches the `current_user` to the `current_visit`.
 
 With [Devise](https://github.com/plataformatec/devise), it will attach the user even if he / she signs in after the visit starts.
 
+With other authentication frameworks, add this to the end of your sign in method:
+
+```ruby
+if current_visit
+  current_visit.user ||= current_user
+  current_visit.save!
+end
+```
+
 To see the visits for a given user, create an association:
 
 ```ruby
