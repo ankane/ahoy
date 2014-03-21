@@ -20,6 +20,13 @@ module Ahoy
     @referrer_parser ||= RefererParser::Referer.new("https://github.com/ankane/ahoy")
   end
 
+  def self.associate_visit_with_user(user, visit_token)
+    visit = visit_model.where(visit_token: visit_token).first
+    if visit
+      visit.user = user
+      visit.save!
+    end
+  end
 end
 
 ActionController::Base.send :include, Ahoy::Controller
@@ -29,11 +36,7 @@ if defined?(Warden)
   Warden::Manager.after_authentication do |user, auth, opts|
     request = Rack::Request.new(auth.env)
     if request.cookies["ahoy_visit"]
-      visit = Ahoy.visit_model.where(visit_token: request.cookies["ahoy_visit"]).first
-      if visit
-        visit.user = user
-        visit.save!
-      end
+      Ahoy.associate_visit_with_user(user, request.cookies["ahoy_visit"])
     end
   end
 end
