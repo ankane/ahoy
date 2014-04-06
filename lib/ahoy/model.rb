@@ -75,7 +75,14 @@ module Ahoy
 
         def set_location
           if respond_to?(:ip) and [:country=, :region=, :city=].any?{|method| respond_to?(method) }
-            location = Geocoder.search(ip).first rescue nil
+            location =
+              begin
+                Geocoder.search(ip).first
+              rescue => e
+                $stderr.puts e.message
+                nil
+              end
+
             if location
               self.country = location.country.presence if respond_to?(:country=)
               self.region = location.state.presence if respond_to?(:region=)
