@@ -7,6 +7,7 @@
   var visitTtl, visitorTtl;
   var $ = window.jQuery || window.Zepto || window.$;
   var visitToken, visitorToken;
+  var cookieDomain;
 
   if (debugMode) {
     visitTtl = 0.2;
@@ -16,17 +17,23 @@
     visitorTtl = 2 * 365 * 24 * 60; // 2 years
   }
 
+  cookieDomain = window.ahoyCookieDomain || null;
+
   // cookies
 
   // http://www.quirksmode.org/js/cookies.html
-  function setCookie(name, value, ttl) {
+  function setCookie(name, value, ttl, domain) {
     var expires = "";
+    var cookieDomain = "";
     if (ttl) {
       var date = new Date();
       date.setTime(date.getTime() + (ttl * 60 * 1000));
       expires = "; expires=" + date.toGMTString();
     }
-    document.cookie = name + "=" + value + expires + "; path=/";
+    if (domain) {
+      cookieDomain = "; domain=" + domain;
+    }
+    document.cookie = name + "=" + value + expires + cookieDomain + "; path=/";
   }
 
   function getCookie(name) {
@@ -79,12 +86,12 @@
   } else {
     if (!visitorToken) {
       visitorToken = generateToken();
-      setCookie("ahoy_visitor", visitorToken, visitorTtl);
+      setCookie("ahoy_visitor", visitorToken, visitorTtl, cookieDomain);
     }
 
     // always generate a new visit id here
     visitToken = generateToken();
-    setCookie("ahoy_visit", visitToken, visitTtl);
+    setCookie("ahoy_visit", visitToken, visitTtl, cookieDomain);
 
     // make sure cookies are enabled
     if (getCookie("ahoy_visit")) {
