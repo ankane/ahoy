@@ -4,10 +4,10 @@
   "use strict";
 
   var debugMode = false;
-  var visitTtl, visitorTtl;
+  var options = window.Ahoy || {};
   var $ = window.jQuery || window.Zepto || window.$;
   var visitToken, visitorToken;
-  var cookieDomain;
+  var visitTtl, visitorTtl;
 
   if (debugMode) {
     visitTtl = 0.2;
@@ -16,8 +16,6 @@
     visitTtl = 4 * 60; // 4 hours
     visitorTtl = 2 * 365 * 24 * 60; // 2 years
   }
-
-  cookieDomain = window.ahoyCookieDomain || null;
 
   // cookies
 
@@ -86,12 +84,12 @@
   } else {
     if (!visitorToken) {
       visitorToken = generateToken();
-      setCookie("ahoy_visitor", visitorToken, visitorTtl, cookieDomain);
+      setCookie("ahoy_visitor", visitorToken, visitorTtl, options.domain);
     }
 
     // always generate a new visit id here
     visitToken = generateToken();
-    setCookie("ahoy_visit", visitToken, visitTtl, cookieDomain);
+    setCookie("ahoy_visit", visitToken, visitTtl, options.domain);
 
     // make sure cookies are enabled
     if (getCookie("ahoy_visit")) {
