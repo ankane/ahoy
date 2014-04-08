@@ -123,6 +123,7 @@ To track visits across multiple subdomains, add this to your layout **before** t
 
 - Excludes bots
 - Degrades gracefully when cookies are disabled
+- Don’t need a field? Just remove it from the migration
 
 ## Installation
 
