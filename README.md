@@ -149,11 +149,23 @@ Lastly, include the javascript file in `app/assets/javascripts/application.js` a
 
 We recommend using traditional analytics services like [Google Analytics](http://www.google.com/analytics/) as well.
 
+## Reference
+
+Use a different model
+
+```ruby
+Ahoy.visit_model = UserVisit
+```
+
 ## TODO
 
 - simple dashboard
 - hook to store additional fields
 - turn off modules
+
+## History
+
+View the [changelog](https://github.com/ankane/ahoy/blob/master/CHANGELOG.md)
 
 ## Contributing
 
