@@ -11,7 +11,11 @@ require "ahoy/engine"
 module Ahoy
 
   def self.visit_model
-    ::Visit
+    @visit_model || ::Visit
+  end
+
+  def self.visit_model=(visit_model)
+    @visit_model = visit_model
   end
 
   # TODO private
@@ -26,7 +30,7 @@ ActionController::Base.send :include, Ahoy::Controller
 ActiveRecord::Base.send(:extend, Ahoy::Model) if defined?(ActiveRecord)
 
 if defined?(Warden)
-  Warden::Manager.after_authentication do |user, auth, opts|
+  Warden::Manager.after_set_user except: :fetch do |user, auth, opts|
     request = Rack::Request.new(auth.env)
     if request.cookies["ahoy_visit"]
       visit = Ahoy.visit_model.where(visit_token: request.cookies["ahoy_visit"]).first
