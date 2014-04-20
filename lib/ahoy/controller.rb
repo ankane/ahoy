@@ -11,8 +11,9 @@ module Ahoy
     protected
 
     def current_visit
-      if cookies[:ahoy_visit]
-        @current_visit ||= Ahoy.visit_model.where(visit_token: cookies[:ahoy_visit]).first
+      visit_token = cookies[:ahoy_visit] || request.headers["Ahoy-Visit"]
+      if visit_token
+        @current_visit ||= Ahoy.visit_model.where(visit_token: visit_token).first
       end
     end
 

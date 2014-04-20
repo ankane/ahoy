@@ -15,7 +15,7 @@ module Ahoy
         end
 
       visit.save!
-      render json: {id: visit.id}
+      render json: {visit_token: visit.visit_token}
     end
 
     protected
