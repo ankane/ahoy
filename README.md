@@ -65,6 +65,8 @@ Order.joins(:visit).group("device_type").count
 
 Ahoy automatically attaches the `current_user` to the `current_visit`.
 
+If you define your own `current_user` method, be sure to add it to `ActionController::Base`, not `ApplicationController`.
+
 With [Devise](https://github.com/plataformatec/devise), it will attach the user even if he / she signs in after the visit starts.
 
 With other authentication frameworks, add this to the end of your sign in method:
