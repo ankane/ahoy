@@ -143,14 +143,6 @@ Send the visit token in the `Ahoy-Visit` header for all requests.
 
 After 4 hours, create another visit and use the updated visit token.
 
-To change the platform on the web, use:
-
-```html
-<script>
-  var Ahoy = {"platform": "Mobile Web"}
-</script>
-```
-
 ### More
 
 - Excludes bots
@@ -187,6 +179,14 @@ Use a different model
 
 ```ruby
 Ahoy.visit_model = UserVisit
+```
+
+Change the platform on the web
+
+```html
+<script>
+  var Ahoy = {"platform": "Mobile Web"}
+</script>
 ```
 
 ## TODO
