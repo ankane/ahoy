@@ -121,6 +121,36 @@ To track visits across multiple subdomains, add this to your layout **before** t
 </script>
 ```
 
+### Native Apps [master]
+
+When a user launches the app, create a visit.  Send a `POST` request to `/ahoy/visits` with:
+
+- platform - `iOS`, `Android`, etc.
+- app_version - `1.0.0`
+- os_version - `7.0.6`
+- visitor_token - if you have one
+
+The endpoint will return a JSON response like:
+
+```json
+{
+  "visit_token": "8tx2ziymkwa1WlppnkqxyaBaRlXrEQ3K",
+  "visitor_token": "hYBIV0rBfrIUAiArWweiECt4N9pyiygN"
+}
+```
+
+Send the visit token in the `Ahoy-Visit` header for all requests.
+
+After 4 hours, create another visit and use the updated visit token.
+
+To change the platform on the web, use:
+
+```html
+<script>
+  var Ahoy = {"platform": "Mobile Web"}
+</script>
+```
+
 ### More
 
 - Excludes bots

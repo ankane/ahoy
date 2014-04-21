@@ -3,7 +3,7 @@
 (function (window) {
   "use strict";
 
-  var debugMode = false;
+  var debugMode = true;
   var options = window.Ahoy || {};
   var $ = window.jQuery || window.Zepto || window.$;
   var visitToken, visitorToken;
@@ -50,23 +50,6 @@
     return null;
   }
 
-  // ids
-
-  // https://github.com/klughammer/node-randomstring
-  function generateToken() {
-    var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghiklmnopqrstuvwxyz';
-    var length = 32;
-    var string = '';
-    var i, randomNumber;
-
-    for (i = 0; i < length; i++) {
-      randomNumber = Math.floor(Math.random() * chars.length);
-      string += chars.substring(randomNumber, randomNumber + 1);
-    }
-
-    return string;
-  }
-
   function debug(message) {
     if (debugMode) {
       window.console.log(message, visitToken, visitorToken);
@@ -78,26 +61,18 @@
   visitToken = getCookie("ahoy_visit");
   visitorToken = getCookie("ahoy_visitor");
 
-  if (visitToken && visitorToken) {
+  if (visitToken && visitorToken && visitToken != "test") {
     // TODO keep visit alive?
     debug("Active visit");
   } else {
-    if (!visitorToken) {
-      visitorToken = generateToken();
-      setCookie("ahoy_visitor", visitorToken, visitorTtl, options.domain);
-    }
-
-    // always generate a new visit id here
-    visitToken = generateToken();
-    setCookie("ahoy_visit", visitToken, visitTtl, options.domain);
+    setCookie("ahoy_visit", "test", 1, options.domain);
 
     // make sure cookies are enabled
     if (getCookie("ahoy_visit")) {
       debug("Visit started");
 
       var data = {
-        visit_token: visitToken,
-        visitor_token: visitorToken,
+        platform: options.platform || "Web",
         landing_page: window.location.href
       };
 
@@ -106,9 +81,16 @@
         data.referrer = document.referrer;
       }
 
+      if (visitorToken) {
+        data.visitor_token = visitorToken;
+      }
+
       debug(data);
 
-      $.post("/ahoy/visits", data);
+      $.post("/ahoy/visits", data, function(response) {
+        setCookie("ahoy_visit", response.visit_token, visitTtl, options.domain);
+        setCookie("ahoy_visitor", response.visitor_token, visitorTtl, options.domain);
+      }, "json");
     } else {
       debug("Cookies disabled");
     }
