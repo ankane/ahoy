@@ -111,7 +111,7 @@ http://datakick.org/?utm_medium=twitter&utm_campaign=social&utm_source=tweet123
 
 Ahoy uses [Geocoder](https://github.com/alexreisner/geocoder) for IP-based geocoding.
 
-### Multiple Subdomains [master]
+### Multiple Subdomains
 
 To track visits across multiple subdomains, add this to your layout **before** the javascript files.
 
