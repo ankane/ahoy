@@ -192,6 +192,7 @@ After 4 hours, create another visit and use the updated visit token.
 - Excludes bots
 - Degrades gracefully when cookies are disabled
 - Don’t need a field? Just remove it from the migration
+- Visits are 4 hours by default
 
 ## Reference
 
