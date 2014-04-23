@@ -96,8 +96,8 @@ With [Devise](https://github.com/plataformatec/devise), it will attach the user 
 With other authentication frameworks, add this to the end of your sign in method:
 
 ```ruby
-if current_visit
-  current_visit.user ||= current_user
+if current_visit and !current_visit.user
+  current_visit.user = current_user
   current_visit.save!
 end
 ```

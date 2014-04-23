@@ -35,7 +35,7 @@ if defined?(Warden)
     visit_token = request.cookies["ahoy_visit"] || request.headers["Ahoy-Visit"]
     if visit_token
       visit = Ahoy.visit_model.where(visit_token: visit_token).first
-      if visit
+      if visit and !visit.user
         visit.user = user
         visit.save!
       end
