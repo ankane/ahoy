@@ -113,15 +113,35 @@ Ahoy uses [Geocoder](https://github.com/alexreisner/geocoder) for IP-based geoco
 
 ### Multiple Subdomains
 
-To track visits across multiple subdomains, add this to your layout **before** the javascript files.
+To track visits across multiple subdomains, add this **before** the javascript files.
 
-```html
-<script>
-  var Ahoy = {"domain": "yourdomain.com"};
-</script>
+```javascript
+var ahoy = {"domain": "yourdomain.com"};
 ```
 
-### Native Apps [master]
+### Development [master]
+
+Ahoy is built with developers in mind.  You can run the following code in your browser’s console.
+
+Force a new visit
+
+```javascript
+ahoy.reset(); // then reload the page
+```
+
+Log messages
+
+```javascript
+ahoy.debug();
+```
+
+Turn off logging
+
+```javascript
+ahoy.debug(false);
+```
+
+### Native Apps [experimental] [master]
 
 When a user launches the app, create a visit.  Send a `POST` request to `/ahoy/visits` with:
 
@@ -183,10 +203,8 @@ Ahoy.visit_model = UserVisit
 
 Change the platform on the web
 
-```html
-<script>
-  var Ahoy = {"platform": "Mobile Web"}
-</script>
+```javascript
+var ahoy = {"platform": "Mobile Web"}
 ```
 
 ## TODO

@@ -1,3 +1,10 @@
+## 0.1.3 [unreleased]
+
+- Added `ahoy.reset()`
+- Added `ahoy.debug()`
+- Added experimental support for native apps
+- Prefer `ahoy` over `Ahoy`
+
 ## 0.1.2
 
 - Attach user on Devise sign up

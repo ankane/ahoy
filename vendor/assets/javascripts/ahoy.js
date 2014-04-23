@@ -3,24 +3,16 @@
 (function (window) {
   "use strict";
 
-  var debugMode = true;
-  var options = window.Ahoy || {};
+  var ahoy = window.ahoy || window.Ahoy || {};
   var $ = window.jQuery || window.Zepto || window.$;
   var visitToken, visitorToken;
-  var visitTtl, visitorTtl;
-
-  if (debugMode) {
-    visitTtl = 0.2;
-    visitorTtl = 5; // 5 minutes
-  } else {
-    visitTtl = 4 * 60; // 4 hours
-    visitorTtl = 2 * 365 * 24 * 60; // 2 years
-  }
+  var visitTtl = 4 * 60; // 4 hours
+  var visitorTtl = 2 * 365 * 24 * 60; // 2 years
 
   // cookies
 
   // http://www.quirksmode.org/js/cookies.html
-  function setCookie(name, value, ttl, domain) {
+  function setCookie(name, value, ttl) {
     var expires = "";
     var cookieDomain = "";
     if (ttl) {
@@ -28,8 +20,8 @@
       date.setTime(date.getTime() + (ttl * 60 * 1000));
       expires = "; expires=" + date.toGMTString();
     }
-    if (domain) {
-      cookieDomain = "; domain=" + domain;
+    if (ahoy.domain) {
+      cookieDomain = "; domain=" + ahoy.domain;
     }
     document.cookie = name + "=" + value + expires + cookieDomain + "; path=/";
   }
@@ -50,9 +42,13 @@
     return null;
   }
 
-  function debug(message) {
-    if (debugMode) {
-      window.console.log(message, visitToken, visitorToken);
+  function destroyCookie(name) {
+    setCookie(name, "", -1);
+  }
+
+  function log(message) {
+    if (getCookie("ahoy_debug")) {
+      window.console.log(message);
     }
   }
 
@@ -63,16 +59,16 @@
 
   if (visitToken && visitorToken && visitToken != "test") {
     // TODO keep visit alive?
-    debug("Active visit");
+    log("Active visit");
   } else {
-    setCookie("ahoy_visit", "test", 1, options.domain);
+    setCookie("ahoy_visit", "test", 1);
 
     // make sure cookies are enabled
     if (getCookie("ahoy_visit")) {
-      debug("Visit started");
+      log("Visit started");
 
       var data = {
-        platform: options.platform || "Web",
+        platform: ahoy.platform || "Web",
         landing_page: window.location.href
       };
 
@@ -85,15 +81,31 @@
         data.visitor_token = visitorToken;
       }
 
-      debug(data);
+      log(data);
 
       $.post("/ahoy/visits", data, function(response) {
-        setCookie("ahoy_visit", response.visit_token, visitTtl, options.domain);
-        setCookie("ahoy_visitor", response.visitor_token, visitorTtl, options.domain);
+        setCookie("ahoy_visit", response.visit_token, visitTtl);
+        setCookie("ahoy_visitor", response.visitor_token, visitorTtl);
       }, "json");
     } else {
-      debug("Cookies disabled");
+      log("Cookies disabled");
     }
   }
 
+  ahoy.reset = function () {
+    destroyCookie("ahoy_visit");
+    destroyCookie("ahoy_visitor");
+    return true;
+  };
+
+  ahoy.debug = function (enabled) {
+    if (enabled === false) {
+      destroyCookie("ahoy_debug");
+    } else {
+      setCookie("ahoy_debug", "t", 365 * 24 * 60); // 1 year
+    }
+    return true;
+  };
+
+  window.ahoy = ahoy;
 }(window));
