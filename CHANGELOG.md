@@ -1,5 +1,6 @@
 ## 0.1.3 [unreleased]
 
+- Supports `current_user` from `ApplicationController`
 - Added `ahoy.reset()`
 - Added `ahoy.debug()`
 - Added experimental support for native apps
