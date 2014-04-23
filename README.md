@@ -17,6 +17,30 @@ See which campaigns generate the most revenue effortlessly.
 Order.joins(:visit).group("utm_campaign").sum(:revenue)
 ```
 
+## Installation
+
+Add this line to your application’s Gemfile:
+
+```ruby
+gem 'ahoy_matey'
+```
+
+And run the generator. This creates a model to store visits.
+
+```sh
+rails generate ahoy:install
+rake db:migrate
+```
+
+Lastly, include the javascript file in `app/assets/javascripts/application.js` after jQuery.
+
+```javascript
+//= require jquery
+//= require ahoy
+```
+
+We recommend using traditional analytics services like [Google Analytics](http://www.google.com/analytics/) as well.
+
 ## How It Works
 
 When someone visits your website, Ahoy creates a visit with lots of useful information.
@@ -168,30 +192,6 @@ After 4 hours, create another visit and use the updated visit token.
 - Excludes bots
 - Degrades gracefully when cookies are disabled
 - Don’t need a field? Just remove it from the migration
-
-## Installation
-
-Add this line to your application’s Gemfile:
-
-```ruby
-gem 'ahoy_matey'
-```
-
-And run the generator. This creates a model to store visits.
-
-```sh
-rails generate ahoy:install
-rake db:migrate
-```
-
-Lastly, include the javascript file in `app/assets/javascripts/application.js` after jQuery.
-
-```javascript
-//= require jquery
-//= require ahoy
-```
-
-We recommend using traditional analytics services like [Google Analytics](http://www.google.com/analytics/) as well.
 
 ## Reference
 
