@@ -31,7 +31,7 @@ ActiveRecord::Base.send(:extend, Ahoy::Model) if defined?(ActiveRecord)
 
 if defined?(Warden)
   Warden::Manager.after_set_user except: :fetch do |user, auth, opts|
-    request = Rack::Request.new(auth.env)
+    request = ActionDispatch::Request.new(auth.env)
     visit_token = request.cookies["ahoy_visit"] || request.headers["Ahoy-Visit"]
     if visit_token
       visit = Ahoy.visit_model.where(visit_token: visit_token).first
