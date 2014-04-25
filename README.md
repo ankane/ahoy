@@ -143,7 +143,7 @@ To track visits across multiple subdomains, add this **before** the javascript f
 var ahoy = {"domain": "yourdomain.com"};
 ```
 
-### Development [master]
+### Development
 
 Ahoy is built with developers in mind.  You can run the following code in your browser’s console.
 
@@ -165,7 +165,7 @@ Turn off logging
 ahoy.debug(false);
 ```
 
-### Native Apps [experimental] [master]
+### Native Apps [experimental]
 
 When a user launches the app, create a visit.  Send a `POST` request to `/ahoy/visits` with:
 

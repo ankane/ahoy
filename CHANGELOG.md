@@ -1,4 +1,4 @@
-## 0.1.3 [unreleased]
+## 0.1.3
 
 - Supports `current_user` from `ApplicationController`
 - Added `ahoy.reset()`
