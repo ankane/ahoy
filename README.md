@@ -210,6 +210,8 @@ var ahoy = {"platform": "Mobile Web"}
 
 ## TODO
 
+- track events
+- track emails
 - simple dashboard
 - hook to store additional fields
 - turn off modules
