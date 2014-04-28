@@ -1,3 +1,7 @@
+## 0.1.4
+
+- Added `ahoy.ready()` and `ahoy.log()` for events
+
 ## 0.1.3
 
 - Supports `current_user` from `ApplicationController`

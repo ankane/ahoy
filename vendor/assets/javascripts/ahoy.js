@@ -8,6 +8,8 @@
   var visitToken, visitorToken;
   var visitTtl = 4 * 60; // 4 hours
   var visitorTtl = 2 * 365 * 24 * 60; // 2 years
+  var isReady = false;
+  var queue = [];
 
   // cookies
 
@@ -52,6 +54,14 @@
     }
   }
 
+  function setReady() {
+    var callback;
+    while (callback = queue.shift()) {
+      callback();
+    }
+    isReady = true;
+  }
+
   // main
 
   visitToken = getCookie("ahoy_visit");
@@ -60,6 +70,7 @@
   if (visitToken && visitorToken && visitToken != "test") {
     // TODO keep visit alive?
     log("Active visit");
+    setReady();
   } else {
     setCookie("ahoy_visit", "test", 1);
 
@@ -86,9 +97,11 @@
       $.post("/ahoy/visits", data, function(response) {
         setCookie("ahoy_visit", response.visit_token, visitTtl);
         setCookie("ahoy_visitor", response.visitor_token, visitorTtl);
+        setReady();
       }, "json");
     } else {
       log("Cookies disabled");
+      setReady();
     }
   }
 
@@ -105,6 +118,16 @@
       setCookie("ahoy_debug", "t", 365 * 24 * 60); // 1 year
     }
     return true;
+  };
+
+  ahoy.log = log;
+
+  ahoy.ready = function (callback) {
+    if (isReady) {
+      callback();
+    } else {
+      queue.push(callback);
+    }
   };
 
   window.ahoy = ahoy;

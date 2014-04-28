@@ -8,8 +8,6 @@ module Ahoy
       end
     end
 
-    protected
-
     def current_visit
       visit_token = cookies[:ahoy_visit] || request.headers["Ahoy-Visit"]
       if visit_token

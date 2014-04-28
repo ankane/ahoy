@@ -17,6 +17,8 @@ See which campaigns generate the most revenue effortlessly.
 Order.joins(:visit).group("utm_campaign").sum(:revenue)
 ```
 
+:seedling: To track events like page views, check out [Ahoy Events](https://github.com/ankane/ahoy_events).
+
 ## Installation
 
 Add this line to your application’s Gemfile:
@@ -210,7 +212,6 @@ var ahoy = {"platform": "Mobile Web"}
 
 ## TODO
 
-- track events
 - track emails
 - simple dashboard
 - hook to store additional fields

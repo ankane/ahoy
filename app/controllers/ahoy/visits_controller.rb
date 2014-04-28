@@ -1,9 +1,5 @@
 module Ahoy
-  class VisitsController < ApplicationController
-    # skip all filters
-    skip_filter *_process_action_callbacks.map(&:filter)
-
-    before_filter :halt_bots
+  class VisitsController < BaseController
 
     def create
       visit_token = generate_token
@@ -31,16 +27,6 @@ module Ahoy
 
     def generate_token
       SecureRandom.urlsafe_base64(32).gsub(/[\-_]/, "").first(32)
-    end
-
-    def browser
-      @browser ||= Browser.new(ua: request.user_agent)
-    end
-
-    def halt_bots
-      if browser.bot?
-        render json: {}
-      end
     end
 
   end
