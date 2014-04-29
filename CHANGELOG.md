@@ -1,3 +1,7 @@
+## 0.1.5 [unreleased]
+
+- Added `landing_params` method
+
 ## 0.1.4
 
 - Added `ahoy.ready()` and `ahoy.log()` for events
