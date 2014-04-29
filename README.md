@@ -9,7 +9,7 @@ You get:
 - **traffic source** - referrer, referring domain, landing page, search keyword
 - **location** - country, region, and city
 - **technology** - browser, OS, and device type
-- **utm parameters** - source, medium, term, content, campaign
+- **utm parameters** - source, medium, term, content, campaign, type
 
 See which campaigns generate the most revenue effortlessly.
 

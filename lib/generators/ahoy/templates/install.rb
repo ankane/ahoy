@@ -38,6 +38,7 @@ class <%= migration_class_name %> < ActiveRecord::Migration
       t.string :utm_term
       t.string :utm_content
       t.string :utm_campaign
+      t.string :utm_type
 
       # native apps
       # t.string :platform

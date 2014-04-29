@@ -24,7 +24,7 @@ module Ahoy
           landing_uri = Addressable::URI.parse(landing_page) rescue nil
           if landing_uri
             query_values = landing_uri.query_values || {}
-            %w[utm_source utm_medium utm_term utm_content utm_campaign].each do |name|
+            %w[utm_source utm_medium utm_term utm_content utm_campaign utm_type].each do |name|
               self[name] = query_values[name] if respond_to?(:"#{name}=")
             end
           end
