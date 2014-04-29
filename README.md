@@ -229,9 +229,7 @@ end
 
 ## TODO
 
-- track emails
 - simple dashboard
-- hook to store additional fields
 - turn off modules
 
 ## History
