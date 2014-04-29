@@ -21,12 +21,8 @@ module Ahoy
         end
 
         def set_utm_parameters
-          landing_uri = Addressable::URI.parse(landing_page) rescue nil
-          if landing_uri
-            query_values = landing_uri.query_values || {}
-            %w[utm_source utm_medium utm_term utm_content utm_campaign].each do |name|
-              self[name] = query_values[name] if respond_to?(:"#{name}=")
-            end
+          %w[utm_source utm_medium utm_term utm_content utm_campaign].each do |name|
+            self[name] = landing_params[name] if respond_to?(:"#{name}=")
           end
           true
         end
@@ -90,6 +86,13 @@ module Ahoy
             end
           end
           true
+        end
+
+        def landing_params
+          @landing_params ||= begin
+            landing_uri = Addressable::URI.parse(landing_page) rescue nil
+            ActiveSupport::HashWithIndifferentAccess.new((landing_uri && landing_uri.query_values) || {})
+          end
         end
 
       end # end class_eval

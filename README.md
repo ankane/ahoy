@@ -212,6 +212,21 @@ Change the platform on the web
 var ahoy = {"platform": "Mobile Web"}
 ```
 
+Track additional values
+
+```ruby
+class Visit < ActiveRecord::Base
+  ahoy_visit
+
+  before_create :set_gclid
+
+  def set_gclid
+    self.gclid = landing_params["GCLID"] # [master]
+  end
+
+end
+```
+
 ## TODO
 
 - track emails
