@@ -221,7 +221,7 @@ class Visit < ActiveRecord::Base
   before_create :set_gclid
 
   def set_gclid
-    self.gclid = landing_params["GCLID"] # [master]
+    self.gclid = landing_params["gclid"] # [master]
   end
 
 end
