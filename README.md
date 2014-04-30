@@ -19,7 +19,7 @@ Order.joins(:visit).group("utm_campaign").sum(:revenue)
 
 :seedling: To track events like page views, check out [Ahoy Events](https://github.com/ankane/ahoy_events).
 
-:envelope: To track emails, check out [Ahoy Email](https://github.com/ankane/ahoy_email).
+:postbox: To track emails, check out [Ahoy Email](https://github.com/ankane/ahoy_email).
 
 ## Installation
 
