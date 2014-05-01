@@ -169,7 +169,7 @@ Turn off logging
 ahoy.debug(false);
 ```
 
-### Native Apps [experimental]
+### Native Apps
 
 When a user launches the app, create a visit.  Send a `POST` request to `/ahoy/visits` with:
 
