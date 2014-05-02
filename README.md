@@ -191,7 +191,7 @@ Send the visit token in the `Ahoy-Visit` header for all requests.
 
 After 4 hours, create another visit and use the updated visit token.
 
-### Doorkeeper [master]
+### Doorkeeper
 
 To attach the user with [Doorkeeper](https://github.com/doorkeeper-gem/doorkeeper), be sure you have a `current_resource_owner` method in `ApplicationController`.
 
@@ -237,13 +237,13 @@ class Visit < ActiveRecord::Base
   before_create :set_gclid
 
   def set_gclid
-    self.gclid = landing_params["gclid"] # [master]
+    self.gclid = landing_params["gclid"]
   end
 
 end
 ```
 
-Use a method besides `current_user` [master]
+Use a method besides `current_user`
 
 ```ruby
 Ahoy.user_method = :true_user
