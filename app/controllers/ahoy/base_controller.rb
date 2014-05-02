@@ -1,7 +1,5 @@
 module Ahoy
   class BaseController < ApplicationController
-    include Doorkeeper::Helpers::Filter if defined?(Doorkeeper)
-
     # skip all filters
     skip_filter *_process_action_callbacks.map(&:filter)
 
