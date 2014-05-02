@@ -255,6 +255,12 @@ or use a Proc
 Ahoy.user_method = proc {|controller| controller.current_user }
 ```
 
+Customize visitable
+
+```ruby
+visitable :sign_up_visit, class_name: "Visit"
+```
+
 ## TODO
 
 - simple dashboard

@@ -1,5 +1,7 @@
 ## 0.1.5 [unreleased]
 
+- Added support for Doorkeeper
+- Added options to `visitable`
 - Added `landing_params` method
 
 ## 0.1.4
