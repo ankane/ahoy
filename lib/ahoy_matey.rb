@@ -24,6 +24,19 @@ module Ahoy
     @referrer_parser ||= RefererParser::Referer.new("https://github.com/ankane/ahoy")
   end
 
+  def self.fetch_user(controller)
+    if user_method.respond_to?(:call)
+      user_method.call(controller)
+    else
+      controller.send(user_method)
+    end
+  end
+
+  mattr_accessor :user_method
+  self.user_method = proc do |controller|
+    (controller.respond_to?(:current_user) && controller.current_user) || (controller.respond_to?(:current_resource_owner, true) and controller.send(:current_resource_owner))
+  end
+
 end
 
 ActionController::Base.send :include, Ahoy::Controller
