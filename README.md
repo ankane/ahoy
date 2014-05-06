@@ -220,6 +220,11 @@ Use a different model
 
 ```ruby
 Ahoy.visit_model = UserVisit
+
+# fix for Rails reloader in development
+ActionDispatch::Reloader.to_prepare do
+  Ahoy.visit_model = UserVisit
+end
 ```
 
 Change the platform on the web
