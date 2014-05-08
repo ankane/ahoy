@@ -29,30 +29,12 @@ module Ahoy
 
         def set_technology
           if respond_to?(:user_agent)
+            agent = Ahoy.user_agent_parser.parse(user_agent)
+
+            self.browser = agent.name if respond_to?(:browser=)
+            self.os = agent.os.name if respond_to?(:os=)
+
             browser = Browser.new(ua: user_agent)
-
-            self.browser = browser.name if respond_to?(:browser=)
-
-            # TODO add more
-            self.os =
-              if browser.android?
-                "Android"
-              elsif browser.ios?
-                "iOS"
-              elsif browser.windows_phone?
-                "Windows Phone"
-              elsif browser.blackberry?
-                "Blackberry"
-              elsif browser.chrome_os?
-                "Chrome OS"
-              elsif browser.mac?
-                "Mac"
-              elsif browser.windows?
-                "Windows"
-              elsif browser.linux?
-                "Linux"
-              end if respond_to?(:os=)
-
             self.device_type =
               if browser.tv?
                 "TV"
