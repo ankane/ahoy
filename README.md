@@ -266,6 +266,17 @@ Customize visitable
 visitable :sign_up_visit, class_name: "Visit"
 ```
 
+## Upgrading
+
+In `0.1.6`, a big improvement was made to `browser` and `os`. Update existing visits with:
+
+```ruby
+Visit.find_each do |visit|
+  visit.set_technology
+  visit.save! if visit.changed?
+end
+```
+
 ## TODO
 
 - simple dashboard
