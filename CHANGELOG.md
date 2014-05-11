@@ -1,4 +1,4 @@
-## 0.1.8 [unreleased]
+## 0.1.8
 
 - Fixed bug with `user_type` set to `false` instead of `nil`
 
