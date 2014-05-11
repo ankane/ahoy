@@ -1,3 +1,7 @@
+## 0.1.8 [unreleased]
+
+- Fixed bug with `user_type` set to `false` instead of `nil`
+
 ## 0.1.7
 
 - Made cookie functions public for ahoy_events

@@ -40,7 +40,7 @@ module Ahoy
 
   mattr_accessor :user_method
   self.user_method = proc do |controller|
-    (controller.respond_to?(:current_user) && controller.current_user) || (controller.respond_to?(:current_resource_owner, true) and controller.send(:current_resource_owner))
+    (controller.respond_to?(:current_user) && controller.current_user) || (controller.respond_to?(:current_resource_owner, true) && controller.send(:current_resource_owner)) || nil
   end
 
 end
