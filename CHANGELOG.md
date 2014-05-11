@@ -1,3 +1,7 @@
+## 0.1.7
+
+- Made cookie functions public for ahoy_events
+
 ## 0.1.6
 
 - Better user agent parser
