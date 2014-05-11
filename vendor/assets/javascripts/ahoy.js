@@ -120,6 +120,9 @@
     return true;
   };
 
+  ahoy.setCookie = setCookie;
+  ahoy.getCookie = getCookie;
+  ahoy.destroyCookie = destroyCookie;
   ahoy.log = log;
 
   ahoy.ready = function (callback) {
