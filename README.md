@@ -21,6 +21,8 @@ Order.joins(:visit).group("utm_campaign").sum(:revenue)
 
 :postbox: To track emails, check out [Ahoy Email](https://github.com/ankane/ahoy_email).
 
+No Ruby? Check out [Ahoy.js](https://github.com/ankane/ahoy.js).
+
 ## Installation
 
 Add this line to your application’s Gemfile:
