@@ -36,7 +36,9 @@ module Ahoy
 
             browser = Browser.new(ua: user_agent)
             self.device_type =
-              if browser.tv?
+              if browser.bot?
+                "Bot"
+              elsif browser.tv?
                 "TV"
               elsif browser.console?
                 "Console"

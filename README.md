@@ -367,6 +367,12 @@ Use a different model for events
 Ahoy.subscribers << Ahoy::Subscribers::ActiveRecord.new(model: Event)
 ```
 
+Track bots
+
+```ruby
+Ahoy.track_bots = true
+```
+
 ## Upgrading
 
 In `0.1.6`, a big improvement was made to `browser` and `os`. Update existing visits with:

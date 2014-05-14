@@ -48,6 +48,9 @@ module Ahoy
 
   mattr_accessor :subscribers
   self.subscribers = []
+
+  mattr_accessor :track_bots
+  self.track_bots = false
 end
 
 ActionController::Base.send :include, Ahoy::Controller
