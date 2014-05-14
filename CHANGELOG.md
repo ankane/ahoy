@@ -1,3 +1,8 @@
+## 0.2.1 [unreleased]
+
+- Added `track_bots` option
+- Added `$authenticate` event
+
 ## 0.2.0
 
 - Added event tracking (merged ahoy_events)
