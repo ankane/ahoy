@@ -12,7 +12,7 @@ module Ahoy
     end
 
     def halt_bots
-      if Ahoy.track_bots and browser.bot?
+      if !Ahoy.track_bots and browser.bot?
         render json: {}
       end
     end
