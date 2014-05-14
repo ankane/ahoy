@@ -2,7 +2,7 @@ module Ahoy
   class VisitsController < BaseController
 
     def create
-      visit_token = generate_token
+      visit_token = params[:visit_token] || generate_token
       visitor_token = params[:visitor_token] || generate_token
 
       visit =

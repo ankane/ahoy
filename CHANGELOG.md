@@ -1,3 +1,8 @@
+## 0.2.0
+
+- Added event tracking (merged ahoy_events)
+- Added ahoy.js
+
 ## 0.1.8
 
 - Fixed bug with `user_type` set to `false` instead of `nil`

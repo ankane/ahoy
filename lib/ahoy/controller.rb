@@ -3,6 +3,7 @@ module Ahoy
 
     def self.included(base)
       base.helper_method :current_visit
+      base.helper_method :ahoy
       base.before_filter do
         RequestStore.store[:ahoy_controller] ||= self
       end
@@ -13,6 +14,10 @@ module Ahoy
       if visit_token
         @current_visit ||= Ahoy.visit_model.where(visit_token: visit_token).first
       end
+    end
+
+    def ahoy
+      @ahoy ||= Ahoy::Tracker.new(controller: self)
     end
 
   end

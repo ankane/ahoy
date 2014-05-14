@@ -5,8 +5,10 @@ require "referer-parser"
 require "user_agent_parser"
 require "request_store"
 require "ahoy/version"
+require "ahoy/tracker"
 require "ahoy/controller"
 require "ahoy/model"
+require "ahoy/subscribers/active_record"
 require "ahoy/engine"
 
 module Ahoy
@@ -43,6 +45,8 @@ module Ahoy
     (controller.respond_to?(:current_user) && controller.current_user) || (controller.respond_to?(:current_resource_owner, true) && controller.send(:current_resource_owner)) || nil
   end
 
+  mattr_accessor :subscribers
+  self.subscribers = []
 end
 
 ActionController::Base.send :include, Ahoy::Controller

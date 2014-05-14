@@ -1,6 +1,6 @@
 # Ahoy
 
-:fire: Simple, powerful visit tracking for Rails
+:fire: Simple, powerful analytics for Rails
 
 Visits are stored in **your database** so you can easily combine them with other data.
 
@@ -11,13 +11,13 @@ You get:
 - **technology** - browser, OS, and device type
 - **utm parameters** - source, medium, term, content, campaign
 
-See which campaigns generate the most revenue effortlessly.
+Track events in:
 
-```ruby
-Order.joins(:visit).group("utm_campaign").sum(:revenue)
-```
+- JavaScript
+- Ruby
+- Native apps
 
-:seedling: To track events like page views, check out [Ahoy Events](https://github.com/ankane/ahoy_events).
+And store them wherever you’d like - your database, logs, external services, or all of them.
 
 :postbox: To track emails, check out [Ahoy Email](https://github.com/ankane/ahoy_email).
 
@@ -135,40 +135,6 @@ or
 http://datakick.org/?utm_medium=twitter&utm_campaign=social&utm_source=tweet123
 ```
 
-### Location
-
-Ahoy uses [Geocoder](https://github.com/alexreisner/geocoder) for IP-based geocoding.
-
-### Multiple Subdomains
-
-To track visits across multiple subdomains, add this **before** the javascript files.
-
-```javascript
-var ahoy = {"domain": "yourdomain.com"};
-```
-
-### Development
-
-Ahoy is built with developers in mind.  You can run the following code in your browser’s console.
-
-Force a new visit
-
-```javascript
-ahoy.reset(); // then reload the page
-```
-
-Log messages
-
-```javascript
-ahoy.debug();
-```
-
-Turn off logging
-
-```javascript
-ahoy.debug(false);
-```
-
 ### Native Apps
 
 When a user launches the app, create a visit.  Send a `POST` request to `/ahoy/visits` with:
@@ -191,6 +157,110 @@ Send the visit token in the `Ahoy-Visit` header for all requests.
 
 After 4 hours, create another visit and use the updated visit token.
 
+## Events
+
+Each event has a `name` and `properties`.
+
+There are three ways to track events.
+
+#### JavaScript
+
+```javascript
+ahoy.track("Viewed book", {title: "The World is Flat"});
+```
+
+or track all views and clicks with:
+
+```javascript
+ahoy.trackAll();
+```
+
+#### Ruby
+
+```ruby
+ahoy.track "Viewed book", title: "Hot, Flat, and Crowded"
+```
+
+#### Native Apps
+
+Send a `POST` request to `/ahoy/events` with:
+
+- name
+- properties
+- user token (depends on your authentication framework)
+- `Ahoy-Visit` header
+
+Requests should have `Content-Type: application/json`.
+
+### Storing Events
+
+You choose how to store events.
+
+#### ActiveRecord
+
+Create an `Ahoy::Event` model to store events.
+
+```sh
+rails generate ahoy:events:active_record
+rake db:migrate
+```
+
+#### Custom
+
+Create your own subscribers in `config/initializers/ahoy.rb`.
+
+```ruby
+class LogSubscriber
+
+  def track(name, properties, options = {})
+    data = {
+      name: name,
+      properties: properties,
+      time: options[:time].to_i,
+      visit_id: options[:visit].try(:id),
+      user_id: options[:user].try(:id),
+      ip: options[:controller].try(:request).try(:remote_ip)
+    }
+    Rails.logger.info data.to_json
+  end
+
+end
+
+# and add it
+Ahoy.subscribers << LogSubscriber.new
+```
+
+Add as many subscribers as you’d like.
+
+## Development
+
+Ahoy is built with developers in mind.  You can run the following code in your browser’s console.
+
+Force a new visit
+
+```javascript
+ahoy.reset(); // then reload the page
+```
+
+Log messages
+
+```javascript
+ahoy.debug();
+```
+
+Turn off logging
+
+```javascript
+ahoy.debug(false);
+```
+
+### More
+
+- Excludes bots
+- Degrades gracefully when cookies are disabled
+- Don’t need a field? Just remove it from the migration
+- Visits are 4 hours by default
+
 ### Doorkeeper
 
 To attach the user with [Doorkeeper](https://github.com/doorkeeper-gem/doorkeeper), be sure you have a `current_resource_owner` method in `ApplicationController`.
@@ -207,24 +277,12 @@ class ApplicationController < ActionController::Base
 end
 ```
 
-### More
-
-- Excludes bots
-- Degrades gracefully when cookies are disabled
-- Don’t need a field? Just remove it from the migration
-- Visits are 4 hours by default
-
 ## Reference
 
-Use a different model
+To track visits across multiple subdomains, add this **before** the javascript files.
 
-```ruby
-Ahoy.visit_model = UserVisit
-
-# fix for Rails reloader in development
-ActionDispatch::Reloader.to_prepare do
-  Ahoy.visit_model = UserVisit
-end
+```javascript
+var ahoy = {"domain": "yourdomain.com"};
 ```
 
 Change the platform on the web
@@ -266,6 +324,49 @@ Customize visitable
 visitable :sign_up_visit, class_name: "Visit"
 ```
 
+Track view
+
+```javascript
+ahoy.trackView();
+```
+
+Track clicks
+
+```javascript
+ahoy.trackClicks();
+```
+
+Track all Rails actions
+
+```ruby
+class ApplicationController < ActionController::Base
+  after_filter :track_action
+
+  protected
+
+  def track_action
+    ahoy.track "Hit action", request.filtered_parameters
+  end
+end
+```
+
+Use a different model for visits
+
+```ruby
+Ahoy.visit_model = UserVisit
+
+# fix for Rails reloader in development
+ActionDispatch::Reloader.to_prepare do
+  Ahoy.visit_model = UserVisit
+end
+```
+
+Use a different model for events
+
+```ruby
+Ahoy.subscribers << Ahoy::Subscribers::ActiveRecord.new(model: Event)
+```
+
 ## Upgrading
 
 In `0.1.6`, a big improvement was made to `browser` and `os`. Update existing visits with:
@@ -279,6 +380,7 @@ end
 
 ## TODO
 
+- better readme
 - simple dashboard
 - turn off modules
 
