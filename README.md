@@ -367,7 +367,7 @@ Use a different model for events
 Ahoy.subscribers << Ahoy::Subscribers::ActiveRecord.new(model: Event)
 ```
 
-Track bots
+Track bots [master]
 
 ```ruby
 Ahoy.track_bots = true
