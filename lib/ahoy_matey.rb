@@ -10,6 +10,7 @@ require "ahoy/controller"
 require "ahoy/model"
 require "ahoy/subscribers/active_record"
 require "ahoy/engine"
+require "ahoy/warden" if defined?(Warden)
 
 module Ahoy
 
@@ -51,17 +52,3 @@ end
 
 ActionController::Base.send :include, Ahoy::Controller
 ActiveRecord::Base.send(:extend, Ahoy::Model) if defined?(ActiveRecord)
-
-if defined?(Warden)
-  Warden::Manager.after_set_user except: :fetch do |user, auth, opts|
-    request = ActionDispatch::Request.new(auth.env)
-    visit_token = request.cookies["ahoy_visit"] || request.headers["Ahoy-Visit"]
-    if visit_token
-      visit = Ahoy.visit_model.where(visit_token: visit_token).first
-      if visit and !visit.user
-        visit.user = user
-        visit.save!
-      end
-    end
-  end
-end
