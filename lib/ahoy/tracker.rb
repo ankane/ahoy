@@ -5,7 +5,7 @@ module Ahoy
       @controller = options[:controller]
     end
 
-    def track(name, properties, options = {})
+    def track(name, properties = {}, options = {})
       # publish to each subscriber
       if @controller
         options[:controller] ||= @controller
