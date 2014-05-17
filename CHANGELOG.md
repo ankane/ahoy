@@ -1,5 +1,6 @@
 ## 0.2.1 [unreleased]
 
+- Fixed IE 8 error
 - Added `track_bots` option
 - Added `$authenticate` event
 

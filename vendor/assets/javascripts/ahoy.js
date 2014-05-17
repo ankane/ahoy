@@ -123,7 +123,7 @@
     return {
       tag: $target.get(0).tagName.toLowerCase(),
       id: $target.attr("id"),
-      class: $target.attr("class")
+      "class": $target.attr("class")
     };
   }
 
