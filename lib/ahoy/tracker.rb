@@ -6,25 +6,29 @@ module Ahoy
     end
 
     def track(name, properties = {}, options = {})
-      # publish to each subscriber
-      options = options.dup
-      if @controller
-        options[:controller] ||= @controller
-        options[:user] ||= Ahoy.fetch_user(@controller)
-        if @controller.respond_to?(:current_visit)
-          options[:visit] ||= @controller.current_visit
+      if !(@controller and Ahoy.exclude_method and Ahoy.exclude_method.call(@controller))
+        # publish to each subscriber
+        options = options.dup
+        if @controller
+          options[:controller] ||= @controller
+          options[:user] ||= Ahoy.fetch_user(@controller)
+          if @controller.respond_to?(:current_visit)
+            options[:visit] ||= @controller.current_visit
+          end
         end
-      end
-      options[:time] ||= Time.zone.now
+        options[:time] ||= Time.zone.now
 
-      subscribers = Ahoy.subscribers
-      if subscribers.any?
-        subscribers.each do |subscriber|
-          subscriber.track(name, properties, options)
+        subscribers = Ahoy.subscribers
+        if subscribers.any?
+          subscribers.each do |subscriber|
+            subscriber.track(name, properties, options)
+          end
+        else
+          $stderr.puts "No subscribers"
         end
-      else
-        $stderr.puts "No subscribers"
       end
+
+      true
     end
 
   end

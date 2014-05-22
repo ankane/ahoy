@@ -46,6 +46,8 @@ module Ahoy
     (controller.respond_to?(:current_user) && controller.current_user) || (controller.respond_to?(:current_resource_owner, true) && controller.send(:current_resource_owner)) || nil
   end
 
+  mattr_accessor :exclude_method
+
   mattr_accessor :subscribers
   self.subscribers = []
 

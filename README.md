@@ -367,6 +367,14 @@ Use a different model for events
 Ahoy.subscribers << Ahoy::Subscribers::ActiveRecord.new(model: Event)
 ```
 
+Exclude visits and events [master]
+
+```ruby
+Ahoy.exclude_method = proc do |controller|
+  controller.request.ip == "192.168.1.1"
+end
+```
+
 Track bots
 
 ```ruby
@@ -386,7 +394,6 @@ end
 
 ## TODO
 
-- custom hook to exclude visits and events
 - handle batch events
 - better readme
 - simple dashboard

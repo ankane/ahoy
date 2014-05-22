@@ -1,3 +1,7 @@
+## 0.2.2 [unreleased]
+
+- Added `exclude_method` option
+
 ## 0.2.1
 
 - Fixed IE 8 error
