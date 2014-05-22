@@ -7,6 +7,7 @@ module Ahoy
 
     def track(name, properties = {}, options = {})
       # publish to each subscriber
+      options = options.dup
       if @controller
         options[:controller] ||= @controller
         options[:user] ||= Ahoy.fetch_user(@controller)
