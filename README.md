@@ -386,6 +386,8 @@ end
 
 ## TODO
 
+- custom hook to exclude visits and events
+- handle batch events
 - better readme
 - simple dashboard
 - turn off modules
