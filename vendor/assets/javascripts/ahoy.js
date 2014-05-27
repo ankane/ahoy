@@ -27,7 +27,7 @@
     if (ahoy.domain) {
       cookieDomain = "; domain=" + ahoy.domain;
     }
-    document.cookie = name + "=" + value + expires + cookieDomain + "; path=/";
+    document.cookie = name + "=" + escape(value) + expires + cookieDomain + "; path=/";
   }
 
   function getCookie(name) {
@@ -40,7 +40,7 @@
         c = c.substring(1, c.length);
       }
       if (c.indexOf(nameEQ) === 0) {
-        return c.substring(nameEQ.length, c.length);
+        return unescape(c.substring(nameEQ.length, c.length));
       }
     }
     return null;
@@ -100,7 +100,7 @@
         $.ajax({
           type: "POST",
           url: "/ahoy/events",
-          data: JSON.stringify(event),
+          data: JSON.stringify([event]),
           contentType: "application/json; charset=utf-8",
           dataType: "json",
           success: function() {
@@ -218,7 +218,7 @@
     $(document).on("click", "a, button, input[type=submit]", function (e) {
       var $target = $(e.currentTarget);
       var properties = eventProperties(e);
-      properties.text = properties.tag == "input" ? $target.val() : $.trim($target.text());
+      properties.text = properties.tag == "input" ? $target.val() : $.trim($target.text().replace(/[\s\r\n]+/g, " "));
       properties.href = $target.attr("href");
       ahoy.track("$click", properties);
     });
