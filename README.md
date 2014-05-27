@@ -367,7 +367,7 @@ Use a different model for events
 Ahoy.subscribers << Ahoy::Subscribers::ActiveRecord.new(model: Event)
 ```
 
-Exclude visits and events [master]
+Exclude visits and events
 
 ```ruby
 Ahoy.exclude_method = proc do |controller|
@@ -394,7 +394,6 @@ end
 
 ## TODO
 
-- handle batch events
 - better readme
 - simple dashboard
 - turn off modules

@@ -1,8 +1,9 @@
-## 0.2.2 [unreleased]
+## 0.2.2
 
 - Added `exclude_method` option
 - Added support for batch events
 - Fixed cookie encoding
+- Fixed `options` variable from being modified
 
 ## 0.2.1
 
