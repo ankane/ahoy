@@ -254,6 +254,12 @@ Turn off logging
 ahoy.debug(false);
 ```
 
+Debug endpoint requests in Ruby [master]
+
+```ruby
+Ahoy.quiet = false
+```
+
 ### More
 
 - Excludes bots
