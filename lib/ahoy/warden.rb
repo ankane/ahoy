@@ -9,6 +9,6 @@ Warden::Manager.after_set_user except: :fetch do |user, auth, opts|
       visit.save!
     end
   end
-  ahoy = Ahoy::Tracker.new
+  ahoy = Ahoy::Tracker.new(request: request)
   ahoy.track "$authenticate", {}, user: user, visit: visit
 end

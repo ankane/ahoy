@@ -3,10 +3,11 @@ module Ahoy
 
     def initialize(options = {})
       @controller = options[:controller]
+      @request = options[:request] || @controller.try(:request)
     end
 
     def track(name, properties = {}, options = {})
-      if !(@controller and Ahoy.exclude_method and Ahoy.exclude_method.call(@controller))
+      if (Ahoy.track_bots or !bot?) and !exclude?
         # publish to each subscriber
         options = options.dup
         if @controller
@@ -29,6 +30,24 @@ module Ahoy
       end
 
       true
+    end
+
+    protected
+
+    def bot?
+      @bot ||= Browser.new(ua: @request.user_agent).bot?
+    end
+
+    def exclude?
+      if Ahoy.exclude_method
+        if Ahoy.exclude_method.arity == 1
+          Ahoy.exclude_method.call(@controller)
+        else
+          Ahoy.exclude_method.call(@controller, @request)
+        end
+      else
+        false
+      end
     end
 
   end
