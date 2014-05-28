@@ -1,3 +1,8 @@
+## 0.2.3 [unreleased]
+
+- Skip server-side bot events
+- Added `request` argument to `exclude_method`
+
 ## 0.2.2
 
 - Added `exclude_method` option
