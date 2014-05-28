@@ -53,6 +53,9 @@ module Ahoy
 
   mattr_accessor :track_bots
   self.track_bots = false
+
+  mattr_accessor :quiet
+  self.quiet = true
 end
 
 ActionController::Base.send :include, Ahoy::Controller

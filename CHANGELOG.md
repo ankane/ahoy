@@ -1,5 +1,6 @@
 ## 0.2.3 [unreleased]
 
+- Quiet endpoint requests
 - Skip server-side bot events
 - Added `request` argument to `exclude_method`
 
