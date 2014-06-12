@@ -175,6 +175,8 @@ or track all views and clicks with:
 ahoy.trackAll();
 ```
 
+See [Ahoy.js](https://github.com/ankane/ahoy.js) for a complete list of features.
+
 #### Ruby
 
 ```ruby
