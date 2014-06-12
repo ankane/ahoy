@@ -30,7 +30,14 @@ module Ahoy
     end
 
     def set_ahoy_visitor_cookie
-      cookies[:ahoy_visitor] = current_visitor_token if !request.headers["Ahoy-Visitor"] && !cookies[:ahoy_visitor]
+      if !request.headers["Ahoy-Visitor"] && !cookies[:ahoy_visitor]
+        cookie = {
+          value: current_visitor_token,
+          expires: 2.years.from_now
+        }
+        cookie[:domain] = Ahoy.domain if Ahoy.domain
+        cookies[:ahoy_visitor] = cookie
+      end
     end
 
   end

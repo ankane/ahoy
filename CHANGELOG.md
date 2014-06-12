@@ -1,3 +1,8 @@
+## 0.3.1
+
+- Fixed visitor cookies when set on server
+- Added `domain` option for server cookies
+
 ## 0.3.0
 
 - Added `current_visit_token` and `current_visitor_token` method

@@ -60,6 +60,8 @@ module Ahoy
 
   mattr_accessor :quiet
   self.quiet = true
+
+  mattr_accessor :domain
 end
 
 ActionController::Base.send :include, Ahoy::Controller
