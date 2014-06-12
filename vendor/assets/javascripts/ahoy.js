@@ -177,6 +177,14 @@
     }
   }
 
+  ahoy.getVisitToken = function () {
+    return visitId;
+  };
+
+  ahoy.getVisitorToken = function () {
+    return visitorId;
+  };
+
   ahoy.reset = function () {
     destroyCookie("ahoy_visit");
     destroyCookie("ahoy_visitor");
