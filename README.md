@@ -250,7 +250,7 @@ Turn off logging
 ahoy.debug(false);
 ```
 
-Debug endpoint requests in Ruby [master]
+Debug endpoint requests in Ruby
 
 ```ruby
 Ahoy.quiet = false
