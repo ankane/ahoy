@@ -16,11 +16,11 @@ module Ahoy
           if @controller.respond_to?(:current_visit)
             options[:visit] ||= @controller.current_visit
           end
-          if @controller.respond_to?(:current_visitor_id)
-            options[:visitor_id] = @controller.current_visitor_id
+          if @controller.respond_to?(:current_visit_token)
+            options[:visit_token] = @controller.current_visit_token
           end
-          if @controller.respond_to?(:current_visit_id)
-            options[:visit_id] = @controller.current_visit_id
+          if @controller.respond_to?(:current_visitor_token)
+            options[:visitor_token] = @controller.current_visitor_token
           end
         end
         options[:time] ||= Time.zone.now

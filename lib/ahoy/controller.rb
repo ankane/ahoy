@@ -15,24 +15,22 @@ module Ahoy
     end
 
     def current_visit
-      visit_token = current_visit_id
+      visit_token = current_visit_token
       if visit_token
         @current_visit ||= Ahoy.visit_model.where(visit_token: visit_token).first
       end
     end
 
-    # different from current_visit.id
-    # this is confusing, but we must move to UUIDs
-    def current_visit_id
-      @current_visit_id ||= request.headers["Ahoy-Visit"] || cookies[:ahoy_visit]
+    def current_visit_token
+      @current_visit_token ||= request.headers["Ahoy-Visit"] || cookies[:ahoy_visit]
+    end
+
+    def current_visitor_token
+      @current_visitor_token ||= request.headers["Ahoy-Visitor"] || cookies[:ahoy_visitor] || Ahoy.generate_id
     end
 
     def set_ahoy_visitor_cookie
-      cookies[:ahoy_visitor] = current_visitor_id if !request.headers["Ahoy-Visitor"] && !cookies[:ahoy_visitor]
-    end
-
-    def current_visitor_id
-      @current_visitor_id ||= request.headers["Ahoy-Visitor"] || cookies[:ahoy_visitor] || Ahoy.generate_id
+      cookies[:ahoy_visitor] = current_visitor_token if !request.headers["Ahoy-Visitor"] && !cookies[:ahoy_visitor]
     end
 
   end
