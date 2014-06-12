@@ -18,6 +18,7 @@ module Ahoy
           end
         end
         options[:time] ||= Time.zone.now
+        options[:id] ||= Ahoy.generate_id
 
         subscribers = Ahoy.subscribers
         if subscribers.any?
