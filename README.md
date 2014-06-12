@@ -142,18 +142,12 @@ When a user launches the app, create a visit.  Send a `POST` request to `/ahoy/v
 - platform - `iOS`, `Android`, etc.
 - app_version - `1.0.0`
 - os_version - `7.0.6`
-- visitor_token - if you have one
+- visit_token - `505f6201-8e10-44cf-ba1c-37271c8d0125`
+- visitor_token - `db3b1a8f-302b-42df-9cd0-06875f549474`
 
-The endpoint will return a JSON response like:
+Tokens must be [UUIDs](http://en.wikipedia.org/wiki/Universally_unique_identifier).
 
-```json
-{
-  "visit_token": "8tx2ziymkwa1WlppnkqxyaBaRlXrEQ3K",
-  "visitor_token": "hYBIV0rBfrIUAiArWweiECt4N9pyiygN"
-}
-```
-
-Send the visit token in the `Ahoy-Visit` header for all requests.
+Send the visit and visitor tokens in the `Ahoy-Visit` and `Ahoy-Visitor` headers with all requests.
 
 After 4 hours, create another visit and use the updated visit token.
 
