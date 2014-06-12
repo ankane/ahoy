@@ -1,3 +1,11 @@
+/*
+ * Ahoy.js
+ * Simple, powerful JavaScript analytics
+ * https://github.com/ankane/ahoy.js
+ * v0.1.0
+ * MIT License
+ */
+
 /*jslint browser: true, indent: 2, plusplus: true, vars: true */
 
 (function (window) {
@@ -5,13 +13,14 @@
 
   var ahoy = window.ahoy || window.Ahoy || {};
   var $ = window.jQuery || window.Zepto || window.$;
-  var visitToken, visitorToken;
+  var visitId, visitorId;
   var visitTtl = 4 * 60; // 4 hours
   var visitorTtl = 2 * 365 * 24 * 60; // 2 years
   var isReady = false;
   var queue = [];
   var canStringify = typeof(JSON) !== "undefined" && typeof(JSON.stringify) !== "undefined";
   var eventQueue = [];
+  var page = ahoy.page || window.location.pathname;
 
   // cookies
 
@@ -72,18 +81,12 @@
     }
   }
 
-  // https://github.com/klughammer/node-randomstring
+  // http://stackoverflow.com/a/2117523/1177228
   function generateId() {
-    var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghiklmnopqrstuvwxyz';
-    var length = 32;
-    var string = '';
-
-    for (var i = 0; i < length; i++) {
-      var randomNumber = Math.floor(Math.random() * chars.length);
-      string += chars.substring(randomNumber, randomNumber + 1);
-    }
-
-    return string;
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+      var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+      return v.toString(16);
+    });
   }
 
   function saveEventQueue() {
@@ -123,35 +126,37 @@
     return {
       tag: $target.get(0).tagName.toLowerCase(),
       id: $target.attr("id"),
-      "class": $target.attr("class")
+      "class": $target.attr("class"),
+      page: page,
+      section: $target.closest("*[data-section]").data("section")
     };
   }
 
   // main
 
-  visitToken = getCookie("ahoy_visit");
-  visitorToken = getCookie("ahoy_visitor");
+  visitId = getCookie("ahoy_visit");
+  visitorId = getCookie("ahoy_visitor");
 
-  if (visitToken && visitorToken) {
+  if (visitId && visitorId) {
     // TODO keep visit alive?
     log("Active visit");
     setReady();
   } else {
-    visitToken = generateId();
-    setCookie("ahoy_visit", visitToken, visitTtl);
+    visitId = generateId();
+    setCookie("ahoy_visit", visitId, visitTtl);
 
     // make sure cookies are enabled
     if (getCookie("ahoy_visit")) {
       log("Visit started");
 
-      if (!visitorToken) {
-        visitorToken = generateId();
-        setCookie("ahoy_visitor", visitorToken, visitorTtl);
+      if (!visitorId) {
+        visitorId = generateId();
+        setCookie("ahoy_visitor", visitorId, visitorTtl);
       }
 
       var data = {
-        visit_token: visitToken,
-        visitor_token: visitorToken,
+        visit_token: visitId,
+        visitor_token: visitorId,
         platform: ahoy.platform || "Web",
         landing_page: window.location.href,
         screen_width: window.screen.width,
@@ -209,7 +214,8 @@
   ahoy.trackView = function () {
     var properties = {
       url: window.location.href,
-      title: document.title
+      title: document.title,
+      page: page
     };
     ahoy.track("$view", properties);
   };

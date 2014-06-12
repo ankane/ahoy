@@ -2,8 +2,8 @@ module Ahoy
   class VisitsController < BaseController
 
     def create
-      visit_token = params[:visit_token] || generate_token
-      visitor_token = params[:visitor_token] || generate_token
+      visit_token = params[:visit_token] || Ahoy.generate_id
+      visitor_token = params[:visitor_token] || Ahoy.generate_id
 
       visit =
         Ahoy.visit_model.new do |v|
@@ -21,12 +21,6 @@ module Ahoy
 
       visit.save!
       render json: {visit_token: visit.visit_token, visitor_token: visit.visitor_token}
-    end
-
-    protected
-
-    def generate_token
-      SecureRandom.urlsafe_base64(32).gsub(/[\-_]/, "").first(32)
     end
 
   end
