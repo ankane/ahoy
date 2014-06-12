@@ -26,7 +26,7 @@ module Ahoy
     end
 
     def current_visitor_token
-      @current_visitor_token ||= request.headers["Ahoy-Visitor"] || cookies[:ahoy_visitor] || Ahoy.generate_id
+      @current_visitor_token ||= request.headers["Ahoy-Visitor"] || cookies[:ahoy_visitor] || current_visit.try(:visitor_token) || Ahoy.generate_id
     end
 
     def set_ahoy_visitor_cookie
