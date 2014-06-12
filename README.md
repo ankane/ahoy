@@ -378,8 +378,8 @@ Ahoy.subscribers << Ahoy::Subscribers::ActiveRecord.new(model: Event)
 Exclude visits and events
 
 ```ruby
-Ahoy.exclude_method = proc do |controller|
-  controller.request.ip == "192.168.1.1"
+Ahoy.exclude_method = proc do |controller, request|
+  request.ip == "192.168.1.1"
 end
 ```
 
@@ -390,6 +390,12 @@ Ahoy.track_bots = true
 ```
 
 ## Upgrading
+
+### 0.3.0
+
+Starting with `0.3.0`, visit and visitor tokens are now UUIDs.
+
+### 0.1.6
 
 In `0.1.6`, a big improvement was made to `browser` and `os`. Update existing visits with:
 

@@ -1,4 +1,4 @@
-## 0.3.0 [unreleased]
+## 0.3.0
 
 - Added `current_visit_token` and `current_visitor_token` method
 - Switched to UUIDs
