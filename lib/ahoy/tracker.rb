@@ -16,6 +16,12 @@ module Ahoy
           if @controller.respond_to?(:current_visit)
             options[:visit] ||= @controller.current_visit
           end
+          if @controller.respond_to?(:current_visitor_id)
+            options[:visitor_id] = @controller.current_visitor_id
+          end
+          if @controller.respond_to?(:current_visit_id)
+            options[:visit_id] = @controller.current_visit_id
+          end
         end
         options[:time] ||= Time.zone.now
         options[:id] ||= Ahoy.generate_id

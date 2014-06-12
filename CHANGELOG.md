@@ -1,6 +1,6 @@
 ## 0.3.0 [unreleased]
 
-- Added `current_visitor_id` method
+- Added `current_visit_id` and `current_visitor_id` method
 - Switched to UUIDs
 - Quiet endpoint requests
 - Skip server-side bot events

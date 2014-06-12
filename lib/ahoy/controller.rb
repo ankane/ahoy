@@ -10,15 +10,21 @@ module Ahoy
       end
     end
 
+    def ahoy
+      @ahoy ||= Ahoy::Tracker.new(controller: self)
+    end
+
     def current_visit
-      visit_token = cookies[:ahoy_visit] || request.headers["Ahoy-Visit"]
+      visit_token = current_visit_id
       if visit_token
         @current_visit ||= Ahoy.visit_model.where(visit_token: visit_token).first
       end
     end
 
-    def ahoy
-      @ahoy ||= Ahoy::Tracker.new(controller: self)
+    # different from current_visit.id
+    # this is confusing, but we must move to UUIDs
+    def current_visit_id
+      @current_visit_id ||= request.headers["Ahoy-Visit"] || cookies[:ahoy_visit]
     end
 
     def set_ahoy_visitor_cookie
@@ -26,7 +32,7 @@ module Ahoy
     end
 
     def current_visitor_id
-      @current_visit_id ||= request.headers["Ahoy-Visitor"] || cookies[:ahoy_visitor] || Ahoy.generate_id
+      @current_visitor_id ||= request.headers["Ahoy-Visitor"] || cookies[:ahoy_visitor] || Ahoy.generate_id
     end
 
   end
