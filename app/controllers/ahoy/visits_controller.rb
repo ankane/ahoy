@@ -19,7 +19,11 @@ module Ahoy
           v.os_version = params[:os_version] if v.respond_to?(:os_version=)
         end
 
-      visit.save!
+      begin
+        visit.save!
+      rescue ActiveRecord::RecordNotUnique
+        # do nothing
+      end
       render json: {visit_token: visit.visit_token, visitor_token: visit.visitor_token}
     end
 
