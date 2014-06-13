@@ -54,7 +54,7 @@ module Ahoy
             v.user_agent = request.user_agent if v.respond_to?(:user_agent=)
             v.referrer = params[:referrer] if v.respond_to?(:referrer=)
             v.landing_page = params[:landing_page] if v.respond_to?(:landing_page=)
-            v.user = Ahoy.fetch_user(self) if v.respond_to?(:user=)
+            v.user = Ahoy.fetch_user(@controller) if v.respond_to?(:user=)
             v.platform = params[:platform] if v.respond_to?(:platform=)
             v.app_version = params[:app_version] if v.respond_to?(:app_version=)
             v.os_version = params[:os_version] if v.respond_to?(:os_version=)
