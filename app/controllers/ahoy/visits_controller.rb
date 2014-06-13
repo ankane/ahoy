@@ -5,6 +5,7 @@ module Ahoy
       visit_token = params[:visit_token] || Ahoy.generate_id
       visitor_token = params[:visitor_token] || Ahoy.generate_id
 
+      # TODO move to subscriber
       visit =
         Ahoy.visit_model.new do |v|
           v.visit_token = visit_token
@@ -24,7 +25,8 @@ module Ahoy
       rescue ActiveRecord::RecordNotUnique
         # do nothing
       end
-      render json: {visit_token: visit.visit_token, visitor_token: visit.visitor_token}
+
+      render json: {visit_token: visit_token, visitor_token: visitor_token}
     end
 
   end
