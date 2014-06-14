@@ -1,5 +1,6 @@
 module Ahoy
   class Tracker
+    attr_reader :request, :controller
 
     def initialize(options = {})
       @controller = options[:controller]
@@ -13,16 +14,11 @@ module Ahoy
         if @controller
           options[:controller] ||= @controller
           options[:user] ||= Ahoy.fetch_user(@controller)
-          if @controller.respond_to?(:current_visit)
-            options[:visit] ||= @controller.current_visit
-          end
-          if @controller.respond_to?(:current_visit_token)
-            options[:visit_token] = @controller.current_visit_token
-          end
-          if @controller.respond_to?(:current_visitor_token)
-            options[:visitor_token] = @controller.current_visitor_token
-          end
         end
+
+        options[:visit] ||= current_visit
+        options[:visit_token] ||= visit_token
+        options[:visitor_token] ||= visitor_token
         options[:time] ||= Time.zone.now
         options[:id] ||= Ahoy.generate_id
 
@@ -70,7 +66,35 @@ module Ahoy
       {visit_token: visit_token, visitor_token: visitor_token}
     end
 
+    # TODO move to subscriber
+    def current_visit
+      @current_visit ||= Ahoy.visit_model.where(visit_token: visit_token).first if visit_token
+    end
+
+    def visit_token
+      @visit_token ||= request.headers["Ahoy-Visit"] || request.cookies["ahoy_visit"]
+    end
+
+    def visitor_token
+      @visitor_token ||= existing_visitor_token || current_visit.try(:visitor_token) || Ahoy.generate_id
+    end
+
+    def set_visitor_cookie
+      if !existing_visitor_token
+        cookie = {
+          value: visitor_token,
+          expires: 2.years.from_now
+        }
+        cookie[:domain] = Ahoy.domain if Ahoy.domain
+        controller.response.set_cookie(:ahoy_visitor, cookie)
+      end
+    end
+
     protected
+
+    def existing_visitor_token
+      request.headers["Ahoy-Visitor"] || request.cookies["ahoy_visitor"]
+    end
 
     def track?
       (Ahoy.track_bots || !bot?) && !exclude?
@@ -94,10 +118,6 @@ module Ahoy
 
     def params
       @controller.params
-    end
-
-    def request
-      @request
     end
 
   end

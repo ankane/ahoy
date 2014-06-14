@@ -4,6 +4,8 @@ module Ahoy
     def self.included(base)
       base.helper_method :current_visit
       base.helper_method :ahoy
+      base.helper_method :visit_token
+      base.helper_method :visitor_token
       base.before_filter :set_ahoy_visitor_cookie
       base.before_filter do
         RequestStore.store[:ahoy_controller] ||= self
@@ -15,29 +17,23 @@ module Ahoy
     end
 
     def current_visit
-      visit_token = current_visit_token
-      if visit_token
-        @current_visit ||= Ahoy.visit_model.where(visit_token: visit_token).first
-      end
+      ahoy.current_visit
     end
 
-    def current_visit_token
-      @current_visit_token ||= request.headers["Ahoy-Visit"] || cookies[:ahoy_visit]
+    def visit_token
+      ahoy.visit_token
     end
+    # deprecated
+    alias_method :current_visit_token, :visit_token
 
-    def current_visitor_token
-      @current_visitor_token ||= request.headers["Ahoy-Visitor"] || cookies[:ahoy_visitor] || current_visit.try(:visitor_token) || Ahoy.generate_id
+    def visitor_token
+      ahoy.visitor_token
     end
+    # deprecated
+    alias_method :current_visitor_token, :visitor_token
 
     def set_ahoy_visitor_cookie
-      if !request.headers["Ahoy-Visitor"] && !cookies[:ahoy_visitor]
-        cookie = {
-          value: current_visitor_token,
-          expires: 2.years.from_now
-        }
-        cookie[:domain] = Ahoy.domain if Ahoy.domain
-        cookies[:ahoy_visitor] = cookie
-      end
+      ahoy.set_visitor_cookie
     end
 
   end
