@@ -8,6 +8,7 @@ require "ahoy/version"
 require "ahoy/tracker"
 require "ahoy/controller"
 require "ahoy/model"
+require "ahoy/stores/active_record"
 require "ahoy/subscribers/active_record"
 require "ahoy/engine"
 require "ahoy/warden" if defined?(Warden)
@@ -62,6 +63,9 @@ module Ahoy
   self.quiet = true
 
   mattr_accessor :domain
+
+  mattr_accessor :data_store
+  self.data_store = Ahoy::Stores::ActiveRecord.new
 end
 
 ActionController::Base.send :include, Ahoy::Controller

@@ -3,8 +3,16 @@ module Ahoy
 
     def ahoy_visit
       class_eval do
-
         belongs_to :user, polymorphic: true
+
+        def landing_params
+          @landing_params ||= begin
+            landing_uri = Addressable::URI.parse(landing_page) rescue nil
+            ActiveSupport::HashWithIndifferentAccess.new((landing_uri && landing_uri.query_values) || {})
+          end
+        end
+
+        # TODO move elsewhere
 
         before_create :set_traffic_source
         before_create :set_utm_parameters
@@ -70,13 +78,6 @@ module Ahoy
             end
           end
           true
-        end
-
-        def landing_params
-          @landing_params ||= begin
-            landing_uri = Addressable::URI.parse(landing_page) rescue nil
-            ActiveSupport::HashWithIndifferentAccess.new((landing_uri && landing_uri.query_values) || {})
-          end
         end
 
       end # end class_eval
