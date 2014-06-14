@@ -19,7 +19,7 @@ module Ahoy
         options[:id] ||= Ahoy.generate_id
         options[:controller] ||= @controller
 
-        Ahoy.data_store.track_event(name, properties, options)
+        Ahoy.store.track_event(name, properties, options)
       end
 
       true
@@ -30,14 +30,14 @@ module Ahoy
       @visitor_token = request.params["visitor_token"] || Ahoy.generate_id
 
       if track?
-        Ahoy.data_store.track_visit(self)
+        Ahoy.store.track_visit(self)
       end
 
       {visit_token: visit_token, visitor_token: visitor_token}
     end
 
     def current_visit
-      @current_visit ||= Ahoy.data_store.current_visit(self)
+      @current_visit ||= Ahoy.store.current_visit(self)
     end
 
     def visit_token
