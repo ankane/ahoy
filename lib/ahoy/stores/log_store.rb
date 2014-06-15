@@ -33,11 +33,11 @@ module Ahoy
 
       # TODO disable header
       def visit_logger
-        ActiveSupport::Logger.new(Rails.root.join("log/visits.log"))
+        @visit_logger ||= ActiveSupport::Logger.new(Rails.root.join("log/visits.log"))
       end
 
       def event_logger
-        ActiveSupport::Logger.new(Rails.root.join("log/events.log"))
+        @event_logger ||= ActiveSupport::Logger.new(Rails.root.join("log/events.log"))
       end
 
     end
