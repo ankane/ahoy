@@ -3,9 +3,22 @@ module Ahoy
     class ActiveRecord
 
       def initialize(options = {})
+        @options = options
+        @model = options[:model] || Ahoy::Event
       end
 
       def track_event(name, properties, options)
+        unless @options[:track_events] == false
+          @model.create! do |e|
+            e.visit = options[:visit]
+            e.user = options[:user]
+            e.name = name
+            e.properties = properties
+            e.time = options[:time]
+          end
+        end
+
+        # deprecated
         subscribers = Ahoy.subscribers
         if subscribers.any?
           subscribers.each do |subscriber|
