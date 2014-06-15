@@ -22,15 +22,6 @@ require "ahoy/engine"
 require "ahoy/warden" if defined?(Warden)
 
 module Ahoy
-
-  def self.fetch_user(controller)
-    if user_method.respond_to?(:call)
-      user_method.call(controller)
-    else
-      controller.send(user_method)
-    end
-  end
-
   mattr_accessor :store
 
   mattr_accessor :user_method
@@ -39,9 +30,6 @@ module Ahoy
   end
 
   mattr_accessor :exclude_method
-
-  mattr_accessor :subscribers
-  self.subscribers = []
 
   mattr_accessor :track_bots
   self.track_bots = false
@@ -52,6 +40,9 @@ module Ahoy
   mattr_accessor :domain
 
   # deprecated
+
+  mattr_accessor :subscribers
+  self.subscribers = []
 
   def self.visit_model
     @visit_model || ::Visit

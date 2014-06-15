@@ -60,10 +60,17 @@ module Ahoy
     end
 
     def user
-      @user ||= Ahoy.fetch_user(@controller)
+      @user ||= begin
+        user_method = Ahoy.user_method
+        if user_method.respond_to?(:call)
+          user_method.call(controller)
+        else
+          controller.send(user_method)
+        end
+      end
     end
 
-    # TODO wrap request in Ahoy::Request
+    # TODO better method
     def ahoy_request
       @ahoy_request ||= Ahoy::Request.new(request)
     end
