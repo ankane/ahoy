@@ -23,7 +23,7 @@ module Ahoy
         visit.upsert
       end
 
-      def track_event(name, properties, options)
+      def track_event(name, properties, options, &block)
         unless @options[:track_events] == false
           event =
             event_model.new do |e|
@@ -34,6 +34,8 @@ module Ahoy
               e.properties = properties
               e.time = options[:time]
             end
+
+          yield(event) if block_given?
 
           event.upsert
         end

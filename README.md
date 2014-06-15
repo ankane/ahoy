@@ -165,6 +165,16 @@ def track_visit
 end
 ```
 
+or
+
+```ruby
+def track_event
+  super do |event|
+    event.ip = request.ip
+  end
+end
+```
+
 ### Use Different Models
 
 For ActiveRecord and Mongoid stores

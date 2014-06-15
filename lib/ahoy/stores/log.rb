@@ -21,6 +21,9 @@ module Ahoy
           properties: properties
         }.merge(options.slice(:time, :id, :visit_token, :visitor_token))
         data[:user_id] = options[:user].id if options[:user]
+
+        yield(data) if block_given?
+
         event_logger.info data.to_json
       end
 

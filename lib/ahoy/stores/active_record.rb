@@ -30,13 +30,17 @@ module Ahoy
 
       def track_event(name, properties, options)
         unless @options[:track_events] == false
-          event_model.create! do |e|
+          event_model.new do |e|
             e.visit = options[:visit]
             e.user = options[:user]
             e.name = name
             e.properties = properties
             e.time = options[:time]
           end
+
+          yield(event) if block_given?
+
+          event.save!
         end
 
         # deprecated
