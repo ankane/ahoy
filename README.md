@@ -189,6 +189,18 @@ def event_model
 end
 ```
 
+### Report Exceptions
+
+Exceptions are caught by default so analytics do not break your app.
+
+To report them to a service, use:
+
+```ruby
+def report_exception(e)
+  Rollbar.report_exception(e)
+end
+```
+
 ## More Features
 
 ### Automatic Tracking

@@ -23,6 +23,8 @@ module Ahoy
       end
 
       true
+    rescue => e
+      report_exception(e)
     end
 
     def track_visit
@@ -34,6 +36,8 @@ module Ahoy
       end
 
       {visit_token: visit_token, visitor_token: visitor_token}
+    rescue => e
+      report_exception(e)
     end
 
     def authenticate(user)
@@ -41,6 +45,8 @@ module Ahoy
         current_visit.user = current_user
         current_visit.save!
       end
+    rescue => e
+      report_exception(e)
     end
 
     def current_visit
@@ -83,6 +89,10 @@ module Ahoy
     end
 
     protected
+
+    def report_exception(e)
+      Ahoy.store.report_exception(e) if Ahoy.store.respond_to?(:report_exception)
+    end
 
     def generate_id
       SecureRandom.uuid
