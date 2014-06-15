@@ -2,6 +2,9 @@ module Ahoy
   module Stores
     class ActiveRecord
 
+      def initialize(options = {})
+      end
+
       def track_event(name, properties, options)
         subscribers = Ahoy.subscribers
         if subscribers.any?
