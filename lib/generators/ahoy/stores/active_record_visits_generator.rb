@@ -9,8 +9,9 @@ module Ahoy
     module Generators
       class ActiveRecordVisitsGenerator < Rails::Generators::Base
         include Rails::Generators::Migration
-
         source_root File.expand_path("../templates", __FILE__)
+
+        class_option :database, type: :string, aliases: "-d"
 
         # Implement the required interface for Rails::Generators::Migration.
         def self.next_migration_number(dirname) #:nodoc:
@@ -23,6 +24,9 @@ module Ahoy
         end
 
         def copy_migration
+          unless options["database"].in?([nil, "postgresql"])
+            raise Thor::Error, "Unknown database option"
+          end
           migration_template "active_record_visits_migration.rb", "db/migrate/create_visits.rb"
         end
 

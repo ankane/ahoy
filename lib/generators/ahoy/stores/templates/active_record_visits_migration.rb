@@ -1,8 +1,9 @@
 class <%= migration_class_name %> < ActiveRecord::Migration
   def change
     create_table :visits, id: false do |t|
-      t.uuid :id, primary_key: true
-      t.uuid :visitor_id
+      <% if options["database"] == "postgresql" %>t.uuid :id, primary_key: true
+      t.uuid :visitor_id<% else %>t.binary :id, limit: 16, primary_key: true
+      t.binary :visitor_id, limit: 16<% end %>
 
       # the rest are recommended but optional
       # simply remove the columns you don't want

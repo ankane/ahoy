@@ -37,6 +37,15 @@ rails generate ahoy:stores:active_record_visits
 rake db:migrate
 ```
 
+For PostgreSQL 9.2+, use:
+
+```sh
+rails generate ahoy:stores:active_record -d postgresql
+rake db:migrate
+```
+
+To make events more performant and queryable.
+
 ### Mongoid
 
 ```sh
