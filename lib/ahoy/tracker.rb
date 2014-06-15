@@ -61,7 +61,8 @@ module Ahoy
         track_visit
         cookie = {
           value: visit_id,
-          expires: 4.hours.from_now
+          expires: 4.hours.from_now,
+          path: "/"
         }
         cookie[:domain] = Ahoy.domain if Ahoy.domain
         controller.response.set_cookie("ahoy_visit", cookie)
@@ -72,7 +73,8 @@ module Ahoy
       if !existing_visitor_id
         cookie = {
           value: visitor_id,
-          expires: 2.years.from_now
+          expires: 2.years.from_now,
+          path: "/"
         }
         cookie[:domain] = Ahoy.domain if Ahoy.domain
         controller.response.set_cookie("ahoy_visitor", cookie)
