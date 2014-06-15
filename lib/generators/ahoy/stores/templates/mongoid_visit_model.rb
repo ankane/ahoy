@@ -37,5 +37,5 @@ class Visit
   field :utm_content, type: String
   field :utm_campaign, type: String
 
-  field :created_at, type: Time
+  field :started_at, type: Time
 end

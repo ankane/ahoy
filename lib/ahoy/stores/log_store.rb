@@ -6,7 +6,7 @@ module Ahoy
         data = {
           visit_token: ahoy.visit_token,
           visitor_token: ahoy.visitor_token,
-          time: options[:time]
+          started_at: options[:time]
         }.merge(ahoy.extractor.attributes)
         data[:user_id] = user.id if user
 

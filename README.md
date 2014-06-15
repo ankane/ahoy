@@ -37,8 +37,6 @@ rails generate ahoy:stores:active_record_visits
 rake db:migrate
 ```
 
-Don’t need a field? Just remove it from the migration
-
 ### Mongoid
 
 ```sh
