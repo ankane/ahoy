@@ -17,7 +17,6 @@ module Ahoy
 
         @store.track_event(name, properties, options)
       end
-
       true
     rescue => e
       report_exception(e)
@@ -31,14 +30,16 @@ module Ahoy
 
         @store.track_visit(options)
       end
-
       true
     rescue => e
       report_exception(e)
     end
 
     def authenticate(user)
-      @store.authenticate(user)
+      unless exclude?
+        @store.authenticate(user)
+      end
+      true
     rescue => e
       report_exception(e)
     end
