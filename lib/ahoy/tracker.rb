@@ -27,9 +27,11 @@ module Ahoy
       @visit_token = request.params["visit_token"] || generate_id
       @visitor_token = request.params["visitor_token"] || generate_id
 
-      options[:time] ||= Time.zone.now
-
       unless exclude?
+        options = options.dup
+
+        options[:time] ||= Time.zone.now
+
         @store.track_visit(options)
       end
 
