@@ -87,6 +87,10 @@ class CassandraStore
 
   end
 
+  def current_visit(ahoy)
+
+  end
+
 end
 ```
 
