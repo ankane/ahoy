@@ -27,6 +27,7 @@ module Ahoy
       def track_event(name, properties, options, &block)
         event =
           event_model.new do |e|
+            e.id = options[:id]
             e.visit_id = ahoy.visit_id
             e.user = user
             e.name = name
@@ -36,7 +37,11 @@ module Ahoy
 
         yield(event) if block_given?
 
-        event.save!
+        begin
+          event.save!
+        rescue ActiveRecord::RecordNotUnique
+          # do nothing
+        end
       end
 
       def current_visit

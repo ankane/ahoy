@@ -64,7 +64,7 @@ module Ahoy
           expires: 4.hours.from_now
         }
         cookie[:domain] = Ahoy.domain if Ahoy.domain
-        controller.response.set_cookie(:ahoy_visit, cookie)
+        controller.response.set_cookie("ahoy_visit", cookie)
       end
     end
 
@@ -75,7 +75,7 @@ module Ahoy
           expires: 2.years.from_now
         }
         cookie[:domain] = Ahoy.domain if Ahoy.domain
-        controller.response.set_cookie(:ahoy_visitor, cookie)
+        controller.response.set_cookie("ahoy_visitor", cookie)
       end
     end
 

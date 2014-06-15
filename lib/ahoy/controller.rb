@@ -21,8 +21,8 @@ module Ahoy
     end
 
     def set_ahoy_cookies
-      ahoy.set_visit_cookie
       ahoy.set_visitor_cookie
+      ahoy.set_visit_cookie
     end
 
   end

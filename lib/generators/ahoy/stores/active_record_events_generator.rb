@@ -27,7 +27,7 @@ module Ahoy
         end
 
         def generate_model
-          template "../../../../../app/models/ahoy/event.rb", "app/models/ahoy/event.rb"
+          template "active_record_event_model.rb", "app/models/ahoy/event.rb"
         end
 
         def create_initializer

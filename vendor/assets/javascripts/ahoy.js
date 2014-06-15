@@ -21,6 +21,8 @@
   var canStringify = typeof(JSON) !== "undefined" && typeof(JSON.stringify) !== "undefined";
   var eventQueue = [];
   var page = ahoy.page || window.location.pathname;
+  var visitsUrl = ahoy.visitsUrl || "/ahoy/visits"
+  var eventsUrl = ahoy.eventsUrl || "/ahoy/events"
 
   // cookies
 
@@ -102,7 +104,7 @@
       if (canStringify) {
         $.ajax({
           type: "POST",
-          url: "/ahoy/events",
+          url: eventsUrl,
           data: JSON.stringify([event]),
           contentType: "application/json; charset=utf-8",
           dataType: "json",
@@ -170,18 +172,18 @@
 
       log(data);
 
-      $.post("/ahoy/visits", data, setReady, "json");
+      $.post(visitsUrl, data, setReady, "json");
     } else {
       log("Cookies disabled");
       setReady();
     }
   }
 
-  ahoy.getVisitToken = function () {
+  ahoy.getVisitId = function () {
     return visitId;
   };
 
-  ahoy.getVisitorToken = function () {
+  ahoy.getVisitorId = function () {
     return visitorId;
   };
 
