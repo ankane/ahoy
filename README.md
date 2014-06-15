@@ -62,15 +62,12 @@ rails generate ahoy:stores:custom
 This creates a class for you to fill out.
 
 ```ruby
-class CustomStore
+class Ahoy::Store < Ahoy::Stores::BaseStore
+
+  def track_visit
+  end
 
   def track_event(name, properties, options)
-  end
-
-  def track_visit(ahoy)
-  end
-
-  def current_visit(ahoy)
   end
 
 end
