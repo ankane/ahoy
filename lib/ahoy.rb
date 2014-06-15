@@ -29,7 +29,7 @@ module Ahoy
 
   mattr_accessor :domain # cookies
 
-  # move into store
+  # deprecated - functionality in store
 
   mattr_accessor :user_method
   self.user_method = proc do |controller|

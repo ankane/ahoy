@@ -127,39 +127,59 @@ With other authentication frameworks, add this to the end of your sign in method
 ahoy.authenticate(user)
 ```
 
-## Features
+## Customize the Store
+
+Stores are built to be highly customizable.
+
+```ruby
+class Ahoy::Store < Ahoy::Stores::ActiveRecord
+  # add methods here
+end
+```
 
 ### Exclude Bots and More
 
 Bots are excluded by default. To change this, use:
 
 ```ruby
-Ahoy.track_bots = true
-```
-
-You can also use a custom method.
-
-```ruby
-Ahoy.exclude_method = proc do |controller, request|
-  request.ip == "192.168.1.1"
+def exclude?
+  bots? || request.ip == "192.168.1.1"
 end
 ```
 
-### Multiple Subdomains
-
-To track visits across multiple subdomains, you must set the domain in two places (at the moment).
-
-Add this to the `config/initializers/ahoy.rb` initializer:
+### Customize User
 
 ```ruby
-Ahoy.domain = "yourdomain.com"
+def user
+  controller.true_user
+end
 ```
 
-and add this **before** the javascript files:
+### Track Additional Values
 
-```javascript
-var ahoy = {"domain": "yourdomain.com"};
+```ruby
+def track_visit
+  super do |visit|
+    visit.gclid = landing_params["gclid"]
+  end
+end
 ```
+
+### Use Different Models
+
+For ActiveRecord and Mongoid stores
+
+```ruby
+def visit_model
+  CustomVisit
+end
+
+def event_model
+  CustomEvent
+end
+```
+
+## More Features
 
 ### Automatic Tracking
 
@@ -189,24 +209,20 @@ class ApplicationController < ActionController::Base
 end
 ```
 
-### Customize User
+### Multiple Subdomains
 
-Use a method besides `current_user`
+To track visits across multiple subdomains, you must set the domain in two places (at the moment).
 
-```ruby
-Ahoy.user_method = :true_user
-```
-
-or use a Proc
+Add this to the `config/initializers/ahoy.rb` initializer:
 
 ```ruby
-Ahoy.user_method = proc {|controller| controller.current_user }
+Ahoy.domain = "yourdomain.com"
 ```
 
-### Change Platform
+and add this **before** the javascript files:
 
 ```javascript
-var ahoy = {"platform": "Mobile Web"}
+var ahoy = {"domain": "yourdomain.com"};
 ```
 
 ### ActiveRecord
@@ -227,27 +243,6 @@ Customize visitable
 
 ```ruby
 visitable :sign_up_visit, class_name: "Visit"
-```
-
-Track additional values
-
-```ruby
-class Visit < ActiveRecord::Base
-  ahoy_visit
-
-  before_create :set_gclid
-
-  def set_gclid
-    self.gclid = landing_params["gclid"]
-  end
-
-end
-```
-
-To use a different model name, change the initializer to:
-
-```ruby
-Ahoy.store = Ahoy::Stores::ActiveRecord.new(visit_model: UserVisit, event_model: Event)
 ```
 
 ### Doorkeeper
@@ -371,6 +366,10 @@ Requests should have `Content-Type: application/json`.
 Use an array to pass multiple events at once.
 
 ## Upgrading
+
+### 1.0.0
+
+Ahoy is now database agnostic.
 
 ### 0.3.0
 
