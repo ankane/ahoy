@@ -95,7 +95,33 @@ When someone visits your website, Ahoy creates a visit with lots of useful infor
 
 Use the `current_visit` method to access it, and the `visit_token` and `visitor_token` methods to get the tokens.
 
-### ActiveRecord
+### Events
+
+Each event has a `name` and `properties`.
+
+There are three ways to track events.
+
+#### JavaScript
+
+```javascript
+ahoy.track("Viewed book", {title: "The World is Flat"});
+```
+
+or track events automatically with:
+
+```javascript
+ahoy.trackAll();
+```
+
+See [Ahoy.js](https://github.com/ankane/ahoy.js) for a complete list of features.
+
+#### Ruby
+
+```ruby
+ahoy.track "Viewed book", title: "Hot, Flat, and Crowded"
+```
+
+## ActiveRecord
 
 Explore your visits with queries like:
 
@@ -165,81 +191,6 @@ user = User.first
 user.visits
 ```
 
-### UTM Parameters
-
-Use UTM parameters to track campaigns. [This is great for emails and social media](http://www.thunderseo.com/blog/utm-parameters/). Just add them to your links and Ahoy will pick them up.
-
-```
-http://datakick.org/?utm_medium=email&utm_campaign=newsletter&utm_source=newsletter-2014-03
-```
-
-or
-
-```
-http://datakick.org/?utm_medium=twitter&utm_campaign=social&utm_source=tweet123
-```
-
-### Events
-
-Each event has a `name` and `properties`.
-
-There are three ways to track events.
-
-#### JavaScript
-
-```javascript
-ahoy.track("Viewed book", {title: "The World is Flat"});
-```
-
-or track events automatically with:
-
-```javascript
-ahoy.trackAll();
-```
-
-See [Ahoy.js](https://github.com/ankane/ahoy.js) for a complete list of features.
-
-#### Ruby
-
-```ruby
-ahoy.track "Viewed book", title: "Hot, Flat, and Crowded"
-```
-
-## Native Apps
-
-Libraries for iOS and Android are coming soon. Until then, here’s the HTTP spec.
-
-### Visits
-
-When a user launches the app, create a visit.  Send a `POST` request to `/ahoy/visits` with:
-
-- platform - `iOS`, `Android`, etc.
-- app_version - `1.0.0`
-- os_version - `7.0.6`
-- visit_token - `505f6201-8e10-44cf-ba1c-37271c8d0125`
-- visitor_token - `db3b1a8f-302b-42df-9cd0-06875f549474`
-
-Tokens must be [UUIDs](http://en.wikipedia.org/wiki/Universally_unique_identifier).
-
-Send the visit and visitor tokens in the `Ahoy-Visit` and `Ahoy-Visitor` headers with all requests.
-
-After 4 hours, create another visit and use the updated visit token.
-
-### Events
-
-Send a `POST` request to `/ahoy/events` with:
-
-- id (generated UUID)
-- name
-- properties
-- time ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))
-- `Ahoy-Visit` and `Ahoy-Visitor` headers
-- user token (depends on your authentication framework)
-
-Requests should have `Content-Type: application/json`.
-
-Use an array to pass multiple events at once.
-
 ## Development
 
 Ahoy is built with developers in mind.  You can run the following code in your browser’s console.
@@ -266,29 +217,6 @@ Debug endpoint requests in Ruby
 
 ```ruby
 Ahoy.quiet = false
-```
-
-### More
-
-- Excludes bots
-- Degrades gracefully when cookies are disabled
-- Don’t need a field? Just remove it from the migration
-- Visits are 4 hours by default
-
-### Doorkeeper
-
-To attach the user with [Doorkeeper](https://github.com/doorkeeper-gem/doorkeeper), be sure you have a `current_resource_owner` method in `ApplicationController`.
-
-```ruby
-class ApplicationController < ActionController::Base
-
-  private
-
-  def current_resource_owner
-    User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
-  end
-
-end
 ```
 
 ## Reference
@@ -391,6 +319,64 @@ Track bots
 ```ruby
 Ahoy.track_bots = true
 ```
+
+### More
+
+- Excludes bots
+- Degrades gracefully when cookies are disabled
+- Don’t need a field? Just remove it from the migration
+- Visits are 4 hours by default
+
+### Doorkeeper
+
+To attach the user with [Doorkeeper](https://github.com/doorkeeper-gem/doorkeeper), be sure you have a `current_resource_owner` method in `ApplicationController`.
+
+```ruby
+class ApplicationController < ActionController::Base
+
+  private
+
+  def current_resource_owner
+    User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
+  end
+
+end
+```
+
+## Native Apps
+
+Libraries for iOS and Android are coming soon. Until then, here’s the HTTP spec.
+
+### Visits
+
+When a user launches the app, create a visit.  Send a `POST` request to `/ahoy/visits` with:
+
+- platform - `iOS`, `Android`, etc.
+- app_version - `1.0.0`
+- os_version - `7.0.6`
+- visit_token - `505f6201-8e10-44cf-ba1c-37271c8d0125`
+- visitor_token - `db3b1a8f-302b-42df-9cd0-06875f549474`
+
+Tokens must be [UUIDs](http://en.wikipedia.org/wiki/Universally_unique_identifier).
+
+Send the visit and visitor tokens in the `Ahoy-Visit` and `Ahoy-Visitor` headers with all requests.
+
+After 4 hours, create another visit and use the updated visit token.
+
+### Events
+
+Send a `POST` request to `/ahoy/events` with:
+
+- id (generated UUID)
+- name
+- properties
+- time ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))
+- `Ahoy-Visit` and `Ahoy-Visitor` headers
+- user token (depends on your authentication framework)
+
+Requests should have `Content-Type: application/json`.
+
+Use an array to pass multiple events at once.
 
 ## Upgrading
 
