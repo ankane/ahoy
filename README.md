@@ -121,51 +121,11 @@ See [Ahoy.js](https://github.com/ankane/ahoy.js) for a complete list of features
 ahoy.track "Viewed book", title: "Hot, Flat, and Crowded"
 ```
 
-## ActiveRecord
-
-Explore your visits with queries like:
-
-```ruby
-Visit.group(:search_keyword).count
-Visit.group(:country).count
-Visit.group(:referring_domain).count
-```
-
-[Chartkick](http://chartkick.com/) and [Groupdate](https://github.com/ankane/groupdate) make it super easy to visualize the data.
-
-```erb
-<%= line_chart Visit.group_by_day(:created_at).count %>
-```
-
-### The Power
-
-This information is great on its own, but super powerful when combined with other models.
-
-Let’s associate orders with visits.
-
-```ruby
-class Order < ActiveRecord::Base
-  visitable
-end
-```
-
-When a visitor places an order, the `visit_id` column is automatically set.
-
-:tada: Magic!
-
-See where orders are coming from with simple joins:
-
-```ruby
-Order.joins(:visit).group("referring_domain").count
-Order.joins(:visit).group("city").count
-Order.joins(:visit).group("device_type").count
-```
-
 ### Users
 
-Ahoy automatically attaches the `current_user` to the `current_visit`.
+Ahoy automatically attaches the `current_user` to the visit.
 
-With [Devise](https://github.com/plataformatec/devise), it will attach the user even if he / she signs in after the visit starts.
+With [Devise](https://github.com/plataformatec/devise), it will attach the user even if he or she signs in after the visit starts.
 
 With other authentication frameworks, add this to the end of your sign in method:
 
@@ -174,21 +134,6 @@ if current_visit and !current_visit.user
   current_visit.user = current_user
   current_visit.save!
 end
-```
-
-To see the visits for a given user, create an association:
-
-```ruby
-class User < ActiveRecord::Base
-  has_many :visits
-end
-```
-
-And use:
-
-```ruby
-user = User.first
-user.visits
 ```
 
 ## Development
@@ -341,6 +286,61 @@ class ApplicationController < ActionController::Base
   end
 
 end
+```
+
+## Explore the Data
+
+How you explore the data depends on the data store used.
+
+Here are ways to do it with ActiveRecord.
+
+```ruby
+Visit.group(:search_keyword).count
+Visit.group(:country).count
+Visit.group(:referring_domain).count
+```
+
+[Chartkick](http://chartkick.com/) and [Groupdate](https://github.com/ankane/groupdate) make it super easy to visualize the data.
+
+```erb
+<%= line_chart Visit.group_by_day(:created_at).count %>
+```
+
+This information is great on its own, but super powerful when combined with other models.
+
+Let’s associate orders with visits.
+
+```ruby
+class Order < ActiveRecord::Base
+  visitable
+end
+```
+
+When a visitor places an order, the `visit_id` column is automatically set.
+
+:tada: Magic!
+
+See where orders are coming from with simple joins:
+
+```ruby
+Order.joins(:visit).group("referring_domain").count
+Order.joins(:visit).group("city").count
+Order.joins(:visit).group("device_type").count
+```
+
+To see the visits for a given user, create an association:
+
+```ruby
+class User < ActiveRecord::Base
+  has_many :visits
+end
+```
+
+And use:
+
+```ruby
+user = User.first
+user.visits
 ```
 
 ## Native Apps
