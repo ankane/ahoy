@@ -26,7 +26,7 @@ module Ahoy
       end
       class_eval %Q{
         def set_visit
-          self.#{name} ||= RequestStore.store[:ahoy_controller].try(:send, :current_visit)
+          self.#{name} ||= RequestStore.store[:ahoy].try(:send, :current_visit)
         end
       }
     end

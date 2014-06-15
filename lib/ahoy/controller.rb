@@ -10,7 +10,7 @@ module Ahoy
       base.helper_method :visitor_token
       base.before_filter :set_ahoy_visitor_cookie
       base.before_filter do
-        RequestStore.store[:ahoy_controller] ||= self
+        RequestStore.store[:ahoy] ||= ahoy
       end
     end
 
