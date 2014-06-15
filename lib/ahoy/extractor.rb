@@ -11,7 +11,7 @@ module Ahoy
       TRAFFIC_SOURCE_KEYS + UTM_PARAMETERS_KEYS + TECHNOLOGY_KEYS + LOCATION_KEYS
 
     delegate *TRAFFIC_SOURCE_KEYS, to: :traffic_source_extractor
-    delegate *UTM_PARAMETERS_KEYS, to: :utm_parameters_extractor
+    delegate *UTM_PARAMETERS_KEYS, to: :utm_parameter_extractor
     delegate *TECHNOLOGY_KEYS, to: :technology_extractor
     delegate *LOCATION_KEYS, to: :location_extractor
 
@@ -61,7 +61,7 @@ module Ahoy
       @traffic_source_extractor ||= Extractors::TrafficSourceExtractor.new(referrer)
     end
 
-    def utm_parameters_extractor
+    def utm_parameter_extractor
       @utm_parameters_extractor ||= Extractors::UtmParameterExtractor.new(landing_page)
     end
 
