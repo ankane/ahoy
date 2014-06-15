@@ -51,11 +51,22 @@ module Ahoy
     end
 
     def visit_token
-      @visit_token ||= request.headers["Ahoy-Visit"] || request.cookies["ahoy_visit"]
+      @visit_token ||= existing_visit_token || generate_id
     end
 
     def visitor_token
-      @visitor_token ||= existing_visitor_token || current_visit.try(:visitor_token) || generate_id
+      @visitor_token ||= existing_visitor_token || generate_id
+    end
+
+    def set_visit_cookie
+      if !existing_visit_token
+        cookie = {
+          value: visit_token,
+          expires: 4.hours.from_now
+        }
+        cookie[:domain] = Ahoy.domain if Ahoy.domain
+        controller.response.set_cookie(:ahoy_visit, cookie)
+      end
     end
 
     def set_visitor_cookie
@@ -102,8 +113,12 @@ module Ahoy
       @store.generate_id
     end
 
+    def existing_visit_token
+      @existing_visit_token ||= request.headers["Ahoy-Visit"] || request.cookies["ahoy_visit"] || current_visit.try(:visit_token)
+    end
+
     def existing_visitor_token
-      @existing_visitor_token ||= request.headers["Ahoy-Visitor"] || request.cookies["ahoy_visitor"]
+      @existing_visitor_token ||= request.headers["Ahoy-Visitor"] || request.cookies["ahoy_visitor"] || current_visit.try(:visitor_token)
     end
 
   end

@@ -8,7 +8,7 @@ module Ahoy
       base.helper_method :ahoy
       base.helper_method :visit_token
       base.helper_method :visitor_token
-      base.before_filter :set_ahoy_visitor_cookie
+      base.before_filter :set_ahoy_cookies
       base.before_filter do
         RequestStore.store[:ahoy] ||= ahoy
       end
@@ -30,7 +30,8 @@ module Ahoy
       ahoy.visitor_token
     end
 
-    def set_ahoy_visitor_cookie
+    def set_ahoy_cookies
+      ahoy.set_visit_cookie
       ahoy.set_visitor_cookie
     end
 
