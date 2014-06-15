@@ -37,7 +37,7 @@ module Ahoy
         @store.track_visit(options)
       end
 
-      {visit_token: visit_token, visitor_token: visitor_token}
+      true
     rescue => e
       report_exception(e)
     end

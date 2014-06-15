@@ -4,8 +4,8 @@ module Ahoy
 
       def track_visit(options = {}, &block)
         data = {
-          visit_token: visit_token,
-          visitor_token: visitor_token,
+          visit_token: ahoy.visit_token,
+          visitor_token: ahoy.visitor_token,
           time: Time.zone.now
         }.merge(ahoy.ahoy_request.attributes)
 
@@ -14,7 +14,7 @@ module Ahoy
         visit_logger.info data.to_json
       end
 
-      def track_event(name, properties, options)
+      def track_event(name, properties, options, &block)
         data = {
           name: name,
           properties: properties
