@@ -35,7 +35,7 @@ module Ahoy
         end
 
         def create_initializer
-          template "active_record_visits_initializer.rb", "config/initializers/ahoy.rb"
+          template "active_record_initializer.rb", "config/initializers/ahoy.rb"
         end
 
       end
