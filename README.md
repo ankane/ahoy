@@ -54,7 +54,7 @@ rails generate ahoy:stores:active_record_postgresql
 rake db:migrate
 ```
 
-### Mongoid [coming soon]
+### Mongoid
 
 ```sh
 rails generate ahoy:stores:mongoid

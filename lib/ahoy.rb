@@ -16,6 +16,7 @@ require "ahoy/extractors/technology"
 require "ahoy/extractors/location"
 require "ahoy/stores/active_record"
 require "ahoy/stores/log"
+require "ahoy/stores/mongoid"
 require "ahoy/subscribers/active_record"
 require "ahoy/engine"
 require "ahoy/warden" if defined?(Warden)

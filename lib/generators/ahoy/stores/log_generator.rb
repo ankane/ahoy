@@ -1,6 +1,4 @@
-# taken from https://github.com/collectiveidea/audited/blob/master/lib/generators/audited/install_generator.rb
 require "rails/generators"
-require "rails/generators/migration"
 
 module Ahoy
   module Stores
