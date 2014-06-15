@@ -9,11 +9,11 @@ module Ahoy
       def track_visit(ahoy)
         visit = Ahoy.visit_model.new
 
-        visit[:visitor_token] = ahoy.visitor_token
+        visit[:visitor_token] = binary(ahoy.visitor_token)
         visit[:user_id] = ahoy.user.id if ahoy.user
         visit.assign_attributes(ahoy.ahoy_request.attributes.select{|k, v| v })
 
-        visit.id = ahoy.visit_token
+        visit.id = binary(ahoy.visit_token)
         visit.upsert
       end
 
@@ -29,7 +29,7 @@ module Ahoy
           event[:visit_id] = options[:visit].id if options[:visit]
           event[:user_id] = options[:user].id if options[:user]
 
-          event.id = options[:id]
+          event.id = binary(options[:id])
           event.upsert
         end
       end
@@ -46,6 +46,10 @@ module Ahoy
 
       def event_model
         @options[:event_model] || ::Ahoy::Event
+      end
+
+      def binary(token)
+        ::BSON::Binary.new(token.delete("-"), :uuid)
       end
 
     end
