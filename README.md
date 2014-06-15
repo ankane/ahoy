@@ -193,7 +193,7 @@ There are three ways to track events.
 ahoy.track("Viewed book", {title: "The World is Flat"});
 ```
 
-or track all views and clicks with:
+or track events automatically with:
 
 ```javascript
 ahoy.trackAll();
@@ -229,12 +229,16 @@ After 4 hours, create another visit and use the updated visit token.
 
 Send a `POST` request to `/ahoy/events` with:
 
+- id (generated UUID)
 - name
 - properties
+- time ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))
+- `Ahoy-Visit` and `Ahoy-Visitor` headers
 - user token (depends on your authentication framework)
-- `Ahoy-Visit` header
 
 Requests should have `Content-Type: application/json`.
+
+Use an array to pass multiple events at once.
 
 ## Development
 
