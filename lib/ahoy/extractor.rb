@@ -1,5 +1,5 @@
 module Ahoy
-  class Request
+  class Extractor
     attr_reader :request
 
     TRAFFIC_SOURCE_KEYS = [:referring_domain, :search_keyword]
@@ -19,8 +19,12 @@ module Ahoy
       @request = request
     end
 
+    def keys
+      KEYS
+    end
+
     def attributes
-      @attributes ||= KEYS.inject({}){|memo, key| memo[key] = send(key); memo }
+      @attributes ||= keys.inject({}){|memo, key| memo[key] = send(key); memo }
     end
 
     def ip
@@ -54,7 +58,7 @@ module Ahoy
     protected
 
     def traffic_source_extractor
-      @traffic_source_extractor ||= Extractors::TrafficSourceExactractor.new(referrer)
+      @traffic_source_extractor ||= Extractors::TrafficSourceExtractor.new(referrer)
     end
 
     def utm_parameters_extractor

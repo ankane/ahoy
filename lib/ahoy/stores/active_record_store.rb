@@ -11,8 +11,8 @@ module Ahoy
             v.created_at = options[:time]
           end
 
-        Ahoy::Request::KEYS.each do |key|
-          visit.send(:"#{key}=", ahoy.ahoy_request.send(key)) if visit.respond_to?(:"#{key}=")
+        ahoy.extractor.keys.each do |key|
+          visit.send(:"#{key}=", ahoy.extractor.send(key)) if visit.respond_to?(:"#{key}=")
         end
 
         yield(visit) if block_given?

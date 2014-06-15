@@ -73,9 +73,8 @@ module Ahoy
       @user ||= @store.user
     end
 
-    # TODO better method
-    def ahoy_request
-      @ahoy_request ||= Ahoy::Request.new(request)
+    def extractor
+      @extractor ||= Ahoy::Extractor.new(request)
     end
 
     protected

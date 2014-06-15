@@ -1,3 +1,5 @@
+require "request_store"
+
 module Ahoy
   module Controller
 

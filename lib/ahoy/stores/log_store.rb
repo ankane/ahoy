@@ -7,7 +7,7 @@ module Ahoy
           visit_token: ahoy.visit_token,
           visitor_token: ahoy.visitor_token,
           time: options[:time]
-        }.merge(ahoy.ahoy_request.attributes)
+        }.merge(ahoy.extractor.attributes)
 
         yield(data) if block_given?
 
