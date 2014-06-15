@@ -390,6 +390,20 @@ Use an array to pass multiple events at once.
 
 Ahoy is now database agnostic.
 
+#### Global Options
+
+- Replace `Ahoy.user_method` with `user` method
+- Replace `Ahoy.track_bots` and `Ahoy.exclude_method` with `exclude?` method
+
+#### Visit Model
+
+- Replace `ahoy_visit` with `belongs_to :user, polymorphic: true`
+- For storing additional values, use `track_event` method
+
+#### Subscribers
+
+- Copy `track` method in subscribers to `track_events` method in `Ahoy::Store`
+
 ### 0.3.0
 
 Starting with `0.3.0`, visit and visitor tokens are now UUIDs.
