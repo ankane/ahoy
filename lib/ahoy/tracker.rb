@@ -36,6 +36,13 @@ module Ahoy
       {visit_token: visit_token, visitor_token: visitor_token}
     end
 
+    def authenticate(user)
+      if current_visit and current_visit.respond_to?(:user) and !current_visit.user
+        current_visit.user = current_user
+        current_visit.save!
+      end
+    end
+
     def current_visit
       @current_visit ||= Ahoy.store.current_visit(self)
     end
