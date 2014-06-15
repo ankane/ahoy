@@ -15,22 +15,16 @@ module Ahoy
 
       # TODO much better interface
       def track_visit(ahoy)
-        request = ahoy.request
-        params = ahoy.controller.params
-
         visit =
           Ahoy.visit_model.new do |v|
             v.visit_token = ahoy.visit_token
             v.visitor_token = ahoy.visitor_token
-            v.ip = request.remote_ip if v.respond_to?(:ip=)
-            v.user_agent = request.user_agent if v.respond_to?(:user_agent=)
-            v.referrer = params[:referrer] if v.respond_to?(:referrer=)
-            v.landing_page = params[:landing_page] if v.respond_to?(:landing_page=)
             v.user = ahoy.user if v.respond_to?(:user=)
-            v.platform = params[:platform] if v.respond_to?(:platform=)
-            v.app_version = params[:app_version] if v.respond_to?(:app_version=)
-            v.os_version = params[:os_version] if v.respond_to?(:os_version=)
           end
+
+        Ahoy::Request::KEYS.each do |key|
+          visit.send(:"#{key}=", ahoy.ahoy_request.send(key)) if visit.respond_to?(:"#{key}=")
+        end
 
         begin
           visit.save!

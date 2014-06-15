@@ -63,6 +63,11 @@ module Ahoy
       @user ||= Ahoy.fetch_user(@controller)
     end
 
+    # TODO wrap request in Ahoy::Request
+    def ahoy_request
+      @ahoy_request ||= Ahoy::Request.new(request)
+    end
+
     protected
 
     def existing_visitor_token
