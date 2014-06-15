@@ -93,9 +93,7 @@ When someone visits your website, Ahoy creates a visit with lots of useful infor
 - **technology** - browser, OS, and device type
 - **utm parameters** - source, medium, term, content, campaign
 
-Use the `current_visit` method to access it.
-
-`visit_token` and `visitor_token` methods
+Use the `current_visit` method to access it, and the `visit_token` and `visitor_token` methods to get the tokens.
 
 ### ActiveRecord
 
