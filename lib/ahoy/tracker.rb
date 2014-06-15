@@ -12,7 +12,7 @@ module Ahoy
       unless exclude?
         options = options.dup
 
-        options[:time] ||= Time.zone.now
+        options[:time] ||= trusted_time(options)
         options[:id] ||= generate_id
 
         @store.track_event(name, properties, options)
@@ -30,7 +30,7 @@ module Ahoy
       unless exclude?
         options = options.dup
 
-        options[:time] ||= Time.zone.now
+        options[:time] ||= trusted_time(options)
 
         @store.track_visit(options)
       end
@@ -79,6 +79,14 @@ module Ahoy
     end
 
     protected
+
+    def trusted_time(options)
+      if options[:time] and options[:trusted] == false and (1.minute.ago..Time.now).cover?(options[:time])
+        options[:time]
+      else
+        Time.zone.now
+      end
+    end
 
     def exclude?
       @store.exclude?
