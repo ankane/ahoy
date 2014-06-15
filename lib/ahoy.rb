@@ -24,6 +24,13 @@ require "ahoy/warden" if defined?(Warden)
 module Ahoy
   mattr_accessor :store
 
+  mattr_accessor :quiet
+  self.quiet = true
+
+  mattr_accessor :domain # cookies
+
+  # move into store
+
   mattr_accessor :user_method
   self.user_method = proc do |controller|
     (controller.respond_to?(:current_user) && controller.current_user) || (controller.respond_to?(:current_resource_owner, true) && controller.send(:current_resource_owner)) || nil
@@ -33,11 +40,6 @@ module Ahoy
 
   mattr_accessor :track_bots
   self.track_bots = false
-
-  mattr_accessor :quiet
-  self.quiet = true
-
-  mattr_accessor :domain
 
   # deprecated
 
