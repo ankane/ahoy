@@ -36,7 +36,7 @@ module Ahoy
         event.upsert
       end
 
-      def current_visit(ahoy)
+      def current_visit
         visit_model.where(_id: binary(ahoy.visit_token)).first if ahoy.visit_token
       end
 

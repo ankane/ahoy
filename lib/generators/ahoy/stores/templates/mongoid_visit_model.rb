@@ -36,4 +36,6 @@ class Visit
   field :utm_term, type: String
   field :utm_content, type: String
   field :utm_campaign, type: String
+
+  field :created_at, type: Time
 end
