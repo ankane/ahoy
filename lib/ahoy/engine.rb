@@ -1,7 +1,12 @@
 module Ahoy
   class Engine < ::Rails::Engine
+
+    initializer "ahoy" do
+      Ahoy.store ||= Ahoy::Stores::ActiveRecord.new(track_events: false)
+    end
+
     # from https://github.com/evrone/quiet_assets/blob/master/lib/quiet_assets.rb
-    initializer "ahoy", after: "sprockets.environment" do |app|
+    initializer "ahoy.middleware", after: "sprockets.environment" do |app|
       next unless Ahoy.quiet
 
       # Parse PATH_INFO by assets prefix
@@ -24,5 +29,6 @@ module Ahoy
         alias_method_chain :call, :quiet_ahoy
       end
     end
+
   end
 end

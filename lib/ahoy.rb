@@ -72,7 +72,6 @@ module Ahoy
   mattr_accessor :domain
 
   mattr_accessor :store
-  self.store = Ahoy::Stores::ActiveRecord.new
 end
 
 ActionController::Base.send :include, Ahoy::Controller
