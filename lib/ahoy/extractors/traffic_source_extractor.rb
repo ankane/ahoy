@@ -1,6 +1,6 @@
 module Ahoy
   module Extractors
-    class TrafficSource
+    class TrafficSourceExtractor
 
       def initialize(referrer)
         @referrer = referrer

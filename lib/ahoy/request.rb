@@ -54,19 +54,19 @@ module Ahoy
     protected
 
     def traffic_source_extractor
-      @traffic_source_extractor ||= Extractors::TrafficSource.new(referrer)
+      @traffic_source_extractor ||= Extractors::TrafficSourceExactractor.new(referrer)
     end
 
     def utm_parameters_extractor
-      @utm_parameters_extractor ||= Extractors::UtmParameters.new(landing_page)
+      @utm_parameters_extractor ||= Extractors::UtmParameterExtractor.new(landing_page)
     end
 
     def technology_extractor
-      @technology_extractor ||= Extractors::Technology.new(user_agent)
+      @technology_extractor ||= Extractors::TechnologyExtractor.new(user_agent)
     end
 
     def location_extractor
-      @location_extractor ||= Extractors::Location.new(ip)
+      @location_extractor ||= Extractors::LocationExtractor.new(ip)
     end
 
   end

@@ -1,6 +1,6 @@
 module Ahoy
   module Extractors
-    class Location
+    class LocationExtractor
 
       def initialize(ip)
         @ip = ip
