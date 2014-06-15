@@ -147,14 +147,6 @@ def exclude?
 end
 ```
 
-### Customize User
-
-```ruby
-def user
-  controller.true_user
-end
-```
-
 ### Track Additional Values
 
 ```ruby
@@ -175,17 +167,11 @@ def track_event
 end
 ```
 
-### Use Different Models
-
-For ActiveRecord and Mongoid stores
+### Customize User
 
 ```ruby
-def visit_model
-  CustomVisit
-end
-
-def event_model
-  CustomEvent
+def user
+  controller.true_user
 end
 ```
 
@@ -198,6 +184,20 @@ To report them to a service, use:
 ```ruby
 def report_exception(e)
   Rollbar.report_exception(e)
+end
+```
+
+### Use Different Models
+
+For ActiveRecord and Mongoid stores
+
+```ruby
+def visit_model
+  CustomVisit
+end
+
+def event_model
+  CustomEvent
 end
 ```
 
