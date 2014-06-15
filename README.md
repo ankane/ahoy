@@ -146,7 +146,7 @@ end
 
 ## Features
 
-### Exclude visits and events
+### Exclude Bots and More
 
 Bots are excluded by default. To change this, use:
 
@@ -206,10 +206,44 @@ class ApplicationController < ActionController::Base
 end
 ```
 
-Change the platform on the web
+### Customize User
+
+Use a method besides `current_user`
+
+```ruby
+Ahoy.user_method = :true_user
+```
+
+or use a Proc
+
+```ruby
+Ahoy.user_method = proc {|controller| controller.current_user }
+```
+
+### Change Platform
 
 ```javascript
 var ahoy = {"platform": "Mobile Web"}
+```
+
+### ActiveRecord
+
+Let’s associate orders with visits.
+
+```ruby
+class Order < ActiveRecord::Base
+  visitable
+end
+```
+
+When a visitor places an order, the `visit_id` column is automatically set.
+
+:tada: Magic!
+
+Customize visitable
+
+```ruby
+visitable :sign_up_visit, class_name: "Visit"
 ```
 
 Track additional values
@@ -225,24 +259,6 @@ class Visit < ActiveRecord::Base
   end
 
 end
-```
-
-Use a method besides `current_user`
-
-```ruby
-Ahoy.user_method = :true_user
-```
-
-or use a Proc
-
-```ruby
-Ahoy.user_method = proc {|controller| controller.current_user }
-```
-
-Customize visitable
-
-```ruby
-visitable :sign_up_visit, class_name: "Visit"
 ```
 
 ### Doorkeeper
@@ -306,20 +322,6 @@ Visit.group(:referring_domain).count
 ```erb
 <%= line_chart Visit.group_by_day(:created_at).count %>
 ```
-
-This information is great on its own, but super powerful when combined with other models.
-
-Let’s associate orders with visits.
-
-```ruby
-class Order < ActiveRecord::Base
-  visitable
-end
-```
-
-When a visitor places an order, the `visit_id` column is automatically set.
-
-:tada: Magic!
 
 See where orders are coming from with simple joins:
 
