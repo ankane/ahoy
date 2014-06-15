@@ -4,12 +4,11 @@ module Ahoy
 
       def initialize(options = {})
         @options = options
-        @model = options[:model] || Ahoy::Event
       end
 
       def track_event(name, properties, options)
         unless @options[:track_events] == false
-          @model.create! do |e|
+          event_model.create! do |e|
             e.visit = options[:visit]
             e.user = options[:user]
             e.name = name
@@ -50,7 +49,17 @@ module Ahoy
       end
 
       def current_visit(ahoy)
-        Ahoy.visit_model.where(visit_token: ahoy.visit_token).first if ahoy.visit_token
+        visit_model.where(visit_token: ahoy.visit_token).first if ahoy.visit_token
+      end
+
+      protected
+
+      def visit_model
+        @options[:visit_model] || Ahoy.visit_model
+      end
+
+      def event_model
+        @options[:event_model] || ::Ahoy::Event
       end
 
     end

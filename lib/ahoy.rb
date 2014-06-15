@@ -26,14 +26,6 @@ module Ahoy
     SecureRandom.uuid
   end
 
-  def self.visit_model
-    @visit_model || ::Visit
-  end
-
-  def self.visit_model=(visit_model)
-    @visit_model = visit_model
-  end
-
   # TODO private
   # performance hack for referer-parser
   def self.referrer_parser
@@ -53,6 +45,8 @@ module Ahoy
     end
   end
 
+  mattr_accessor :store
+
   mattr_accessor :user_method
   self.user_method = proc do |controller|
     (controller.respond_to?(:current_user) && controller.current_user) || (controller.respond_to?(:current_resource_owner, true) && controller.send(:current_resource_owner)) || nil
@@ -71,7 +65,16 @@ module Ahoy
 
   mattr_accessor :domain
 
-  mattr_accessor :store
+  # deprecated
+
+  def self.visit_model
+    @visit_model || ::Visit
+  end
+
+  def self.visit_model=(visit_model)
+    @visit_model = visit_model
+  end
+
 end
 
 ActionController::Base.send :include, Ahoy::Controller

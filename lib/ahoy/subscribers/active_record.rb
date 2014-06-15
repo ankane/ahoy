@@ -1,3 +1,4 @@
+# deprecated
 module Ahoy
   module Subscribers
     class ActiveRecord

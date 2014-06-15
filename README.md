@@ -374,21 +374,10 @@ class ApplicationController < ActionController::Base
 end
 ```
 
-Use a different model for visits
+Use a different model for visits or events
 
 ```ruby
-Ahoy.visit_model = UserVisit
-
-# fix for Rails reloader in development
-ActionDispatch::Reloader.to_prepare do
-  Ahoy.visit_model = UserVisit
-end
-```
-
-Use a different model for events
-
-```ruby
-Ahoy.subscribers << Ahoy::Subscribers::ActiveRecord.new(model: Event)
+Ahoy.store = Ahoy::Stores::ActiveRecord.new(visit_model: UserVisit, event_model: Event)
 ```
 
 Exclude visits and events
