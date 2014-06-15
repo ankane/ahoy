@@ -37,6 +37,14 @@ rails generate ahoy:stores:active_record_visits
 rake db:migrate
 ```
 
+Don’t need a field? Just remove it from the migration
+
+To use a different model name, change the initializer to:
+
+```ruby
+Ahoy.store = Ahoy::Stores::ActiveRecord.new(visit_model: UserVisit, event_model: Event)
+```
+
 ### PostgreSQL 9.3 [coming soon]
 
 Just like the ActiveRecord store, but more performant.
@@ -136,35 +144,25 @@ if current_visit and !current_visit.user
 end
 ```
 
-## Development
+## Features
 
-Ahoy is built with developers in mind.  You can run the following code in your browser’s console.
+### Exclude visits and events
 
-Force a new visit
-
-```javascript
-ahoy.reset(); // then reload the page
-```
-
-Log messages
-
-```javascript
-ahoy.debug();
-```
-
-Turn off logging
-
-```javascript
-ahoy.debug(false);
-```
-
-Debug endpoint requests in Ruby
+Bots are excluded by default. To change this, use:
 
 ```ruby
-Ahoy.quiet = false
+Ahoy.track_bots = true
 ```
 
-## Reference
+You can also use a custom method.
+
+```ruby
+Ahoy.exclude_method = proc do |controller, request|
+  request.ip == "192.168.1.1"
+end
+```
+
+### Multiple Subdomains
 
 To track visits across multiple subdomains, you must set the domain in two places (at the moment).
 
@@ -178,6 +176,34 @@ and add this **before** the javascript files:
 
 ```javascript
 var ahoy = {"domain": "yourdomain.com"};
+```
+
+### Automatic Tracking
+
+Page views
+
+```javascript
+ahoy.trackView();
+```
+
+Clicks
+
+```javascript
+ahoy.trackClicks();
+```
+
+Rails actions
+
+```ruby
+class ApplicationController < ActionController::Base
+  after_filter :track_action
+
+  protected
+
+  def track_action
+    ahoy.track "Processed #{controller_name}##{action_name}", request.filtered_parameters
+  end
+end
 ```
 
 Change the platform on the web
@@ -219,59 +245,6 @@ Customize visitable
 visitable :sign_up_visit, class_name: "Visit"
 ```
 
-Track view
-
-```javascript
-ahoy.trackView();
-```
-
-Track clicks
-
-```javascript
-ahoy.trackClicks();
-```
-
-Track all Rails actions
-
-```ruby
-class ApplicationController < ActionController::Base
-  after_filter :track_action
-
-  protected
-
-  def track_action
-    ahoy.track "Hit action", request.filtered_parameters
-  end
-end
-```
-
-Use a different model for visits or events
-
-```ruby
-Ahoy.store = Ahoy::Stores::ActiveRecord.new(visit_model: UserVisit, event_model: Event)
-```
-
-Exclude visits and events
-
-```ruby
-Ahoy.exclude_method = proc do |controller, request|
-  request.ip == "192.168.1.1"
-end
-```
-
-Track bots
-
-```ruby
-Ahoy.track_bots = true
-```
-
-### More
-
-- Excludes bots
-- Degrades gracefully when cookies are disabled
-- Don’t need a field? Just remove it from the migration
-- Visits are 4 hours by default
-
 ### Doorkeeper
 
 To attach the user with [Doorkeeper](https://github.com/doorkeeper-gem/doorkeeper), be sure you have a `current_resource_owner` method in `ApplicationController`.
@@ -286,6 +259,34 @@ class ApplicationController < ActionController::Base
   end
 
 end
+```
+
+## Development
+
+Ahoy is built with developers in mind.  You can run the following code in your browser’s console.
+
+Force a new visit
+
+```javascript
+ahoy.reset(); // then reload the page
+```
+
+Log messages
+
+```javascript
+ahoy.debug();
+```
+
+Turn off logging
+
+```javascript
+ahoy.debug(false);
+```
+
+Debug endpoint requests in Ruby
+
+```ruby
+Ahoy.quiet = false
 ```
 
 ## Explore the Data
