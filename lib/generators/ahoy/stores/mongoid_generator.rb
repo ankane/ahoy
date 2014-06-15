@@ -10,8 +10,10 @@ module Ahoy
           invoke "mongoid:model", ["Visit"]
         end
 
+        # needed to call invoke task more than once
+        # http://stackoverflow.com/questions/4331267/call-task-more-than-once-in-rails-3-generator
         def generate_event_model
-          invoke "mongoid:model", ["Ahoy::Event"]
+          Rails::Generators.invoke "mongoid:model", ["Ahoy::Event"]
         end
 
         def create_initializer
