@@ -1,13 +1,8 @@
 module Ahoy
   module Stores
-    class ActiveRecord
+    class ActiveRecordStore < BaseStore
 
-      def initialize(options = {})
-        @options = options
-      end
-
-      # TODO better interface
-      def track_visit(ahoy, &block)
+      def track_visit(options, &block)
         visit =
           visit_model.new do |v|
             v.visit_token = ahoy.visit_token
@@ -28,8 +23,8 @@ module Ahoy
         end
       end
 
-      def track_event(name, properties, options)
-        unless @options[:track_events] == false
+      def track_event(name, properties, options, &block)
+        event =
           event_model.new do |e|
             e.visit = options[:visit]
             e.user = options[:user]
@@ -38,34 +33,23 @@ module Ahoy
             e.time = options[:time]
           end
 
-          yield(event) if block_given?
+        yield(event) if block_given?
 
-          event.save!
-        end
-
-        # deprecated
-        subscribers = Ahoy.subscribers
-        if subscribers.any?
-          subscribers.each do |subscriber|
-            subscriber.track(name, properties, options)
-          end
-        else
-          $stderr.puts "No subscribers"
-        end
+        event.save!
       end
 
-      def current_visit(ahoy)
+      def current_visit
         visit_model.where(visit_token: ahoy.visit_token).first if ahoy.visit_token
       end
 
       protected
 
       def visit_model
-        @options[:visit_model] || Ahoy.visit_model
+        ::Visit
       end
 
       def event_model
-        @options[:event_model] || ::Ahoy::Event
+        ::Ahoy::Event
       end
 
     end

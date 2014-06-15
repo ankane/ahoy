@@ -1,12 +1,11 @@
 module Ahoy
   module Stores
-    class Log
+    class LogStore < BaseStore
 
-      # TODO much better interface
-      def track_visit(ahoy, &block)
+      def track_visit(options = {}, &block)
         data = {
-          visit_token: ahoy.visit_token,
-          visitor_token: ahoy.visitor_token,
+          visit_token: visit_token,
+          visitor_token: visitor_token,
           time: Time.zone.now
         }.merge(ahoy.ahoy_request.attributes)
 
@@ -20,15 +19,12 @@ module Ahoy
           name: name,
           properties: properties
         }.merge(options.slice(:time, :id, :visit_token, :visitor_token))
+
         data[:user_id] = options[:user].id if options[:user]
 
         yield(data) if block_given?
 
         event_logger.info data.to_json
-      end
-
-      def current_visit(ahoy)
-        nil # not queryable
       end
 
       protected

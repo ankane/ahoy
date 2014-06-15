@@ -1,1 +1,3 @@
-Ahoy.store = Ahoy::Stores::Log.new
+class Ahoy::Store < Ahoy::Stores::LogStore
+  # customize here
+end

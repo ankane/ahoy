@@ -1,10 +1,6 @@
 module Ahoy
   module Stores
-    class Mongoid
-
-      def initialize(options = {})
-        @options = options
-      end
+    class MongoidStore < BaseStore
 
       def track_visit(ahoy, &block)
         visit =
@@ -48,11 +44,11 @@ module Ahoy
       protected
 
       def visit_model
-        @options[:visit_model] || Ahoy.visit_model
+        ::Visit
       end
 
       def event_model
-        @options[:event_model] || ::Ahoy::Event
+        ::Ahoy::Event
       end
 
       def binary(token)

@@ -1,1 +1,3 @@
-Ahoy.store = Ahoy::Stores::Mongoid.new
+class Ahoy::Store < Ahoy::Stores::MongoidStore
+  # customize here
+end

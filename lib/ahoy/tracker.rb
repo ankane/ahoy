@@ -3,23 +3,25 @@ module Ahoy
     attr_reader :request, :controller
 
     def initialize(options = {})
+      @store = Ahoy::Store.new(options.merge(ahoy: self))
       @controller = options[:controller]
       @request = options[:request] || @controller.try(:request)
     end
 
     def track(name, properties = {}, options = {})
-      if track?
+      unless exclude?
         options = options.dup
 
+        # TODO be lazy about setting these
+        options[:time] ||= Time.zone.now
+        options[:id] ||= generate_id
         options[:visit] ||= current_visit
         options[:visit_token] ||= visit_token
         options[:visitor_token] ||= visitor_token
         options[:user] ||= user
-        options[:time] ||= Time.zone.now
-        options[:id] ||= generate_id
         options[:controller] ||= @controller
 
-        Ahoy.store.track_event(name, properties, options)
+        @store.track_event(name, properties, options)
       end
 
       true
@@ -27,12 +29,12 @@ module Ahoy
       report_exception(e)
     end
 
-    def track_visit
+    def track_visit(options = {})
       @visit_token = request.params["visit_token"] || generate_id
       @visitor_token = request.params["visitor_token"] || generate_id
 
-      if track?
-        Ahoy.store.track_visit(self)
+      unless exclude?
+        @store.track_visit(options)
       end
 
       {visit_token: visit_token, visitor_token: visitor_token}
@@ -41,16 +43,13 @@ module Ahoy
     end
 
     def authenticate(user)
-      if current_visit and current_visit.respond_to?(:user) and !current_visit.user
-        current_visit.user = current_user
-        current_visit.save!
-      end
+      @store.authenticate(user)
     rescue => e
       report_exception(e)
     end
 
     def current_visit
-      @current_visit ||= Ahoy.store.current_visit(self)
+      @current_visit ||= @store.current_visit
     end
 
     def visit_token
@@ -73,14 +72,7 @@ module Ahoy
     end
 
     def user
-      @user ||= begin
-        user_method = Ahoy.user_method
-        if user_method.respond_to?(:call)
-          user_method.call(controller)
-        else
-          controller.send(user_method)
-        end
-      end
+      @store.user
     end
 
     # TODO better method
@@ -90,36 +82,20 @@ module Ahoy
 
     protected
 
+    def exclude?
+      @store.exclude?
+    end
+
     def report_exception(e)
-      Ahoy.store.report_exception(e) if Ahoy.store.respond_to?(:report_exception)
+      @store.report_exception(e)
     end
 
     def generate_id
-      SecureRandom.uuid
+      @store.generate_id
     end
 
     def existing_visitor_token
       request.headers["Ahoy-Visitor"] || request.cookies["ahoy_visitor"]
-    end
-
-    def track?
-      (Ahoy.track_bots || !bot?) && !exclude?
-    end
-
-    def bot?
-      @bot ||= Browser.new(ua: @request.user_agent).bot?
-    end
-
-    def exclude?
-      if Ahoy.exclude_method
-        if Ahoy.exclude_method.arity == 1
-          Ahoy.exclude_method.call(@controller)
-        else
-          Ahoy.exclude_method.call(@controller, @request)
-        end
-      else
-        false
-      end
     end
 
   end

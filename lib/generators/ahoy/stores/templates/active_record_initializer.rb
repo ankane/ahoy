@@ -1,1 +1,3 @@
-Ahoy.store = Ahoy::Stores::ActiveRecord.new
+class Ahoy::Store < Ahoy::Stores::ActiveRecordStore
+  # customize here
+end

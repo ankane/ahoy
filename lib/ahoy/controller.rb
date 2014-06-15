@@ -23,14 +23,10 @@ module Ahoy
     def visit_token
       ahoy.visit_token
     end
-    # deprecated
-    alias_method :current_visit_token, :visit_token
 
     def visitor_token
       ahoy.visitor_token
     end
-    # deprecated
-    alias_method :current_visitor_token, :visitor_token
 
     def set_ahoy_visitor_cookie
       ahoy.set_visitor_cookie
