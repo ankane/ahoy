@@ -2,11 +2,11 @@ module Ahoy
   module Stores
     class LogStore < BaseStore
 
-      def track_visit(options = {}, &block)
+      def track_visit(options, &block)
         data = {
           visit_token: ahoy.visit_token,
           visitor_token: ahoy.visitor_token,
-          time: Time.zone.now
+          time: options[:time]
         }.merge(ahoy.ahoy_request.attributes)
 
         yield(data) if block_given?

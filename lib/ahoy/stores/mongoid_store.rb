@@ -2,12 +2,13 @@ module Ahoy
   module Stores
     class MongoidStore < BaseStore
 
-      def track_visit(ahoy, &block)
+      def track_visit(options, &block)
         visit =
           visit_model.new do |v|
             v.id = binary(ahoy.visit_token)
             v.visitor_token = binary(ahoy.visitor_token)
-            v.user = ahoy.user if v.respond_to?(:user=) && ahoy.user
+            v.user = user if v.respond_to?(:user=) && user
+            v.created_at = options[:time]
           end
 
         Ahoy::Request::KEYS.each do |key|
@@ -20,21 +21,19 @@ module Ahoy
       end
 
       def track_event(name, properties, options, &block)
-        unless @options[:track_events] == false
-          event =
-            event_model.new do |e|
-              e.id = binary(options[:id])
-              e.visit = options[:visit]
-              e.user = options[:user] if e.respond_to?(:user)
-              e.name = name
-              e.properties = properties
-              e.time = options[:time]
-            end
+        event =
+          event_model.new do |e|
+            e.id = binary(options[:id])
+            e.visit = current_visit
+            e.user = user if e.respond_to?(:user)
+            e.name = name
+            e.properties = properties
+            e.time = options[:time]
+          end
 
-          yield(event) if block_given?
+        yield(event) if block_given?
 
-          event.upsert
-        end
+        event.upsert
       end
 
       def current_visit(ahoy)

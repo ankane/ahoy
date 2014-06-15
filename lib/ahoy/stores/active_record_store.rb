@@ -7,7 +7,8 @@ module Ahoy
           visit_model.new do |v|
             v.visit_token = ahoy.visit_token
             v.visitor_token = ahoy.visitor_token
-            v.user = ahoy.user if v.respond_to?(:user=)
+            v.user = user if v.respond_to?(:user=)
+            v.created_at = options[:time]
           end
 
         Ahoy::Request::KEYS.each do |key|
@@ -26,8 +27,8 @@ module Ahoy
       def track_event(name, properties, options, &block)
         event =
           event_model.new do |e|
-            e.visit = options[:visit]
-            e.user = options[:user]
+            e.visit = current_visit
+            e.user = user
             e.name = name
             e.properties = properties
             e.time = options[:time]

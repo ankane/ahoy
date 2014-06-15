@@ -12,14 +12,8 @@ module Ahoy
       unless exclude?
         options = options.dup
 
-        # TODO be lazy about setting these
         options[:time] ||= Time.zone.now
         options[:id] ||= generate_id
-        options[:visit] ||= current_visit
-        options[:visit_token] ||= visit_token
-        options[:visitor_token] ||= visitor_token
-        options[:user] ||= user
-        options[:controller] ||= @controller
 
         @store.track_event(name, properties, options)
       end
@@ -32,6 +26,8 @@ module Ahoy
     def track_visit(options = {})
       @visit_token = request.params["visit_token"] || generate_id
       @visitor_token = request.params["visitor_token"] || generate_id
+
+      options[:time] ||= Time.zone.now
 
       unless exclude?
         @store.track_visit(options)
@@ -72,7 +68,7 @@ module Ahoy
     end
 
     def user
-      @store.user
+      @user ||= @store.user
     end
 
     # TODO better method
@@ -95,7 +91,7 @@ module Ahoy
     end
 
     def existing_visitor_token
-      request.headers["Ahoy-Visitor"] || request.cookies["ahoy_visitor"]
+      @existing_visitor_token ||= request.headers["Ahoy-Visitor"] || request.cookies["ahoy_visitor"]
     end
 
   end
