@@ -53,18 +53,18 @@ module Ahoy
     end
 
     def visitor_id
-      @visitor_id ||= existing_visitor_id || generate_id
+      @visitor_id ||= existing_visitor_id || current_visit.try(:visitor_id) || generate_id
     end
 
     def set_visit_cookie
       if !existing_visit_id
+        track_visit
         cookie = {
           value: visit_id,
           expires: 4.hours.from_now
         }
         cookie[:domain] = Ahoy.domain if Ahoy.domain
         controller.response.set_cookie(:ahoy_visit, cookie)
-        track_visit
       end
     end
 
@@ -113,11 +113,11 @@ module Ahoy
     end
 
     def existing_visit_id
-      @existing_visit_id ||= request.headers["Ahoy-Visit"] || request.cookies["ahoy_visit"] || current_visit.try(:id)
+      @existing_visit_id ||= request.headers["Ahoy-Visit"] || request.cookies["ahoy_visit"]
     end
 
     def existing_visitor_id
-      @existing_visitor_id ||= request.headers["Ahoy-Visitor"] || request.cookies["ahoy_visitor"] || current_visit.try(:visitor_id)
+      @existing_visitor_id ||= request.headers["Ahoy-Visitor"] || request.cookies["ahoy_visitor"]
     end
 
   end
