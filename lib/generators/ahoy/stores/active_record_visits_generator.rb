@@ -27,7 +27,7 @@ module Ahoy
         end
 
         def generate_model
-          invoke "active_record:model", ["Visit"], migration: false
+          template "active_record_visit_model.rb", "app/models/visit.rb"
         end
 
         def create_initializer
