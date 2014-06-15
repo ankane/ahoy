@@ -10,6 +10,7 @@ class <%= migration_class_name %> < ActiveRecord::Migration
 
       t.string :name
       t.text :properties
+      # use t.json :properties for PostreSQL 9.2+
       t.timestamp :time
     end
 
