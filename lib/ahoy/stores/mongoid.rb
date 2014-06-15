@@ -7,35 +7,38 @@ module Ahoy
       end
 
       def track_visit(ahoy)
-        visit = Ahoy.visit_model.new
+        visit =
+          visit_model.new do |v|
+            v.id = binary(ahoy.visit_token)
+            v.visitor_token = binary(ahoy.visitor_token)
+            v.user = ahoy.user if v.respond_to?(:user=) && ahoy.user
+          end
 
-        visit[:visitor_token] = binary(ahoy.visitor_token)
-        visit[:user_id] = ahoy.user.id if ahoy.user
-        visit.assign_attributes(ahoy.ahoy_request.attributes.select{|k, v| v })
+        Ahoy::Request::KEYS.each do |key|
+          visit.send(:"#{key}=", ahoy.ahoy_request.send(key)) if visit.respond_to?(:"#{key}=") && ahoy.ahoy_request.send(key)
+        end
 
-        visit.id = binary(ahoy.visit_token)
         visit.upsert
       end
 
       def track_event(name, properties, options)
         unless @options[:track_events] == false
           event =
-            event_model.new(
-              name: name,
-              properties: properties,
-              time: options[:time]
-            )
+            event_model.new do |e|
+              e.id = binary(options[:id])
+              e.visit = options[:visit]
+              e.user = options[:user] if e.respond_to?(:user)
+              e.name = name
+              e.properties = properties
+              e.time = options[:time]
+            end
 
-          event[:visit_id] = options[:visit].id if options[:visit]
-          event[:user_id] = options[:user].id if options[:user]
-
-          event.id = binary(options[:id])
           event.upsert
         end
       end
 
       def current_visit(ahoy)
-        visit_model.where(visit_token: ahoy.visit_token).first if ahoy.visit_token
+        visit_model.where(_id: binary(ahoy.visit_token)).first if ahoy.visit_token
       end
 
       protected

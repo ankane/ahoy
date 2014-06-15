@@ -1,7 +1,7 @@
 class <%= migration_class_name %> < ActiveRecord::Migration
   def change
     create_table :visits do |t|
-      # cookies
+      # required
       t.string :visit_token
       t.string :visitor_token
 

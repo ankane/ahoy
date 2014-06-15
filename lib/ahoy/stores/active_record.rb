@@ -9,7 +9,7 @@ module Ahoy
       # TODO better interface
       def track_visit(ahoy)
         visit =
-          Ahoy.visit_model.new do |v|
+          visit_model.new do |v|
             v.visit_token = ahoy.visit_token
             v.visitor_token = ahoy.visitor_token
             v.user = ahoy.user if v.respond_to?(:user=)

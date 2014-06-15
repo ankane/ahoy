@@ -7,13 +7,11 @@ module Ahoy
         source_root File.expand_path("../templates", __FILE__)
 
         def generate_visit_model
-          invoke "mongoid:model", ["Visit"]
+          template "mongoid_visit_model.rb", "app/models/visit.rb"
         end
 
-        # needed to call invoke task more than once
-        # http://stackoverflow.com/questions/4331267/call-task-more-than-once-in-rails-3-generator
         def generate_event_model
-          Rails::Generators.invoke "mongoid:model", ["Ahoy::Event"]
+          template "mongoid_event_model.rb", "app/models/ahoy/event.rb"
         end
 
         def create_initializer
