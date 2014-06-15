@@ -7,7 +7,7 @@ module Ahoy
 
         def landing_params
           @landing_params ||= begin
-            ActiveSupport::HashWithIndifferentAccess.new(Extractors::UtmParameters.new(landing_page))
+            ActiveSupport::HashWithIndifferentAccess.new(Extractors::UtmParameters.new(landing_page).landing_params)
           end
         end
 
