@@ -93,6 +93,9 @@ module Ahoy
 
     def report_exception(e)
       @store.report_exception(e)
+      if Rails.env.development?
+        raise e
+      end
     end
 
     def generate_id

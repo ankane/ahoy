@@ -23,9 +23,6 @@ module Ahoy
       end
 
       def report_exception(e)
-        if Rails.env.development?
-          raise e
-        end
       end
 
       def user
