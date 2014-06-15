@@ -5,8 +5,8 @@ module Ahoy
       def track_visit(options, &block)
         visit =
           visit_model.new do |v|
-            v.id = binary(ahoy.visit_token)
-            v.visitor_token = binary(ahoy.visitor_token)
+            v.id = binary(ahoy.visit_id)
+            v.visitor_id = binary(ahoy.visitor_id)
             v.user = user if v.respond_to?(:user=) && user
             v.started_at = options[:time]
           end
@@ -24,7 +24,7 @@ module Ahoy
         event =
           event_model.new do |e|
             e.id = binary(options[:id])
-            e.visit = current_visit
+            e.visit_id = binary(ahoy.visit_id)
             e.user = user if e.respond_to?(:user)
             e.name = name
             e.properties = properties

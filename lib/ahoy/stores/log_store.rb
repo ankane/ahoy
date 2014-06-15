@@ -4,11 +4,11 @@ module Ahoy
 
       def track_visit(options, &block)
         data = {
-          visit_token: ahoy.visit_token,
-          visitor_token: ahoy.visitor_token,
-          started_at: options[:time]
+          id: ahoy.visit_id,
+          visitor_id: ahoy.visitor_id,
         }.merge(ahoy.extractor.attributes)
         data[:user_id] = user.id if user
+        data[:started_at] = options[:started_at]
 
         yield(data) if block_given?
 
@@ -17,12 +17,14 @@ module Ahoy
 
       def track_event(name, properties, options, &block)
         data = {
+          id: options[:id],
           name: name,
           properties: properties,
-          visit_token: ahoy.visit_token,
-          visitor_token: ahoy.visitor_token
-        }.merge(options.slice(:time, :id))
+          visit_id: ahoy.visit_id,
+          visitor_id: ahoy.visitor_id
+        }
         data[:user_id] = user.id if user
+        data[:time] = options[:time]
 
         yield(data) if block_given?
 

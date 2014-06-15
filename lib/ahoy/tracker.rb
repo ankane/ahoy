@@ -24,13 +24,10 @@ module Ahoy
     end
 
     def track_visit(options = {})
-      @visit_token = request.params["visit_token"] || generate_id
-      @visitor_token = request.params["visitor_token"] || generate_id
-
       unless exclude?
         options = options.dup
 
-        options[:time] ||= trusted_time(options)
+        options[:started_at] ||= Time.zone.now
 
         @store.track_visit(options)
       end
@@ -50,29 +47,30 @@ module Ahoy
       @current_visit ||= @store.current_visit
     end
 
-    def visit_token
-      @visit_token ||= existing_visit_token || generate_id
+    def visit_id
+      @visit_id ||= existing_visit_id || generate_id
     end
 
-    def visitor_token
-      @visitor_token ||= existing_visitor_token || generate_id
+    def visitor_id
+      @visitor_id ||= existing_visitor_id || generate_id
     end
 
     def set_visit_cookie
-      if !existing_visit_token
+      if !existing_visit_id
         cookie = {
-          value: visit_token,
+          value: visit_id,
           expires: 4.hours.from_now
         }
         cookie[:domain] = Ahoy.domain if Ahoy.domain
         controller.response.set_cookie(:ahoy_visit, cookie)
+        track_visit
       end
     end
 
     def set_visitor_cookie
-      if !existing_visitor_token
+      if !existing_visitor_id
         cookie = {
-          value: visitor_token,
+          value: visitor_id,
           expires: 2.years.from_now
         }
         cookie[:domain] = Ahoy.domain if Ahoy.domain
@@ -113,12 +111,12 @@ module Ahoy
       @store.generate_id
     end
 
-    def existing_visit_token
-      @existing_visit_token ||= request.headers["Ahoy-Visit"] || request.cookies["ahoy_visit"] || current_visit.try(:visit_token)
+    def existing_visit_id
+      @existing_visit_id ||= request.headers["Ahoy-Visit"] || request.cookies["ahoy_visit"] || current_visit.try(:id)
     end
 
-    def existing_visitor_token
-      @existing_visitor_token ||= request.headers["Ahoy-Visitor"] || request.cookies["ahoy_visitor"] || current_visit.try(:visitor_token)
+    def existing_visitor_id
+      @existing_visitor_id ||= request.headers["Ahoy-Visitor"] || request.cookies["ahoy_visitor"] || current_visit.try(:visitor_id)
     end
 
   end
