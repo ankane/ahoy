@@ -11,7 +11,12 @@ module Ahoy
       end
 
       def search_keyword
-        @search_keyword ||= (Ahoy.referrer_parser.parse(@referrer)[1].first(255) rescue nil).presence
+        @search_keyword ||= (self.class.referrer_parser.parse(@referrer)[1].first(255) rescue nil).presence
+      end
+
+      # performance hack for referer-parser
+      def self.referrer_parser
+        @referrer_parser ||= RefererParser::Referer.new("https://github.com/ankane/ahoy")
       end
 
     end

@@ -36,7 +36,12 @@ module Ahoy
       protected
 
       def agent
-        @agent ||= Ahoy.user_agent_parser.parse(@user_agent)
+        @agent ||= self.class.user_agent_parser.parse(@user_agent)
+      end
+
+      # performance
+      def self.user_agent_parser
+        @user_agent_parser ||= UserAgentParser::Parser.new
       end
 
     end

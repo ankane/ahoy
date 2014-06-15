@@ -23,21 +23,6 @@ require "ahoy/warden" if defined?(Warden)
 
 module Ahoy
 
-  def self.generate_id
-    SecureRandom.uuid
-  end
-
-  # TODO private
-  # performance hack for referer-parser
-  def self.referrer_parser
-    @referrer_parser ||= RefererParser::Referer.new("https://github.com/ankane/ahoy")
-  end
-
-  # performance
-  def self.user_agent_parser
-    @user_agent_parser ||= UserAgentParser::Parser.new
-  end
-
   def self.fetch_user(controller)
     if user_method.respond_to?(:call)
       user_method.call(controller)

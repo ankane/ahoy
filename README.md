@@ -45,15 +45,6 @@ To use a different model name, change the initializer to:
 Ahoy.store = Ahoy::Stores::ActiveRecord.new(visit_model: UserVisit, event_model: Event)
 ```
 
-### PostgreSQL 9.3 [coming soon]
-
-Just like the ActiveRecord store, but more performant.
-
-```sh
-rails generate ahoy:stores:active_record_postgresql
-rake db:migrate
-```
-
 ### Mongoid
 
 ```sh

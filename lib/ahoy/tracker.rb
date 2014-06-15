@@ -16,7 +16,7 @@ module Ahoy
         options[:visitor_token] ||= visitor_token
         options[:user] ||= user
         options[:time] ||= Time.zone.now
-        options[:id] ||= Ahoy.generate_id
+        options[:id] ||= generate_id
         options[:controller] ||= @controller
 
         Ahoy.store.track_event(name, properties, options)
@@ -26,8 +26,8 @@ module Ahoy
     end
 
     def track_visit
-      @visit_token = request.params["visit_token"] || Ahoy.generate_id
-      @visitor_token = request.params["visitor_token"] || Ahoy.generate_id
+      @visit_token = request.params["visit_token"] || generate_id
+      @visitor_token = request.params["visitor_token"] || generate_id
 
       if track?
         Ahoy.store.track_visit(self)
@@ -45,7 +45,7 @@ module Ahoy
     end
 
     def visitor_token
-      @visitor_token ||= existing_visitor_token || current_visit.try(:visitor_token) || Ahoy.generate_id
+      @visitor_token ||= existing_visitor_token || current_visit.try(:visitor_token) || generate_id
     end
 
     def set_visitor_cookie
@@ -69,6 +69,10 @@ module Ahoy
     end
 
     protected
+
+    def generate_id
+      SecureRandom.uuid
+    end
 
     def existing_visitor_token
       request.headers["Ahoy-Visitor"] || request.cookies["ahoy_visitor"]
