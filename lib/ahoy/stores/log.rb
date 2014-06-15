@@ -3,12 +3,15 @@ module Ahoy
     class Log
 
       # TODO much better interface
-      def track_visit(ahoy)
+      def track_visit(ahoy, &block)
         data = {
           visit_token: ahoy.visit_token,
           visitor_token: ahoy.visitor_token,
           time: Time.zone.now
         }.merge(ahoy.ahoy_request.attributes)
+
+        yield(data) if block_given?
+
         visit_logger.info data.to_json
       end
 

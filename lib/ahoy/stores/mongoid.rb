@@ -6,7 +6,7 @@ module Ahoy
         @options = options
       end
 
-      def track_visit(ahoy)
+      def track_visit(ahoy, &block)
         visit =
           visit_model.new do |v|
             v.id = binary(ahoy.visit_token)
@@ -17,6 +17,8 @@ module Ahoy
         Ahoy::Request::KEYS.each do |key|
           visit.send(:"#{key}=", ahoy.ahoy_request.send(key)) if visit.respond_to?(:"#{key}=") && ahoy.ahoy_request.send(key)
         end
+
+        yield(visit) if block_given?
 
         visit.upsert
       end

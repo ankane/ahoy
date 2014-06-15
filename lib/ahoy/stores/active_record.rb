@@ -7,7 +7,7 @@ module Ahoy
       end
 
       # TODO better interface
-      def track_visit(ahoy)
+      def track_visit(ahoy, &block)
         visit =
           visit_model.new do |v|
             v.visit_token = ahoy.visit_token
@@ -18,6 +18,8 @@ module Ahoy
         Ahoy::Request::KEYS.each do |key|
           visit.send(:"#{key}=", ahoy.ahoy_request.send(key)) if visit.respond_to?(:"#{key}=")
         end
+
+        yield(visit) if block_given?
 
         begin
           visit.save!
