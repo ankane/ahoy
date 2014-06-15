@@ -27,7 +27,7 @@ module Ahoy
       def track_event(name, properties, options, &block)
         event =
           event_model.new do |e|
-            e.visit = current_visit
+            e.visit_id = ahoy.visit_id
             e.user = user
             e.name = name
             e.properties = properties
@@ -40,7 +40,7 @@ module Ahoy
       end
 
       def current_visit
-        visit_model.where(visit_token: ahoy.visit_token).first if ahoy.visit_token
+        visit_model.where(id: ahoy.visit_id).first if ahoy.visit_id
       end
 
       protected
