@@ -3,7 +3,7 @@ module Ahoy
 
     def create
       ahoy.track_visit(trusted: false)
-      render json: {visit_token: ahoy.visit_token, visitor_token: ahoy.visitor_token}
+      render json: {visit_id: ahoy.visit_id, visitor_id: ahoy.visitor_id}
     end
 
   end

@@ -155,8 +155,8 @@
       }
 
       var data = {
-        visit_token: visitId,
-        visitor_token: visitorId,
+        visit_id: visitId,
+        visitor_id: visitorId,
         platform: ahoy.platform || "Web",
         landing_page: window.location.href,
         screen_width: window.screen.width,

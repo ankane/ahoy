@@ -5,7 +5,7 @@ class Visit
   belongs_to :user
 
   # required
-  field :visitor_token, type: BSON::Binary
+  field :visitor_id, type: BSON::Binary
 
   # the rest are recommended but optional
   # simply remove the columns you don't want

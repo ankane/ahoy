@@ -5,8 +5,8 @@ module Ahoy
       def track_visit(options, &block)
         visit =
           visit_model.new do |v|
-            v.visit_token = ahoy.visit_token
-            v.visitor_token = ahoy.visitor_token
+            v.id = ahoy.visit_id
+            v.visitor_id = ahoy.visitor_id
             v.user = user if v.respond_to?(:user=)
             v.started_at = options[:time]
           end
