@@ -209,6 +209,8 @@ ahoy.track "Viewed book", title: "Hot, Flat, and Crowded"
 
 ## Native Apps
 
+Libraries for iOS and Android are coming soon. Until then, here’s the HTTP spec.
+
 ### Visits
 
 When a user launches the app, create a visit.  Send a `POST` request to `/ahoy/visits` with:
