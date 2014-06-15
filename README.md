@@ -39,12 +39,6 @@ rake db:migrate
 
 Don’t need a field? Just remove it from the migration
 
-To use a different model name, change the initializer to:
-
-```ruby
-Ahoy.store = Ahoy::Stores::ActiveRecord.new(visit_model: UserVisit, event_model: Event)
-```
-
 ### Mongoid
 
 ```sh
@@ -53,7 +47,7 @@ rails generate ahoy:stores:mongoid
 
 ### Logs
 
-```ruby
+```sh
 rails generate ahoy:stores:log
 ```
 
@@ -61,25 +55,22 @@ This logs visits to `log/visits.log` and events to `log/events.log`.
 
 ### Custom
 
-Create an initializer `config/initializers/ahoy.rb` with:
-
-```ruby
-Ahoy.store = CassandraStore.new
+```sh
+rails generate ahoy:stores:custom
 ```
 
+This creates a class for you to fill out.
+
 ```ruby
-class CassandraStore
+class CustomStore
 
   def track_event(name, properties, options)
-
   end
 
   def track_visit(ahoy)
-
   end
 
   def current_visit(ahoy)
-
   end
 
 end
@@ -254,6 +245,12 @@ class Visit < ActiveRecord::Base
   end
 
 end
+```
+
+To use a different model name, change the initializer to:
+
+```ruby
+Ahoy.store = Ahoy::Stores::ActiveRecord.new(visit_model: UserVisit, event_model: Event)
 ```
 
 ### Doorkeeper
