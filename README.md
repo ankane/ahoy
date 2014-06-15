@@ -2,26 +2,9 @@
 
 :fire: Simple, powerful analytics for Rails
 
-Visits are stored in **your database** so you can easily combine them with other data.
-
-You get:
-
-- **traffic source** - referrer, referring domain, landing page, search keyword
-- **location** - country, region, and city
-- **technology** - browser, OS, and device type
-- **utm parameters** - source, medium, term, content, campaign
-
-Track events in:
-
-- JavaScript
-- Ruby
-- Native apps
-
-And store them wherever you’d like - your database, logs, external services, or all of them.
+Ahoy makes it easy to track visitors and users.  Track visits (sessions) and events in Ruby, JavaScript, and native apps.  Works with any data store so you easily scale.
 
 :postbox: To track emails, check out [Ahoy Email](https://github.com/ankane/ahoy_email).
-
-No Ruby? Check out [Ahoy.js](https://github.com/ankane/ahoy.js).
 
 ## Installation
 
@@ -31,27 +14,90 @@ Add this line to your application’s Gemfile:
 gem 'ahoy_matey'
 ```
 
-And run the generator. This creates a model to store visits.
-
-```sh
-rails generate ahoy:install
-rake db:migrate
-```
-
-Lastly, include the javascript file in `app/assets/javascripts/application.js` after jQuery.
+And add the javascript file in `app/assets/javascripts/application.js` after jQuery.
 
 ```javascript
 //= require jquery
 //= require ahoy
 ```
 
-We recommend using traditional analytics services like [Google Analytics](http://www.google.com/analytics/) as well.
+## Choose a Data Store
+
+### ActiveRecord
+
+```sh
+rails generate ahoy:stores:active_record
+rake db:migrate
+```
+
+If you just want visits, run:
+
+```sh
+rails generate ahoy:stores:active_record_visits
+rake db:migrate
+```
+
+### PostgreSQL 9.3 [coming soon]
+
+Just like the ActiveRecord store, but more performant.
+
+```sh
+rails generate ahoy:stores:active_record_postgresql
+rake db:migrate
+```
+
+### Mongoid [coming soon]
+
+```sh
+rails generate ahoy:stores:mongoid
+```
+
+### Logs
+
+```ruby
+rails generate ahoy:stores:log
+```
+
+This logs visits to `log/visits.log` and events to `log/events.log`.
+
+### Custom
+
+Create an initializer `config/initializers/ahoy.rb` with:
+
+```ruby
+Ahoy.store = CassandraStore.new
+```
+
+```ruby
+class CassandraStore
+
+  def track_event(name, properties, options)
+
+  end
+
+  def track_visit(ahoy)
+
+  end
+
+end
+```
 
 ## How It Works
 
+### Visits
+
 When someone visits your website, Ahoy creates a visit with lots of useful information.
 
+- **traffic source** - referrer, referring domain, landing page, search keyword
+- **location** - country, region, and city
+- **technology** - browser, OS, and device type
+- **utm parameters** - source, medium, term, content, campaign
+
 Use the `current_visit` method to access it.
+
+`visit_token` and `visitor_token` methods
+
+### ActiveRecord
 
 Explore your visits with queries like:
 
@@ -135,23 +181,7 @@ or
 http://datakick.org/?utm_medium=twitter&utm_campaign=social&utm_source=tweet123
 ```
 
-### Native Apps
-
-When a user launches the app, create a visit.  Send a `POST` request to `/ahoy/visits` with:
-
-- platform - `iOS`, `Android`, etc.
-- app_version - `1.0.0`
-- os_version - `7.0.6`
-- visit_token - `505f6201-8e10-44cf-ba1c-37271c8d0125`
-- visitor_token - `db3b1a8f-302b-42df-9cd0-06875f549474`
-
-Tokens must be [UUIDs](http://en.wikipedia.org/wiki/Universally_unique_identifier).
-
-Send the visit and visitor tokens in the `Ahoy-Visit` and `Ahoy-Visitor` headers with all requests.
-
-After 4 hours, create another visit and use the updated visit token.
-
-## Events
+### Events
 
 Each event has a `name` and `properties`.
 
@@ -177,7 +207,25 @@ See [Ahoy.js](https://github.com/ankane/ahoy.js) for a complete list of features
 ahoy.track "Viewed book", title: "Hot, Flat, and Crowded"
 ```
 
-#### Native Apps
+## Native Apps
+
+### Visits
+
+When a user launches the app, create a visit.  Send a `POST` request to `/ahoy/visits` with:
+
+- platform - `iOS`, `Android`, etc.
+- app_version - `1.0.0`
+- os_version - `7.0.6`
+- visit_token - `505f6201-8e10-44cf-ba1c-37271c8d0125`
+- visitor_token - `db3b1a8f-302b-42df-9cd0-06875f549474`
+
+Tokens must be [UUIDs](http://en.wikipedia.org/wiki/Universally_unique_identifier).
+
+Send the visit and visitor tokens in the `Ahoy-Visit` and `Ahoy-Visitor` headers with all requests.
+
+After 4 hours, create another visit and use the updated visit token.
+
+### Events
 
 Send a `POST` request to `/ahoy/events` with:
 
@@ -187,46 +235,6 @@ Send a `POST` request to `/ahoy/events` with:
 - `Ahoy-Visit` header
 
 Requests should have `Content-Type: application/json`.
-
-### Storing Events
-
-You choose how to store events.
-
-#### ActiveRecord
-
-Create an `Ahoy::Event` model to store events.
-
-```sh
-rails generate ahoy:events:active_record
-rake db:migrate
-```
-
-#### Custom
-
-Create your own subscribers in `config/initializers/ahoy.rb`.
-
-```ruby
-class LogSubscriber
-
-  def track(name, properties, options = {})
-    data = {
-      name: name,
-      properties: properties,
-      time: options[:time].to_i,
-      visit_id: options[:visit].try(:id),
-      user_id: options[:user].try(:id),
-      ip: options[:controller].try(:request).try(:remote_ip)
-    }
-    Rails.logger.info data.to_json
-  end
-
-end
-
-# and add it
-Ahoy.subscribers << LogSubscriber.new
-```
-
-Add as many subscribers as you’d like.
 
 ## Development
 
@@ -413,6 +421,10 @@ end
 - better readme
 - simple dashboard
 - turn off modules
+
+## No Ruby?
+
+Check out [Ahoy.js](https://github.com/ankane/ahoy.js).
 
 ## History
 
