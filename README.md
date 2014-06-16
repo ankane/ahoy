@@ -166,7 +166,7 @@ end
 ```ruby
 def track_visit
   super do |visit|
-    visit.gclid = landing_params["gclid"]
+    visit.gclid = ahoy.extractor.landing_params["gclid"]
   end
 end
 ```
