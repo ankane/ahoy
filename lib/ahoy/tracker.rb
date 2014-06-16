@@ -49,11 +49,11 @@ module Ahoy
     end
 
     def visit_id
-      @visit_id ||= existing_visit_id || generate_id
+      @visit_id ||= existing_visit_id || visit_token
     end
 
     def visitor_id
-      @visitor_id ||= existing_visitor_id || current_visit.try(:visitor_id) || generate_id
+      @visitor_id ||= existing_visitor_id || visitor_token
     end
 
     def set_visit_cookie
@@ -91,12 +91,12 @@ module Ahoy
 
     # for ActiveRecordLegacyStore only - do not use
     def visit_token
-      @visit_token ||= existing_visit_id
+      @visit_token ||= existing_visit_id || generate_id
     end
 
     # for ActiveRecordLegacyStore only - do not use
     def visitor_token
-      @visitor_token ||= existing_visitor_id || visitor_id
+      @visitor_token ||= existing_visitor_id || generate_id
     end
 
     protected
