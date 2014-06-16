@@ -89,6 +89,16 @@ module Ahoy
       @extractor ||= Ahoy::Extractor.new(request)
     end
 
+    # for ActiveRecordLegacyStore only - do not use
+    def visit_token
+      @visit_token ||= existing_visit_id
+    end
+
+    # for ActiveRecordLegacyStore only - do not use
+    def visitor_token
+      @visitor_token ||= existing_visitor_id || visitor_id
+    end
+
     protected
 
     def trusted_time(options)

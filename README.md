@@ -6,6 +6,8 @@ Ahoy makes it easy to track visitors and users.  Track visits (sessions) and eve
 
 :postbox: To track emails, check out [Ahoy Email](https://github.com/ankane/ahoy_email).
 
+See [upgrade instructions](#upgrading) on how to move to 1.0.
+
 ## Installation
 
 Add this line to your application’s Gemfile:
@@ -405,19 +407,58 @@ Use an array to pass multiple events at once.
 
 Ahoy is now database agnostic.
 
+First, rename the existing initializer so it won’t interfere with the upgrade.
+
+```sh
+mv config/initializers/ahoy.rb config/initializers/ahoy.txt
+```
+
+Generate a legacy store.
+
+```ruby
+rails generate ahoy:stores:active_record_legacy
+```
+
+#### Visits
+
+Remove `ahoy_visit` from your visit model and replace it with:
+
+```ruby
+class Visit < ActiveRecord::Base
+  belongs_to :user, polymorphic: true
+end
+```
+
+If tracking additional values with ActiveRecord callbacks, move the code to the `track_event` method.
+
+#### Events
+
+If tracking events with ActiveRecord, copy the model to `app/models/ahoy/event.rb`.
+
+```ruby
+module Ahoy
+  class Event < ActiveRecord::Base
+    self.table_name = "ahoy_events"
+
+    belongs_to :visit
+    belongs_to :user
+
+    serialize :properties, JSON
+  end
+end
+```
+
+And copy the `track` method in subscribers to `track_events` method in `Ahoy::Store`.
+
 #### Global Options
 
-- Replace `Ahoy.user_method` with `user` method
-- Replace `Ahoy.track_bots` and `Ahoy.exclude_method` with `exclude?` method
+Replace the `Ahoy.user_method` with `user` method, and replace `Ahoy.track_bots` and `Ahoy.exclude_method` with `exclude?` method.
 
-#### Visit Model
+Remove the old initializer and you’re done!
 
-- Replace `ahoy_visit` with `belongs_to :user, polymorphic: true`
-- For storing additional values, use `track_event` method
-
-#### Subscribers
-
-- Copy `track` method in subscribers to `track_events` method in `Ahoy::Store`
+```sh
+rm config/initializers/ahoy.txt
+```
 
 ### 0.3.0
 
@@ -436,7 +477,6 @@ end
 
 ## TODO
 
-- better readme
 - simple dashboard
 - turn off modules
 
