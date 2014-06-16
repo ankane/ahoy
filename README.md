@@ -172,7 +172,7 @@ end
 or
 
 ```ruby
-def track_event
+def track_event(name, properties, options)
   super do |event|
     event.ip = request.ip
   end
