@@ -1,9 +1,8 @@
 class <%= migration_class_name %> < ActiveRecord::Migration
   def change
     create_table :ahoy_events, id: false do |t|
-      <% if options["database"] == "postgresql" %>t.uuid :id, primary_key: true
-      t.uuid :visit_id<% else %>t.binary :id, limit: 16, primary_key: true
-      t.binary :visit_id, limit: 16<% end %>
+      t.uuid :id, primary_key: true
+      t.uuid :visit_id
 
       # user
       t.integer :user_id

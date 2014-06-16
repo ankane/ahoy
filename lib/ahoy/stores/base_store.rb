@@ -17,7 +17,7 @@ module Ahoy
 
       def authenticate(user)
         if current_visit and current_visit.respond_to?(:user) and !current_visit.user
-          current_visit.user = current_user
+          current_visit.user = user
           current_visit.save!
         end
       end

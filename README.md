@@ -25,6 +25,23 @@ And add the javascript file in `app/assets/javascripts/application.js` after jQu
 
 ### ActiveRecord
 
+#### PostgreSQL 9.2+
+
+```sh
+rails generate ahoy:stores:active_record -d postgresql
+rake db:migrate
+```
+
+#### Other
+
+Add [activeuuid](https://github.com/ankane/activeuuid) to your Gemfile.
+
+```ruby
+gem 'activeuuid', github: 'ankane/activeuuid' # use this fork for now
+```
+
+And run:
+
 ```sh
 rails generate ahoy:stores:active_record
 rake db:migrate
@@ -36,15 +53,6 @@ If you just want visits, run:
 rails generate ahoy:stores:active_record_visits
 rake db:migrate
 ```
-
-For PostgreSQL 9.2+, use:
-
-```sh
-rails generate ahoy:stores:active_record -d postgresql
-rake db:migrate
-```
-
-To make events more performant and queryable.
 
 ### Mongoid
 
