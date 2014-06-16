@@ -129,6 +129,10 @@ See [Ahoy.js](https://github.com/ankane/ahoy.js) for a complete list of features
 ahoy.track "Viewed book", title: "Hot, Flat, and Crowded"
 ```
 
+#### Native Apps
+
+See the [HTTP spec](#native-apps).
+
 ### Users
 
 Ahoy automatically attaches the `current_user` to the visit.
