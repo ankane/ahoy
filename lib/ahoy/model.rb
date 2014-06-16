@@ -18,5 +18,23 @@ module Ahoy
       }
     end
 
+    # deprecated
+
+    def ahoy_visit
+      class_eval do
+        warn "[DEPRECATION] ahoy_visit is deprecated"
+
+        belongs_to :user, polymorphic: true
+
+        def landing_params
+          @landing_params ||= begin
+            warn "[DEPRECATION] landing_params is deprecated"
+            ActiveSupport::HashWithIndifferentAccess.new(Extractors::UtmParameterExtractor.new(landing_page).landing_params)
+          end
+        end
+
+      end
+    end
+
   end
 end

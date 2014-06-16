@@ -8,7 +8,7 @@ module Ahoy
             v.visit_token = ahoy.visit_token
             v.visitor_token = ahoy.visitor_token
             v.user = user if v.respond_to?(:user=)
-            v.started_at = options[:time]
+            v.created_at = options[:time]
           end
 
         ahoy.extractor.keys.each do |key|
@@ -36,15 +36,52 @@ module Ahoy
 
         yield(event) if block_given?
 
-        begin
-          event.save!
-        rescue ActiveRecord::RecordNotUnique
-          # do nothing
+        event.save!
+
+        options[:controller] ||= controller
+        options[:user] ||= user
+        options[:visit] ||= current_visit
+        options[:visit_token] ||= ahoy.visit_token
+        options[:visitor_token] ||= ahoy.visitor_token
+
+        subscribers = Ahoy.subscribers
+        if subscribers.any?
+          warn "[DEPRECATION] Ahoy.subscribers is deprecated"
+          subscribers.each do |subscriber|
+            subscriber.track(name, properties, options.dup)
+          end
+        else
+          $stderr.puts "No subscribers"
         end
       end
 
       def current_visit
         visit_model.where(id: ahoy.visit_token).first if ahoy.visit_token
+      end
+
+      def exclude?
+        (!Ahoy.track_bots && bot?) ||
+        (
+          if Ahoy.exclude_method
+            warn "[DEPRECATION] Ahoy.exclude_method is deprecated - use exclude? instead"
+            if Ahoy.exclude_method.arity == 1
+              Ahoy.exclude_method.call(controller)
+            else
+              Ahoy.exclude_method.call(controller, request)
+            end
+          else
+            false
+          end
+        )
+      end
+
+      def user
+        user_method = Ahoy.user_method
+        if user_method.respond_to?(:call)
+          user_method.call(controller)
+        else
+          controller.send(user_method)
+        end
       end
 
       protected

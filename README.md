@@ -405,19 +405,16 @@ Use an array to pass multiple events at once.
 
 ### 1.0.0
 
-Ahoy is now database agnostic.
+Ahoy now works with any data store.
 
-First, rename the existing initializer so it won’t interfere with the upgrade.
-
-```sh
-mv config/initializers/ahoy.rb config/initializers/ahoy.txt
-```
-
-Generate a legacy store.
+Add the following code to the end of `config/intializers/ahoy.rb`.
 
 ```ruby
-rails generate ahoy:stores:active_record_legacy
+class Ahoy::Store < Ahoy::Stores::ActiveRecordLegacyStore
+end
 ```
+
+That’s it!  To fix deprecations, keep reading.
 
 #### Visits
 
@@ -453,12 +450,6 @@ And copy the `track` method in subscribers to `track_events` method in `Ahoy::St
 #### Global Options
 
 Replace the `Ahoy.user_method` with `user` method, and replace `Ahoy.track_bots` and `Ahoy.exclude_method` with `exclude?` method.
-
-Remove the old initializer and you’re done!
-
-```sh
-rm config/initializers/ahoy.txt
-```
 
 ### 0.3.0
 

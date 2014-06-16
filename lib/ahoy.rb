@@ -22,11 +22,31 @@ require "ahoy/stores/mongoid_store"
 require "ahoy/engine"
 require "ahoy/warden" if defined?(Warden)
 
+# deprecated
+require "ahoy/subscribers/active_record"
+
 module Ahoy
   mattr_accessor :quiet
   self.quiet = true
 
   mattr_accessor :domain # cookies
+
+  # deprecated
+
+  mattr_accessor :visit_model
+
+  mattr_accessor :user_method
+  self.user_method = proc do |controller|
+    (controller.respond_to?(:current_user) && controller.current_user) || (controller.respond_to?(:current_resource_owner, true) && controller.send(:current_resource_owner)) || nil
+  end
+
+  mattr_accessor :exclude_method
+
+  mattr_accessor :subscribers
+  self.subscribers = []
+
+  mattr_accessor :track_bots
+  self.track_bots = false
 end
 
 ActionController::Base.send :include, Ahoy::Controller
