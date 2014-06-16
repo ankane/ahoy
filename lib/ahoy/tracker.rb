@@ -13,7 +13,7 @@ module Ahoy
         options = options.dup
 
         options[:time] ||= trusted_time(options)
-        options[:id] ||= generate_id
+        options[:id] = ensure_uuid(options[:id] || generate_id)
 
         @store.track_event(name, properties, options)
       end
