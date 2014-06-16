@@ -49,11 +49,11 @@ module Ahoy
     end
 
     def visit_id
-      @visit_id ||= existing_visit_id || visit_token
+      @visit_id ||= ensure_uuid(existing_visit_id || visit_token)
     end
 
     def visitor_id
-      @visitor_id ||= existing_visitor_id || visitor_token
+      @visitor_id ||= ensure_uuid(existing_visitor_id || visitor_token)
     end
 
     def set_visit_cookie
@@ -130,6 +130,10 @@ module Ahoy
 
     def existing_visitor_id
       @existing_visitor_id ||= request.headers["Ahoy-Visitor"] || request.cookies["ahoy_visitor"]
+    end
+
+    def ensure_uuid(id)
+      Ahoy.ensure_uuid(id)
     end
 
   end

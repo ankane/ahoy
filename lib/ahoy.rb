@@ -4,6 +4,7 @@ require "geocoder"
 require "referer-parser"
 require "user_agent_parser"
 require "request_store"
+require "uuidtools"
 
 require "ahoy/version"
 require "ahoy/tracker"
@@ -30,6 +31,17 @@ module Ahoy
   self.quiet = true
 
   mattr_accessor :domain # cookies
+
+  UUID_NAMESPACE = UUIDTools::UUID.parse("a82ae811-5011-45ab-a728-569df7499c5f")
+
+  def self.ensure_uuid(id)
+    valid = UUIDTools::UUID.parse(id) rescue nil
+    if valid
+      id
+    else
+      UUIDTools::UUID.sha1_create(UUID_NAMESPACE, id).to_s
+    end
+  end
 
   # deprecated
 
