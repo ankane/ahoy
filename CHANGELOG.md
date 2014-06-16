@@ -1,8 +1,9 @@
 ## 1.0.0
 
-- Replaced `current_visit_token` and `current_visitor_token` methods with `visit_token` and `visitor_token`
 - Removed subscribers in favor of stores
 - Added support for Mongoid
+- Moved to UUID storage
+- Added exception catching and reporting
 
 ## 0.3.1
 
