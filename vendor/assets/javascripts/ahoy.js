@@ -13,7 +13,7 @@
 
   var ahoy = window.ahoy || window.Ahoy || {};
   var $ = window.jQuery || window.Zepto || window.$;
-  var visitId, visitorId;
+  var visitId, visitorId, track;
   var visitTtl = 4 * 60; // 4 hours
   var visitorTtl = 2 * 365 * 24 * 60; // 2 years
   var isReady = false;
@@ -138,14 +138,21 @@
 
   visitId = getCookie("ahoy_visit");
   visitorId = getCookie("ahoy_visitor");
+  track = getCookie("ahoy_track");
 
-  if (visitId && visitorId) {
+  if (visitId && visitorId && !track) {
     // TODO keep visit alive?
     log("Active visit");
     setReady();
   } else {
-    visitId = generateId();
-    setCookie("ahoy_visit", visitId, visitTtl);
+    if (track) {
+      destroyCookie("ahoy_track");
+    }
+
+    if (!visitId) {
+      visitId = generateId();
+      setCookie("ahoy_visit", visitId, visitTtl);
+    }
 
     // make sure cookies are enabled
     if (getCookie("ahoy_visit")) {

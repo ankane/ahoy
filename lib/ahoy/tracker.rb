@@ -23,7 +23,7 @@ module Ahoy
     end
 
     def track_visit(options = {})
-      unless exclude? or existing_visit_id
+      unless exclude?
         if options[:defer]
           set_cookie("ahoy_track", true)
         else
@@ -58,6 +58,10 @@ module Ahoy
 
     def visitor_id
       @visitor_id ||= ensure_uuid(existing_visitor_id || visitor_token)
+    end
+
+    def new_visit?
+      !existing_visit_id
     end
 
     def set_visit_cookie
