@@ -61,9 +61,7 @@ module Ahoy
     end
 
     def set_visit_cookie
-      if !existing_visit_id
-        set_cookie("ahoy_visit", visit_id, Ahoy.visit_duration)
-      end
+      set_cookie("ahoy_visit", visit_id, Ahoy.visit_duration)
     end
 
     def set_visitor_cookie

@@ -257,6 +257,16 @@ To track visits across multiple subdomains, use:
 Ahoy.cookie_domain = "yourdomain.com"
 ```
 
+### Visit Duration
+
+By default, a new visit is created after 4 hours of inactivity.
+
+Change this with:
+
+```ruby
+Ahoy.visit_duration = 30.minutes
+```
+
 ### ActiveRecord
 
 Let’s associate orders with visits.
@@ -304,6 +314,8 @@ Change this with:
 ```ruby
 Ahoy.track_visits_on_server = true
 ```
+
+**Note:** At the moment, geocoding is performed in the foreground, which can slow down the first page load.
 
 If you add this to your `ApplicationController`, be sure to exclude API endpoints with:
 

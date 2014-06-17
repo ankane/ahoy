@@ -4,6 +4,10 @@
 - Added support for Mongoid
 - Moved to UUID storage
 - Added exception catching and reporting
+- Always have a `visit_id` and `visitor_id` available on server
+- Add `visit_duration` option
+- Visits expire after inactivity, not fixed interval
+- Simplied cookie domain setup
 
 ## 0.3.1
 
