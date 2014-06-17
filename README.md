@@ -305,11 +305,7 @@ end
 
 ### Track Visits on the Server
 
-The visitor and visit id are generated on the server, but the `track_visit` method is triggered through JavaScript.
-
-This prevents users with cookies disabled from creating multiple visits and ensures visits are not created for API endpoints.
-
-Change this with:
+The visitor and visit id are generated on the server, but the `track_visit` method is triggered through JavaScript.  This prevents users with cookies disabled from creating multiple visits and ensures visits are not created for API endpoints.  Change this with:
 
 ```ruby
 Ahoy.track_visits_on_server = true
