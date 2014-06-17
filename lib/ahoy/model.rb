@@ -13,7 +13,7 @@ module Ahoy
       end
       class_eval %Q{
         def set_visit
-          self.#{name} ||= RequestStore.store[:ahoy].current_visit
+          self.#{name} ||= RequestStore.store[:ahoy].visit
         end
       }
     end

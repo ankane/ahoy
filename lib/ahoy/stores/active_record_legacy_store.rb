@@ -27,7 +27,7 @@ module Ahoy
       def track_event(name, properties, options, &block)
         event =
           event_model.new do |e|
-            e.visit_id = current_visit.try(:id)
+            e.visit_id = visit.try(:id)
             e.user = user
             e.name = name
             e.properties = properties
@@ -40,7 +40,7 @@ module Ahoy
 
         options[:controller] ||= controller
         options[:user] ||= user
-        options[:visit] ||= current_visit
+        options[:visit] ||= visit
         options[:visit_token] ||= ahoy.visit_token
         options[:visitor_token] ||= ahoy.visitor_token
 
@@ -55,8 +55,8 @@ module Ahoy
         end
       end
 
-      def current_visit
-        visit_model.where(visit_token: ahoy.visit_token).first if ahoy.visit_token
+      def visit
+        @visit ||= visit_model.where(visit_token: ahoy.visit_token).first if ahoy.visit_token
       end
 
       def exclude?

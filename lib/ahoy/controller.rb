@@ -18,7 +18,7 @@ module Ahoy
     end
 
     def current_visit
-      ahoy.current_visit
+      ahoy.visit
     end
 
     def set_ahoy_cookies

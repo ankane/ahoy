@@ -12,13 +12,13 @@ module Ahoy
       def track_event(name, properties, options)
       end
 
-      def current_visit
+      def visit
       end
 
       def authenticate(user)
-        if current_visit and current_visit.respond_to?(:user) and !current_visit.user
-          current_visit.user = user
-          current_visit.save!
+        if visit and visit.respond_to?(:user) and !visit.user
+          visit.user = user
+          visit.save!
         end
       end
 

@@ -48,8 +48,8 @@ module Ahoy
       report_exception(e)
     end
 
-    def current_visit
-      @current_visit ||= @store.current_visit
+    def visit
+      @visit ||= @store.visit
     end
 
     def visit_id
