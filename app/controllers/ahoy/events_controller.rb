@@ -11,8 +11,7 @@ module Ahoy
 
         options = {
           id: event["id"],
-          time: time,
-          trusted: false
+          time: time
         }
         ahoy.track event["name"], event["properties"], options
       end

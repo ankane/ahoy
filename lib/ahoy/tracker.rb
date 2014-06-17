@@ -6,13 +6,14 @@ module Ahoy
       @store = Ahoy::Store.new(options.merge(ahoy: self))
       @controller = options[:controller]
       @request = options[:request] || @controller.try(:request)
+      @options = options
     end
 
     def track(name, properties = {}, options = {})
       unless exclude?
         options = options.dup
 
-        options[:time] ||= trusted_time(options)
+        options[:time] = trusted_time(options[:time])
         options[:id] = ensure_uuid(options[:id] || generate_id)
 
         @store.track_event(name, properties, options)
@@ -79,7 +80,7 @@ module Ahoy
     end
 
     def extractor
-      @extractor ||= Ahoy::Extractor.new(request)
+      @extractor ||= Ahoy::Extractor.new(request, @options.slice(:api))
     end
 
     # for ActiveRecordLegacyStore only - do not use
@@ -105,11 +106,11 @@ module Ahoy
       controller.response.set_cookie(name, cookie)
     end
 
-    def trusted_time(options)
-      if options[:time] and options[:trusted] == false and (1.minute.ago..Time.now).cover?(options[:time])
-        options[:time]
-      else
+    def trusted_time(time)
+      if !time or (@options[:api] and !(1.minute.ago..Time.now).cover?(time))
         Time.zone.now
+      else
+        time
       end
     end
 

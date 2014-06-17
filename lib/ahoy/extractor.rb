@@ -15,8 +15,9 @@ module Ahoy
     delegate *TECHNOLOGY_KEYS, to: :technology_extractor
     delegate *LOCATION_KEYS, to: :location_extractor
 
-    def initialize(request)
+    def initialize(request, options = {})
       @request = request
+      @options = options
     end
 
     def keys
@@ -36,11 +37,11 @@ module Ahoy
     end
 
     def referrer
-      request.params["referrer"]
+      @options[:api] ? request.params["referrer"] : request.referer
     end
 
     def landing_page
-      request.params["landing_page"]
+      @options[:api] ? request.params["landing_page"] : request.original_url
     end
 
     def platform
