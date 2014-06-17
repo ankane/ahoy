@@ -25,35 +25,34 @@ module Ahoy
       end
 
       def track_event(name, properties, options, &block)
-        event =
-          event_model.new do |e|
-            e.visit_id = visit.try(:id)
-            e.user = user
-            e.name = name
-            e.properties = properties
-            e.time = options[:time]
-          end
+        if self.class.uses_deprecated_subscribers?
+          options[:controller] ||= controller
+          options[:user] ||= user
+          options[:visit] ||= visit
+          options[:visit_token] ||= ahoy.visit_token
+          options[:visitor_token] ||= ahoy.visitor_token
 
-        yield(event) if block_given?
-
-        event.save!
-      end
-
-      def deprecated_subscribers(name, properties, options)
-        options[:controller] ||= controller
-        options[:user] ||= user
-        options[:visit] ||= visit
-        options[:visit_token] ||= ahoy.visit_token
-        options[:visitor_token] ||= ahoy.visitor_token
-
-        subscribers = Ahoy.subscribers
-        if subscribers.any?
-          warn "[DEPRECATION] Ahoy.subscribers is deprecated"
-          subscribers.each do |subscriber|
-            subscriber.track(name, properties, options.dup)
+          subscribers = Ahoy.subscribers
+          if subscribers.any?
+            subscribers.each do |subscriber|
+              subscriber.track(name, properties, options.dup)
+            end
+          else
+            $stderr.puts "No subscribers"
           end
         else
-          $stderr.puts "No subscribers"
+          event =
+            event_model.new do |e|
+              e.visit_id = visit.try(:id)
+              e.user = user
+              e.name = name
+              e.properties = properties
+              e.time = options[:time]
+            end
+
+          yield(event) if block_given?
+
+          event.save!
         end
       end
 
@@ -84,6 +83,19 @@ module Ahoy
         else
           controller.send(user_method)
         end
+      end
+
+      class << self
+
+        def uses_deprecated_subscribers
+          warn "[DEPRECATION] Ahoy subscribers are deprecated"
+          @uses_deprecated_subscribers = true
+        end
+
+        def uses_deprecated_subscribers?
+          @uses_deprecated_subscribers || false
+        end
+
       end
 
       protected
