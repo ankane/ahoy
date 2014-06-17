@@ -8,7 +8,7 @@ module Ahoy
             v.visit_token = ahoy.visit_token
             v.visitor_token = ahoy.visitor_token
             v.user = user if v.respond_to?(:user=)
-            v.created_at = options[:time]
+            v.created_at = options[:started_at]
           end
 
         ahoy.extractor.keys.each do |key|
