@@ -396,8 +396,8 @@ user.visits
 
 ```ruby
 viewed_store_ids = Ahoy::Event.where(name: "Viewed store").uniq.pluck(:user_id)
-added_item_ids = Ahoy::Event.where(visit_id: viewed_store_ids, name: "Added item to cart").uniq.pluck(:user_id)
-viewed_checkout_ids = Ahoy::Event.where(visit_id: viewed_checkout_ids, name: "Viewed checkout").uniq.pluck(:user_id)
+added_item_ids = Ahoy::Event.where(user_id: viewed_store_ids, name: "Added item to cart").uniq.pluck(:user_id)
+viewed_checkout_ids = Ahoy::Event.where(user_id: viewed_checkout_ids, name: "Viewed checkout").uniq.pluck(:user_id)
 ```
 
 The same approach also works with visitor ids.
