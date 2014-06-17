@@ -251,18 +251,10 @@ end
 
 ### Multiple Subdomains
 
-To track visits across multiple subdomains, you must set the domain in two places (at the moment).
-
-Add this to the `config/initializers/ahoy.rb` initializer:
+To track visits across multiple subdomains, use:
 
 ```ruby
-Ahoy.domain = "yourdomain.com"
-```
-
-and add this **before** the javascript files:
-
-```javascript
-var ahoy = {"domain": "yourdomain.com"};
+Ahoy.cookie_domain = "yourdomain.com"
 ```
 
 ### ActiveRecord
