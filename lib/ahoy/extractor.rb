@@ -1,5 +1,5 @@
 module Ahoy
-  class Extractor
+  class Extractor < Hash
     attr_reader :request
 
     TRAFFIC_SOURCE_KEYS = [:referring_domain, :search_keyword]
@@ -21,7 +21,7 @@ module Ahoy
     end
 
     def [](key)
-      send(key)
+      send(key) || super
     end
 
     def keys
