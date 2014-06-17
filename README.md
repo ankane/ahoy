@@ -443,6 +443,7 @@ Add the following code to the end of `config/intializers/ahoy.rb`.
 
 ```ruby
 class Ahoy::Store < Ahoy::Stores::ActiveRecordLegacyStore
+  uses_deprecated_subscribers
 end
 ```
 
@@ -458,11 +459,13 @@ class Visit < ActiveRecord::Base
 end
 ```
 
-If tracking additional values with ActiveRecord callbacks, move the code to the `track_event` method.
+#### Subscribers
 
-#### Events
+Remove `uses_deprecated_subscribers` from `Ahoy::Store`.
 
-If tracking events with ActiveRecord, copy the model to `app/models/ahoy/event.rb`.
+##### ActiveRecord
+
+Copy the model to `app/models/ahoy/event.rb`.
 
 ```ruby
 module Ahoy
@@ -477,11 +480,43 @@ module Ahoy
 end
 ```
 
-And copy the `track` method in subscribers to `track_events` method in `Ahoy::Store`.
+##### Custom
+
+Copy the `track` method in subscribers to `track_event` in `Ahoy::Store`.
+
+```ruby
+class Ahoy::Store < Ahoy::Stores::ActiveRecordLegacyStore
+
+  def track_event(name, properties, options)
+    # code copied from the track method in your subscriber
+  end
+
+end
+```
 
 #### Global Options
 
 Replace the `Ahoy.user_method` with `user` method, and replace `Ahoy.track_bots` and `Ahoy.exclude_method` with `exclude?` method.
+
+Skip this step if you do not use these options.
+
+```ruby
+class Ahoy::Store < Ahoy::Stores::ActiveRecordLegacyStore
+
+  def user
+    # code from Ahoy.user_method goes here
+    controller.true_user
+  end
+
+  def exclude?
+    # code from Ahoy.track_bots and Ahoy.exclude_method goes here
+    bots? || request.ip == "192.168.1.1"
+  end
+
+end
+```
+
+You made it!  Now, take advantage of Ahoy’s awesome new features, like exception reporting.
 
 ### 0.3.0
 

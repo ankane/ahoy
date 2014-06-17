@@ -37,7 +37,9 @@ module Ahoy
         yield(event) if block_given?
 
         event.save!
+      end
 
+      def deprecated_subscribers(name, properties, options)
         options[:controller] ||= controller
         options[:user] ||= user
         options[:visit] ||= visit
@@ -87,7 +89,7 @@ module Ahoy
       protected
 
       def visit_model
-        ::Visit
+        Ahoy.visit_model || ::Visit
       end
 
       def event_model
