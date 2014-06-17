@@ -2,7 +2,7 @@ module Ahoy
   module Stores
     class BaseStore
 
-      def initialize(options = {})
+      def initialize(options)
         @options = options
       end
 
