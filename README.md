@@ -408,19 +408,19 @@ Libraries for iOS and Android are coming soon. Until then, here’s the HTTP spe
 
 ### Visits
 
-When a user launches the app, create a visit.  Send a `POST` request to `/ahoy/visits` with:
+When a user launches the app, create a visit.
+
+Generate a `visit_id` and `visitor_id` as [UUIDs](http://en.wikipedia.org/wiki/Universally_unique_identifier).
+
+Send these values in the `Ahoy-Visit` and `Ahoy-Visitor` headers with all requests.
+
+Send a `POST` request to `/ahoy/visits` with:
 
 - platform - `iOS`, `Android`, etc.
 - app_version - `1.0.0`
 - os_version - `7.0.6`
-- visit_token - `505f6201-8e10-44cf-ba1c-37271c8d0125`
-- visitor_token - `db3b1a8f-302b-42df-9cd0-06875f549474`
 
-Tokens must be [UUIDs](http://en.wikipedia.org/wiki/Universally_unique_identifier).
-
-Send the visit and visitor tokens in the `Ahoy-Visit` and `Ahoy-Visitor` headers with all requests.
-
-After 4 hours, create another visit and use the updated visit token.
+After 4 hours of inactivity, create another visit and use the updated visit id.
 
 ### Events
 
