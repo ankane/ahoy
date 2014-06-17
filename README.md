@@ -498,12 +498,12 @@ Skip this step if you do not use these options.
 class Ahoy::Store < Ahoy::Stores::ActiveRecordLegacyStore
 
   def user
-    # code from Ahoy.user_method goes here
+    # logic from Ahoy.user_method goes here
     controller.true_user
   end
 
   def exclude?
-    # code from Ahoy.track_bots and Ahoy.exclude_method goes here
+    # logic from Ahoy.track_bots and Ahoy.exclude_method goes here
     bots? || request.ip == "192.168.1.1"
   end
 
