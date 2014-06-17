@@ -392,6 +392,16 @@ user = User.first
 user.visits
 ```
 
+### Create Funnels
+
+```ruby
+viewed_store_ids = Ahoy::Event.where(name: "Viewed store").uniq.pluck(:user_id)
+added_item_ids = Ahoy::Event.where(visit_id: viewed_store_ids, name: "Added item to cart").uniq.pluck(:user_id)
+viewed_checkout_ids = Ahoy::Event.where(visit_id: viewed_checkout_ids, name: "Viewed checkout").uniq.pluck(:user_id)
+```
+
+The same approach also works with visitor ids.
+
 ## Native Apps
 
 Libraries for iOS and Android are coming soon. Until then, here’s the HTTP spec.
