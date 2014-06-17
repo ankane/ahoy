@@ -27,12 +27,18 @@ require "ahoy/warden" if defined?(Warden)
 require "ahoy/subscribers/active_record"
 
 module Ahoy
+  UUID_NAMESPACE = UUIDTools::UUID.parse("a82ae811-5011-45ab-a728-569df7499c5f")
+
+  mattr_accessor :visit_duration
+  self.visit_duration = 4.hours
+
+  mattr_accessor :visitor_duration
+  self.visitor_duration = 2.years
+
+  mattr_accessor :cookie_domain
+
   mattr_accessor :quiet
   self.quiet = true
-
-  mattr_accessor :domain # cookies
-
-  UUID_NAMESPACE = UUIDTools::UUID.parse("a82ae811-5011-45ab-a728-569df7499c5f")
 
   def self.ensure_uuid(id)
     valid = UUIDTools::UUID.parse(id) rescue nil
@@ -44,6 +50,8 @@ module Ahoy
   end
 
   # deprecated
+
+  mattr_accessor :domain
 
   mattr_accessor :visit_model
 

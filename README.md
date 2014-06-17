@@ -301,6 +301,24 @@ class ApplicationController < ActionController::Base
 end
 ```
 
+### Track Visits on the Server
+
+The visitor and visit id are generated on the server, but the `track_visit` method is triggered through JavaScript.
+
+This prevents users with cookies disabled from creating multiple visits and ensures visits are not created for API endpoints.
+
+Add a before filter to change this:
+
+```
+before_filter :track_ahoy_visit
+```
+
+If you add this to your `ApplicationController`, be sure to exclude API endpoints with:
+
+```ruby
+skip_before_filter :track_ahoy_visit
+```
+
 ## Development
 
 Ahoy is built with developers in mind.  You can run the following code in your browser’s console.

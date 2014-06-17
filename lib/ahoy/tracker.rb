@@ -23,7 +23,7 @@ module Ahoy
     end
 
     def track_visit(options = {})
-      unless exclude?
+      unless exclude? or existing_visit_id
         options = options.dup
 
         options[:started_at] ||= Time.zone.now
@@ -58,26 +58,14 @@ module Ahoy
 
     def set_visit_cookie
       if !existing_visit_id
-        track_visit
-        cookie = {
-          value: visit_id,
-          expires: 4.hours.from_now,
-          path: "/"
-        }
-        cookie[:domain] = Ahoy.domain if Ahoy.domain
-        controller.response.set_cookie("ahoy_visit", cookie)
+        set_cookie("ahoy_visit", visit_id, Ahoy.visit_duration)
+        set_cookie("ahoy_track", true) # TODO do not set for visits tracked on server
       end
     end
 
     def set_visitor_cookie
       if !existing_visitor_id
-        cookie = {
-          value: visitor_id,
-          expires: 2.years.from_now,
-          path: "/"
-        }
-        cookie[:domain] = Ahoy.domain if Ahoy.domain
-        controller.response.set_cookie("ahoy_visitor", cookie)
+        set_cookie("ahoy_visitor", visitor_id, Ahoy.visitor_duration)
       end
     end
 
@@ -100,6 +88,17 @@ module Ahoy
     end
 
     protected
+
+    def set_cookie(name, value, duration)
+      cookie = {
+        value: value,
+        expires: duration.from_now,
+        path: "/"
+      }
+      domain = Ahoy.cookie_domain || Ahoy.domain
+      cookie[:domain] = domain if domain
+      controller.response.set_cookie(name, cookie)
+    end
 
     def trusted_time(options)
       if options[:time] and options[:trusted] == false and (1.minute.ago..Time.now).cover?(options[:time])
