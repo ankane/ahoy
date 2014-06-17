@@ -11,8 +11,8 @@ module Ahoy
             v.started_at = options[:started_at]
           end
 
-        ahoy.extractor.keys.each do |key|
-          visit.send(:"#{key}=", ahoy.extractor.send(key)) if visit.respond_to?(:"#{key}=") && ahoy.extractor.send(key)
+        properties.keys.each do |key|
+          visit.send(:"#{key}=", properties[key]) if visit.respond_to?(:"#{key}=") && properties[key]
         end
 
         yield(visit) if block_given?

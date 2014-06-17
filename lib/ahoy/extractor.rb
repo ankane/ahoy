@@ -20,12 +20,16 @@ module Ahoy
       @options = options
     end
 
+    def [](key)
+      send(key)
+    end
+
     def keys
       KEYS
     end
 
-    def attributes
-      @attributes ||= keys.inject({}){|memo, key| memo[key] = send(key); memo }
+    def to_hash
+      keys.inject({}){|memo, key| memo[key] = send(key); memo }
     end
 
     def ip

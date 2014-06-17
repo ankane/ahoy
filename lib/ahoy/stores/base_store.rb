@@ -55,6 +55,10 @@ module Ahoy
         @ahoy ||= @options[:ahoy]
       end
 
+      def properties
+        ahoy.extractor
+      end
+
     end
   end
 end

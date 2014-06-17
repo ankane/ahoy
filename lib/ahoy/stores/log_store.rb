@@ -6,7 +6,7 @@ module Ahoy
         data = {
           id: ahoy.visit_id,
           visitor_id: ahoy.visitor_id,
-        }.merge(ahoy.extractor.attributes)
+        }.merge(properties.to_hash)
         data[:user_id] = user.id if user
         data[:started_at] = options[:started_at]
 
