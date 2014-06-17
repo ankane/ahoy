@@ -307,10 +307,10 @@ The visitor and visit id are generated on the server, but the `track_visit` meth
 
 This prevents users with cookies disabled from creating multiple visits and ensures visits are not created for API endpoints.
 
-Add a before filter to change this:
+Change this with:
 
-```
-before_filter :track_ahoy_visit
+```ruby
+Ahoy.track_visits_on_server = true
 ```
 
 If you add this to your `ApplicationController`, be sure to exclude API endpoints with:
