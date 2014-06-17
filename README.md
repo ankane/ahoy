@@ -437,13 +437,26 @@ Use an array to pass multiple events at once.
 
 ### 1.0.0
 
-Ahoy now works with any data store.
-
 Add the following code to the end of `config/intializers/ahoy.rb`.
 
 ```ruby
 class Ahoy::Store < Ahoy::Stores::ActiveRecordLegacyStore
   uses_deprecated_subscribers
+end
+```
+
+If you use `Ahoy::Event` to track events, copy it into your project.
+
+```ruby
+module Ahoy
+  class Event < ActiveRecord::Base
+    self.table_name = "ahoy_events"
+
+    belongs_to :visit
+    belongs_to :user
+
+    serialize :properties, JSON
+  end
 end
 ```
 
@@ -463,26 +476,7 @@ end
 
 Remove `uses_deprecated_subscribers` from `Ahoy::Store`.
 
-##### ActiveRecord
-
-Copy the model to `app/models/ahoy/event.rb`.
-
-```ruby
-module Ahoy
-  class Event < ActiveRecord::Base
-    self.table_name = "ahoy_events"
-
-    belongs_to :visit
-    belongs_to :user
-
-    serialize :properties, JSON
-  end
-end
-```
-
-##### Custom
-
-Copy the `track` method in subscribers to `track_event` in `Ahoy::Store`.
+If you have a custom subscriber, copy the `track` method to `track_event` in `Ahoy::Store`.
 
 ```ruby
 class Ahoy::Store < Ahoy::Stores::ActiveRecordLegacyStore
