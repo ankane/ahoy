@@ -1,6 +1,6 @@
 module Ahoy
-  module Extractors
-    class TrafficSourceExtractor
+  module Deckhands
+    class TrafficSourceDeckhand
 
       def initialize(referrer)
         @referrer = referrer

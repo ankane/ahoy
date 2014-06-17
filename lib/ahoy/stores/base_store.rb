@@ -55,8 +55,8 @@ module Ahoy
         @ahoy ||= @options[:ahoy]
       end
 
-      def properties
-        ahoy.extractor
+      def visit_properties
+        ahoy.visit_properties
       end
 
     end

@@ -168,9 +168,9 @@ end
 ### Track Additional Values
 
 ```ruby
-def track_visit
+def track_visit(options)
   super do |visit|
-    visit.gclid = ahoy.extractor.landing_params["gclid"]
+    visit.gclid = visit_properties.landing_params["gclid"]
   end
 end
 ```

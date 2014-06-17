@@ -11,8 +11,8 @@ module Ahoy
             v.created_at = options[:started_at]
           end
 
-        properties.keys.each do |key|
-          visit.send(:"#{key}=", properties[key]) if visit.respond_to?(:"#{key}=")
+        visit_properties.keys.each do |key|
+          visit.send(:"#{key}=", visit_properties[key]) if visit.respond_to?(:"#{key}=")
         end
 
         yield(visit) if block_given?

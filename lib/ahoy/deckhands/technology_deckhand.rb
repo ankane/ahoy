@@ -1,6 +1,6 @@
 module Ahoy
-  module Extractors
-    class TechnologyExtractor
+  module Deckhands
+    class TechnologyDeckhand
 
       def initialize(user_agent)
         @user_agent = user_agent

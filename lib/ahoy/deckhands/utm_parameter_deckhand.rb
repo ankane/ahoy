@@ -1,6 +1,6 @@
 module Ahoy
-  module Extractors
-    class UtmParameterExtractor
+  module Deckhands
+    class UtmParameterDeckhand
 
       def initialize(landing_page)
         @landing_page = landing_page

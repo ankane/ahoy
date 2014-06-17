@@ -79,8 +79,9 @@ module Ahoy
       @user ||= @store.user
     end
 
-    def extractor
-      @extractor ||= Ahoy::Extractor.new(request, @options.slice(:api))
+    # TODO rename method
+    def visit_properties
+      @visit_properties ||= Ahoy::VisitProperties.new(request, @options.slice(:api))
     end
 
     # for ActiveRecordLegacyStore only - do not use

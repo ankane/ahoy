@@ -29,7 +29,7 @@ module Ahoy
         def landing_params
           @landing_params ||= begin
             warn "[DEPRECATION] landing_params is deprecated"
-            ActiveSupport::HashWithIndifferentAccess.new(Extractors::UtmParameterExtractor.new(landing_page).landing_params)
+            Deckhands::UtmParameterDeckhand.new(landing_page).landing_params
           end
         end
 
