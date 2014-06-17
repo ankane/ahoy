@@ -254,7 +254,7 @@ end
 To track visits across multiple subdomains, use:
 
 ```ruby
-Ahoy.cookie_domain = "yourdomain.com"
+Ahoy.cookie_domain = :all
 ```
 
 ### Visit Duration

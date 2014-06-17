@@ -79,7 +79,7 @@ module Ahoy
       @user ||= @store.user
     end
 
-    # TODO rename method
+    # TODO better name
     def visit_properties
       @visit_properties ||= Ahoy::VisitProperties.new(request, @options.slice(:api))
     end
@@ -98,13 +98,12 @@ module Ahoy
 
     def set_cookie(name, value, duration = nil)
       cookie = {
-        value: value,
-        path: "/"
+        value: value
       }
       cookie[:expires] = duration.from_now if duration
       domain = Ahoy.cookie_domain || Ahoy.domain
       cookie[:domain] = domain if domain
-      controller.response.set_cookie(name, cookie)
+      request.cookie_jar[name] = cookie
     end
 
     def trusted_time(time)
