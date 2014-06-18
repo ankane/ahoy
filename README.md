@@ -131,7 +131,7 @@ ahoy.track "Viewed book", title: "Hot, Flat, and Crowded"
 
 #### Native Apps
 
-See the [HTTP spec](#native-apps).
+See the [HTTP spec](#native-apps) until libraries are built.
 
 ### Users
 
@@ -400,8 +400,6 @@ The same approach also works with visitor ids.
 
 ## Native Apps
 
-Libraries for iOS and Android are coming soon. Until then, here’s the HTTP spec.
-
 ### Visits
 
 When a user launches the app, create a visit.
@@ -420,16 +418,14 @@ After 4 hours of inactivity, create another visit and use the updated visit id.
 
 ### Events
 
-Send a `POST` request to `/ahoy/events` with:
+Send a `POST` request as `Content-Type: application/json` to `/ahoy/events` with:
 
-- id (generated UUID)
-- name
-- properties
-- time ([ISO 8601](https://en.wikipedia.org/wiki/ISO_8601))
+- id - `5aea7b70-182d-4070-b062-b0a09699ad5e` - UUID
+- name - `Viewed item`
+- properties - `{"item_id": 123}`
+- time - `2014-06-17T00:00:00-07:00` - [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601)
 - `Ahoy-Visit` and `Ahoy-Visitor` headers
 - user token (depends on your authentication framework)
-
-Requests should have `Content-Type: application/json`.
 
 Use an array to pass multiple events at once.
 
