@@ -13,7 +13,7 @@
 
   var ahoy = window.ahoy || window.Ahoy || {};
   var $ = window.jQuery || window.Zepto || window.$;
-  var visitId, visitorId;
+  var visitId, visitorId, track;
   var visitTtl = 4 * 60; // 4 hours
   var visitorTtl = 2 * 365 * 24 * 60; // 2 years
   var isReady = false;
@@ -21,6 +21,8 @@
   var canStringify = typeof(JSON) !== "undefined" && typeof(JSON.stringify) !== "undefined";
   var eventQueue = [];
   var page = ahoy.page || window.location.pathname;
+  var visitsUrl = ahoy.visitsUrl || "/ahoy/visits"
+  var eventsUrl = ahoy.eventsUrl || "/ahoy/events"
 
   // cookies
 
@@ -102,7 +104,7 @@
       if (canStringify) {
         $.ajax({
           type: "POST",
-          url: "/ahoy/events",
+          url: eventsUrl,
           data: JSON.stringify([event]),
           contentType: "application/json; charset=utf-8",
           dataType: "json",
@@ -136,14 +138,21 @@
 
   visitId = getCookie("ahoy_visit");
   visitorId = getCookie("ahoy_visitor");
+  track = getCookie("ahoy_track");
 
-  if (visitId && visitorId) {
+  if (visitId && visitorId && !track) {
     // TODO keep visit alive?
     log("Active visit");
     setReady();
   } else {
-    visitId = generateId();
-    setCookie("ahoy_visit", visitId, visitTtl);
+    if (track) {
+      destroyCookie("ahoy_track");
+    }
+
+    if (!visitId) {
+      visitId = generateId();
+      setCookie("ahoy_visit", visitId, visitTtl);
+    }
 
     // make sure cookies are enabled
     if (getCookie("ahoy_visit")) {
@@ -170,24 +179,26 @@
 
       log(data);
 
-      $.post("/ahoy/visits", data, setReady, "json");
+      $.post(visitsUrl, data, setReady, "json");
     } else {
       log("Cookies disabled");
       setReady();
     }
   }
 
-  ahoy.getVisitToken = function () {
+  ahoy.getVisitId = ahoy.getVisitToken = function () {
     return visitId;
   };
 
-  ahoy.getVisitorToken = function () {
+  ahoy.getVisitorId = ahoy.getVisitorToken = function () {
     return visitorId;
   };
 
   ahoy.reset = function () {
     destroyCookie("ahoy_visit");
     destroyCookie("ahoy_visitor");
+    destroyCookie("ahoy_events");
+    destroyCookie("ahoy_track");
     return true;
   };
 

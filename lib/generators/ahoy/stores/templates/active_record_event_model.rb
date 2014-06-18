@@ -3,8 +3,8 @@ module Ahoy
     self.table_name = "ahoy_events"
 
     belongs_to :visit
-    belongs_to :user, polymorphic: true
+    belongs_to :user
 
-    serialize :properties, JSON
+    <% if options["database"] != "postgresql" %>serialize :properties, JSON<% end %>
   end
 end

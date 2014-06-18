@@ -1,6 +1,6 @@
 module Ahoy
-  module Extractors
-    class Location
+  module Deckhands
+    class LocationDeckhand
 
       def initialize(ip)
         @ip = ip

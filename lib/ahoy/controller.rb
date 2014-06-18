@@ -1,14 +1,15 @@
+require "request_store"
+
 module Ahoy
   module Controller
 
     def self.included(base)
       base.helper_method :current_visit
       base.helper_method :ahoy
-      base.helper_method :visit_token
-      base.helper_method :visitor_token
-      base.before_filter :set_ahoy_visitor_cookie
+      base.before_filter :set_ahoy_cookies
+      base.before_filter :track_ahoy_visit
       base.before_filter do
-        RequestStore.store[:ahoy_controller] ||= self
+        RequestStore.store[:ahoy] ||= ahoy
       end
     end
 
@@ -17,23 +18,18 @@ module Ahoy
     end
 
     def current_visit
-      ahoy.current_visit
+      ahoy.visit
     end
 
-    def visit_token
-      ahoy.visit_token
-    end
-    # deprecated
-    alias_method :current_visit_token, :visit_token
-
-    def visitor_token
-      ahoy.visitor_token
-    end
-    # deprecated
-    alias_method :current_visitor_token, :visitor_token
-
-    def set_ahoy_visitor_cookie
+    def set_ahoy_cookies
       ahoy.set_visitor_cookie
+      ahoy.set_visit_cookie
+    end
+
+    def track_ahoy_visit
+      if ahoy.new_visit?
+        ahoy.track_visit(defer: !Ahoy.track_visits_immediately)
+      end
     end
 
   end

@@ -2,7 +2,8 @@ module Ahoy
   class VisitsController < BaseController
 
     def create
-      render json: ahoy.track_visit
+      ahoy.track_visit
+      render json: {visit_id: ahoy.visit_id, visitor_id: ahoy.visitor_id}
     end
 
   end

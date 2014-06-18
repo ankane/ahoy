@@ -1,9 +1,8 @@
 class <%= migration_class_name %> < ActiveRecord::Migration
   def change
-    create_table :visits do |t|
-      # cookies
-      t.string :visit_token
-      t.string :visitor_token
+    create_table :visits, id: false do |t|
+      t.uuid :id, primary_key: true
+      t.uuid :visitor_id
 
       # the rest are recommended but optional
       # simply remove the columns you don't want
@@ -16,7 +15,7 @@ class <%= migration_class_name %> < ActiveRecord::Migration
 
       # user
       t.integer :user_id
-      t.string :user_type
+      # add t.string :user_type if polymorphic
 
       # traffic source
       t.string :referring_domain
@@ -44,10 +43,9 @@ class <%= migration_class_name %> < ActiveRecord::Migration
       # t.string :app_version
       # t.string :os_version
 
-      t.timestamp :created_at
+      t.timestamp :started_at
     end
 
-    add_index :visits, [:visit_token], unique: true
-    add_index :visits, [:user_id, :user_type]
+    add_index :visits, [:user_id]
   end
 end

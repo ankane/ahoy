@@ -1,3 +1,11 @@
+## 1.0.0
+
+- Added support for any data store, and Mongoid out of the box
+- Added `track_visits_immediately` option
+- Added exception catching and reporting
+- Visits expire after inactivity, not fixed interval
+- Added `visit_duration` and `visitor_duration` options
+
 ## 0.3.2
 
 - Fixed bot exclusion for visits

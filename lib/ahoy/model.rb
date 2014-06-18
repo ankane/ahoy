@@ -1,19 +1,6 @@
 module Ahoy
   module Model
 
-    def ahoy_visit
-      class_eval do
-        belongs_to :user, polymorphic: true
-
-        def landing_params
-          @landing_params ||= begin
-            ActiveSupport::HashWithIndifferentAccess.new(Extractors::UtmParameters.new(landing_page).landing_params)
-          end
-        end
-
-      end
-    end
-
     def visitable(name = nil, options = {})
       if name.is_a?(Hash)
         name = nil
@@ -26,9 +13,27 @@ module Ahoy
       end
       class_eval %Q{
         def set_visit
-          self.#{name} ||= RequestStore.store[:ahoy_controller].try(:send, :current_visit)
+          self.#{name} ||= RequestStore.store[:ahoy].visit
         end
       }
+    end
+
+    # deprecated
+
+    def ahoy_visit
+      class_eval do
+        warn "[DEPRECATION] ahoy_visit is deprecated"
+
+        belongs_to :user, polymorphic: true
+
+        def landing_params
+          @landing_params ||= begin
+            warn "[DEPRECATION] landing_params is deprecated"
+            Deckhands::UtmParameterDeckhand.new(landing_page).landing_params
+          end
+        end
+
+      end
     end
 
   end

@@ -4,54 +4,60 @@ require "geocoder"
 require "referer-parser"
 require "user_agent_parser"
 require "request_store"
+require "uuidtools"
 
 require "ahoy/version"
 require "ahoy/tracker"
 require "ahoy/controller"
 require "ahoy/model"
-require "ahoy/request"
-require "ahoy/extractors/traffic_source"
-require "ahoy/extractors/utm_parameters"
-require "ahoy/extractors/technology"
-require "ahoy/extractors/location"
-require "ahoy/stores/active_record"
-require "ahoy/stores/log"
-require "ahoy/subscribers/active_record"
+require "ahoy/visit_properties"
+require "ahoy/deckhands/location_deckhand"
+require "ahoy/deckhands/request_deckhand"
+require "ahoy/deckhands/technology_deckhand"
+require "ahoy/deckhands/traffic_source_deckhand"
+require "ahoy/deckhands/utm_parameter_deckhand"
+require "ahoy/stores/base_store"
+require "ahoy/stores/active_record_store"
+require "ahoy/stores/active_record_token_store"
+require "ahoy/stores/log_store"
+require "ahoy/stores/mongoid_store"
 require "ahoy/engine"
 require "ahoy/warden" if defined?(Warden)
 
+# deprecated
+require "ahoy/subscribers/active_record"
+
 module Ahoy
+  UUID_NAMESPACE = UUIDTools::UUID.parse("a82ae811-5011-45ab-a728-569df7499c5f")
 
-  def self.generate_id
-    SecureRandom.uuid
-  end
+  mattr_accessor :visit_duration
+  self.visit_duration = 4.hours
 
-  def self.visit_model
-    @visit_model || ::Visit
-  end
+  mattr_accessor :visitor_duration
+  self.visitor_duration = 2.years
 
-  def self.visit_model=(visit_model)
-    @visit_model = visit_model
-  end
+  mattr_accessor :cookie_domain
 
-  # TODO private
-  # performance hack for referer-parser
-  def self.referrer_parser
-    @referrer_parser ||= RefererParser::Referer.new("https://github.com/ankane/ahoy")
-  end
+  mattr_accessor :track_visits_immediately
+  self.track_visits_immediately = false
 
-  # performance
-  def self.user_agent_parser
-    @user_agent_parser ||= UserAgentParser::Parser.new
-  end
+  mattr_accessor :quiet
+  self.quiet = true
 
-  def self.fetch_user(controller)
-    if user_method.respond_to?(:call)
-      user_method.call(controller)
+  def self.ensure_uuid(id)
+    valid = UUIDTools::UUID.parse(id) rescue nil
+    if valid
+      id
     else
-      controller.send(user_method)
+      UUIDTools::UUID.sha1_create(UUID_NAMESPACE, id).to_s
     end
   end
+
+  # deprecated
+
+  mattr_accessor :domain
+
+  mattr_accessor :visit_model
 
   mattr_accessor :user_method
   self.user_method = proc do |controller|
@@ -65,14 +71,6 @@ module Ahoy
 
   mattr_accessor :track_bots
   self.track_bots = false
-
-  mattr_accessor :quiet
-  self.quiet = true
-
-  mattr_accessor :domain
-
-  mattr_accessor :store
-  self.store = Ahoy::Stores::ActiveRecord.new
 end
 
 ActionController::Base.send :include, Ahoy::Controller
