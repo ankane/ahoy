@@ -1,13 +1,11 @@
 ## 1.0.0
 
-- Removed subscribers in favor of stores
-- Added support for Mongoid
-- Moved to UUID storage
-- Added exception catching and reporting
-- Always have a `visit_id` and `visitor_id` available on server
-- Add `visit_duration` option
+- Added support for any data store, and Mongoid out of the box
+- Added `track_visits_on_server` option
+- Always have a `visit_id` and `visitor_id` available on the server
 - Visits expire after inactivity, not fixed interval
-- Simplied cookie domain setup
+- Added `visit_duration` and `visitor_duration` options
+- Added exception catching and reporting
 
 ## 0.3.1
 
