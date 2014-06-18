@@ -152,58 +152,74 @@ ahoy.authenticate(user)
 Stores are built to be highly customizable.
 
 ```ruby
-class Ahoy::Store < Ahoy::Stores::ActiveRecord
+class Ahoy::Store < Ahoy::Stores::ActiveRecordStore
   # add methods here
 end
 ```
 
 ### Exclude Bots and More
 
-Bots are excluded by default. To change this, use:
+Exclude visits and events from being tracked with:
 
 ```ruby
-def exclude?
-  bot? || request.ip == "192.168.1.1"
+class Ahoy::Store < Ahoy::Stores::ActiveRecordStore
+
+  def exclude?
+    bot? || request.ip == "192.168.1.1"
+  end
+
 end
 ```
+
+Bots are excluded by default.
 
 ### Track Additional Values
 
 ```ruby
-def track_visit(options)
-  super do |visit|
-    visit.gclid = visit_properties.landing_params["gclid"]
-  end
-end
-```
+class Ahoy::Store < Ahoy::Stores::ActiveRecordStore
 
-or
-
-```ruby
-def track_event(name, properties, options)
-  super do |event|
-    event.ip = request.ip
+  def track_visit(options)
+    super do |visit|
+      visit.gclid = visit_properties.landing_params["gclid"]
+    end
   end
+
+  def track_event(name, properties, options)
+    super do |event|
+      event.ip = request.ip
+    end
+  end
+
 end
 ```
 
 ### Customize User
 
+If you use a method other than `current_user`, set it here:
+
 ```ruby
-def user
-  controller.true_user
+class Ahoy::Store < Ahoy::Stores::ActiveRecordStore
+
+  def user
+    controller.true_user
+  end
+
 end
 ```
 
 ### Report Exceptions
 
-Exceptions are caught by default so analytics do not break your app.
+Exceptions are rescued so analytics do not break your app.
 
 To report them to a service, use:
 
 ```ruby
-def report_exception(e)
-  Rollbar.report_exception(e)
+class Ahoy::Store < Ahoy::Stores::ActiveRecordStore
+
+  def report_exception(e)
+    Rollbar.report_exception(e)
+  end
+
 end
 ```
 
@@ -212,12 +228,16 @@ end
 For ActiveRecord and Mongoid stores
 
 ```ruby
-def visit_model
-  CustomVisit
-end
+class Ahoy::Store < Ahoy::Stores::ActiveRecordStore
 
-def event_model
-  CustomEvent
+  def visit_model
+    CustomVisit
+  end
+
+  def event_model
+    CustomEvent
+  end
+
 end
 ```
 
