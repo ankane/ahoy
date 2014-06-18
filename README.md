@@ -36,10 +36,10 @@ rake db:migrate
 
 #### MySQL and SQLite
 
-Add [activeuuid](https://github.com/ankane/activeuuid) to your Gemfile.
+Add [activeuuid](https://github.com/jashmenn/activeuuid) to your Gemfile.
 
 ```ruby
-gem 'activeuuid', github: 'ankane/activeuuid' # use this fork for now
+gem 'activeuuid', '>= 0.5.0'
 ```
 
 And run:
