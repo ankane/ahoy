@@ -16,6 +16,7 @@ module Ahoy
       end
 
       def authenticate(user)
+        @user = user
         if visit and visit.respond_to?(:user) and !visit.user
           visit.user = user
           visit.save!
@@ -26,7 +27,7 @@ module Ahoy
       end
 
       def user
-        controller.current_user
+        @user ||= controller.current_user
       end
 
       def exclude?

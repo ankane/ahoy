@@ -488,6 +488,23 @@ class Ahoy::Store < Ahoy::Stores::ActiveRecordTokenStore
 end
 ```
 
+#### Authentication
+
+Ahoy no longer tracks the `$authenticate` event automatically.
+
+To restore this behavior, use:
+
+```ruby
+class Ahoy::Store < Ahoy::Stores::ActiveRecordTokenStore
+
+  def authenticate(user)
+    super
+    ahoy.track "$authenticate"
+  end
+
+end
+```
+
 #### Global Options
 
 Replace the `Ahoy.user_method` with `user` method, and replace `Ahoy.track_bots` and `Ahoy.exclude_method` with `exclude?` method.
