@@ -504,7 +504,7 @@ class Ahoy::Store < Ahoy::Stores::ActiveRecordTokenStore
 
   def exclude?
     # logic from Ahoy.track_bots and Ahoy.exclude_method goes here
-    bots? || request.ip == "192.168.1.1"
+    bot? || request.ip == "192.168.1.1"
   end
 
 end
