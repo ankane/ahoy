@@ -32,7 +32,7 @@ rails generate ahoy:stores:active_record -d postgresql
 rake db:migrate
 ```
 
-### MySQL and SQLite
+### MySQL or SQLite
 
 Add [activeuuid](https://github.com/jashmenn/activeuuid) to your Gemfile.
 
