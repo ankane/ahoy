@@ -90,6 +90,8 @@ class Ahoy::Store < Ahoy::Stores::BaseStore
 end
 ```
 
+See the [ActiveRecordStore](https://github.com/ankane/ahoy/blob/master/lib/ahoy/stores/active_record_store.rb) for an example.
+
 ## How It Works
 
 ### Visits
