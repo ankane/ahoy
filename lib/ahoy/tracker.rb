@@ -86,12 +86,12 @@ module Ahoy
 
     # for ActiveRecordTokenStore only - do not use
     def visit_token
-      @visit_token ||= existing_visit_id || generate_id
+      @visit_token ||= existing_visit_id || (@options[:api] && request.params["visit_token"]) || generate_id
     end
 
     # for ActiveRecordTokenStore only - do not use
     def visitor_token
-      @visitor_token ||= existing_visitor_id || generate_id
+      @visitor_token ||= existing_visitor_id || (@options[:api] && request.params["visitor_token"]) || generate_id
     end
 
     protected
