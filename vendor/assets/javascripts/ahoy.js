@@ -186,11 +186,11 @@
     }
   }
 
-  ahoy.getVisitId = function () {
+  ahoy.getVisitId = ahoy.getVisitToken = function () {
     return visitId;
   };
 
-  ahoy.getVisitorId = function () {
+  ahoy.getVisitorId = ahoy.getVisitorToken = function () {
     return visitorId;
   };
 
