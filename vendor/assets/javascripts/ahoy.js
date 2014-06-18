@@ -197,6 +197,8 @@
   ahoy.reset = function () {
     destroyCookie("ahoy_visit");
     destroyCookie("ahoy_visitor");
+    destroyCookie("ahoy_events");
+    destroyCookie("ahoy_track");
     return true;
   };
 
