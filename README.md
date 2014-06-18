@@ -161,7 +161,7 @@ Bots are excluded by default. To change this, use:
 
 ```ruby
 def exclude?
-  bots? || request.ip == "192.168.1.1"
+  bot? || request.ip == "192.168.1.1"
 end
 ```
 
