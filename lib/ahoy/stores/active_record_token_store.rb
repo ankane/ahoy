@@ -1,6 +1,6 @@
 module Ahoy
   module Stores
-    class ActiveRecordLegacyStore < BaseStore
+    class ActiveRecordTokenStore < BaseStore
 
       def track_visit(options, &block)
         visit =

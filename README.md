@@ -440,7 +440,7 @@ Use an array to pass multiple events at once.
 Add the following code to the end of `config/intializers/ahoy.rb`.
 
 ```ruby
-class Ahoy::Store < Ahoy::Stores::ActiveRecordLegacyStore
+class Ahoy::Store < Ahoy::Stores::ActiveRecordTokenStore
   uses_deprecated_subscribers
 end
 ```
@@ -479,7 +479,7 @@ Remove `uses_deprecated_subscribers` from `Ahoy::Store`.
 If you have a custom subscriber, copy the `track` method to `track_event` in `Ahoy::Store`.
 
 ```ruby
-class Ahoy::Store < Ahoy::Stores::ActiveRecordLegacyStore
+class Ahoy::Store < Ahoy::Stores::ActiveRecordTokenStore
 
   def track_event(name, properties, options)
     # code copied from the track method in your subscriber
@@ -495,7 +495,7 @@ Replace the `Ahoy.user_method` with `user` method, and replace `Ahoy.track_bots`
 Skip this step if you do not use these options.
 
 ```ruby
-class Ahoy::Store < Ahoy::Stores::ActiveRecordLegacyStore
+class Ahoy::Store < Ahoy::Stores::ActiveRecordTokenStore
 
   def user
     # logic from Ahoy.user_method goes here

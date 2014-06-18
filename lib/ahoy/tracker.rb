@@ -84,12 +84,12 @@ module Ahoy
       @visit_properties ||= Ahoy::VisitProperties.new(request, @options.slice(:api))
     end
 
-    # for ActiveRecordLegacyStore only - do not use
+    # for ActiveRecordTokenStore only - do not use
     def visit_token
       @visit_token ||= existing_visit_id || generate_id
     end
 
-    # for ActiveRecordLegacyStore only - do not use
+    # for ActiveRecordTokenStore only - do not use
     def visitor_token
       @visitor_token ||= existing_visitor_id || generate_id
     end
