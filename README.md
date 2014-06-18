@@ -25,16 +25,14 @@ And add the javascript file in `app/assets/javascripts/application.js` after jQu
 
 ## Choose a Data Store
 
-### ActiveRecord
-
-#### PostgreSQL
+### PostgreSQL
 
 ```sh
 rails generate ahoy:stores:active_record -d postgresql
 rake db:migrate
 ```
 
-#### MySQL and SQLite
+### MySQL and SQLite
 
 Add [activeuuid](https://github.com/jashmenn/activeuuid) to your Gemfile.
 
