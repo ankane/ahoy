@@ -103,7 +103,7 @@ When someone visits your website, Ahoy creates a visit with lots of useful infor
 - **technology** - browser, OS, and device type
 - **utm parameters** - source, medium, term, content, campaign
 
-Use the `current_visit` method to access it, and the `ahoy.visit_id` and `ahoy.visitor_id` methods to get the ids.
+Use the `current_visit` method to access it.
 
 ### Events
 
