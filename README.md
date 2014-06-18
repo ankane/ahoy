@@ -281,7 +281,7 @@ When a visitor places an order, the `visit_id` column is automatically set.
 
 :tada: Magic!
 
-Customize visitable
+Customize the column and class name with:
 
 ```ruby
 visitable :sign_up_visit, class_name: "Visit"
