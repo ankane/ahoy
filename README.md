@@ -303,17 +303,17 @@ class ApplicationController < ActionController::Base
 end
 ```
 
-### Track Visits on the Server
+### Track Visits Immediately
 
-The visitor and visit id are generated on the server, but the `track_visit` method is not called until the JavaScript library executes.  This prevents users with cookies disabled from creating multiple visits and ensures visits are not created for API endpoints.  Change this with:
+Visitor and visit ids are generated on the first request (so you can use them immediately), but the `track_visit` method isn’t called until the JavaScript library posts to the server.  This prevents browsers with cookies disabled from creating multiple visits and ensures visits are not created for API endpoints.  Change this with:
 
 ```ruby
-Ahoy.track_visits_on_server = true
+Ahoy.track_visits_immediately = true
 ```
 
 **Note:** At the moment, geocoding is performed in the foreground, which can slow down the first page load.
 
-If you add this to your `ApplicationController`, be sure to exclude API endpoints with:
+You can exclude API endpoints and other actions with:
 
 ```ruby
 skip_before_filter :track_ahoy_visit
@@ -523,7 +523,7 @@ class Ahoy::Store < Ahoy::Stores::ActiveRecordTokenStore
 end
 ```
 
-You made it!  Now, take advantage of Ahoy’s awesome new features, like exception reporting.
+You made it!  Now, take advantage of Ahoy’s awesome new features, like easy customization and exception reporting.
 
 ### 0.3.0
 

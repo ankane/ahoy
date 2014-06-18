@@ -1,7 +1,7 @@
 ## 1.0.0
 
 - Added support for any data store, and Mongoid out of the box
-- Added `track_visits_on_server` option
+- Added `track_visits_immediately` option
 - Always have a `visit_id` and `visitor_id` available on the server
 - Visits expire after inactivity, not fixed interval
 - Added `visit_duration` and `visitor_duration` options

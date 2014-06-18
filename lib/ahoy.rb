@@ -38,8 +38,8 @@ module Ahoy
 
   mattr_accessor :cookie_domain
 
-  mattr_accessor :track_visits_on_server
-  self.track_visits_on_server = false
+  mattr_accessor :track_visits_immediately
+  self.track_visits_immediately = false
 
   mattr_accessor :quiet
   self.quiet = true
