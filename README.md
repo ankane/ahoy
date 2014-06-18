@@ -1,8 +1,8 @@
 # Ahoy
 
-:fire: Simple, powerful analytics for Rails
+Ahoy provides a solid foundation to track visits and events in Ruby, JavaScript, and native apps.
 
-Ahoy makes it easy to track visitors and users.  Track visits (sessions) and events in Ruby, JavaScript, and native apps.  Works with any data store so you can easily scale.
+:fire: Works with any data store so you can easily scale.
 
 :postbox: To track emails, check out [Ahoy Email](https://github.com/ankane/ahoy_email).
 
