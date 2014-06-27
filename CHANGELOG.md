@@ -1,3 +1,7 @@
+## 1.0.1
+
+- Fixed `visitable` outside of requests
+
 ## 1.0.0
 
 - Added support for any data store, and Mongoid out of the box
