@@ -5,7 +5,16 @@ class Visit
   belongs_to :user
 
   # required
-  field :visitor_id, type: BSON::Binary
+  type =
+    case
+      when defined?(::Moped::BSON)
+        ::Moped::BSON::Binary
+      when defined?(::BSON)
+        ::BSON::Binary
+      else
+        raise 'no BSON!'
+    end
+  field :visitor_id, type: type
 
   # the rest are recommended but optional
   # simply remove the columns you don't want
