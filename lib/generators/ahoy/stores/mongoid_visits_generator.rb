@@ -7,6 +7,14 @@ module Ahoy
         source_root File.expand_path("../templates", __FILE__)
 
         def generate_model
+          @visitor_id_type =
+            if defined?(::BSON)
+              "BSON::Binary"
+            elsif defined?(::Moped::BSON)
+              "Moped::BSON::Binary"
+            else
+              "String"
+            end
           template "mongoid_visit_model.rb", "app/models/visit.rb"
         end
 

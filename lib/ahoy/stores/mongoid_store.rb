@@ -51,7 +51,14 @@ module Ahoy
       end
 
       def binary(token)
-        ::BSON::Binary.new(token.delete("-"), :uuid)
+        token = token.delete("-")
+        if defined?(::BSON)
+          ::BSON::Binary.new(token, :uuid)
+        elsif defined?(::Moped::BSON)
+          ::Moped::BSON::Binary.new(:uuid, token)
+        else
+          token
+        end
       end
 
     end
