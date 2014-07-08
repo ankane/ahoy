@@ -2,7 +2,19 @@ module Ahoy
   class EventsController < Ahoy::BaseController
 
     def create
-      events = params[:name] ? [params] : ActiveSupport::JSON.decode(request.body.read)
+      events =
+        if params[:name]
+          # legacy API
+          [params]
+        else
+          begin
+            ActiveSupport::JSON.decode(request.body.read)
+          rescue ActiveSupport::JSON.parse_error
+            # do nothing
+            []
+          end
+        end
+
       events.each do |event|
         time = Time.zone.parse(event["time"]) rescue nil
 
