@@ -77,11 +77,15 @@ module Ahoy
       end
 
       def user
-        user_method = Ahoy.user_method
-        if user_method.respond_to?(:call)
-          user_method.call(controller)
-        else
-          controller.send(user_method)
+        @user ||= begin
+          user_method = Ahoy.user_method
+          if user_method.respond_to?(:call)
+            user_method.call(controller)
+          elsif user_method
+            controller.send(user_method)
+          else
+            super
+          end
         end
       end
 

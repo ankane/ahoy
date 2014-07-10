@@ -56,14 +56,8 @@ module Ahoy
   # deprecated
 
   mattr_accessor :domain
-
   mattr_accessor :visit_model
-
   mattr_accessor :user_method
-  self.user_method = proc do |controller|
-    (controller.respond_to?(:current_user) && controller.current_user) || (controller.respond_to?(:current_resource_owner, true) && controller.send(:current_resource_owner)) || nil
-  end
-
   mattr_accessor :exclude_method
 
   mattr_accessor :subscribers
