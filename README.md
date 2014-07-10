@@ -6,6 +6,8 @@ Ahoy provides a solid foundation to track visits and events in Ruby, JavaScript,
 
 :postbox: To track emails, check out [Ahoy Email](https://github.com/ankane/ahoy_email).
 
+Never build an analytics platform from scratch again.
+
 See [upgrade instructions](#upgrading) on how to move to 1.0.
 
 ## Installation
