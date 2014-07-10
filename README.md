@@ -27,10 +27,14 @@ And add the javascript file in `app/assets/javascripts/application.js` after jQu
 
 ### PostgreSQL
 
+For Rails 4 and PostgreSQL 9.2 or greater, use:
+
 ```sh
 rails generate ahoy:stores:active_record -d postgresql
 rake db:migrate
 ```
+
+Otherwise, follow the instructions for MySQL.
 
 ### MySQL or SQLite
 
