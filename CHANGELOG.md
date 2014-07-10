@@ -1,3 +1,9 @@
+## 1.0.2
+
+- Fixed BSON for Mongoid 3
+- Fixed Doorkeeper integration
+- Fixed user tracking in overridden authenticate method
+
 ## 1.0.1
 
 - Fixed `visitable` outside of requests
