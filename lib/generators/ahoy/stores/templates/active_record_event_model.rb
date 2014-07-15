@@ -3,8 +3,8 @@ module Ahoy
     self.table_name = "ahoy_events"
 
     belongs_to :visit
-    belongs_to :user
+    belongs_to :user<% if options["database"] != "postgresql" %>
 
-    <% if options["database"] != "postgresql" %>serialize :properties, JSON<% end %>
+    serialize :properties, JSON<% end %>
   end
 end
