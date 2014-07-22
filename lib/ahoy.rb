@@ -44,6 +44,9 @@ module Ahoy
   mattr_accessor :quiet
   self.quiet = true
 
+  mattr_accessor :automount
+  self.automount = true
+
   def self.ensure_uuid(id)
     valid = UUIDTools::UUID.parse(id) rescue nil
     if valid

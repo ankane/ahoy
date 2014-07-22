@@ -1,5 +1,7 @@
-Rails.application.routes.draw do
-  mount Ahoy::Engine => "/ahoy"
+if Ahoy.automount
+  Rails.application.routes.draw do
+    mount Ahoy::Engine => "/ahoy"
+  end
 end
 
 Ahoy::Engine.routes.draw do

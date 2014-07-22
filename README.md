@@ -345,6 +345,20 @@ You can exclude API endpoints and other actions with:
 skip_before_filter :track_ahoy_visit
 ```
 
+###  Mount Ahoy Manually
+If you have a catch-all route ,then your need to mount ahoy manually.
+Add the following code to the your config/intializers/ahoy.rb.
+
+```ruby
+Ahoy.automount = false
+```
+
+then mount it on your own config/route.rb, before the catch-all route.
+
+```ruby
+mount Ahoy::Engine => "/ahoy"
+```
+
 ## Development
 
 Ahoy is built with developers in mind.  You can run the following code in your browser’s console.
