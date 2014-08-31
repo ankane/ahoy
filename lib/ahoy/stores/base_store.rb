@@ -45,7 +45,7 @@ module Ahoy
       protected
 
       def bot?
-        @bot ||= Browser.new(ua: request.user_agent).bot?
+        @bot ||= request ? Browser.new(ua: request.user_agent).bot? : false
       end
 
       def request
