@@ -1,3 +1,7 @@
+## 1.0.3 [unreleased]
+
+- Fixed association mismatch
+
 ## 1.0.2
 
 - Fixed BSON for Mongoid 3
