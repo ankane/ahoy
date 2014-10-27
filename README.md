@@ -351,7 +351,7 @@ Visitor and visit ids are generated on the first request (so you can use them im
 Ahoy.track_visits_immediately = true
 ```
 
-**Note:** At the moment, geocoding is performed in the foreground, which can slow down the first page load.
+**Note:** It’s highly recommended to perform geocoding in the background with this option.
 
 You can exclude API endpoints and other actions with:
 
