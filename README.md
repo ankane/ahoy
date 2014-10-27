@@ -331,13 +331,7 @@ end
 
 ### Geocoding [master]
 
-By default, geocoding is performed inline. For performance, move it to the background.
-
-```ruby
-gem 'activejob_backport'
-```
-
-And set:
+By default, geocoding is performed inline. For performance, move it to the background. Add [Active Job](https://github.com/ankane/activejob_backport) and set:
 
 ```ruby
 Ahoy.geocode = :async
