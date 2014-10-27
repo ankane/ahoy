@@ -11,13 +11,12 @@ module Ahoy
             v.started_at = options[:started_at]
           end
 
-        visit_properties.keys.each do |key|
-          visit.send(:"#{key}=", visit_properties[key]) if visit.respond_to?(:"#{key}=") && visit_properties[key]
-        end
+        set_visit_properties(visit)
 
         yield(visit) if block_given?
 
         visit.upsert
+        geocode(visit)
       end
 
       def track_event(name, properties, options, &block)

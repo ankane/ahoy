@@ -24,6 +24,14 @@ require "ahoy/stores/mongoid_store"
 require "ahoy/engine"
 require "ahoy/warden" if defined?(Warden)
 
+# background jobs
+begin
+  require "active_job"
+rescue LoadError
+  # do nothing
+end
+require "ahoy/geocode_job" if defined?(ActiveJob)
+
 # deprecated
 require "ahoy/subscribers/active_record"
 
@@ -43,6 +51,9 @@ module Ahoy
 
   mattr_accessor :quiet
   self.quiet = true
+
+  mattr_accessor :geocode
+  self.geocode = true
 
   def self.ensure_uuid(id)
     valid = UUIDTools::UUID.parse(id) rescue nil

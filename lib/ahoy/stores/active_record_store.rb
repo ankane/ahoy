@@ -11,14 +11,13 @@ module Ahoy
             v.started_at = options[:started_at]
           end
 
-        visit_properties.keys.each do |key|
-          visit.send(:"#{key}=", visit_properties[key]) if visit.respond_to?(:"#{key}=")
-        end
+        set_visit_properties(visit)
 
         yield(visit) if block_given?
 
         begin
           visit.save!
+          geocode(visit)
         rescue ActiveRecord::RecordNotUnique
           # do nothing
         end

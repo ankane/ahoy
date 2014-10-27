@@ -1,5 +1,6 @@
 ## 1.0.3 [unreleased]
 
+- Added `geocode` option
 - Fixed association mismatch
 
 ## 1.0.2

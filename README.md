@@ -329,6 +329,26 @@ class ApplicationController < ActionController::Base
 end
 ```
 
+### Geocoding [master]
+
+By default, geocoding is performed inline. For performance, move it to the background.
+
+```ruby
+gem 'activejob_backport'
+```
+
+And set:
+
+```ruby
+Ahoy.geocode = :async
+```
+
+Or disable it with:
+
+```ruby
+Ahoy.geocode = false
+```
+
 ### Track Visits Immediately
 
 Visitor and visit ids are generated on the first request (so you can use them immediately), but the `track_visit` method isn’t called until the JavaScript library posts to the server.  This prevents browsers with cookies disabled from creating multiple visits and ensures visits are not created for API endpoints.  Change this with:
