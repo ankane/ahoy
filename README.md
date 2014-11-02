@@ -331,7 +331,7 @@ class ApplicationController < ActionController::Base
 end
 ```
 
-### Geocoding [master]
+### Geocoding
 
 By default, geocoding is performed inline. For performance, move it to the background. Add [Active Job](https://github.com/ankane/activejob_backport) and set:
 
