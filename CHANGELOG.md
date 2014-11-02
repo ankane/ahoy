@@ -1,6 +1,7 @@
-## 1.0.3 [unreleased]
+## 1.1.0 [unreleased]
 
 - Added `geocode` option
+- Report errors to service by default
 - Fixed association mismatch
 
 ## 1.0.2

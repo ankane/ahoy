@@ -25,6 +25,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "user_agent_parser"
   spec.add_dependency "request_store"
   spec.add_dependency "uuidtools"
+  spec.add_dependency "errbase"
 
   spec.add_development_dependency "bundler", "~> 1.5"
   spec.add_development_dependency "rake"

@@ -215,7 +215,9 @@ end
 
 Exceptions are rescued so analytics do not break your app.
 
-To report them to a service, use:
+Ahoy uses [Errbase](https://github.com/ankane/errbase) to try to report them to a service by default.
+
+To customize this, use:
 
 ```ruby
 class Ahoy::Store < Ahoy::Stores::ActiveRecordStore

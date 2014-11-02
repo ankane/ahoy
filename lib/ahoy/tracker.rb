@@ -119,7 +119,12 @@ module Ahoy
     end
 
     def report_exception(e)
-      @store.report_exception(e)
+      begin
+        @store.report_exception(e)
+      rescue
+        # fail-safe
+        $stderr.puts "Error reporting exception"
+      end
       if Rails.env.development?
         raise e
       end
