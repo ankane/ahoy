@@ -1,4 +1,4 @@
-## 1.1.0 [unreleased]
+## 1.1.0
 
 - Added `geocode` option
 - Report errors to service by default
