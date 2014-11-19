@@ -1,0 +1,11 @@
+source "https://rubygems.org/"
+
+gem 'rails', '4.1.7'
+gem 'sqlite3'
+gem 'activeuuid', ">= 0.5.0"
+gem 'jquery-rails'
+gem 'ahoy_matey', path: '../../'
+
+group :development, :test do
+  gem 'rspec-rails'
+end
