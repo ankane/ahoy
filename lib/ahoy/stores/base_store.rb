@@ -67,7 +67,6 @@ module Ahoy
 
       def set_visit_properties(visit)
         keys = visit_properties.keys
-        keys -= Ahoy::VisitProperties::LOCATION_KEYS if Ahoy.geocode != true
         keys.each do |key|
           visit.send(:"#{key}=", visit_properties[key]) if visit.respond_to?(:"#{key}=") && visit_properties[key]
         end
