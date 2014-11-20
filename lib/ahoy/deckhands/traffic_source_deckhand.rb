@@ -7,16 +7,16 @@ module Ahoy
       end
 
       def referring_domain
-        @referring_domain ||= Addressable::URI.parse(@referrer).host.first(255) rescue nil
+        @referring_domain ||= (self.class.referrer_parser.parse(@referrer)[:domain][0..255] rescue nil).presence
       end
 
       def search_keyword
-        @search_keyword ||= (self.class.referrer_parser.parse(@referrer)[1].first(255) rescue nil).presence
+        @search_keyword ||= (self.class.referrer_parser.parse(@referrer)[:term][0..255] rescue nil).presence
       end
 
       # performance hack for referer-parser
       def self.referrer_parser
-        @referrer_parser ||= RefererParser::Referer.new("https://github.com/ankane/ahoy")
+        @referrer_parser ||= RefererParser::Parser.new
       end
 
     end
