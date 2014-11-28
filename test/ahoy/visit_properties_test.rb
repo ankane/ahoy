@@ -7,15 +7,28 @@ class TestVisitProperties < Minitest::Test
   end
 
   def test_keys
-    assert_equal @visit_properties.keys, Ahoy::VisitProperties::KEYS
+    with_geocode(true) do
+      assert_equal @visit_properties.keys, Ahoy::VisitProperties::KEYS
+    end
   end
 
   def test_keys_when_geocode_disabled
-    Ahoy.geocode = false
-    keys = @visit_properties.keys
+    with_geocode(false) do
+      keys = @visit_properties.keys
 
-    refute keys.include?(:country)
-    refute keys.include?(:region)
-    refute keys.include?(:city)
+      refute keys.include?(:country)
+      refute keys.include?(:region)
+      refute keys.include?(:city)
+    end
+  end
+
+  private
+
+  def with_geocode(enabled)
+    original = Ahoy.geocode
+    Ahoy.geocode = enabled
+    yield
+  ensure
+    Ahoy.geocode = original
   end
 end
