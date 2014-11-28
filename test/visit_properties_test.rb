@@ -2,8 +2,8 @@ require_relative "test_helper"
 
 class TestVisitProperties < Minitest::Test
   def setup
-    request = MiniTest::Mock.new
-    @visit_properties = Ahoy::VisitProperties.new(request)
+    @request = MiniTest::Mock.new
+    @visit_properties = Ahoy::VisitProperties.new(@request)
   end
 
   def test_keys
@@ -30,6 +30,13 @@ class TestVisitProperties < Minitest::Test
       refute keys.include?(:region)
       refute keys.include?(:city)
     end
+  end
+
+  def test_user_agent_header_encoding
+    raw_user_agent = "FBCR/M\xE9ditel"
+    encoded_user_agent = "FBCR/Méditel"
+    @request.expect(:user_agent, raw_user_agent)
+    assert_equal @visit_properties.user_agent, encoded_user_agent
   end
 
   private
