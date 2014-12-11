@@ -1,3 +1,7 @@
+## 1.1.1 [unreleased]
+
+- Better support for Authlogic
+
 ## 1.1.0
 
 - Added `geocode` option
