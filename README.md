@@ -404,7 +404,7 @@ Visit.group(:referring_domain).count
 [Chartkick](http://chartkick.com/) and [Groupdate](https://github.com/ankane/groupdate) make it super easy to visualize the data.
 
 ```erb
-<%= line_chart Visit.group_by_day(:created_at).count %>
+<%= line_chart Visit.group_by_day(:started_at).count %>
 ```
 
 See where orders are coming from with simple joins:
