@@ -7,7 +7,7 @@ module Ahoy
       end
 
       def referring_domain
-        @referring_domain ||= (self.class.referrer_parser.parse(@referrer)[:domain][0..255] rescue nil).presence
+        @referring_domain ||= Addressable::URI.parse(@referrer).host.first(255) rescue nil
       end
 
       def search_keyword
