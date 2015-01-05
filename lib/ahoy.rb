@@ -1,3 +1,4 @@
+require "rails"
 require "addressable/uri"
 require "browser"
 require "geocoder"

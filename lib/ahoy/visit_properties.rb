@@ -25,7 +25,11 @@ module Ahoy
     end
 
     def keys
-      KEYS
+      if Ahoy.geocode == true # no location keys for :async
+        KEYS
+      else
+        KEYS - LOCATION_KEYS
+      end
     end
 
     def to_hash
