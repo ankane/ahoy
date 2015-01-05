@@ -25,7 +25,7 @@ module Ahoy
     end
 
     def keys
-      if Ahoy.geocode
+      if Ahoy.geocode == true # no location keys for :async
         KEYS
       else
         KEYS - LOCATION_KEYS

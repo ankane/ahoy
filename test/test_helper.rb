@@ -1,3 +1,4 @@
-require 'minitest/autorun'
-require 'rails'
-require_relative '../lib/ahoy.rb'
+require "bundler/setup"
+Bundler.require(:default)
+require "minitest/autorun"
+require "minitest/pride"

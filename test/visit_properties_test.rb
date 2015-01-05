@@ -1,4 +1,4 @@
-require_relative '../test_helper'
+require_relative "test_helper"
 
 class TestVisitProperties < Minitest::Test
   def setup
@@ -14,6 +14,16 @@ class TestVisitProperties < Minitest::Test
 
   def test_keys_when_geocode_disabled
     with_geocode(false) do
+      keys = @visit_properties.keys
+
+      refute keys.include?(:country)
+      refute keys.include?(:region)
+      refute keys.include?(:city)
+    end
+  end
+
+  def test_keys_when_geocode_async
+    with_geocode(:async) do
       keys = @visit_properties.keys
 
       refute keys.include?(:country)
