@@ -24,6 +24,8 @@ class Visit
   field :browser, type: String
   field :os, type: String
   field :device_type, type: String
+  field :screen_height, type: Integer
+  field :screen_width, type: Integer
 
   # location
   field :country, type: String

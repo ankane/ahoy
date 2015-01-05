@@ -25,6 +25,8 @@ class <%= migration_class_name %> < ActiveRecord::Migration
       t.string :browser
       t.string :os
       t.string :device_type
+      t.integer :screen_height
+      t.integer :screen_width
 
       # location
       t.string :country
