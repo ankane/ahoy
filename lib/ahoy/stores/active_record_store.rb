@@ -18,7 +18,7 @@ module Ahoy
         begin
           visit.save!
           geocode(visit)
-        rescue ActiveRecord::RecordNotUnique
+        rescue *unique_exception_classes
           # do nothing
         end
       end
@@ -38,7 +38,7 @@ module Ahoy
 
         begin
           event.save!
-        rescue ActiveRecord::RecordNotUnique
+        rescue *unique_exception_classes
           # do nothing
         end
       end

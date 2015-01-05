@@ -78,6 +78,13 @@ module Ahoy
         end
       end
 
+      def unique_exception_classes
+        classes = []
+        classes << ActiveRecord::RecordNotUnique if defined?(ActiveRecord::RecordNotUnique)
+        classes << PG::UniqueViolation if defined?(PG::UniqueViolation)
+        classes
+      end
+
     end
   end
 end
