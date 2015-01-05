@@ -25,7 +25,11 @@ module Ahoy
     end
 
     def keys
-      KEYS
+      if Ahoy.geocode
+        KEYS
+      else
+        KEYS - LOCATION_KEYS
+      end
     end
 
     def to_hash
