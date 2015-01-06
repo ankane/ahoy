@@ -1,4 +1,4 @@
-## 1.1.1 [unreleased]
+## 1.1.1
 
 - Better support for Authlogic
 - Added `screen_height` and `screen_width`
