@@ -13,7 +13,9 @@ module Ahoy
       end
 
       def user_agent
-        request.user_agent.force_encoding(Encoding::ISO_8859_1).encode(Encoding::UTF_8)
+        if request.user_agent
+          request.user_agent.force_encoding(Encoding::ISO_8859_1).encode(Encoding::UTF_8)
+        end
       end
 
       def referrer

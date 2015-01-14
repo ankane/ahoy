@@ -35,8 +35,13 @@ class TestVisitProperties < Minitest::Test
   def test_user_agent_header_encoding
     raw_user_agent = "FBCR/M\xE9ditel"
     encoded_user_agent = "FBCR/Méditel"
-    @request.expect(:user_agent, raw_user_agent)
+    2.times { @request.expect(:user_agent, raw_user_agent) }
     assert_equal @visit_properties.user_agent, encoded_user_agent
+  end
+
+  def test_nil_user_agent
+    @request.expect(:user_agent, nil)
+    assert_equal @visit_properties.user_agent, nil
   end
 
   private
