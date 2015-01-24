@@ -1,8 +1,8 @@
 class <%= migration_class_name %> < ActiveRecord::Migration
   def change
     create_table :ahoy_events, id: false do |t|
-      t.uuid :id, primary_key: true
-      t.uuid :visit_id
+      t.uuid :id, default: nil, primary_key: true
+      t.uuid :visit_id, default: nil
 
       # user
       t.integer :user_id
