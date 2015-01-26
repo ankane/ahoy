@@ -1,8 +1,8 @@
 class <%= migration_class_name %> < ActiveRecord::Migration
   def change
     create_table :visits, id: false do |t|
-      t.uuid :id, primary_key: true
-      t.uuid :visitor_id
+      t.uuid :id, default: nil, primary_key: true
+      t.uuid :visitor_id, default: nil
 
       # the rest are recommended but optional
       # simply remove the columns you don't want
