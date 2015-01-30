@@ -18,6 +18,14 @@ module Ahoy
         location.try(:city).presence
       end
 
+      def latitude
+        location.try(:latitude).presence
+      end
+
+      def longitude
+        location.try(:longitude).presence
+      end
+
       protected
 
       def location
