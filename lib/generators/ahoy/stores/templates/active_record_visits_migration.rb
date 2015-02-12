@@ -33,8 +33,8 @@ class <%= migration_class_name %> < ActiveRecord::Migration
       t.string :region
       t.string :city
       t.string :postal_code
-      t.float  :latitude
-      t.float  :longitude
+      t.decimal :latitude
+      t.decimal :longitude
 
       # utm parameters
       t.string :utm_source
