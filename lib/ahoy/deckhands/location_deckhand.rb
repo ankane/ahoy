@@ -14,6 +14,10 @@ module Ahoy
         location.try(:state).presence
       end
 
+      def postal_code
+        location.try(:postal_code).presence
+      end
+
       def city
         location.try(:city).presence
       end
