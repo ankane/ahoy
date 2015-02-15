@@ -297,7 +297,7 @@ Ahoy.visit_duration = 30.minutes
 
 ### ActiveRecord
 
-Let’s associate orders with visits.
+Let’s associate orders with visits. Add a `visit_id` column on orders and do:
 
 ```ruby
 class Order < ActiveRecord::Base
