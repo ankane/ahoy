@@ -1,7 +1,6 @@
 module Ahoy
   module Deckhands
     class TechnologyDeckhand
-
       def initialize(user_agent)
         @user_agent = user_agent
       end
@@ -43,7 +42,6 @@ module Ahoy
       def self.user_agent_parser
         @user_agent_parser ||= UserAgentParser::Parser.new
       end
-
     end
   end
 end

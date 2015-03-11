@@ -13,7 +13,6 @@ module Ahoy
         def create_initializer
           template "mongoid_initializer.rb", "config/initializers/ahoy.rb"
         end
-
       end
     end
   end

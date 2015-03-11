@@ -1,6 +1,5 @@
 module Ahoy
   module Model
-
     def visitable(name = nil, options = {})
       if name.is_a?(Hash)
         name = nil
@@ -11,7 +10,7 @@ module Ahoy
         belongs_to name, options
         before_create :set_visit
       end
-      class_eval %Q{
+      class_eval %{
         def set_visit
           self.#{name} ||= RequestStore.store[:ahoy].try(:visit)
         end
@@ -32,9 +31,7 @@ module Ahoy
             Deckhands::UtmParameterDeckhand.new(landing_page).landing_params
           end
         end
-
       end
     end
-
   end
 end

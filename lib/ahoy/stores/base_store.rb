@@ -1,7 +1,6 @@
 module Ahoy
   module Stores
     class BaseStore
-
       def initialize(options)
         @options = options
       end
@@ -17,7 +16,7 @@ module Ahoy
 
       def authenticate(user)
         @user = user
-        if visit and visit.respond_to?(:user) and !visit.user
+        if visit && visit.respond_to?(:user) && !visit.user
           begin
             visit.user = user
             visit.save!
@@ -84,7 +83,6 @@ module Ahoy
         classes << PG::UniqueViolation if defined?(PG::UniqueViolation)
         classes
       end
-
     end
   end
 end

@@ -1,5 +1,4 @@
 class Ahoy::Store < Ahoy::Stores::BaseStore
-
   def track_visit(options)
   end
 
@@ -8,5 +7,4 @@ class Ahoy::Store < Ahoy::Stores::BaseStore
 
   def current_visit
   end
-
 end

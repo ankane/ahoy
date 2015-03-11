@@ -1,7 +1,6 @@
 module Ahoy
   module Stores
     class MongoidStore < BaseStore
-
       def track_visit(options, &block)
         visit =
           visit_model.new do |v|
@@ -59,7 +58,6 @@ module Ahoy
           token
         end
       end
-
     end
   end
 end

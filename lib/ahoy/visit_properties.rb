@@ -1,6 +1,5 @@
 module Ahoy
   class VisitProperties
-
     REQUEST_KEYS = [:ip, :user_agent, :referrer, :landing_page, :platform, :app_version, :os_version, :screen_height, :screen_width]
     TRAFFIC_SOURCE_KEYS = [:referring_domain, :search_keyword]
     UTM_PARAMETER_KEYS = [:utm_source, :utm_medium, :utm_term, :utm_content, :utm_campaign]
@@ -33,7 +32,7 @@ module Ahoy
     end
 
     def to_hash
-      keys.inject({}){|memo, key| memo[key] = send(key); memo }
+      keys.inject({}) { |memo, key| memo[key] = send(key); memo }
     end
 
     protected
@@ -57,6 +56,5 @@ module Ahoy
     def location_deckhand
       @location_deckhand ||= Deckhands::LocationDeckhand.new(request_deckhand.ip)
     end
-
   end
 end

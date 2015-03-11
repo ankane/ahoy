@@ -9,6 +9,5 @@ module Ahoy
       end
       visit.save!
     end
-
   end
 end

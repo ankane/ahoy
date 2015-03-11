@@ -1,7 +1,6 @@
 module Ahoy
   module Stores
     class ActiveRecordStore < BaseStore
-
       def track_visit(options, &block)
         visit =
           visit_model.new do |v|
@@ -56,7 +55,6 @@ module Ahoy
       def event_model
         ::Ahoy::Event
       end
-
     end
   end
 end

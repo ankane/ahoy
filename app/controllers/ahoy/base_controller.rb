@@ -6,6 +6,5 @@ module Ahoy
     def ahoy
       @ahoy ||= Ahoy::Tracker.new(controller: self, api: true)
     end
-
   end
 end

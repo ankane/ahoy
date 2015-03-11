@@ -1,6 +1,5 @@
 module Ahoy
   class EventsController < Ahoy::BaseController
-
     def create
       events =
         if params[:name]
@@ -29,6 +28,5 @@ module Ahoy
       end
       render json: {}
     end
-
   end
 end

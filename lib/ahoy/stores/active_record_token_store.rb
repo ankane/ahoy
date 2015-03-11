@@ -1,7 +1,6 @@
 module Ahoy
   module Stores
     class ActiveRecordTokenStore < BaseStore
-
       def track_visit(options, &block)
         visit =
           visit_model.new do |v|
@@ -61,18 +60,18 @@ module Ahoy
 
       def exclude?
         (!Ahoy.track_bots && bot?) ||
-        (
-          if Ahoy.exclude_method
-            warn "[DEPRECATION] Ahoy.exclude_method is deprecated - use exclude? instead"
-            if Ahoy.exclude_method.arity == 1
-              Ahoy.exclude_method.call(controller)
+          (
+            if Ahoy.exclude_method
+              warn "[DEPRECATION] Ahoy.exclude_method is deprecated - use exclude? instead"
+              if Ahoy.exclude_method.arity == 1
+                Ahoy.exclude_method.call(controller)
+              else
+                Ahoy.exclude_method.call(controller, request)
+              end
             else
-              Ahoy.exclude_method.call(controller, request)
+              false
             end
-          else
-            false
-          end
-        )
+          )
       end
 
       def user
@@ -89,7 +88,6 @@ module Ahoy
       end
 
       class << self
-
         def uses_deprecated_subscribers
           warn "[DEPRECATION] Ahoy subscribers are deprecated"
           @uses_deprecated_subscribers = true
@@ -98,7 +96,6 @@ module Ahoy
         def uses_deprecated_subscribers?
           @uses_deprecated_subscribers || false
         end
-
       end
 
       protected
@@ -110,7 +107,6 @@ module Ahoy
       def event_model
         ::Ahoy::Event
       end
-
     end
   end
 end

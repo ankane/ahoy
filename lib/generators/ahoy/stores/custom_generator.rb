@@ -9,7 +9,6 @@ module Ahoy
         def create_initializer
           template "custom_initializer.rb", "config/initializers/ahoy.rb"
         end
-
       end
     end
   end

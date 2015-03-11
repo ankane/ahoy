@@ -1,7 +1,6 @@
 module Ahoy
   module Subscribers
     class ActiveRecord
-
       def initialize(options = {})
         @model = options[:model] || Ahoy::Event
       end
@@ -15,7 +14,6 @@ module Ahoy
           e.time = options[:time]
         end
       end
-
     end
   end
 end

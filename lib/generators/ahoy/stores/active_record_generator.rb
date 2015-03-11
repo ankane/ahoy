@@ -10,7 +10,6 @@ module Ahoy
           invoke "ahoy:stores:active_record_visits", nil, options
           invoke "ahoy:stores:active_record_events", nil, options
         end
-
       end
     end
   end

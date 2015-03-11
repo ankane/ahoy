@@ -43,7 +43,6 @@ module Ahoy
       def screen_width
         request.params["screen_width"]
       end
-
     end
   end
 end

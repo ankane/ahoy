@@ -1,7 +1,6 @@
 module Ahoy
   module Deckhands
     class TrafficSourceDeckhand
-
       def initialize(referrer)
         @referrer = referrer
       end
@@ -18,7 +17,6 @@ module Ahoy
       def self.referrer_parser
         @referrer_parser ||= RefererParser::Parser.new
       end
-
     end
   end
 end

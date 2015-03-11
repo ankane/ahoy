@@ -70,7 +70,7 @@ module Ahoy
     end
 
     def set_visitor_cookie
-      if !existing_visitor_id
+      unless existing_visitor_id
         set_cookie("ahoy_visitor", visitor_id, Ahoy.visitor_duration)
       end
     end
@@ -107,7 +107,7 @@ module Ahoy
     end
 
     def trusted_time(time)
-      if !time or (@options[:api] and !(1.minute.ago..Time.now).cover?(time))
+      if !time || (@options[:api] && !(1.minute.ago..Time.now).cover?(time))
         Time.zone.now
       else
         time
@@ -145,6 +145,5 @@ module Ahoy
     def ensure_uuid(id)
       Ahoy.ensure_uuid(id)
     end
-
   end
 end

@@ -1,7 +1,6 @@
 module Ahoy
   module Deckhands
     class LocationDeckhand
-
       def initialize(ip)
         @ip = ip
       end
@@ -33,7 +32,7 @@ module Ahoy
       protected
 
       def location
-        if !@checked
+        unless @checked
           @location =
             begin
               Geocoder.search(@ip).first
@@ -45,7 +44,6 @@ module Ahoy
         end
         @location
       end
-
     end
   end
 end

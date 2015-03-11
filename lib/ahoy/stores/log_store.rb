@@ -1,11 +1,10 @@
 module Ahoy
   module Stores
     class LogStore < BaseStore
-
       def track_visit(options, &block)
         data = {
           id: ahoy.visit_id,
-          visitor_id: ahoy.visitor_id,
+          visitor_id: ahoy.visitor_id
         }.merge(visit_properties.to_hash)
         data[:user_id] = user.id if user
         data[:started_at] = options[:started_at]
@@ -41,7 +40,6 @@ module Ahoy
       def event_logger
         @event_logger ||= ActiveSupport::Logger.new(Rails.root.join("log/events.log"))
       end
-
     end
   end
 end

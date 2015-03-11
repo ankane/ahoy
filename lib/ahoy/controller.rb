@@ -2,7 +2,6 @@ require "request_store"
 
 module Ahoy
   module Controller
-
     def self.included(base)
       base.helper_method :current_visit
       base.helper_method :ahoy
@@ -31,6 +30,5 @@ module Ahoy
         ahoy.track_visit(defer: !Ahoy.track_visits_immediately)
       end
     end
-
   end
 end
