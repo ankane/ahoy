@@ -10,6 +10,8 @@ Never build an analytics platform from scratch again.
 
 See [upgrade instructions](#upgrading) on how to move to 1.0.
 
+:tangerine: Battle-tested at [Instacart](https://www.instacart.com/opensource)
+
 ## Installation
 
 Add this line to your application’s Gemfile:
