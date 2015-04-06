@@ -1,16 +1,16 @@
 # Ahoy
 
+:fire: Never build an analytics platform from scratch again.
+
 Ahoy provides a solid foundation to track visits and events in Ruby, JavaScript, and native apps.
 
-:fire: Works with any data store so you can easily scale.
+Works with any data store so you can easily scale.
+
+:tangerine: Battle-tested at [Instacart](https://www.instacart.com/opensource)
 
 :postbox: To track emails, check out [Ahoy Email](https://github.com/ankane/ahoy_email).
 
-Never build an analytics platform from scratch again.
-
 See [upgrade instructions](#upgrading) on how to move to 1.0.
-
-:tangerine: Battle-tested at [Instacart](https://www.instacart.com/opensource)
 
 ## Installation
 
