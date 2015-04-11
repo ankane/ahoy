@@ -62,7 +62,7 @@ rails generate ahoy:stores:active_record_visits
 rake db:migrate
 ```
 
-### Mongoid
+### MongoDB
 
 ```sh
 rails generate ahoy:stores:mongoid
