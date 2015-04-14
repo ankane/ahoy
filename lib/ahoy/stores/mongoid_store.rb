@@ -32,6 +32,7 @@ module Ahoy
         yield(event) if block_given?
 
         event.upsert
+        event
       end
 
       def visit

@@ -28,6 +28,8 @@ module Ahoy
         yield(data) if block_given?
 
         event_logger.info data.to_json
+
+        data
       end
 
       protected
