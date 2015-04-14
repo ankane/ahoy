@@ -37,6 +37,7 @@ module Ahoy
 
         begin
           event.save!
+          event
         rescue *unique_exception_classes
           # do nothing
         end

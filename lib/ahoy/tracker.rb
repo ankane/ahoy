@@ -16,9 +16,9 @@ module Ahoy
         options[:time] = trusted_time(options[:time])
         options[:id] = ensure_uuid(options[:id] || generate_id)
 
-        @store.track_event(name, properties, options)
+        event = @store.track_event(name, properties, options)
+        event
       end
-      true
     rescue => e
       report_exception(e)
     end
