@@ -11,7 +11,7 @@ module Ahoy
 
         yield(data) if block_given?
 
-        visit_logger.info data.to_json
+        log_visit(data)
       end
 
       def track_event(name, properties, options, &block)
@@ -27,10 +27,18 @@ module Ahoy
 
         yield(data) if block_given?
 
-        event_logger.info data.to_json
+        log_event(data)
       end
 
       protected
+
+      def log_visit(data)
+        visit_logger.info data.to_json
+      end
+
+      def log_event(data)
+        event_logger.info data.to_json
+      end
 
       # TODO disable header
       def visit_logger

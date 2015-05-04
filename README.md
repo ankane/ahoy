@@ -68,6 +68,22 @@ rake db:migrate
 rails generate ahoy:stores:mongoid
 ```
 
+### Fluentd [master]
+
+Add [fluent-logger](https://github.com/fluent/fluent-logger-ruby) to your Gemfile.
+
+```ruby
+gem 'fluent-logger'
+```
+
+And run:
+
+```sh
+rails generate ahoy:stores:fluentd
+```
+
+Use `ENV["FLUENTD_HOST"]` and `ENV["FLUENTD_PORT"]` to configure.
+
 ### Logs
 
 ```sh
