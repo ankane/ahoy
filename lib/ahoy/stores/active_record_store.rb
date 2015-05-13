@@ -27,7 +27,7 @@ module Ahoy
           event_model.new do |e|
             e.id = options[:id]
             e.visit_id = ahoy.visit_id
-            e.user = user
+            e.user = user if e.respond_to?(:user=)
             e.name = name
             e.properties = properties
             e.time = options[:time]
