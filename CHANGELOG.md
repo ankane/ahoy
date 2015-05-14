@@ -1,3 +1,8 @@
+## 1.2.0 [unreleased]
+
+- Added Fluentd store
+- Added latitude, longitude, and postal_code to visits
+
 ## 1.1.1
 
 - Better support for Authlogic
