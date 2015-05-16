@@ -26,7 +26,7 @@ module Ahoy
     def track_visit(options = {})
       unless exclude?
         if options[:defer]
-          set_cookie("ahoy_track", true)
+          set_track_cookie
         else
           options = options.dup
 
@@ -65,13 +65,17 @@ module Ahoy
       !existing_visit_id
     end
 
+    def set_track_cookie
+      set_cookie("ahoy_track", true, domain: :none)
+    end
+
     def set_visit_cookie
-      set_cookie("ahoy_visit", visit_id, Ahoy.visit_duration)
+      set_cookie("ahoy_visit", visit_id, duration: Ahoy.visit_duration)
     end
 
     def set_visitor_cookie
       unless existing_visitor_id
-        set_cookie("ahoy_visitor", visitor_id, Ahoy.visitor_duration)
+        set_cookie("ahoy_visitor", visitor_id, duration: Ahoy.visitor_duration)
       end
     end
 
@@ -96,13 +100,13 @@ module Ahoy
 
     protected
 
-    def set_cookie(name, value, duration = nil)
+    def set_cookie(name, value, duration: nil, domain: nil)
       cookie = {
         value: value
       }
       cookie[:expires] = duration.from_now if duration
-      domain = Ahoy.cookie_domain || Ahoy.domain
-      cookie[:domain] = domain if domain
+      domain ||= Ahoy.cookie_domain || Ahoy.domain
+      cookie[:domain] = domain if domain && domain != :none
       request.cookie_jar[name] = cookie
     end
 

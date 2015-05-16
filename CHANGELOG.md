@@ -1,7 +1,8 @@
-## 1.2.0 [unreleased]
+## 1.2.0.rc1
 
 - Added Fluentd store
 - Added latitude, longitude, and postal_code to visits
+- Fix issue where /ahoy/visits is called indefinitely when Ahoy.cookie_domain = :all
 
 ## 1.1.1
 
