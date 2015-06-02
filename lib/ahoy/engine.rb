@@ -6,7 +6,6 @@ module Ahoy
 
       # Parse PATH_INFO by assets prefix
       AHOY_PREFIX = "/ahoy/".freeze
-      KEY = "ahoy.old_level".freeze
 
       # Just create an alias for call in middleware
       Rails::Rack::Logger.class_eval do
