@@ -15,7 +15,7 @@ module Ahoy
         yield(visit) if block_given?
 
         visit.upsert
-        geocode(visit)
+        geocode(visit.id.data)
       end
 
       def track_event(name, properties, options, &block)
