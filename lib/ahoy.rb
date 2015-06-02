@@ -24,6 +24,7 @@ require "ahoy/stores/active_record_token_store"
 require "ahoy/stores/log_store"
 require "ahoy/stores/fluentd_store"
 require "ahoy/stores/mongoid_store"
+require "ahoy/logger_silencer"
 require "ahoy/engine"
 require "ahoy/warden" if defined?(Warden)
 
@@ -83,3 +84,10 @@ end
 
 ActionController::Base.send :include, Ahoy::Controller
 ActiveRecord::Base.send(:extend, Ahoy::Model) if defined?(ActiveRecord)
+
+Logger.send :include, Ahoy::LoggerSilencer
+
+begin
+  require "syslog/logger"
+  Syslog::Logger.send :include, Ahoy::LoggerSilencer
+rescue LoadError; end

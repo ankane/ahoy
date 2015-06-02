@@ -5,19 +5,19 @@ module Ahoy
       next unless Ahoy.quiet
 
       # Parse PATH_INFO by assets prefix
-      AHOY_PREFIX = "/ahoy/"
-      KEY = "ahoy.old_level"
+      AHOY_PREFIX = "/ahoy/".freeze
+      KEY = "ahoy.old_level".freeze
 
       # Just create an alias for call in middleware
       Rails::Rack::Logger.class_eval do
         def call_with_quiet_ahoy(env)
-          if env["PATH_INFO"].start_with?(AHOY_PREFIX)
-            env[KEY] = Rails.logger.level
-            Rails.logger.level = Logger::ERROR
+          if env["PATH_INFO"].start_with?(AHOY_PREFIX) && logger.respond_to?(:silence_logger)
+            logger.silence_logger do
+              call_without_quiet_ahoy(env)
+            end
+          else
+            call_without_quiet_ahoy(env)
           end
-          call_without_quiet_ahoy(env)
-        ensure
-          Rails.logger.level = env[KEY] if env[KEY]
         end
         alias_method_chain :call, :quiet_ahoy
       end
