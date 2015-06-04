@@ -620,6 +620,7 @@ end
 ## TODO
 
 - real-time dashboard of visits and events
+- more events for append only stores
 - turn off modules
 
 ## No Ruby?
