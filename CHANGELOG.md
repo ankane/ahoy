@@ -2,6 +2,7 @@
 
 - Added Fluentd store
 - Added latitude, longitude, and postal_code to visits
+- Log exclusions
 
 ## 1.1.1
 
