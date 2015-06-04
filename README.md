@@ -619,7 +619,7 @@ end
 
 ## TODO
 
-- simple dashboard
+- real-time dashboard of visits and events
 - turn off modules
 
 ## No Ruby?
