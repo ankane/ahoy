@@ -29,6 +29,16 @@ And add the javascript file in `app/assets/javascripts/application.js` after jQu
 
 ## Choose a Data Store
 
+Ahoy supports a number of data stores out of the box.  You can start with one of them and customize as needed, or create your own store from scratch.
+
+- [PostgreSQL](#PostgreSQL)
+- [MySQL](#MySQL-or-SQLite)
+- [SQLite](#MySQL-or-SQLite)
+- [MongoDB](#MongoDB)
+- [Fluentd](#Fluentd)
+- [Logs](#Logs)
+- [Custom](#Custom)
+
 ### PostgreSQL
 
 For Rails 4 and PostgreSQL 9.4 or greater, use:
