@@ -24,7 +24,7 @@ module Ahoy
         end
 
         def copy_migration
-          unless options["database"].in?([nil, "postgresql"])
+          unless options["database"].in?([nil, "postgresql", "postgresql-jsonb"])
             raise Thor::Error, "Unknown database option"
           end
           migration_template "active_record_visits_migration.rb", "db/migrate/create_visits.rb"

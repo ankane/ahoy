@@ -1,5 +1,6 @@
 ## 1.2.0 [unreleased]
 
+- Added support for PostgreSQL `jsonb` column type
 - Added Fluentd store
 - Added latitude, longitude, and postal_code to visits
 - Log exclusions

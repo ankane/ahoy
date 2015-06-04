@@ -31,7 +31,14 @@ And add the javascript file in `app/assets/javascripts/application.js` after jQu
 
 ### PostgreSQL
 
-For Rails 4 and PostgreSQL 9.2 or greater, use:
+For Rails 4 and PostgreSQL 9.4 or greater, use:
+
+```sh
+rails generate ahoy:stores:active_record -d postgresql-jsonb
+rake db:migrate
+```
+
+For Rails 4 and PostgreSQL 9.2 and 9.3, use:
 
 ```sh
 rails generate ahoy:stores:active_record -d postgresql
