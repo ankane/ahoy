@@ -508,6 +508,26 @@ Use an array to pass multiple events at once.
 
 ## Upgrading
 
+### PostgreSQL + JSONB
+
+```sh
+rails g migration change_properties_to_jsonb_on_ahoy_events
+```
+
+And add:
+
+```rb
+  def up
+    change_column :ahoy_events, :properties, :jsonb, using: "properties::jsonb"
+  end
+
+  def down
+    change_column :ahoy_events, :properties, :json
+  end
+```
+
+Note: This will lock the table while the migration is running.
+
 ### 1.0.0
 
 Add the following code to the end of `config/intializers/ahoy.rb`.
