@@ -31,13 +31,13 @@ And add the javascript file in `app/assets/javascripts/application.js` after jQu
 
 Ahoy supports a number of data stores out of the box.  You can start with one of them and customize as needed, or create your own store from scratch.
 
-- [PostgreSQL](#PostgreSQL)
-- [MySQL](#MySQL-or-SQLite)
-- [SQLite](#MySQL-or-SQLite)
-- [MongoDB](#MongoDB)
-- [Fluentd](#Fluentd)
-- [Logs](#Logs)
-- [Custom](#Custom)
+- [PostgreSQL](#postgresql)
+- [MySQL](#mysql-or-sqlite)
+- [SQLite](#mysql-or-sqlite)
+- [MongoDB](#mongodb)
+- [Fluentd](#fluentd)
+- [Logs](#logs)
+- [Custom](#custom)
 
 ### PostgreSQL
 
