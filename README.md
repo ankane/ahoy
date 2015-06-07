@@ -10,7 +10,7 @@ Works with any data store so you can easily scale.
 
 :postbox: To track emails, check out [Ahoy Email](https://github.com/ankane/ahoy_email).
 
-See [upgrade instructions](#upgrading) on how to move to 1.0.
+See [upgrade instructions](#100) on how to move to 1.0.
 
 ## Installation
 
