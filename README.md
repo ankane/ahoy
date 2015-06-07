@@ -508,7 +508,7 @@ Use an array to pass multiple events at once.
 
 ## Upgrading
 
-### PostgreSQL + JSONB
+### PostgreSQL 9.4 + JSONB
 
 ```sh
 rails g migration change_properties_to_jsonb_on_ahoy_events
