@@ -130,6 +130,7 @@
       id: $target.attr("id"),
       "class": $target.attr("class"),
       page: page,
+      search: location.search,
       section: $target.closest("*[data-section]").data("section")
     };
   }
