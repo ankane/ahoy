@@ -42,10 +42,10 @@ module Ahoy
   UUID_NAMESPACE = UUIDTools::UUID.parse("a82ae811-5011-45ab-a728-569df7499c5f")
 
   mattr_accessor :visit_duration
-  self.visit_duration = 14400 # 4 hours
+  self.visit_duration = 4.hours
 
   mattr_accessor :visitor_duration
-  self.visitor_duration = 63115200 # 2 years
+  self.visitor_duration = 2.years
 
   mattr_accessor :cookie_domain
 
