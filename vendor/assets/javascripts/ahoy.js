@@ -20,7 +20,6 @@
   var queue = [];
   var canStringify = typeof(JSON) !== "undefined" && typeof(JSON.stringify) !== "undefined";
   var eventQueue = [];
-  var page = ahoy.page || window.location.pathname;
   var visitsUrl = ahoy.visitsUrl || "/ahoy/visits"
   var eventsUrl = ahoy.eventsUrl || "/ahoy/events"
 
@@ -123,13 +122,17 @@
     });
   }
 
+  function page() {
+    return ahoy.page || window.location.pathname;
+  }
+
   function eventProperties(e) {
     var $target = $(e.currentTarget);
     return {
       tag: $target.get(0).tagName.toLowerCase(),
       id: $target.attr("id"),
       "class": $target.attr("class"),
-      page: page,
+      page: page(),
       section: $target.closest("*[data-section]").data("section")
     };
   }
@@ -234,7 +237,7 @@
     var properties = {
       url: window.location.href,
       title: document.title,
-      page: page
+      page: page()
     };
     ahoy.track("$view", properties);
   };
