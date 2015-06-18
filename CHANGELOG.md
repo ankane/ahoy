@@ -1,3 +1,7 @@
+## 1.2.1 [unreleased]
+
+- Fixed `SystemStackError: stack level too deep` when used with `activerecord-session_store`
+
 ## 1.2.0
 
 - Added support for PostgreSQL `jsonb` column type
