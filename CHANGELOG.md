@@ -1,4 +1,4 @@
-## 1.2.1 [unreleased]
+## 1.2.1
 
 - Fixed `SystemStackError: stack level too deep` when used with `activerecord-session_store`
 
