@@ -59,6 +59,9 @@ module Ahoy
   mattr_accessor :geocode
   self.geocode = true
 
+  mattr_accessor :job_queue
+  self.job_queue = :ahoy
+
   def self.ensure_uuid(id)
     valid = UUIDTools::UUID.parse(id) rescue nil
     if valid
