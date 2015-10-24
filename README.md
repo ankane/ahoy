@@ -10,7 +10,7 @@ Works with any data store so you can easily scale.
 
 :postbox: To track emails, check out [Ahoy Email](https://github.com/ankane/ahoy_email).
 
-See [upgrade instructions](#upgrading) on how to move to 1.0.
+See [upgrade instructions](#100) on how to move to 1.0.
 
 ## Installation
 
@@ -29,9 +29,26 @@ And add the javascript file in `app/assets/javascripts/application.js` after jQu
 
 ## Choose a Data Store
 
+Ahoy supports a number of data stores out of the box.  You can start with one of them and customize as needed, or create your own store from scratch.
+
+- [PostgreSQL](#postgresql)
+- [MySQL](#mysql-or-sqlite)
+- [SQLite](#mysql-or-sqlite)
+- [MongoDB](#mongodb)
+- [Fluentd](#fluentd)
+- [Logs](#logs)
+- [Custom](#custom)
+
 ### PostgreSQL
 
-For Rails 4 and PostgreSQL 9.2 or greater, use:
+For Rails 4 and PostgreSQL 9.4 or greater, use:
+
+```sh
+rails generate ahoy:stores:active_record -d postgresql-jsonb
+rake db:migrate
+```
+
+For Rails 4 and PostgreSQL 9.2 and 9.3, use:
 
 ```sh
 rails generate ahoy:stores:active_record -d postgresql
@@ -68,7 +85,7 @@ rake db:migrate
 rails generate ahoy:stores:mongoid
 ```
 
-### Fluentd [master]
+### Fluentd
 
 Add [fluent-logger](https://github.com/fluent/fluent-logger-ruby) to your Gemfile.
 
@@ -491,6 +508,26 @@ Use an array to pass multiple events at once.
 
 ## Upgrading
 
+### PostgreSQL 9.4 + JSONB
+
+```sh
+rails g migration change_properties_to_jsonb_on_ahoy_events
+```
+
+And add:
+
+```rb
+  def up
+    change_column :ahoy_events, :properties, :jsonb, using: "properties::jsonb"
+  end
+
+  def down
+    change_column :ahoy_events, :properties, :json
+  end
+```
+
+Note: This will lock the table while the migration is running.
+
 ### 1.0.0
 
 Add the following code to the end of `config/intializers/ahoy.rb`.
@@ -602,7 +639,8 @@ end
 
 ## TODO
 
-- simple dashboard
+- real-time dashboard of visits and events
+- more events for append only stores
 - turn off modules
 
 ## No Ruby?

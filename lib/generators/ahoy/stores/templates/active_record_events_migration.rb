@@ -9,7 +9,7 @@ class <%= migration_class_name %> < ActiveRecord::Migration
       # add t.string :user_type if polymorphic
 
       t.string :name
-      t.<% if options["database"] == "postgresql" %>json<% else %>text<% end %> :properties
+      t.<% case options["database"] when "postgresql" %>json<% when "postgresql-jsonb" %>jsonb<% else %>text<% end %> :properties
       t.timestamp :time
     end
 

@@ -1,7 +1,13 @@
-## 1.2.0 [unreleased]
+## 1.2.1
 
+- Fixed `SystemStackError: stack level too deep` when used with `activerecord-session_store`
+
+## 1.2.0
+
+- Added support for PostgreSQL `jsonb` column type
 - Added Fluentd store
 - Added latitude, longitude, and postal_code to visits
+- Log exclusions
 
 ## 1.1.1
 

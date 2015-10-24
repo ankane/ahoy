@@ -10,7 +10,9 @@ module Ahoy
     end
 
     def track(name, properties = {}, options = {})
-      unless exclude?
+      if exclude?
+        debug "Event excluded"
+      else
         options = options.dup
 
         options[:time] = trusted_time(options[:time])
@@ -24,7 +26,9 @@ module Ahoy
     end
 
     def track_visit(options = {})
-      unless exclude?
+      if exclude?
+        debug "Visit excluded"
+      else
         if options[:defer]
           set_cookie("ahoy_track", true)
         else
@@ -41,7 +45,9 @@ module Ahoy
     end
 
     def authenticate(user)
-      unless exclude?
+      if exclude?
+        debug "Authentication excluded"
+      else
         @store.authenticate(user)
       end
       true
@@ -144,6 +150,10 @@ module Ahoy
 
     def ensure_uuid(id)
       Ahoy.ensure_uuid(id)
+    end
+
+    def debug(message)
+      Rails.logger.debug { "[ahoy] #{message}" }
     end
   end
 end
