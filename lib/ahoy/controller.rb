@@ -1,5 +1,3 @@
-require "request_store"
-
 module Ahoy
   module Controller
     def self.included(base)
@@ -36,7 +34,7 @@ module Ahoy
     end
 
     def set_ahoy_request_store
-      RequestStore.store[:ahoy] ||= ahoy
+      Ahoy.request_store.store[:ahoy] ||= ahoy
     end
   end
 end

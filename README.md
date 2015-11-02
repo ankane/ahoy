@@ -408,6 +408,18 @@ You can exclude API endpoints and other actions with:
 skip_before_action :track_ahoy_visit
 ```
 
+### Alternative Request Storage
+
+By default Ahoy uses [RequestStore](https://github.com/steveklabnik/request_store) but you can create your own or use another by configuring the storage in your initializer.
+
+```ruby
+Ahoy.request_store = MyCustomHash.instance
+```
+
+Make sure that your custom request store responds to `store` which returns an object responding to `:[]`.
+
+For example [RequestStoreRails](https://github.com/ElMassimo/request_store_rails).
+
 ## Development
 
 Ahoy is built with developers in mind.  You can run the following code in your browser’s console.

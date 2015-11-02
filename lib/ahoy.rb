@@ -105,6 +105,9 @@ module Ahoy
 
   mattr_accessor :track_bots
   self.track_bots = false
+
+  mattr_accessor :request_store
+  self.request_store = RequestStore
 end
 
 if defined?(Rails)
