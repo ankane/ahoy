@@ -32,10 +32,6 @@ module Ahoy
         request.params["app_version"]
       end
 
-      def os_version
-        request.params["os_version"]
-      end
-
       def screen_height
         request.params["screen_height"]
       end

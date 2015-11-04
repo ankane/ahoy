@@ -13,6 +13,10 @@ module Ahoy
         agent.os.name
       end
 
+      def os_version
+        agent.os.version
+      end
+
       def device_type
         @device_type ||= begin
           browser = Browser.new(ua: @user_agent)
