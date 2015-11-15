@@ -172,7 +172,7 @@ ahoy.track "Viewed book", title: "Hot, Flat, and Crowded"
 
 #### Native Apps
 
-See the [HTTP spec](#native-apps) until libraries are built.
+See the [HTTP spec](#native-apps-1) until libraries are built.
 
 ### Users
 
