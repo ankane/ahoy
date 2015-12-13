@@ -19,6 +19,7 @@
   var isReady = false;
   var queue = [];
   var canStringify = typeof(JSON) !== "undefined" && typeof(JSON.stringify) !== "undefined";
+  var canUseBeacon = typeof(navigator.sendBeacon) !== "undefined";
   var eventQueue = [];
   var visitsUrl = ahoy.visitsUrl || "/ahoy/visits"
   var eventsUrl = ahoy.eventsUrl || "/ahoy/events"
@@ -122,6 +123,12 @@
     });
   }
 
+  function trackEventNow(event) {
+    if (canStringify && canUseBeacon) {
+      navigator.sendBeacon(eventsUrl, JSON.stringify([event]));
+    }
+  }
+
   function page() {
     return ahoy.page || window.location.pathname;
   }
@@ -214,7 +221,7 @@
     return true;
   };
 
-  ahoy.track = function (name, properties) {
+  ahoy.track = function (name, properties, isImmediateTrack) {
     // generate unique id
     var event = {
       id: generateId(),
@@ -223,6 +230,12 @@
       time: (new Date()).getTime() / 1000.0
     };
     log(event);
+
+    // Try to immediately track event with sendBeacon
+    if (isImmediateTrack && canUseBeacon) {
+      trackEventNow(event);
+      return;
+    }
 
     eventQueue.push(event);
     saveEventQueue();
