@@ -8,6 +8,30 @@
 
 /*jslint browser: true, indent: 2, plusplus: true, vars: true */
 
+// polyfill for Navigator.sendBeacon()
+// https://github.com/miguelmota/Navigator.sendBeacon
+(function(root) {
+  "use strict";
+
+  if (!("sendBeacon" in navigator)) {
+    navigator.sendBeacon = function(url, data) {
+      var xhr = ("XMLHttpRequest" in root) ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+      xhr.open("POST", url, false);
+      xhr.setRequestHeader("Accept", "*/*");
+      if (typeof data === "string") {
+        xhr.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
+        xhr.responseType = "text/plain";
+      } else if (Object.prototype.toString.call(data) === "[object Blob]") {
+        if (data.type) {
+          xhr.setRequestHeader("Content-Type", data.type);
+        }
+      }
+      xhr.send(data);
+      return true;
+    };
+  }
+})(this);
+
 (function (window) {
   "use strict";
 
@@ -19,7 +43,6 @@
   var isReady = false;
   var queue = [];
   var canStringify = typeof(JSON) !== "undefined" && typeof(JSON.stringify) !== "undefined";
-  var canUseBeacon = typeof(navigator.sendBeacon) !== "undefined";
   var eventQueue = [];
   var visitsUrl = ahoy.visitsUrl || "/ahoy/visits"
   var eventsUrl = ahoy.eventsUrl || "/ahoy/events"
@@ -124,7 +147,7 @@
   }
 
   function trackEventNow(event) {
-    if (canStringify && canUseBeacon) {
+    if (canStringify) {
       navigator.sendBeacon(eventsUrl, JSON.stringify([event]));
     }
   }
@@ -232,7 +255,7 @@
     log(event);
 
     // Try to immediately track event with sendBeacon
-    if (isImmediateTrack && canUseBeacon) {
+    if (isImmediateTrack) {
       trackEventNow(event);
       return;
     }
