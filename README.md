@@ -36,6 +36,7 @@ Ahoy supports a number of data stores out of the box.  You can start with one of
 - [SQLite](#mysql-or-sqlite)
 - [MongoDB](#mongodb)
 - [Fluentd](#fluentd)
+- [Kinesis Firehose](#kinesis-firehose-master) [master]
 - [Logs](#logs)
 - [Custom](#custom)
 
@@ -100,6 +101,22 @@ rails generate ahoy:stores:fluentd
 ```
 
 Use `ENV["FLUENTD_HOST"]` and `ENV["FLUENTD_PORT"]` to configure.
+
+### Kinesis Firehose [master]
+
+Add [aws-sdk](https://github.com/aws/aws-sdk-ruby) to your Gemfile.
+
+```ruby
+gem 'aws-sdk', '>= 2.0.0'
+```
+
+And run:
+
+```sh
+rails generate ahoy:stores:kinesis_firehose
+```
+
+Configure delivery streams and credentials in the initializer.
 
 ### Logs
 

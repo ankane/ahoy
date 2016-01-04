@@ -25,6 +25,7 @@ require "ahoy/stores/active_record_token_store"
 require "ahoy/stores/log_store"
 require "ahoy/stores/fluentd_store"
 require "ahoy/stores/mongoid_store"
+require "ahoy/stores/kinesis_firehose_store"
 require "ahoy/engine"
 require "ahoy/warden" if defined?(Warden)
 
