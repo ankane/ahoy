@@ -14,13 +14,11 @@ module Ahoy
       end
 
       def post(stream, data)
-        client.put_record_batch(
+        client.put_record(
           delivery_stream_name: stream,
-          records: [
-            {
-              data: "#{data.to_json}\n"
-            }
-          ]
+          record: {
+            data: "#{data.to_json}\n"
+          }
         )
       end
 
