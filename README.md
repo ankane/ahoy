@@ -42,14 +42,14 @@ Ahoy supports a number of data stores out of the box.  You can start with one of
 
 ### PostgreSQL
 
-For Rails 4 and PostgreSQL 9.4 or greater, use:
+For Rails 4.2 and PostgreSQL 9.4 or greater, use:
 
 ```sh
 rails generate ahoy:stores:active_record -d postgresql-jsonb
 rake db:migrate
 ```
 
-For Rails 4 and PostgreSQL 9.2 and 9.3, use:
+For Rails 4.0/4.1 and PostgreSQL 9.2/9.3, use:
 
 ```sh
 rails generate ahoy:stores:active_record -d postgresql
