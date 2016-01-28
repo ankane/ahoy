@@ -49,7 +49,7 @@ rails generate ahoy:stores:active_record -d postgresql-jsonb
 rake db:migrate
 ```
 
-For Rails 4.0/4.1 and PostgreSQL 9.2/9.3, use:
+For Rails 4 and PostgreSQL 9.2 or greater, use:
 
 ```sh
 rails generate ahoy:stores:active_record -d postgresql
