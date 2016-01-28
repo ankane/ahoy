@@ -1,0 +1,20 @@
+engines:
+  rubocop:
+    enabled: true
+  coffeelint:
+    enabled: true
+  eslint:
+    enabled: true
+  csslint:
+    enabled: true
+
+exclude_paths:
+- vendor/**/*
+
+ratings:
+  paths:
+    - Gemfile.lock
+    - "app/**/*"
+    - "lib/**/*"
+    - "**.rb"
+    - test/**/*

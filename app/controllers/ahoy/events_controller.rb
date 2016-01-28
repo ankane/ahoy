@@ -1,6 +1,8 @@
 module Ahoy
   class EventsController < Ahoy::BaseController
     def create
+      return render json: {} unless current_user.registered?
+
       events =
         if params[:name]
           # legacy API
