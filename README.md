@@ -349,7 +349,25 @@ Ahoy.visit_duration = 30.minutes
 
 ### ActiveRecord
 
-Let’s associate orders with visits. Add a `visit_id` column on orders and do:
+Let’s associate orders with visits. 
+
+First, generate a migration and add a `visit_id` column on orders:
+
+```ruby
+class AddTheVisitIdToModels < ActiveRecord::Migration
+  def up
+    add_column :orders, :visit_id, :uuid
+    add_foreign_key :orders, :visits
+  end
+
+  def down
+    remove_foreign_key :orders, :visits
+    drop_column :orders, :visit_id
+  end
+end
+```
+
+Then, add `visitable` on your Order model:
 
 ```ruby
 class Order < ActiveRecord::Base
