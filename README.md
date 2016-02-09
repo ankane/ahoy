@@ -219,11 +219,9 @@ Exclude visits and events from being tracked with:
 
 ```ruby
 class Ahoy::Store < Ahoy::Stores::ActiveRecordStore
-
   def exclude?
     bot? || request.ip == "192.168.1.1"
   end
-
 end
 ```
 
@@ -233,7 +231,6 @@ Bots are excluded by default.
 
 ```ruby
 class Ahoy::Store < Ahoy::Stores::ActiveRecordStore
-
   def track_visit(options)
     super do |visit|
       visit.gclid = visit_properties.landing_params["gclid"]
@@ -245,7 +242,6 @@ class Ahoy::Store < Ahoy::Stores::ActiveRecordStore
       event.ip = request.ip
     end
   end
-
 end
 ```
 
@@ -255,11 +251,9 @@ If you use a method other than `current_user`, set it here:
 
 ```ruby
 class Ahoy::Store < Ahoy::Stores::ActiveRecordStore
-
   def user
     controller.true_user
   end
-
 end
 ```
 
@@ -273,11 +267,9 @@ To customize this, use:
 
 ```ruby
 class Ahoy::Store < Ahoy::Stores::ActiveRecordStore
-
   def report_exception(e)
     Rollbar.report_exception(e)
   end
-
 end
 ```
 
@@ -287,7 +279,6 @@ For ActiveRecord and Mongoid stores
 
 ```ruby
 class Ahoy::Store < Ahoy::Stores::ActiveRecordStore
-
   def visit_model
     CustomVisit
   end
@@ -295,7 +286,6 @@ class Ahoy::Store < Ahoy::Stores::ActiveRecordStore
   def event_model
     CustomEvent
   end
-
 end
 ```
 
@@ -361,7 +351,7 @@ class AddVisitIdToOrders < ActiveRecord::Migration
 end
 ```
 
-Then, add `visitable` on the model.
+Then, add `visitable` to the model.
 
 ```ruby
 class Order < ActiveRecord::Base
@@ -369,9 +359,7 @@ class Order < ActiveRecord::Base
 end
 ```
 
-When a visitor places an order, the `visit_id` column is automatically set.
-
-:tada: Magic!
+When a visitor places an order, the `visit_id` column is automatically set. :tada:
 
 Customize the column and class name with:
 
@@ -385,13 +373,11 @@ To attach the user with [Doorkeeper](https://github.com/doorkeeper-gem/doorkeepe
 
 ```ruby
 class ApplicationController < ActionController::Base
-
   private
 
   def current_resource_owner
     User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token
   end
-
 end
 ```
 
@@ -546,13 +532,13 @@ rails g migration change_properties_to_jsonb_on_ahoy_events
 And add:
 
 ```rb
-  def up
-    change_column :ahoy_events, :properties, :jsonb, using: "properties::jsonb"
-  end
+def up
+  change_column :ahoy_events, :properties, :jsonb, using: "properties::jsonb"
+end
 
-  def down
-    change_column :ahoy_events, :properties, :json
-  end
+def down
+  change_column :ahoy_events, :properties, :json
+end
 ```
 
 Note: This will lock the table while the migration is running.
@@ -602,11 +588,9 @@ If you have a custom subscriber, copy the `track` method to `track_event` in `Ah
 
 ```ruby
 class Ahoy::Store < Ahoy::Stores::ActiveRecordTokenStore
-
   def track_event(name, properties, options)
     # code copied from the track method in your subscriber
   end
-
 end
 ```
 
@@ -618,12 +602,10 @@ To restore this behavior, use:
 
 ```ruby
 class Ahoy::Store < Ahoy::Stores::ActiveRecordTokenStore
-
   def authenticate(user)
     super
     ahoy.track "$authenticate"
   end
-
 end
 ```
 
@@ -635,7 +617,6 @@ Skip this step if you do not use these options.
 
 ```ruby
 class Ahoy::Store < Ahoy::Stores::ActiveRecordTokenStore
-
   def user
     # logic from Ahoy.user_method goes here
     controller.true_user
@@ -645,7 +626,6 @@ class Ahoy::Store < Ahoy::Stores::ActiveRecordTokenStore
     # logic from Ahoy.track_bots and Ahoy.exclude_method goes here
     bot? || request.ip == "192.168.1.1"
   end
-
 end
 ```
 
