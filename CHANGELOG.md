@@ -1,3 +1,8 @@
+## 1.3.0 [unreleased]
+
+- Added support for RabbitMQ
+- Added support for Amazon Kinesis Firehose
+
 ## 1.2.1
 
 - Fixed `SystemStackError: stack level too deep` when used with `activerecord-session_store`
