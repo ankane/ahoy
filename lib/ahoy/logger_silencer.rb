@@ -54,9 +54,9 @@ module Ahoy
 
     for severity in Logger::Severity.constants
       class_eval <<-EOT, __FILE__, __LINE__ + 1
-        def #{severity.downcase}?                # def debug?
-          Logger::#{severity} >= level           #   DEBUG >= level
-        end                                      # end
+        def #{severity.downcase}?                         # def debug?
+          Logger::#{severity} >= level_with_threadsafety  #   DEBUG >= level
+        end                                               # end
       EOT
     end
 
