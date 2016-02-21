@@ -94,10 +94,10 @@ begin
   require "active_record/session_store/extension/logger_silencer"
 rescue LoadError
   require "ahoy/logger_silencer"
-  Logger.send :include, Ahoy::LoggerSilencer
+  Logger.send(:prepend, Ahoy::LoggerSilencer)
 
   begin
     require "syslog/logger"
-    Syslog::Logger.send :include, Ahoy::LoggerSilencer
+    Syslog::Logger.send(:prepend, Ahoy::LoggerSilencer)
   rescue LoadError; end
 end
