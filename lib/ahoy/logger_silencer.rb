@@ -7,9 +7,15 @@ require "active_support/concern"
 
 module Ahoy
   module LoggerSilencer
-    def self.prepended(base)
-      base.cattr_accessor :silencer
-      base.silencer = true
+    extend ActiveSupport::Concern
+
+    included do
+      cattr_accessor :silencer
+      self.silencer = true
+      alias_method :level_without_threadsafety, :level
+      alias_method :level, :level_with_threadsafety
+      alias_method :add_without_threadsafety, :add
+      alias_method :add, :add_with_threadsafety
     end
 
     def thread_level
@@ -20,15 +26,15 @@ module Ahoy
       Thread.current[thread_hash_level_key] = level
     end
 
-    def level
-      thread_level || super
+    def level_with_threadsafety
+      thread_level || level_without_threadsafety
     end
 
-    def add(severity, message = nil, progname = nil, &block)
+    def add_with_threadsafety(severity, message = nil, progname = nil, &block)
       if !defined?(@logdev) || @logdev.nil? || (severity || UNKNOWN) < level
         true
       else
-        super
+        add_without_threadsafety(severity, message, progname, &block)
       end
     end
 
