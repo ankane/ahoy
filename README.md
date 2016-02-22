@@ -324,7 +324,7 @@ Rails actions
 
 ```ruby
 class ApplicationController < ActionController::Base
-  after_filter :track_action
+  after_action :track_action
 
   protected
 
@@ -423,7 +423,7 @@ Ahoy.track_visits_immediately = true
 You can exclude API endpoints and other actions with:
 
 ```ruby
-skip_before_filter :track_ahoy_visit
+skip_before_action :track_ahoy_visit
 ```
 
 ## Development
