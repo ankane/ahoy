@@ -1,9 +1,9 @@
 module Ahoy
   class VisitProperties
-    REQUEST_KEYS = [:ip, :user_agent, :referrer, :landing_page, :platform, :app_version, :os_version, :screen_height, :screen_width]
+    REQUEST_KEYS = [:ip, :user_agent, :referrer, :landing_page, :platform, :app_version, :screen_height, :screen_width]
     TRAFFIC_SOURCE_KEYS = [:referring_domain, :search_keyword]
     UTM_PARAMETER_KEYS = [:utm_source, :utm_medium, :utm_term, :utm_content, :utm_campaign]
-    TECHNOLOGY_KEYS = [:browser, :os, :device_type]
+    TECHNOLOGY_KEYS = [:browser, :os, :os_version, :device_type]
     LOCATION_KEYS = [:country, :region, :city, :postal_code, :latitude, :longitude]
 
     KEYS = REQUEST_KEYS + TRAFFIC_SOURCE_KEYS + UTM_PARAMETER_KEYS + TECHNOLOGY_KEYS + LOCATION_KEYS
