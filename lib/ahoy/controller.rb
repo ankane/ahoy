@@ -5,9 +5,9 @@ module Ahoy
     def self.included(base)
       base.helper_method :current_visit
       base.helper_method :ahoy
-      base.before_filter :set_ahoy_cookies
-      base.before_filter :track_ahoy_visit
-      base.before_filter do
+      base.before_action :set_ahoy_cookies
+      base.before_action :track_ahoy_visit
+      base.before_action do
         RequestStore.store[:ahoy] ||= ahoy
       end
     end

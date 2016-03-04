@@ -18,11 +18,11 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "rails"
+  spec.add_dependency "rails", ">= 4"
   spec.add_dependency "addressable"
-  spec.add_dependency "browser", ">= 0.4.0"
+  spec.add_dependency "browser", ">= 0.4"
   spec.add_dependency "geocoder"
-  spec.add_dependency "referer-parser", ">= 0.3.0"
+  spec.add_dependency "referer-parser", ">= 0.3"
   spec.add_dependency "user_agent_parser"
   spec.add_dependency "request_store"
   spec.add_dependency "uuidtools"
