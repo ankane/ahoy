@@ -324,7 +324,7 @@ Rails actions
 
 ```ruby
 class ApplicationController < ActionController::Base
-  after_filter :track_action
+  after_action :track_action
 
   protected
 
