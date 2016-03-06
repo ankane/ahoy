@@ -1,7 +1,9 @@
-## 1.3.0 [unreleased]
+## 1.2.2
 
+- Fixed issue with latest version of `browser` gem
 - Added support for RabbitMQ
 - Added support for Amazon Kinesis Firehose
+- Fixed deprecation warnings in Rails 5
 
 ## 1.2.1
 
