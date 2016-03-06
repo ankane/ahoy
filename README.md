@@ -423,7 +423,7 @@ Ahoy.track_visits_immediately = true
 You can exclude API endpoints and other actions with:
 
 ```ruby
-skip_before_filter :track_ahoy_visit
+skip_before_action :track_ahoy_visit
 ```
 
 ## Development

@@ -5,10 +5,14 @@ module Ahoy
     def self.included(base)
       base.helper_method :current_visit
       base.helper_method :ahoy
-      base.before_filter :set_ahoy_cookies
-      base.before_filter :track_ahoy_visit
-      base.before_filter do
-        RequestStore.store[:ahoy] ||= ahoy
+      if base.respond_to?(:before_action)
+        base.before_action :set_ahoy_cookies
+        base.before_action :track_ahoy_visit
+        base.before_action :set_ahoy_request_store
+      else
+        base.before_filter :set_ahoy_cookies
+        base.before_filter :track_ahoy_visit
+        base.before_filter :set_ahoy_request_store
       end
     end
 
@@ -29,6 +33,10 @@ module Ahoy
       if ahoy.new_visit?
         ahoy.track_visit(defer: !Ahoy.track_visits_immediately)
       end
+    end
+
+    def set_ahoy_request_store
+      RequestStore.store[:ahoy] ||= ahoy
     end
   end
 end
