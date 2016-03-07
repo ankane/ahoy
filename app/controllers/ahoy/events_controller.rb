@@ -14,7 +14,7 @@ module Ahoy
           end
         end
 
-      events.each do |event|
+      events.first(Ahoy.max_events_per_request).each do |event|
         time = Time.zone.parse(event["time"]) rescue nil
 
         # timestamp is deprecated

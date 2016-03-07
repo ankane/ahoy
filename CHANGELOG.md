@@ -1,3 +1,8 @@
+## 1.3.0
+
+- Added throttling
+- Added `max_content_length` and `max_events_per_request`
+
 ## 1.2.2
 
 - Fixed issue with latest version of `browser` gem

@@ -62,6 +62,21 @@ module Ahoy
   mattr_accessor :geocode
   self.geocode = true
 
+  mattr_accessor :max_content_length
+  self.max_content_length = 8192
+
+  mattr_accessor :max_events_per_request
+  self.max_events_per_request = 10
+
+  mattr_accessor :throttle
+  self.throttle = true
+
+  mattr_accessor :throttle_limit
+  self.throttle_limit = 20
+
+  mattr_accessor :throttle_period
+  self.throttle_period = 1.minute
+
   def self.ensure_uuid(id)
     valid = UUIDTools::UUID.parse(id) rescue nil
     if valid
