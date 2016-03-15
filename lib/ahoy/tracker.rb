@@ -131,7 +131,7 @@ module Ahoy
         # fail-safe
         $stderr.puts "Error reporting exception"
       end
-      if Rails.env.development?
+      if Rails.env.development? || Rails.env.test?
         raise e
       end
     end
