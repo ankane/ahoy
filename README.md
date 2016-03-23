@@ -555,7 +555,7 @@ Sync the new column.
 
 ```ruby
 Ahoy::Event.where(properties: nil).select(:id).find_in_batches do |events|
-  Ahoy::Event.update_all("properties = properties_json::jsonb")
+  Ahoy::Event.where(id: events.map(&:id)).update_all("properties = properties_json::jsonb")
 end
 ```
 
