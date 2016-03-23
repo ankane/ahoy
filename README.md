@@ -1,7 +1,5 @@
 # Ahoy
 
-:fire: Never build an analytics platform from scratch again.
-
 Ahoy provides a solid foundation to track visits and events in Ruby, JavaScript, and native apps. Works with any data store so you can easily scale.
 
 :tangerine: Battle-tested at [Instacart](https://www.instacart.com/opensource)
