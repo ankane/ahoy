@@ -53,6 +53,21 @@ rake db:migrate
 For Rails 4 and PostgreSQL 9.2 or greater, use:
 
 ```sh
+rails generate migration enable_uuid_ossp_extension
+```
+Then edit the migration.
+
+```ruby
+class EnableUuidOsspExtension < ActiveRecord::Migration
+  def change
+    enable_extension 'uuid-ossp'
+  end
+end
+```
+
+This allows PostgreSQL to generate UUID.
+
+```sh
 rails generate ahoy:stores:active_record -d postgresql
 rake db:migrate
 ```
