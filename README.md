@@ -32,8 +32,8 @@ Ahoy supports a number of data stores out of the box.  You can start with one of
 - [SQLite](#mysql-or-sqlite)
 - [MongoDB](#mongodb)
 - [Fluentd](#fluentd)
-- [RabbitMQ](#rabbitmq-master)
-- [Kinesis Firehose](#kinesis-firehose-master)
+- [RabbitMQ](#rabbitmq)
+- [Amazon Kinesis Firehose](#amazon-kinesis-firehose)
 - [Logs](#logs)
 - [Custom](#custom)
 
@@ -115,7 +115,7 @@ rails generate ahoy:stores:bunny
 
 Use `ENV["RABBITMQ_URL"]` to configure.
 
-### Kinesis Firehose
+### Amazon Kinesis Firehose
 
 Add [aws-sdk](https://github.com/aws/aws-sdk-ruby) to your Gemfile.
 
