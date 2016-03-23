@@ -406,16 +406,16 @@ Ahoy.geocode = :async
 
 For Rails 4.0 and 4.1, you’ll need to add [activejob_backport](https://github.com/ankane/activejob_backport).
 
-Or disable it with:
-
-```ruby
-Ahoy.geocode = false
-```
-
-To change the queue name (`ahoy` by default):
+To change the queue name (`ahoy` by default), use:
 
 ```ruby
 Ahoy.job_queue = :low_priority
+```
+
+Or disable geocoding with:
+
+```ruby
+Ahoy.geocode = false
 ```
 
 ### Track Visits Immediately
