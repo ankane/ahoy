@@ -1,3 +1,8 @@
+## 1.3.1
+
+- Fixed issue with log silencer
+- Raise errors in test environment
+
 ## 1.3.0
 
 - Added throttling
