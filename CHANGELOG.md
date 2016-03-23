@@ -1,4 +1,4 @@
-## 1.4.0 [unreleased]
+## 1.4.0
 
 - Use `ActiveRecordTokenStore` by default (integer instead of uuid for id)
 - Detect database for `rails g ahoy:stores:active_record` for easier installation
