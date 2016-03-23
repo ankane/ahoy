@@ -124,15 +124,14 @@ module Ahoy
       @store.exclude?
     end
 
+    # odd pattern for backwards compatibility
+    # TODO remove this method in next major release
     def report_exception(e)
-      begin
+      safely do
         @store.report_exception(e)
-      rescue
-        # fail-safe
-        $stderr.puts "Error reporting exception"
-      end
-      if Rails.env.development? || Rails.env.test?
-        raise e
+        if Rails.env.development? || Rails.env.test?
+          raise e
+        end
       end
     end
 

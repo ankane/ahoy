@@ -7,7 +7,8 @@ module Ahoy
             v.visit_token = ahoy.visit_token
             v.visitor_token = ahoy.visitor_token
             v.user = user if v.respond_to?(:user=)
-            v.created_at = options[:started_at]
+            v.started_at = options[:started_at] if v.respond_to?(:started_at)
+            v.created_at = options[:started_at] if v.respond_to?(:created_at)
           end
 
         set_visit_properties(visit)

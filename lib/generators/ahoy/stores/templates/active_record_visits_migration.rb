@@ -1,8 +1,8 @@
 class <%= migration_class_name %> < ActiveRecord::Migration
   def change
-    create_table :visits, id: false do |t|
-      t.uuid :id, default: nil, primary_key: true
-      t.uuid :visitor_id, default: nil
+    create_table :visits do |t|
+      t.string :visit_token
+      t.string :visitor_token
 
       # the rest are recommended but optional
       # simply remove the columns you don't want
@@ -51,6 +51,7 @@ class <%= migration_class_name %> < ActiveRecord::Migration
       t.timestamp :started_at
     end
 
+    add_index :visits, [:visit_token], unique: true
     add_index :visits, [:user_id]
   end
 end

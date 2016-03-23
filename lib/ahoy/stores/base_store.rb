@@ -27,7 +27,7 @@ module Ahoy
       end
 
       def report_exception(e)
-        Errbase.report(e)
+        raise e
       end
 
       def user

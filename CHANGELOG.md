@@ -1,6 +1,12 @@
+## 1.4.0 [unreleased]
+
+- Use `ActiveRecordTokenStore` by default (integer instead of uuid for id)
+- Detect database for `rails g ahoy:stores:active_record` for easier installation
+- Use `safely` as default exception handler
+- Fixed issue with log silencer
+
 ## 1.3.1
 
-- Fixed issue with log silencer
 - Raise errors in test environment
 
 ## 1.3.0

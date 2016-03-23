@@ -25,9 +25,7 @@ And add the javascript file in `app/assets/javascripts/application.js` after jQu
 
 Ahoy supports a number of data stores out of the box.  You can start with one of them and customize as needed, or create your own store from scratch.
 
-- [PostgreSQL](#postgresql)
-- [MySQL](#mysql-or-sqlite)
-- [SQLite](#mysql-or-sqlite)
+- [PostgreSQL, MySQL, or SQLite](#postgresql-mysql-or-sqlite)
 - [MongoDB](#mongodb)
 - [Fluentd](#fluentd)
 - [RabbitMQ](#rabbitmq)
@@ -35,43 +33,12 @@ Ahoy supports a number of data stores out of the box.  You can start with one of
 - [Logs](#logs)
 - [Custom](#custom)
 
-### PostgreSQL
+### PostgreSQL, MySQL, or SQLite
 
-For Rails 4.2 and PostgreSQL 9.4 or greater, use:
-
-```sh
-rails generate ahoy:stores:active_record -d postgresql-jsonb
-rake db:migrate
-```
-
-For Rails 4 and PostgreSQL 9.2 or greater, use:
-
-```sh
-rails generate ahoy:stores:active_record -d postgresql
-rake db:migrate
-```
-
-Otherwise, follow the instructions for MySQL.
-
-### MySQL or SQLite
-
-Add [activeuuid](https://github.com/jashmenn/activeuuid) to your Gemfile.
-
-```ruby
-gem 'activeuuid', '>= 0.5.0'
-```
-
-And run:
+Run:
 
 ```sh
 rails generate ahoy:stores:active_record
-rake db:migrate
-```
-
-If you just want visits, run:
-
-```sh
-rails generate ahoy:stores:active_record_visits
 rake db:migrate
 ```
 
@@ -217,7 +184,7 @@ ahoy.authenticate(user)
 Stores are built to be highly customizable.
 
 ```ruby
-class Ahoy::Store < Ahoy::Stores::ActiveRecordStore
+class Ahoy::Store < Ahoy::Stores::ActiveRecordTokenStore
   # add methods here
 end
 ```
@@ -227,7 +194,7 @@ end
 Exclude visits and events from being tracked with:
 
 ```ruby
-class Ahoy::Store < Ahoy::Stores::ActiveRecordStore
+class Ahoy::Store < Ahoy::Stores::ActiveRecordTokenStore
   def exclude?
     bot? || request.ip == "192.168.1.1"
   end
@@ -239,7 +206,7 @@ Bots are excluded by default.
 ### Track Additional Values
 
 ```ruby
-class Ahoy::Store < Ahoy::Stores::ActiveRecordStore
+class Ahoy::Store < Ahoy::Stores::ActiveRecordTokenStore
   def track_visit(options)
     super do |visit|
       visit.gclid = visit_properties.landing_params["gclid"]
@@ -259,7 +226,7 @@ end
 If you use a method other than `current_user`, set it here:
 
 ```ruby
-class Ahoy::Store < Ahoy::Stores::ActiveRecordStore
+class Ahoy::Store < Ahoy::Stores::ActiveRecordTokenStore
   def user
     controller.true_user
   end
@@ -268,18 +235,12 @@ end
 
 ### Report Exceptions
 
-Exceptions are rescued so analytics do not break your app.
-
-Ahoy uses [Errbase](https://github.com/ankane/errbase) to try to report them to a service by default.
+Exceptions are rescued so analytics do not break your app. Ahoy uses [Safely](https://github.com/ankane/safely) to try to report them to a service by default.
 
 To customize this, use:
 
 ```ruby
-class Ahoy::Store < Ahoy::Stores::ActiveRecordStore
-  def report_exception(e)
-    Rollbar.report_exception(e)
-  end
-end
+Safely.report_exception_method = proc { |e| Rollbar.error(e) }
 ```
 
 ### Use Different Models
@@ -287,7 +248,7 @@ end
 For ActiveRecord and Mongoid stores
 
 ```ruby
-class Ahoy::Store < Ahoy::Stores::ActiveRecordStore
+class Ahoy::Store < Ahoy::Stores::ActiveRecordTokenStore
   def visit_model
     CustomVisit
   end
@@ -355,10 +316,12 @@ First, generate a migration and add a `visit_id` column.
 ```ruby
 class AddVisitIdToOrders < ActiveRecord::Migration
   def change
-    add_column :orders, :visit_id, :uuid
+    add_column :orders, :visit_id, :integer
   end
 end
 ```
+
+**Note**: Use the `uuid` column type if the `id` column on `visits` is a `uuid`.
 
 Then, add `visitable` to the model.
 
@@ -505,7 +468,7 @@ added_item_ids = Ahoy::Event.where(user_id: viewed_store_ids, name: "Added item 
 viewed_checkout_ids = Ahoy::Event.where(user_id: added_item_ids, name: "Viewed checkout").uniq.pluck(:user_id)
 ```
 
-The same approach also works with visitor ids.
+The same approach also works with visitor tokens.
 
 ## Native Apps
 
@@ -513,7 +476,7 @@ The same approach also works with visitor ids.
 
 When a user launches the app, create a visit.
 
-Generate a `visit_id` and `visitor_id` as [UUIDs](http://en.wikipedia.org/wiki/Universally_unique_identifier).
+Generate a `visit_token` and `visitor_token` as [UUIDs](http://en.wikipedia.org/wiki/Universally_unique_identifier).
 
 Send these values in the `Ahoy-Visit` and `Ahoy-Visitor` headers with all requests.
 
@@ -540,7 +503,11 @@ Use an array to pass multiple events at once.
 
 ## Upgrading
 
-### PostgreSQL 9.4 + JSONB
+### 1.4.0
+
+There’s nothing to do, but it’s worth noting the default store was changed from `ActiveRecordStore` to `ActiveRecordTokenStore` for new installations.
+
+### json -> jsonb
 
 Create a migration to add a new `jsonb` column.
 

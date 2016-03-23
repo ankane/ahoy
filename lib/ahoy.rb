@@ -6,7 +6,7 @@ require "referer-parser"
 require "user_agent_parser"
 require "request_store"
 require "uuidtools"
-require "errbase"
+require "safely_block"
 
 require "ahoy/version"
 require "ahoy/tracker"

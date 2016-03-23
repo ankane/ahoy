@@ -24,7 +24,8 @@ module Ahoy
         end
 
         def copy_migration
-          unless options["database"].in?([nil, "postgresql", "postgresql-jsonb"])
+          @database = options["database"] || detect_database
+          unless @database.in?([nil, "postgresql", "postgresql-jsonb", "mysql", "sqlite"])
             raise Thor::Error, "Unknown database option"
           end
           migration_template "active_record_events_migration.rb", "db/migrate/create_ahoy_events.rb"
@@ -36,6 +37,15 @@ module Ahoy
 
         def create_initializer
           template "active_record_initializer.rb", "config/initializers/ahoy.rb"
+        end
+
+        def detect_database
+          postgresql_version = ActiveRecord::Base.connection.send(:postgresql_version) rescue 0
+          if postgresql_version >= 90400
+            "postgresql-jsonb"
+          elsif postgresql_version >= 90200
+            "postgresql"
+          end
         end
       end
     end
