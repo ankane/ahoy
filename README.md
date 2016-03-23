@@ -412,6 +412,12 @@ Or disable it with:
 Ahoy.geocode = false
 ```
 
+To change the queue name (`ahoy` by default):
+
+```ruby
+Ahoy.job_queue = :low_priority
+```
+
 ### Track Visits Immediately
 
 Visitor and visit ids are generated on the first request (so you can use them immediately), but the `track_visit` method isn’t called until the JavaScript library posts to the server.  This prevents browsers with cookies disabled from creating multiple visits and ensures visits are not created for API endpoints.  Change this with:
