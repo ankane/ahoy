@@ -76,6 +76,9 @@ module Ahoy
   mattr_accessor :throttle_period
   self.throttle_period = 1.minute
 
+  mattr_accessor :job_queue
+  self.job_queue = :ahoy
+
   def self.ensure_uuid(id)
     valid = UUIDTools::UUID.parse(id) rescue nil
     if valid
