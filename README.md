@@ -470,6 +470,20 @@ viewed_checkout_ids = Ahoy::Event.where(user_id: added_item_ids, name: "Viewed c
 
 The same approach also works with visitor tokens.
 
+### Querying Properties
+
+Postgres `json` or `jsonb`
+
+```ruby
+Ahoy::Event.where("properties ->> 'store_id' = 1").count
+```
+
+Text
+
+```ruby
+Ahoy::Event.where("properties LIKE '%\"store_id\": \"1\"%'").count
+```
+
 ## Native Apps
 
 ### Visits
