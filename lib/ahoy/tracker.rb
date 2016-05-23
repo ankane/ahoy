@@ -126,6 +126,7 @@ module Ahoy
 
     # odd pattern for backwards compatibility
     # TODO remove this method in next major release
+    include Safely::Methods
     def report_exception(e)
       safely do
         @store.report_exception(e)
