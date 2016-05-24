@@ -126,9 +126,8 @@ module Ahoy
 
     # odd pattern for backwards compatibility
     # TODO remove this method in next major release
-    include Safely::Methods
     def report_exception(e)
-      safely do
+      Safely.safely do
         @store.report_exception(e)
         if Rails.env.development? || Rails.env.test?
           raise e
