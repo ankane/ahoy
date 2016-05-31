@@ -2,7 +2,7 @@ module Ahoy
   module Stores
     class ActiveRecordStore < BaseStore
       def track_visit(options, &block)
-        visit =
+        @visit =
           visit_model.new do |v|
             v.id = ahoy.visit_id
             v.visitor_id = ahoy.visitor_id
