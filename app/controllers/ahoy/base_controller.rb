@@ -2,8 +2,11 @@ module Ahoy
   class BaseController < ApplicationController
     # skip all filters except for authlogic
     filters = _process_action_callbacks.map(&:filter) - [:load_authlogic]
-    if respond_to?(:skip_action)
-      skip_action *filters
+
+    if respond_to?(:skip_before_action)
+      skip_before_action *filters
+      skip_after_action *filters
+      skip_around_action *filters
       before_action :verify_request_size
     else
       skip_filter *filters
