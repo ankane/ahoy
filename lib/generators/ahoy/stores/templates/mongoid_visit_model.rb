@@ -29,6 +29,7 @@ class Visit
 
   # location
   field :country, type: String
+  field :country_code, type: String
   field :region, type: String
   field :city, type: String
 

@@ -30,6 +30,7 @@ class <%= migration_class_name %> < ActiveRecord::Migration
 
       # location
       t.string :country
+      t.string :country_code      
       t.string :region
       t.string :city
       t.string :postal_code

@@ -9,6 +9,10 @@ module Ahoy
         location.try(:country).presence
       end
 
+      def country_code
+        location.try(:country_code).presence
+      end
+
       def region
         location.try(:state).presence
       end
