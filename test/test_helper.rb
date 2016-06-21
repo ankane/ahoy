@@ -84,6 +84,11 @@ module PropertiesTest
     assert_equal 0, count_events(hello: "world", prop2: "hi")
   end
 
+  def test_prefix
+    create_event value: 123
+    assert_equal 0, count_events(value: 1)
+  end
+
   def create_event(properties)
     model.create(properties: properties)
   end
