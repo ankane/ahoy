@@ -1,6 +1,6 @@
-## 1.4.2 [unreleased]
+## 1.4.2
 
-- Fixed false matches with `where_properties` for text columns
+- Fixed issues with `where_properties`
 
 ## 1.4.1
 
