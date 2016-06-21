@@ -1,3 +1,4 @@
+require "active_support"
 require "active_support/core_ext"
 require "addressable/uri"
 require "browser"
@@ -28,7 +29,7 @@ require "ahoy/stores/mongoid_store"
 require "ahoy/stores/kafka_store"
 require "ahoy/stores/kinesis_firehose_store"
 require "ahoy/stores/bunny_store"
-require "ahoy/engine"
+require "ahoy/engine" if defined?(Rails)
 require "ahoy/warden" if defined?(Warden)
 
 # background jobs
@@ -106,19 +107,21 @@ module Ahoy
   self.track_bots = false
 end
 
-ActionController::Base.send :include, Ahoy::Controller
-ActiveRecord::Base.send(:extend, Ahoy::Model) if defined?(ActiveRecord)
+if defined?(Rails)
+  ActionController::Base.send :include, Ahoy::Controller
+  ActiveRecord::Base.send(:extend, Ahoy::Model) if defined?(ActiveRecord)
 
-# ensure logger silence will not be added by activerecord-session_store
-# otherwise, we get SystemStackError: stack level too deep
-begin
-  require "active_record/session_store/extension/logger_silencer"
-rescue LoadError
-  require "ahoy/logger_silencer"
-  Logger.send :include, Ahoy::LoggerSilencer
-
+  # ensure logger silence will not be added by activerecord-session_store
+  # otherwise, we get SystemStackError: stack level too deep
   begin
-    require "syslog/logger"
-    Syslog::Logger.send :include, Ahoy::LoggerSilencer
-  rescue LoadError; end
+    require "active_record/session_store/extension/logger_silencer"
+  rescue LoadError
+    require "ahoy/logger_silencer"
+    Logger.send :include, Ahoy::LoggerSilencer
+
+    begin
+      require "syslog/logger"
+      Syslog::Logger.send :include, Ahoy::LoggerSilencer
+    rescue LoadError; end
+  end
 end
