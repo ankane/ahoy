@@ -2,7 +2,7 @@ module Ahoy
   module Stores
     class MongoidStore < BaseStore
       def track_visit(options, &block)
-        visit =
+        @visit =
           visit_model.new do |v|
             v.id = binary(ahoy.visit_id)
             v.visitor_id = binary(ahoy.visitor_id)

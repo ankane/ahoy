@@ -67,6 +67,9 @@ module Ahoy
   mattr_accessor :max_events_per_request
   self.max_events_per_request = 10
 
+  mattr_accessor :mount
+  self.mount = true
+
   mattr_accessor :throttle
   self.throttle = true
 

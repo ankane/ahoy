@@ -436,6 +436,14 @@ Debug endpoint requests in Ruby
 Ahoy.quiet = false
 ```
 
+### Rails engine
+
+You can disable the engine
+
+```ruby
+Ahoy.mount = false
+```
+
 ## Explore the Data
 
 How you explore the data depends on the data store used.
