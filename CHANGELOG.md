@@ -3,6 +3,7 @@
 - Added `where_properties` method
 - Added Kafka store
 - Added `mount` option
+- Use less intrusive version of `safely`
 
 ## 1.4.0
 
