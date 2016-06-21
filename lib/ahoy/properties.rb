@@ -11,7 +11,7 @@ module Ahoy
         when /mysql/
           if column_type == :json
             properties.each do |k, v|
-              relation = relation.where("properties -> ? = ?", "$.#{k.to_s}", v)
+              relation = relation.where("properties -> ? = ?", "$.#{k.to_s}", v.as_json)
             end
           else
             properties.each do |k, v|
@@ -21,7 +21,12 @@ module Ahoy
         when /postgres/
           if column_type == :jsonb || column_type == :json
             properties.each do |k, v|
-              relation = relation.where("properties ->> ? = ?", k.to_s, v.to_s)
+              relation =
+                if v.nil?
+                  relation.where("properties ->> ? IS NULL", k.to_s)
+                else
+                  relation.where("properties ->> ? = ?", k.to_s, v.as_json.to_s)
+                end
             end
           else
             properties.each do |k, v|

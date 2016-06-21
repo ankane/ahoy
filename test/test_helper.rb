@@ -28,13 +28,35 @@ module PropertiesTest
   end
 
   def test_string
-    create_event hello: "world"
-    assert_equal 1, count_events(hello: "world")
+    create_event value: "world"
+    assert_equal 1, count_events(value: "world")
   end
 
   def test_number
-    create_event product_id: 1
-    assert_equal 1, count_events(product_id: 1)
+    create_event value: 1
+    assert_equal 1, count_events(value: 1)
+  end
+
+  def test_date
+    today = Date.today
+    create_event value: today
+    assert_equal 1, count_events(value: today)
+  end
+
+  def test_time
+    now = Time.now
+    create_event value: now
+    assert_equal 1, count_events(value: now)
+  end
+
+  def test_boolean
+    create_event value: true
+    assert_equal 1, count_events(value: true)
+  end
+
+  def test_nil
+    create_event value: nil
+    assert_equal 1, count_events(value: nil)
   end
 
   def test_any
