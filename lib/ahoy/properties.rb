@@ -11,7 +11,13 @@ module Ahoy
         when /mysql/
           if column_type == :json
             properties.each do |k, v|
-              relation = relation.where("properties -> ? = ?", "$.#{k.to_s}", v.as_json)
+              if v.nil?
+                v = "null"
+              elsif v == true
+                v = "true"
+              end
+
+              relation = relation.where("JSON_UNQUOTE(properties -> ?) = ?", "$.#{k.to_s}", v.as_json)
             end
           else
             properties.each do |k, v|
