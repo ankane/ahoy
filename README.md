@@ -436,14 +436,6 @@ Debug endpoint requests in Ruby
 Ahoy.quiet = false
 ```
 
-### Rails engine
-
-You can disable the engine
-
-```ruby
-Ahoy.mount = false
-```
-
 ## Explore the Data
 
 How you explore the data depends on the data store used.
@@ -539,6 +531,14 @@ Send a `POST` request as `Content-Type: application/json` to `/ahoy/events` with
 - user token (depends on your authentication framework)
 
 Use an array to pass multiple events at once.
+
+## Reference
+
+By default, Ahoy create endpoints at `/ahoy/visits` and `/ahoy/events`. To disable, use:
+
+```ruby
+Ahoy.mount = false
+```
 
 ## Upgrading
 
