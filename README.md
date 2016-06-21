@@ -493,7 +493,7 @@ The same approach also works with visitor tokens.
 Ahoy::Event.where_properties(store_id: 1).count
 ```
 
-**Note:** If you get a `NoMethodError`, upgrade Ahoy and add to your model `include Ahoy::Properties`.
+**Note:** If you get a `NoMethodError`, upgrade Ahoy and add `include Ahoy::Properties` to your model.
 
 ## Native Apps
 
