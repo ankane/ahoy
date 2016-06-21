@@ -37,6 +37,26 @@ module PropertiesTest
     assert_equal 1, count_events(product_id: 1)
   end
 
+  def test_any
+    create_event hello: "world", prop2: "hi"
+    assert_equal 1, count_events(hello: "world")
+  end
+
+  def test_multiple
+    create_event prop1: "hi", prop2: "bye"
+    assert_equal 1, count_events(prop1: "hi", prop2: "bye")
+  end
+
+  def test_multiple_order
+    create_event prop2: "bye", prop1: "hi"
+    assert_equal 1, count_events(prop1: "hi", prop2: "bye")
+  end
+
+  def test_partial
+    create_event hello: "world"
+    assert_equal 0, count_events(hello: "world", prop2: "hi")
+  end
+
   def create_event(properties)
     model.create(properties: properties)
   end
