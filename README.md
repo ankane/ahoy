@@ -27,7 +27,7 @@ Ahoy supports a number of data stores out of the box.  You can start with one of
 
 - [PostgreSQL, MySQL, or SQLite](#postgresql-mysql-or-sqlite)
 - [MongoDB](#mongodb)
-- [Kafka](#kafka-master) [master]
+- [Kafka](#kafka)
 - [Fluentd](#fluentd)
 - [RabbitMQ](#rabbitmq)
 - [Amazon Kinesis Firehose](#amazon-kinesis-firehose)
@@ -49,7 +49,7 @@ rake db:migrate
 rails generate ahoy:stores:mongoid
 ```
 
-### Kafka [master]
+### Kafka
 
 Add [ruby-kafka](https://github.com/zendesk/ruby-kafka) to your Gemfile.
 
