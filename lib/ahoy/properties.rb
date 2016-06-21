@@ -6,25 +6,30 @@ module Ahoy
       def where_properties(properties)
         relation = self
         column_type = columns_hash["properties"].type
-        case column_type
-        when :jsonb, :json
-          properties.each do |k, v|
-            relation = relation.where("properties ->> ? = ?", k.to_s, v.to_s)
-          end
-        else
-          adapter_name = connection.adapter_name.downcase
-          case adapter_name
-          when /postgres/
+        adapter_name = connection.adapter_name.downcase
+        case adapter_name
+        when /mysql/
+          if column_type == :json
             properties.each do |k, v|
-              relation = relation.where("properties SIMILAR TO ?", "%[{,]#{{k.to_s => v}.to_json.sub(/\A\{/, "").sub(/\}\z/, "")}[,}]%")
+              relation = relation.where("properties -> ? = ?", "$.#{k.to_s}", v)
             end
-          when /mysql/
+          else
             properties.each do |k, v|
               relation = relation.where("properties REGEXP ?", "[{,]#{{k.to_s => v}.to_json.sub(/\A\{/, "").sub(/\}\z/, "")}[,}]")
             end
-          else
-            raise "Adapter not supported: #{adapter_name}"
           end
+        when /postgres/
+          if column_type == :jsonb || column_type == :json
+            properties.each do |k, v|
+              relation = relation.where("properties ->> ? = ?", k.to_s, v.to_s)
+            end
+          else
+            properties.each do |k, v|
+              relation = relation.where("properties SIMILAR TO ?", "%[{,]#{{k.to_s => v}.to_json.sub(/\A\{/, "").sub(/\}\z/, "")}[,}]%")
+            end
+          end
+        else
+          raise "Adapter not supported: #{adapter_name}"
         end
         relation
       end

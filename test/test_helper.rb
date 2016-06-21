@@ -6,26 +6,42 @@ require "active_record"
 
 ActiveRecord::Base.logger = ActiveSupport::Logger.new(STDOUT) if ENV["VERBOSE"]
 
+class PostgresqlBase < ActiveRecord::Base
+  include Ahoy::Properties
+  establish_connection adapter: "postgresql", database: "ahoy_test"
+  self.abstract_class = true
+end
+
+class MysqlBase < ActiveRecord::Base
+  include Ahoy::Properties
+  establish_connection adapter: "mysql2", username: "root", database: "ahoy_test"
+  self.abstract_class = true
+end
+
 module PropertiesTest
   def setup
-    Ahoy::Event.delete_all
+    model.delete_all
   end
 
   def test_empty
-    assert_equal 0, Ahoy::Event.where_properties({}).count
+    assert_equal 0, count_events({})
   end
 
   def test_string
     create_event hello: "world"
-    assert_equal 1, Ahoy::Event.where_properties(hello: "world").count
+    assert_equal 1, count_events(hello: "world")
   end
 
   def test_number
     create_event product_id: 1
-    assert_equal 1, Ahoy::Event.where_properties(product_id: 1).count
+    assert_equal 1, count_events(product_id: 1)
   end
 
   def create_event(properties)
-    Ahoy::Event.create(properties: properties)
+    model.create(properties: properties)
+  end
+
+  def count_events(properties)
+    model.where_properties(properties).count
   end
 end
