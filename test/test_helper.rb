@@ -49,9 +49,14 @@ module PropertiesTest
     assert_equal 1, count_events(value: now)
   end
 
-  def test_boolean
+  def test_true
     create_event value: true
     assert_equal 1, count_events(value: true)
+  end
+
+  def test_false
+    create_event value: false
+    assert_equal 1, count_events(value: false)
   end
 
   def test_nil
