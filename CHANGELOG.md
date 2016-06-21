@@ -1,3 +1,7 @@
+## 1.4.2 [unreleased]
+
+- Fixed false matches with `where_properties` for text columns
+
 ## 1.4.1
 
 - Added `where_properties` method

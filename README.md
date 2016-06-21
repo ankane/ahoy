@@ -492,7 +492,7 @@ The same approach also works with visitor tokens.
 With ActiveRecord, use:
 
 ```ruby
-Ahoy::Event.where_properties(store_id: 1).count
+Ahoy::Event.where(name: "Viewed product").where_properties(product_id: 123).count
 ```
 
 **Note:** If you get a `NoMethodError`, upgrade Ahoy and add `include Ahoy::Properties` to your model.

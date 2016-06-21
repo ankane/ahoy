@@ -12,9 +12,18 @@ module Ahoy
             relation = relation.where("properties ->> ? = ?", k, v)
           end
         else
-          properties.each do |k, v|
-            # not 100%, but will do
-            relation = relation.where("properties LIKE ?", "%#{{k => v}.to_json.sub(/\A\{/, "").sub(/\}\z/, "")}%")
+          adapter_name = connection.adapter_name.downcase
+          case adapter_name
+          when /postgres/
+            properties.each do |k, v|
+              relation = relation.where("properties SIMILAR TO ?", "%[{,]#{{k => v}.to_json.sub(/\A\{/, "").sub(/\}\z/, "")}[,}]%")
+            end
+          when /mysql/
+            properties.each do |k, v|
+              relation = relation.where("properties REGEXP ?", "[{,]#{{k => v}.to_json.sub(/\A\{/, "").sub(/\}\z/, "")}[,}]")
+            end
+          else
+            raise "Adapter not supported: #{adapter_name}"
           end
         end
         relation
