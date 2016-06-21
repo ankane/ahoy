@@ -1,3 +1,9 @@
+## 1.4.1 [unreleased]
+
+- Added `where_properties` method
+- Added Kafka store
+- Added `mount` option
+
 ## 1.4.0
 
 - Use `ActiveRecordTokenStore` by default (integer instead of uuid for id)

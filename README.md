@@ -489,17 +489,11 @@ The same approach also works with visitor tokens.
 
 ### Querying Properties
 
-Postgres `json` or `jsonb`
-
 ```ruby
-Ahoy::Event.where("properties ->> 'store_id' = 1").count
+Ahoy::Event.where_properties(store_id: 1).count
 ```
 
-Text
-
-```ruby
-Ahoy::Event.where("properties LIKE '%\"store_id\": \"1\"%'").count
-```
+**Note:** If you get a `NoMethodError`, upgrade Ahoy and add to your model `include Ahoy::Properties`.
 
 ## Native Apps
 
