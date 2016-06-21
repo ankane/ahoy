@@ -489,6 +489,8 @@ The same approach also works with visitor tokens.
 
 ### Querying Properties
 
+With ActiveRecord, use:
+
 ```ruby
 Ahoy::Event.where_properties(store_id: 1).count
 ```
