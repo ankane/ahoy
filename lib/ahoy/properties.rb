@@ -34,6 +34,15 @@ module Ahoy
                   relation.where("properties ->> ? = ?", k.to_s, v.as_json.to_s)
                 end
             end
+          elsif column_type == :hstore
+            properties.each do |k, v|
+              relation =
+                if v.nil?
+                  relation.where("properties -> ? IS NULL", k.to_s)
+                else
+                  relation.where("properties -> ? = ?", k.to_s, v.to_s)
+                end
+            end
           else
             properties.each do |k, v|
               relation = relation.where("properties SIMILAR TO ?", "%[{,]#{{k.to_s => v}.to_json.sub(/\A\{/, "").sub(/\}\z/, "")}[,}]%")
