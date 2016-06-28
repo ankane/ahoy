@@ -1,3 +1,7 @@
+## 1.4.3 [unreleased]
+
+- Fixed visit recreation on cookie expiration
+
 ## 1.4.2
 
 - Fixed issues with `where_properties`
