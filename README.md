@@ -440,7 +440,9 @@ Ahoy.quiet = false
 
 How you explore the data depends on the data store used.
 
-Here are ways to do it with ActiveRecord.
+For SQL databases, you can use [Blazer](https://github.com/ankane/blazer) to easily generate charts and dashboards.
+
+With ActiveRecord, you can do:
 
 ```ruby
 Visit.group(:search_keyword).count
@@ -448,7 +450,7 @@ Visit.group(:country).count
 Visit.group(:referring_domain).count
 ```
 
-[Chartkick](http://chartkick.com/) and [Groupdate](https://github.com/ankane/groupdate) make it super easy to visualize the data.
+[Chartkick](http://chartkick.com/) and [Groupdate](https://github.com/ankane/groupdate) make it easy to visualize the data.
 
 ```erb
 <%= line_chart Visit.group_by_day(:started_at).count %>
