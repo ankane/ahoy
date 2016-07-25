@@ -392,6 +392,24 @@ Or disable geocoding with:
 Ahoy.geocode = false
 ```
 
+#### Custom Geocoders and Background Jobs
+
+Ahoy provides inline geocoding through the Ahoy::Geocoder but you can implement your own class by setting the `geocoder` option:
+
+```ruby
+Ahoy.geocoder = CustomGeocoder
+```
+
+Your class will be initialized by Ahoy and the `geocode` method will be called and provided an instance of your configured `visit_model`.
+
+If you want to provide your own background job you can set it the same way:
+
+```ruby
+Ahoy.geocoder = CustomBackgroundGeocoder
+```
+
+Note that this would be equivalent to setting `Ahoy.geocode = :async` but allows you to provide additional features or processing in your own background processing class.
+
 ### Track Visits Immediately
 
 Visitor and visit ids are generated on the first request (so you can use them immediately), but the `track_visit` method isn’t called until the JavaScript library posts to the server.  This prevents browsers with cookies disabled from creating multiple visits and ensures visits are not created for API endpoints.  Change this with:

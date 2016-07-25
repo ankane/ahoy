@@ -38,6 +38,7 @@ begin
 rescue LoadError
   # do nothing
 end
+require "ahoy/geocoder"
 require "ahoy/geocode_job" if defined?(ActiveJob)
 
 # deprecated
@@ -60,7 +61,17 @@ module Ahoy
   mattr_accessor :quiet
   self.quiet = true
 
+  mattr_accessor :geocoder
   mattr_accessor :geocode
+
+  def self.geocode=(val)
+    @@geocode = val
+    if val == :async
+      self.geocoder ||= GeocodeJob
+    elsif val == true
+      self.geocoder ||= Geocoder.new
+    end
+  end
   self.geocode = true
 
   mattr_accessor :max_content_length
