@@ -8,6 +8,30 @@
 
 /*jslint browser: true, indent: 2, plusplus: true, vars: true */
 
+// polyfill for Navigator.sendBeacon()
+// https://github.com/miguelmota/Navigator.sendBeacon
+(function(root) {
+  "use strict";
+
+  if (!("sendBeacon" in navigator)) {
+    navigator.sendBeacon = function(url, data) {
+      var xhr = ("XMLHttpRequest" in root) ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+      xhr.open("POST", url, false);
+      xhr.setRequestHeader("Accept", "*/*");
+      if (typeof data === "string") {
+        xhr.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
+        xhr.responseType = "text/plain";
+      } else if (Object.prototype.toString.call(data) === "[object Blob]") {
+        if (data.type) {
+          xhr.setRequestHeader("Content-Type", data.type);
+        }
+      }
+      xhr.send(data);
+      return true;
+    };
+  }
+})(this);
+
 (function (window) {
   "use strict";
 
@@ -126,6 +150,12 @@
     });
   }
 
+  function trackEventNow(event) {
+    if (canStringify) {
+      navigator.sendBeacon(eventsUrl, JSON.stringify([event]));
+    }
+  }
+
   function page() {
     return ahoy.page || window.location.pathname;
   }
@@ -219,7 +249,7 @@
     return true;
   };
 
-  ahoy.track = function (name, properties) {
+  ahoy.track = function (name, properties, isImmediateTrack) {
     // generate unique id
     var event = {
       id: generateId(),
@@ -228,6 +258,12 @@
       time: (new Date()).getTime() / 1000.0
     };
     log(event);
+
+    // Try to immediately track event with sendBeacon
+    if (isImmediateTrack) {
+      trackEventNow(event);
+      return;
+    }
 
     eventQueue.push(event);
     saveEventQueue();
