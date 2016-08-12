@@ -60,11 +60,11 @@ module Ahoy
     end
 
     def visit_id
-      @visit_id ||= ensure_uuid(existing_visit_id || visit_token)
+      @visit_id ||= ensure_uuid(existing_visit_id || visit_token_helper)
     end
 
     def visitor_id
-      @visitor_id ||= ensure_uuid(existing_visitor_id || visitor_token)
+      @visitor_id ||= ensure_uuid(existing_visitor_id || visitor_token_helper)
     end
 
     def new_visit?
@@ -90,17 +90,23 @@ module Ahoy
       @visit_properties ||= Ahoy::VisitProperties.new(request, @options.slice(:api))
     end
 
-    # for ActiveRecordTokenStore only - do not use
     def visit_token
-      @visit_token ||= existing_visit_id || (@options[:api] && request.params["visit_token"]) || generate_id
+      @visit_token ||= ensure_token(visit_token_helper)
     end
 
-    # for ActiveRecordTokenStore only - do not use
     def visitor_token
-      @visitor_token ||= existing_visitor_id || (@options[:api] && request.params["visitor_token"]) || generate_id
+      @visitor_token ||= ensure_token(visitor_token_helper)
     end
 
     protected
+
+    def visit_token_helper
+      @visit_token_helper ||= existing_visit_id || (@options[:api] && request.params["visit_token"]) || generate_id
+    end
+
+    def visitor_token_helper
+      @visitor_token_helper ||= existing_visitor_id || (@options[:api] && request.params["visitor_token"]) || generate_id
+    end
 
     def set_cookie(name, value, duration = nil)
       cookie = {
@@ -149,6 +155,10 @@ module Ahoy
 
     def ensure_uuid(id)
       Ahoy.ensure_uuid(id)
+    end
+
+    def ensure_token(token)
+      token.to_s.gsub(/[^a-z0-9\-]/i, "").first(64)
     end
 
     def debug(message)

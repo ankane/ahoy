@@ -1,6 +1,7 @@
 ## 1.4.3 [unreleased]
 
 - Fixed visit recreation on cookie expiration
+- Ensure basic token requirements
 
 ## 1.4.2
 
