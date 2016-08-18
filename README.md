@@ -530,6 +530,18 @@ Send a `POST` request as `Content-Type: application/json` to `/ahoy/events` with
 
 Use an array to pass multiple events at once.
 
+## Throttling
+
+To throttle requests to Ahoy endpoints, check out [Rack::Attack](https://github.com/kickstarter/rack-attack). Here’s a sample config:
+
+```ruby
+Rack::Attack.throttle("ahoy/ip", limit: 20, period: 1.minute) do |req|
+  if req.path.start_with?("/ahoy/")
+    req.ip
+  end
+end
+```
+
 ## Reference
 
 By default, Ahoy create endpoints at `/ahoy/visits` and `/ahoy/events`. To disable, use:
