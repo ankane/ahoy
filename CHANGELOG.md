@@ -1,4 +1,4 @@
-## 1.5.1 [unreleased]
+## 1.5.1
 
 - Restored throttling after removing side effects
 
