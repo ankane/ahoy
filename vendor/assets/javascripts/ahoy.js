@@ -137,8 +137,9 @@
     };
   }
 
-  // main
   function createVisit() {
+    isReady = false;
+
     visitId = ahoy.getVisitId();
     visitorId = ahoy.getVisitorId();
     track = getCookie("ahoy_track");
@@ -217,7 +218,6 @@
 
   ahoy.track = function (name, properties) {
     if (!ahoy.getVisitId()) {
-      isReady = false;
       createVisit();
     }
 
