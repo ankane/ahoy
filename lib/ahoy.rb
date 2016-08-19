@@ -72,18 +72,6 @@ module Ahoy
   mattr_accessor :mount
   self.mount = true
 
-  # no longer used
-  mattr_accessor :throttle
-  self.throttle = true
-
-  # no longer used
-  mattr_accessor :throttle_limit
-  self.throttle_limit = 20
-
-  # no longer used
-  mattr_accessor :throttle_period
-  self.throttle_period = 1.minute
-
   mattr_accessor :job_queue
   self.job_queue = :ahoy
 
