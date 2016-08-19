@@ -22,7 +22,7 @@
   var eventQueue = [];
   var visitsUrl = ahoy.visitsUrl || "/ahoy/visits";
   var eventsUrl = ahoy.eventsUrl || "/ahoy/events";
-  var canTrackNow = canStringify && typeof(navigator.sendBeacon) !== "undefined";
+  var canTrackNow = canStringify && typeof(window.navigator.sendBeacon) !== "undefined";
 
   // cookies
 
