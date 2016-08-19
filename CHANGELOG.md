@@ -2,6 +2,7 @@
 
 - Fixed visit recreation on cookie expiration
 - Ensure basic token requirements
+- Fixed issue where `/ahoy/visits` is called indefinitely when `Ahoy.cookie_domain = :all`
 
 ## 1.4.2
 
