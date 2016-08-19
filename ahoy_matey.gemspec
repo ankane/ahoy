@@ -27,6 +27,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "request_store"
   spec.add_dependency "uuidtools"
   spec.add_dependency "safely_block", ">= 0.1.1"
+  spec.add_dependency "rack-attack", "< 6"
 
   spec.add_development_dependency "bundler", "~> 1.5"
   spec.add_development_dependency "rake"

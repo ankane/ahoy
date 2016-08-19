@@ -1,6 +1,11 @@
 module Ahoy
   class Engine < ::Rails::Engine
     initializer "ahoy.middleware", after: "sprockets.environment" do |app|
+      if Ahoy.throttle
+        require "ahoy/throttle"
+        app.middleware.use Ahoy::Throttle
+      end
+
       next unless Ahoy.quiet
 
       # Parse PATH_INFO by assets prefix
