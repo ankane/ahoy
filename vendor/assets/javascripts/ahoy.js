@@ -20,8 +20,8 @@
   var queue = [];
   var canStringify = typeof(JSON) !== "undefined" && typeof(JSON.stringify) !== "undefined";
   var eventQueue = [];
-  var visitsUrl = ahoy.visitsUrl || "/ahoy/visits"
-  var eventsUrl = ahoy.eventsUrl || "/ahoy/events"
+  var visitsUrl = ahoy.visitsUrl || "/ahoy/visits";
+  var eventsUrl = ahoy.eventsUrl || "/ahoy/events";
   var canTrackNow = canStringify && typeof(navigator.sendBeacon) !== "undefined";
 
   // cookies
