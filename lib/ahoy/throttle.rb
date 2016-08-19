@@ -13,13 +13,5 @@ module Ahoy
     def self.throttled_response
       Rack::Attack.throttled_response
     end
-
-    def self.blacklisted_response
-      Rack::Attack.blacklisted_response
-    end
-
-    def self.blocklisted_response
-      Rack::Attack.blocklisted_response
-    end
   end
 end
