@@ -22,6 +22,7 @@
   var eventQueue = [];
   var visitsUrl = ahoy.visitsUrl || "/ahoy/visits"
   var eventsUrl = ahoy.eventsUrl || "/ahoy/events"
+  var canTrackNow = canStringify && typeof(navigator.sendBeacon) !== "undefined";
 
   // cookies
 
@@ -119,6 +120,13 @@
           }
         });
       }
+    });
+  }
+
+  function trackNow(event) {
+    ready( function () {
+      var payload = new Blob([JSON.stringify([event])], {type : "application/json; charset=utf-8"});
+      navigator.sendBeacon(eventsUrl, payload)
     });
   }
 
@@ -232,13 +240,17 @@
     };
     log(event);
 
-    eventQueue.push(event);
-    saveEventQueue();
+    if (canTrackNow) {
+      trackNow(event);
+    } else {
+      eventQueue.push(event);
+      saveEventQueue();
 
-    // wait in case navigating to reduce duplicate events
-    setTimeout( function () {
-      trackEvent(event);
-    }, 1000);
+      // wait in case navigating to reduce duplicate events
+      setTimeout( function () {
+        trackEvent(event);
+      }, 1000);
+    }
   };
 
   ahoy.trackView = function () {
