@@ -30,7 +30,7 @@ module Ahoy
         debug "Visit excluded"
       else
         if options[:defer]
-          set_cookie("ahoy_track", true)
+          set_cookie("ahoy_track", true, nil, false)
         else
           options = options.dup
 
@@ -108,13 +108,13 @@ module Ahoy
       @visitor_token_helper ||= existing_visitor_id || (@options[:api] && request.params["visitor_token"]) || generate_id
     end
 
-    def set_cookie(name, value, duration = nil)
+    def set_cookie(name, value, duration = nil, use_domain = true)
       cookie = {
         value: value
       }
       cookie[:expires] = duration.from_now if duration
       domain = Ahoy.cookie_domain || Ahoy.domain
-      cookie[:domain] = domain if domain
+      cookie[:domain] = domain if domain && use_domain
       request.cookie_jar[name] = cookie
     end
 
