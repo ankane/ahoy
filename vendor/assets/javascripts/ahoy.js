@@ -22,7 +22,7 @@
   var eventQueue = [];
   var visitsUrl = ahoy.visitsUrl || "/ahoy/visits";
   var eventsUrl = ahoy.eventsUrl || "/ahoy/events";
-  var canTrackNow = canStringify && typeof(window.navigator.sendBeacon) !== "undefined";
+  var canTrackNow = ahoy.trackNow && canStringify && typeof(window.navigator.sendBeacon) !== "undefined";
 
   // cookies
 
@@ -123,7 +123,7 @@
     });
   }
 
-  function trackNow(event) {
+  function trackEventNow(event) {
     ready( function () {
       var payload = new Blob([JSON.stringify([event])], {type : "application/json; charset=utf-8"});
       navigator.sendBeacon(eventsUrl, payload)
@@ -241,7 +241,7 @@
     log(event);
 
     if (canTrackNow) {
-      trackNow(event);
+      trackEventNow(event);
     } else {
       eventQueue.push(event);
       saveEventQueue();
