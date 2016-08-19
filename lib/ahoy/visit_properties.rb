@@ -8,11 +8,11 @@ module Ahoy
 
     KEYS = REQUEST_KEYS + TRAFFIC_SOURCE_KEYS + UTM_PARAMETER_KEYS + TECHNOLOGY_KEYS + LOCATION_KEYS
 
-    delegate *REQUEST_KEYS, to: :request_deckhand
-    delegate *TRAFFIC_SOURCE_KEYS, to: :traffic_source_deckhand
-    delegate *(UTM_PARAMETER_KEYS + [:landing_params]), to: :utm_parameter_deckhand
-    delegate *TECHNOLOGY_KEYS, to: :technology_deckhand
-    delegate *LOCATION_KEYS, to: :location_deckhand
+    delegate(*REQUEST_KEYS, to: :request_deckhand)
+    delegate(*TRAFFIC_SOURCE_KEYS, to: :traffic_source_deckhand)
+    delegate(*(UTM_PARAMETER_KEYS + [:landing_params]), to: :utm_parameter_deckhand)
+    delegate(*TECHNOLOGY_KEYS, to: :technology_deckhand)
+    delegate(*LOCATION_KEYS, to: :location_deckhand)
 
     def initialize(request, options = {})
       @request = request
