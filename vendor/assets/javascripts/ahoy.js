@@ -98,10 +98,6 @@
   }
 
   function trackEvent(event) {
-    if (!ahoy.getVisitId()) {
-      ready(createVisit)
-    }
-
     ready( function () {
       // ensure JSON is defined
       if (canStringify) {
@@ -220,9 +216,15 @@
   };
 
   ahoy.track = function (name, properties) {
+    if (!ahoy.getVisitId()) {
+      ready(createVisit)
+    }
+
     // generate unique id
     var event = {
       id: generateId(),
+      visit_token: ahoy.getVisitId(),
+      visitor_token: ahoy.getVisitorId(),
       name: name,
       properties: properties,
       time: (new Date()).getTime() / 1000.0
