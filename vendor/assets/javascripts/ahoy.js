@@ -217,7 +217,8 @@
 
   ahoy.track = function (name, properties) {
     if (!ahoy.getVisitId()) {
-      ready(createVisit)
+      isReady = false;
+      createVisit();
     }
 
     // generate unique id
