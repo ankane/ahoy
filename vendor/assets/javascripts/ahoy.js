@@ -24,6 +24,9 @@
   var eventsUrl = ahoy.eventsUrl || "/ahoy/events";
   var canTrackNow = ahoy.trackNow && canStringify && typeof(window.navigator.sendBeacon) !== "undefined";
 
+  var csrfToken = "";
+  csrfToken = $('meta[name="csrf-token"]').attr('content');
+
   // cookies
 
   // http://www.quirksmode.org/js/cookies.html
@@ -108,6 +111,9 @@
           data: JSON.stringify([event]),
           contentType: "application/json; charset=utf-8",
           dataType: "json",
+          beforeSend: function (xhr) {
+            xhr.setRequestHeader('X-CSRF-Token', csrfToken);
+          },
           success: function() {
             // remove from queue
             for (var i = 0; i < eventQueue.length; i++) {
@@ -191,7 +197,17 @@
 
         log(data);
 
-        $.post(visitsUrl, data, setReady, "json");
+        $.ajax({
+          type: "POST",
+          url: visitsUrl,
+          data: JSON.stringify([data]),
+          contentType: "application/json; charset=utf-8",
+          dataType: "json",
+          beforeSend: function (xhr) {
+            xhr.setRequestHeader('X-CSRF-Token', csrfToken);
+          },
+          success: setReady
+        });
       } else {
         log("Cookies disabled");
         setReady();
