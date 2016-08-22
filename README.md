@@ -21,6 +21,14 @@ And add the javascript file in `app/assets/javascripts/application.js` after jQu
 //= require ahoy
 ```
 
+In your application layout file, make sure the call to `csrf_meta_tags` is
+placed **before** the link to `application.js`. For example, if you're using
+ERB, your `application.html.erb` would include something like this:
+```erb
+<%= csrf_meta_tags %>
+<%= javascript_include_tag 'application' %>
+```
+
 ## Choose a Data Store
 
 Ahoy supports a number of data stores out of the box.  You can start with one of them and customize as needed, or create your own store from scratch.

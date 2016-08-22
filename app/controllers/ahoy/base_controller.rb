@@ -1,7 +1,9 @@
 module Ahoy
   class BaseController < ApplicationController
-    # skip all filters except for authlogic
-    filters = _process_action_callbacks.map(&:filter) - [:load_authlogic]
+    # skip all filters except for authlogic and verify_authenticity_token
+    filters = _process_action_callbacks.map(&:filter) - [
+      :load_authlogic, :verify_authenticity_token
+    ]
     if Rails::VERSION::MAJOR >= 5
       skip_before_action(*filters, raise: false)
       skip_after_action(*filters, raise: false)
