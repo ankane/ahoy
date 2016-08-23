@@ -154,7 +154,7 @@ module Ahoy
     end
 
     def ensure_uuid(id)
-      Ahoy.ensure_uuid(id)
+      Ahoy.ensure_uuid(id) if id
     end
 
     def ensure_token(token)
