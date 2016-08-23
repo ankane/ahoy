@@ -87,6 +87,9 @@ module Ahoy
   mattr_accessor :api_only
   self.api_only = false
 
+  mattr_accessor :protect_from_forgery
+  self.protect_from_forgery = false
+
   def self.ensure_uuid(id)
     valid = UUIDTools::UUID.parse(id) rescue nil
     if valid

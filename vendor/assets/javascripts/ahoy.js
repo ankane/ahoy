@@ -129,34 +129,59 @@
     }
   }
 
+  // from jquery-ujs
+
+  function csrfToken() {
+    return $("meta[name=csrf-token]").attr("content");
+  }
+
+  function csrfParam() {
+    return $("meta[name=csrf-param]").attr("content");
+  }
+
+  function CSRFProtection(xhr) {
+    var token = csrfToken();
+    if (token) xhr.setRequestHeader("X-CSRF-Token", token);
+  }
+
+  function sendRequest(url, data, success) {
+    if (canStringify) {
+      $.ajax({
+        type: "POST",
+        url: url,
+        data: JSON.stringify(data),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        beforeSend: CSRFProtection,
+        success: success
+      });
+    }
+  }
+
   function trackEvent(event) {
     ready( function () {
-      // ensure JSON is defined
-      if (canStringify) {
-        $.ajax({
-          type: "POST",
-          url: eventsUrl(),
-          data: JSON.stringify([event]),
-          contentType: "application/json; charset=utf-8",
-          dataType: "json",
-          success: function() {
-            // remove from queue
-            for (var i = 0; i < eventQueue.length; i++) {
-              if (eventQueue[i].id == event.id) {
-                eventQueue.splice(i, 1);
-                break;
-              }
-            }
-            saveEventQueue();
+      sendRequest(eventsUrl(), {events: [event]}, function() {
+        // remove from queue
+        for (var i = 0; i < eventQueue.length; i++) {
+          if (eventQueue[i].id == event.id) {
+            eventQueue.splice(i, 1);
+            break;
           }
-        });
-      }
+        }
+        saveEventQueue();
+      });
     });
   }
 
   function trackEventNow(event) {
     ready( function () {
-      var payload = new Blob([JSON.stringify([event])], {type : "application/json; charset=utf-8"});
+      var data = {
+        events: [event]
+      }
+      var param = csrfParam();
+      var token = csrfToken();
+      if (param && token) data[param] = token;
+      var payload = new Blob([JSON.stringify(data)], {type : "application/json; charset=utf-8"});
       navigator.sendBeacon(eventsUrl(), payload);
     });
   }
@@ -222,7 +247,7 @@
 
         log(data);
 
-        $.post(visitsUrl(), data, setReady, "json");
+        sendRequest(visitsUrl(), data, setReady);
       } else {
         log("Cookies disabled");
         setReady();
@@ -256,32 +281,34 @@
   };
 
   ahoy.track = function (name, properties) {
-    if (!ahoy.getVisitId()) {
-      createVisit();
-    }
+    ready( function () {
+      if (!ahoy.getVisitId()) {
+        createVisit();
+      }
 
-    // generate unique id
-    var event = {
-      id: generateId(),
-      visit_token: ahoy.getVisitId(),
-      visitor_token: ahoy.getVisitorId(),
-      name: name,
-      properties: properties,
-      time: (new Date()).getTime() / 1000.0
-    };
-    log(event);
+      // generate unique id
+      var event = {
+        id: generateId(),
+        visit_token: ahoy.getVisitId(),
+        visitor_token: ahoy.getVisitorId(),
+        name: name,
+        properties: properties,
+        time: (new Date()).getTime() / 1000.0
+      };
+      log(event);
 
-    if (canTrackNow()) {
-      trackEventNow(event);
-    } else {
-      eventQueue.push(event);
-      saveEventQueue();
+      if (canTrackNow()) {
+        trackEventNow(event);
+      } else {
+        eventQueue.push(event);
+        saveEventQueue();
 
-      // wait in case navigating to reduce duplicate events
-      setTimeout( function () {
-        trackEvent(event);
-      }, 1000);
-    }
+        // wait in case navigating to reduce duplicate events
+        setTimeout( function () {
+          trackEvent(event);
+        }, 1000);
+      }
+    });
   };
 
   ahoy.trackView = function () {
@@ -324,7 +351,7 @@
     ahoy.trackChanges();
   };
 
-  createVisit();
+  $(createVisit);
 
   // push events from queue
   try {
