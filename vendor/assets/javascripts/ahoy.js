@@ -294,7 +294,7 @@
     var event = {
       id: generateId(),
       name: name,
-      properties: properties,
+      properties: properties || {},
       time: (new Date()).getTime() / 1000.0
     };
 
