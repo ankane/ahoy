@@ -158,9 +158,20 @@
     }
   }
 
+  function eventData(event) {
+    var data = {
+      events: [event],
+      visit_token: event.visit_token,
+      visitor_token: event.visitor_token
+    };
+    delete event.visit_token;
+    delete event.visitor_token;
+    return data;
+  }
+
   function trackEvent(event) {
     ready( function () {
-      sendRequest(eventsUrl(), {events: [event]}, function() {
+      sendRequest(eventsUrl(), eventData(event), function() {
         // remove from queue
         for (var i = 0; i < eventQueue.length; i++) {
           if (eventQueue[i].id == event.id) {
@@ -175,9 +186,7 @@
 
   function trackEventNow(event) {
     ready( function () {
-      var data = {
-        events: [event]
-      }
+      var data = eventData(event);
       var param = csrfParam();
       var token = csrfToken();
       if (param && token) data[param] = token;

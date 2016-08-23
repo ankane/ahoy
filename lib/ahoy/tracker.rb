@@ -12,6 +12,8 @@ module Ahoy
     def track(name, properties = {}, options = {})
       if exclude?
         debug "Event excluded"
+      elsif missing_params?
+        debug "Missing required parameters"
       else
         options = options.dup
 
@@ -28,6 +30,8 @@ module Ahoy
     def track_visit(options = {})
       if exclude?
         debug "Visit excluded"
+      elsif missing_params?
+        debug "Missing required parameters"
       else
         if options[:defer]
           set_cookie("ahoy_track", true, nil, false)
@@ -60,15 +64,19 @@ module Ahoy
     end
 
     def visit_id
-      @visit_id ||= ensure_uuid(existing_visit_id || visit_token_helper)
+      @visit_id ||= ensure_uuid(visit_token_helper)
     end
 
     def visitor_id
-      @visitor_id ||= ensure_uuid(existing_visitor_id || visitor_token_helper)
+      @visitor_id ||= ensure_uuid(visitor_token_helper)
     end
 
     def new_visit?
-      !existing_visit_id
+      !existing_visit_token
+    end
+
+    def new_visitor?
+      !existing_visitor_token
     end
 
     def set_visit_cookie
@@ -76,7 +84,7 @@ module Ahoy
     end
 
     def set_visitor_cookie
-      unless existing_visitor_id
+      if new_visitor?
         set_cookie("ahoy_visitor", visitor_id, Ahoy.visitor_duration)
       end
     end
@@ -87,7 +95,7 @@ module Ahoy
 
     # TODO better name
     def visit_properties
-      @visit_properties ||= Ahoy::VisitProperties.new(request, @options.slice(:api))
+      @visit_properties ||= Ahoy::VisitProperties.new(request, api: api?)
     end
 
     def visit_token
@@ -100,12 +108,16 @@ module Ahoy
 
     protected
 
-    def visit_token_helper
-      @visit_token_helper ||= existing_visit_id || (@options[:api] && request.params["visit_token"]) || (Ahoy.api_only ? nil : generate_id)
+    def api?
+      @options[:api]
     end
 
-    def visitor_token_helper
-      @visitor_token_helper ||= existing_visitor_id || (@options[:api] && request.params["visitor_token"]) || (Ahoy.api_only ? nil : generate_id)
+    def missing_params?
+      if api? && Ahoy.protect_from_forgery
+        !(existing_visit_token && existing_visitor_token)
+      else
+        false
+      end
     end
 
     def set_cookie(name, value, duration = nil, use_domain = true)
@@ -119,7 +131,7 @@ module Ahoy
     end
 
     def trusted_time(time)
-      if !time || (@options[:api] && !(1.minute.ago..Time.now).cover?(time))
+      if !time || (api? && !(1.minute.ago..Time.now).cover?(time))
         Time.zone.now
       else
         time
@@ -145,12 +157,62 @@ module Ahoy
       @store.generate_id
     end
 
-    def existing_visit_id
-      @existing_visit_id ||= request && (request.headers["Ahoy-Visit"] || request.cookies["ahoy_visit"])
+    def visit_token_helper
+      @visit_token_helper ||= begin
+        token = existing_visit_token
+        token ||= generate_id unless api?
+        token
+      end
     end
 
-    def existing_visitor_id
-      @existing_visitor_id ||= request && (request.headers["Ahoy-Visitor"] || request.cookies["ahoy_visitor"])
+    def visitor_token_helper
+      @visitor_token_helper ||= begin
+        token = existing_visitor_token
+        token ||= generate_id unless api?
+        token
+      end
+    end
+
+    def existing_visit_token
+      @existing_visit_token ||= begin
+        token = visit_header
+        token ||= visit_cookie unless api? && Ahoy.protect_from_forgery
+        token ||= visit_param if api?
+        token
+      end
+    end
+
+    def existing_visitor_token
+      @existing_visitor_token ||= begin
+        token = visitor_header
+        token ||= visitor_cookie unless api? && Ahoy.protect_from_forgery
+        token ||= visitor_param if api?
+        token
+      end
+    end
+
+    def visit_cookie
+      @visit_cookie ||= request && request.cookies["ahoy_visit"]
+    end
+
+    def visitor_cookie
+      @visitor_cookie ||= request && request.cookies["ahoy_visitor"]
+    end
+
+    def visit_header
+      @visit_header ||= request && request.headers["Ahoy-Visit"]
+    end
+
+    def visitor_header
+      @visitor_header ||= request && request.headers["Ahoy-Visitor"]
+    end
+
+    def visit_param
+      @visit_param ||= request && request.params["visit_token"]
+    end
+
+    def visitor_param
+      @visitor_param ||= request && request.params["visitor_token"]
     end
 
     def ensure_uuid(id)
@@ -158,7 +220,7 @@ module Ahoy
     end
 
     def ensure_token(token)
-      token.to_s.gsub(/[^a-z0-9\-]/i, "").first(64)
+      token.to_s.gsub(/[^a-z0-9\-]/i, "").first(64) if token
     end
 
     def debug(message)
