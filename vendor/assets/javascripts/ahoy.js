@@ -290,21 +290,26 @@
   };
 
   ahoy.track = function (name, properties) {
+    // generate unique id
+    var event = {
+      id: generateId(),
+      name: name,
+      properties: properties,
+      time: (new Date()).getTime() / 1000.0
+    };
+
+    // wait for createVisit to log
+    $( function () {
+      log(event);
+    });
+
     ready( function () {
       if (!ahoy.getVisitId()) {
         createVisit();
       }
 
-      // generate unique id
-      var event = {
-        id: generateId(),
-        visit_token: ahoy.getVisitId(),
-        visitor_token: ahoy.getVisitorId(),
-        name: name,
-        properties: properties,
-        time: (new Date()).getTime() / 1000.0
-      };
-      log(event);
+      event.visit_token = ahoy.getVisitId();
+      event.visitor_token = ahoy.getVisitorId();
 
       if (canTrackNow()) {
         trackEventNow(event);
