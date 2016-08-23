@@ -84,6 +84,9 @@ module Ahoy
   mattr_accessor :job_queue
   self.job_queue = :ahoy
 
+  mattr_accessor :api_only
+  self.api_only = false
+
   def self.ensure_uuid(id)
     valid = UUIDTools::UUID.parse(id) rescue nil
     if valid

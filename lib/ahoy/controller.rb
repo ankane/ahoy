@@ -6,12 +6,12 @@ module Ahoy
       base.helper_method :current_visit
       base.helper_method :ahoy
       if base.respond_to?(:before_action)
-        base.before_action :set_ahoy_cookies
-        base.before_action :track_ahoy_visit
+        base.before_action :set_ahoy_cookies, unless: -> { Ahoy.api_only }
+        base.before_action :track_ahoy_visit, unless: -> { Ahoy.api_only }
         base.before_action :set_ahoy_request_store
       else
-        base.before_filter :set_ahoy_cookies
-        base.before_filter :track_ahoy_visit
+        base.before_filter :set_ahoy_cookies, unless: -> { Ahoy.api_only }
+        base.before_filter :track_ahoy_visit, unless: -> { Ahoy.api_only }
         base.before_filter :set_ahoy_request_store
       end
     end

@@ -101,11 +101,11 @@ module Ahoy
     protected
 
     def visit_token_helper
-      @visit_token_helper ||= existing_visit_id || (@options[:api] && request.params["visit_token"]) || generate_id
+      @visit_token_helper ||= existing_visit_id || (@options[:api] && request.params["visit_token"]) || (Ahoy.api_only ? nil : generate_id)
     end
 
     def visitor_token_helper
-      @visitor_token_helper ||= existing_visitor_id || (@options[:api] && request.params["visitor_token"]) || generate_id
+      @visitor_token_helper ||= existing_visitor_id || (@options[:api] && request.params["visitor_token"]) || (Ahoy.api_only ? nil : generate_id)
     end
 
     def set_cookie(name, value, duration = nil, use_domain = true)
