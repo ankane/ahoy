@@ -114,8 +114,13 @@ module Ahoy
 end
 
 if defined?(Rails)
-  ActionController::Base.send :include, Ahoy::Controller
-  ActiveRecord::Base.send(:extend, Ahoy::Model) if defined?(ActiveRecord)
+  ActiveSupport.on_load(:action_controller) do
+    ActionController::Base.send :include, Ahoy::Controller
+  end
+
+  ActiveSupport.on_load(:active_record) do
+    ActiveRecord::Base.send(:extend, Ahoy::Model)
+  end
 
   # ensure logger silence will not be added by activerecord-session_store
   # otherwise, we get SystemStackError: stack level too deep
