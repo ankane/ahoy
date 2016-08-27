@@ -1,3 +1,7 @@
+## 1.5.2
+
+- Better support for Rails 5
+
 ## 1.5.1
 
 - Restored throttling after removing side effects
