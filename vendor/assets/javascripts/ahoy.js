@@ -15,10 +15,11 @@
     urlPrefix: "",
     visitsUrl: "/ahoy/visits",
     eventsUrl: "/ahoy/events",
-    domain: null,
+    cookieDomain: null,
     page: null,
     platform: "Web",
-    trackNow: false
+    useBeacon: false,
+    startOnReady: true
   };
 
   var ahoy = window.ahoy || window.Ahoy || {};
@@ -52,7 +53,7 @@
   }
 
   function canTrackNow() {
-    return config.trackNow && canStringify && typeof(window.navigator.sendBeacon) !== "undefined";
+    return (config.useBeacon || config.trackNow) && canStringify && typeof(window.navigator.sendBeacon) !== "undefined";
   }
 
   // cookies
@@ -66,8 +67,9 @@
       date.setTime(date.getTime() + (ttl * 60 * 1000));
       expires = "; expires=" + date.toGMTString();
     }
-    if (config.domain) {
-      cookieDomain = "; domain=" + config.domain;
+    var domain = config.cookieDomain || config.domain;
+    if (domain) {
+      cookieDomain = "; domain=" + domain;
     }
     document.cookie = name + "=" + escape(value) + expires + cookieDomain + "; path=/";
   }
@@ -365,18 +367,24 @@
     ahoy.trackChanges();
   };
 
-  $(createVisit);
+  ahoy.start = function () {
+    createVisit();
 
-  // push events from queue
-  try {
-    eventQueue = JSON.parse(getCookie("ahoy_events") || "[]");
-  } catch (e) {
-    // do nothing
-  }
+    // push events from queue
+    try {
+      eventQueue = JSON.parse(getCookie("ahoy_events") || "[]");
+    } catch (e) {
+      // do nothing
+    }
 
-  for (var i = 0; i < eventQueue.length; i++) {
-    trackEvent(eventQueue[i]);
-  }
+    for (var i = 0; i < eventQueue.length; i++) {
+      trackEvent(eventQueue[i]);
+    }
+
+    ahoy.start = function () {};
+  };
+
+  if (config.startOnReady) { $(ahoy.start); }
 
   window.ahoy = ahoy;
 }(window));
