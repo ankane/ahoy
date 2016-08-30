@@ -9,7 +9,7 @@ module Ahoy
       @options = options
     end
 
-    def track(name, properties = {}, options = {})
+    def track(name, properties = {}, options = {}, &block)
       if exclude?
         debug "Event excluded"
       else
@@ -18,14 +18,14 @@ module Ahoy
         options[:time] = trusted_time(options[:time])
         options[:id] = ensure_uuid(options[:id] || generate_id)
 
-        @store.track_event(name, properties, options)
+        @store.track_event(name, properties, options, &block)
       end
       true
     rescue => e
       report_exception(e)
     end
 
-    def track_visit(options = {})
+    def track_visit(options = {}, &block)
       if exclude?
         debug "Visit excluded"
       else
@@ -36,7 +36,7 @@ module Ahoy
 
           options[:started_at] ||= Time.zone.now
 
-          @store.track_visit(options)
+          @store.track_visit(options, &block)
         end
       end
       true
