@@ -139,7 +139,7 @@ class Ahoy::Store < Ahoy::Stores::BaseStore
 end
 ```
 
-See the [ActiveRecordStore](https://github.com/ankane/ahoy/blob/master/lib/ahoy/stores/active_record_store.rb) for an example.
+See the [ActiveRecordTokenStore](https://github.com/ankane/ahoy/blob/master/lib/ahoy/stores/active_record_token_store.rb) for an example.
 
 ## How It Works
 
@@ -542,7 +542,7 @@ Ahoy.mount = false
 
 ### 1.4.0
 
-There’s nothing to do, but it’s worth noting the default store was changed from `ActiveRecordStore` to `ActiveRecordTokenStore` for new installations.
+There’s nothing to do, but it’s worth noting the default store was changed from `ActiveRecordStore` to `ActiveRecordTokenStore` for new installations. `ActiveRecordStore` will continue to be supported.
 
 ### json -> jsonb
 
