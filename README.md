@@ -238,6 +238,8 @@ class Ahoy::Store < Ahoy::Stores::ActiveRecordTokenStore
 end
 ```
 
+Some methods you can use are `request`, `controller`, `visit_properties`, and `ahoy`.
+
 ### Customize User
 
 If you use a method other than `current_user`, set it here:
