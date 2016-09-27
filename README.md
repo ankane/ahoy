@@ -499,6 +499,23 @@ Ahoy::Event.where(name: "Viewed product").where_properties(product_id: 123).coun
 
 **Note:** If you get a `NoMethodError`, upgrade Ahoy and add `include Ahoy::Properties` to your model.
 
+### Request Throttling
+
+By default, Ahoy uses [rack-attack](https://github.com/kickstarter/rack-attack) to throttle requests. To turn this off,  modify the `throttle` flag on the Ahoy object.
+
+```ruby
+# only throttle ahoy requests in production
+Ahoy.throttle = ENV['RACK_ENV'] == 'production'
+```
+
+The default throttle is 20 requests per minute. This can be overridden using the `throttle_limit` and `throttle_period` options.
+
+```ruby
+# limit number of requests to 100 requests every 5 minutes
+Ahoy.throttle_limit = 100
+Ahoy.throttle_period = 5.minutes
+```
+
 ## Native Apps
 
 ### Visits
