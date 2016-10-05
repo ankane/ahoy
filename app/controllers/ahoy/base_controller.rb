@@ -15,7 +15,9 @@ module Ahoy
       before_filter :verify_request_size
     end
 
-    protect_from_forgery with: :null_session, if: -> { Ahoy.protect_from_forgery }
+    if respond_to?(:protect_from_forgery)
+      protect_from_forgery with: :null_session, if: -> { Ahoy.protect_from_forgery }
+    end
 
     protected
 
