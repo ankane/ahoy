@@ -4,9 +4,9 @@ module Ahoy
       events =
         if params[:name]
           # legacy API
-          [params]
+          [request.params]
         elsif params[:events]
-          params[:events]
+          request.params[:events]
         else
           begin
             ActiveSupport::JSON.decode(request.body.read)
