@@ -1,3 +1,7 @@
+## 1.5.3 [unreleased]
+
+- Fixed error with Rails 5 and Mongoid 6
+
 ## 1.5.2
 
 - Better support for Rails 5
