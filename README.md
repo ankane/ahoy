@@ -499,7 +499,16 @@ With ActiveRecord, use:
 Ahoy::Event.where(name: "Viewed product").where_properties(product_id: 123).count
 ```
 
-**Note:** If you get a `NoMethodError`, upgrade Ahoy and add `include Ahoy::Properties` to your model.
+**Note:** If you get a `NoMethodError`, upgrade Ahoy and add `include Ahoy::Properties` to the Ahoy::Event class:
+
+```ruby
+module Ahoy
+  class Event < ActiveRecord::Base
+    include Ahoy::Properties
+    ...
+  end
+end
+```
 
 ## Native Apps
 
