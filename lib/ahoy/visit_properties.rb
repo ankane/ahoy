@@ -46,7 +46,7 @@ module Ahoy
     end
 
     def utm_parameter_deckhand
-      @utm_parameter_deckhand ||= Deckhands::UtmParameterDeckhand.new(request_deckhand.landing_page)
+      @utm_parameter_deckhand ||= Deckhands::UtmParameterDeckhand.new(request_deckhand.landing_page, request_deckhand.params)
     end
 
     def technology_deckhand

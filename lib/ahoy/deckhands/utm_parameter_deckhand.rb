@@ -1,8 +1,9 @@
 module Ahoy
   module Deckhands
     class UtmParameterDeckhand
-      def initialize(landing_page)
+      def initialize(landing_page, params = nil)
         @landing_page = landing_page
+        @params = params || {}
       end
 
       def landing_params
@@ -14,7 +15,7 @@ module Ahoy
 
       %w(utm_source utm_medium utm_term utm_content utm_campaign).each do |name|
         define_method name do
-          landing_params[name]
+          @params[name] || landing_params[name]
         end
       end
     end

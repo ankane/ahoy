@@ -44,8 +44,6 @@ module Ahoy
         params["screen_width"]
       end
 
-      private
-
       def params
         @params ||= request.params
       end
