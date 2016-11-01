@@ -56,7 +56,7 @@ module Ahoy
       end
 
       def visit
-        @visit ||= visit_model.where(visit_token: ahoy.visit_token).first if ahoy.visit_token
+        @visit ||= (visit_model.where(visit_token: ahoy.visit_token).first if ahoy.visit_token)
       end
 
       def exclude?
