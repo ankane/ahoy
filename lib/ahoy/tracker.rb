@@ -160,7 +160,7 @@ module Ahoy
     def visit_token_helper
       @visit_token_helper ||= begin
         token = existing_visit_token
-        token ||= generate_id
+        token ||= generate_id unless Ahoy.api_only
         token
       end
     end
@@ -168,7 +168,7 @@ module Ahoy
     def visitor_token_helper
       @visitor_token_helper ||= begin
         token = existing_visitor_token
-        token ||= generate_id
+        token ||= generate_id unless Ahoy.api_only
         token
       end
     end
