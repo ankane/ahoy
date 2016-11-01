@@ -1,6 +1,7 @@
 ## 1.5.3 [unreleased]
 
 - Fixed error with Rails 5 and Mongoid 6
+- Fixed regression with server not generating visit and visitor tokens
 
 ## 1.5.2
 
