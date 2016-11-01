@@ -1,7 +1,8 @@
-## 1.5.3 [unreleased]
+## 1.5.3
 
 - Fixed error with Rails 5 and Mongoid 6
 - Fixed regression with server not generating visit and visitor tokens
+- Accept UTM parameters as request parameters (for native apps)
 
 ## 1.5.2
 
