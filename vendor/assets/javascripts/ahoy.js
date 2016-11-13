@@ -2,7 +2,7 @@
  * Ahoy.js
  * Simple, powerful JavaScript analytics
  * https://github.com/ankane/ahoy.js
- * v0.1.0
+ * v0.2.0
  * MIT License
  */
 
@@ -327,12 +327,20 @@
     });
   };
 
-  ahoy.trackView = function () {
+  ahoy.trackView = function (additionalProperties) {
     var properties = {
       url: window.location.href,
       title: document.title,
       page: page()
     };
+
+    if (additionalProperties) {
+      for(var propName in additionalProperties) {
+        if (additionalProperties.hasOwnProperty(propName)) {
+          properties[propName] = additionalProperties[propName];
+        }
+      }
+    }
     ahoy.track("$view", properties);
   };
 
@@ -384,7 +392,11 @@
     ahoy.start = function () {};
   };
 
-  if (config.startOnReady) { $(ahoy.start); }
+  $( function () {
+    if (config.startOnReady) {
+      ahoy.start();
+    }
+  });
 
   window.ahoy = ahoy;
 }(window));
