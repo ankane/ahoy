@@ -510,16 +510,15 @@ module Ahoy
 end
 ```
 
-### Request Throttling
+### Throttling
 
-By default, Ahoy uses [rack-attack](https://github.com/kickstarter/rack-attack) to throttle requests. To turn this off,  modify the `throttle` flag on the Ahoy object.
+By default, Ahoy uses [rack-attack](https://github.com/kickstarter/rack-attack) to throttle requests to Ahoy endpoints. Turn this off with:
 
 ```ruby
-# only throttle ahoy requests in production
-Ahoy.throttle = ENV['RACK_ENV'] == 'production'
+Ahoy.throttle = false
 ```
 
-The default throttle is 20 requests per minute. This can be overridden using the `throttle_limit` and `throttle_period` options.
+The default limit is 20 requests per minute. This can be overridden with:
 
 ```ruby
 # limit number of requests to 100 requests every 5 minutes
