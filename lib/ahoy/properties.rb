@@ -24,7 +24,7 @@ module Ahoy
               relation = relation.where("properties REGEXP ?", "[{,]#{{k.to_s => v}.to_json.sub(/\A\{/, "").sub(/\}\z/, "").gsub("+", "\\\\+")}[,}]")
             end
           end
-        when /postgres/
+        when /postgres|postgis/
           if column_type == :jsonb || column_type == :json
             properties.each do |k, v|
               relation =
