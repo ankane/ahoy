@@ -6,6 +6,8 @@ Ahoy provides a solid foundation to track visits and events in Ruby, JavaScript,
 
 :postbox: To track emails, check out [Ahoy Email](https://github.com/ankane/ahoy_email).
 
+:maple_leaf: For A/B testing, check out [Field Test](https://github.com/ankane/field_test).
+
 ## Installation
 
 Add this line to your application’s Gemfile:
