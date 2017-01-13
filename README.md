@@ -305,7 +305,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def track_action
-    ahoy.track "Processed #{controller_name}##{action_name}", request.filtered_parameters
+    ahoy.track "Viewed #{controller_name}##{action_name}"
   end
 end
 ```
