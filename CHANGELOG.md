@@ -36,6 +36,7 @@
 - Detect database for `rails g ahoy:stores:active_record` for easier installation
 - Use `safely` as default exception handler
 - Fixed issue with log silencer
+- Use multi-column indexes on `ahoy_events` table creation
 
 ## 1.3.1
 

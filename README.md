@@ -571,7 +571,14 @@ Ahoy.mount = false
 
 ### 1.4.0
 
-There’s nothing to do, but it’s worth noting the default store was changed from `ActiveRecordStore` to `ActiveRecordTokenStore` for new installations. `ActiveRecordStore` will continue to be supported.
+There’s nothing mandatory to do, but it’s worth noting the default store was changed from `ActiveRecordStore` to `ActiveRecordTokenStore` for new installations. `ActiveRecordStore` will continue to be supported.
+
+**Optional** Consider migrating `ahoy_events` table to have the following multi-column index as this *may* benefit
+query performance depending on your usage:
+
+```ruby
+add_index :ahoy_events, [:name, :time]
+```
 
 ### json -> jsonb
 
