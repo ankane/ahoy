@@ -1,3 +1,8 @@
+## 1.5.4
+
+- Fixed issue with duplicate events
+- Added support for PostGIS for `where_properties`
+
 ## 1.5.3
 
 - Fixed error with Rails 5 and Mongoid 6
