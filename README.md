@@ -33,6 +33,7 @@ Ahoy supports a number of data stores out of the box.  You can start with one of
 - [Fluentd](#fluentd)
 - [RabbitMQ](#rabbitmq)
 - [NATS](#nats-master)
+- [NSQ](#nsq-master)
 - [Amazon Kinesis Firehose](#amazon-kinesis-firehose)
 - [Logs](#logs)
 - [Custom](#custom)
@@ -115,6 +116,22 @@ rails generate ahoy:stores:nats
 ```
 
 Use `ENV["NATS_URL"]` to configure.
+
+### NSQ [master]
+
+Add [nsq-ruby](https://github.com/wistia/nsq-ruby) to your Gemfile.
+
+```ruby
+gem 'nsq-ruby'
+```
+
+And run:
+
+```sh
+rails generate ahoy:stores:nsq
+```
+
+Use `ENV["NSQ_URL"]` to configure.
 
 ### Amazon Kinesis Firehose
 
