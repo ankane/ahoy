@@ -29,12 +29,7 @@ Ahoy supports a number of data stores out of the box.  You can start with one of
 
 - [PostgreSQL, MySQL, or SQLite](#postgresql-mysql-or-sqlite)
 - [MongoDB](#mongodb)
-- [Kafka](#kafka)
-- [Fluentd](#fluentd)
-- [RabbitMQ](#rabbitmq)
-- [NATS](#nats-master)
-- [NSQ](#nsq-master)
-- [Amazon Kinesis Firehose](#amazon-kinesis-firehose)
+- [Kafka](#kafka), [Fluentd](#fluentd), [RabbitMQ](#rabbitmq), [NATS](#nats-master), [NSQ](#nsq-master), or [Amazon Kinesis Firehose](#amazon-kinesis-firehose)
 - [Logs](#logs)
 - [Custom](#custom)
 
@@ -48,6 +43,8 @@ rake db:migrate
 ```
 
 ### MongoDB
+
+Run:
 
 ```sh
 rails generate ahoy:stores:mongoid
