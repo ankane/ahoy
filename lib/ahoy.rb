@@ -27,6 +27,7 @@ require "ahoy/stores/log_store"
 require "ahoy/stores/fluentd_store"
 require "ahoy/stores/mongoid_store"
 require "ahoy/stores/kafka_store"
+require "ahoy/stores/nats_store"
 require "ahoy/stores/kinesis_firehose_store"
 require "ahoy/stores/bunny_store"
 require "ahoy/engine" if defined?(Rails)
