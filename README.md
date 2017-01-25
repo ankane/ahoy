@@ -292,7 +292,7 @@ Exceptions are rescued so analytics do not break your app. Ahoy uses [Safely](ht
 To customize this, use:
 
 ```ruby
-Safely.report_exception_method = proc { |e| Rollbar.error(e) }
+Safely.report_exception_method = -> (e) { Rollbar.error(e) }
 ```
 
 ### Use Different Models
