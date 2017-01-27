@@ -1,3 +1,7 @@
+## 1.5.5 [unreleased]
+
+- Added support for Rails API
+
 ## 1.5.4
 
 - Fixed issue with duplicate events
