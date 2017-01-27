@@ -3,8 +3,10 @@ require "request_store"
 module Ahoy
   module Controller
     def self.included(base)
-      base.helper_method :current_visit
-      base.helper_method :ahoy
+      if base.respond_to?(:helper_method)
+        base.helper_method :current_visit
+        base.helper_method :ahoy
+      end
       if base.respond_to?(:before_action)
         base.before_action :set_ahoy_cookies, unless: -> { Ahoy.api_only }
         base.before_action :track_ahoy_visit, unless: -> { Ahoy.api_only }
