@@ -1,6 +1,7 @@
 ## 1.5.5 [unreleased]
 
 - Added support for Rails API
+- Added NATS and NSQ stores
 
 ## 1.5.4
 
