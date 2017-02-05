@@ -19,7 +19,7 @@ module Ahoy
           visit.save!
           geocode(visit)
         rescue *unique_exception_classes
-          # do nothing
+          @visit = visit_model.where(visit_token: ahoy.visit_token).first
         end
       end
 
