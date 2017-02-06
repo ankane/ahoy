@@ -19,7 +19,8 @@ module Ahoy
           visit.save!
           geocode(visit)
         rescue *unique_exception_classes
-          @visit = visit_model.where(visit_token: ahoy.visit_token).first
+          # reset to nil so subsequent calls to track_event will load visit from DB
+          @visit = nil
         end
       end
 
