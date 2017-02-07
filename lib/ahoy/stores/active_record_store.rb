@@ -18,7 +18,8 @@ module Ahoy
           visit.save!
           geocode(visit)
         rescue *unique_exception_classes
-          # do nothing
+          # reset to nil so subsequent calls to track_event will load visit from DB
+          @visit = nil
         end
       end
 
