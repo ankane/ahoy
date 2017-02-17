@@ -124,6 +124,7 @@ module Ahoy
       cookie = {
         value: value
       }
+      cookie[:secure]  = request.protocol =~ /https/
       cookie[:expires] = duration.from_now if duration
       domain = Ahoy.cookie_domain || Ahoy.domain
       cookie[:domain] = domain if domain && use_domain
