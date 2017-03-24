@@ -29,7 +29,7 @@ Ahoy supports a number of data stores out of the box.  You can start with one of
 
 - [PostgreSQL, MySQL, or SQLite](#postgresql-mysql-or-sqlite)
 - [MongoDB](#mongodb)
-- [Kafka](#kafka), [Fluentd](#fluentd), [RabbitMQ](#rabbitmq), [NATS](#nats-master), [NSQ](#nsq-master), or [Amazon Kinesis Firehose](#amazon-kinesis-firehose)
+- [Kafka](#kafka), [Fluentd](#fluentd), [RabbitMQ](#rabbitmq), [NATS](#nats), [NSQ](#nsq), or [Amazon Kinesis Firehose](#amazon-kinesis-firehose)
 - [Logs](#logs)
 - [Custom](#custom)
 
@@ -98,7 +98,7 @@ rails generate ahoy:stores:bunny
 
 Use `ENV["RABBITMQ_URL"]` to configure.
 
-### NATS [master]
+### NATS
 
 Add [nats-pure](https://github.com/nats-io/pure-ruby-nats) to your Gemfile.
 
@@ -114,7 +114,7 @@ rails generate ahoy:stores:nats
 
 Use `ENV["NATS_URL"]` to configure.
 
-### NSQ [master]
+### NSQ
 
 Add [nsq-ruby](https://github.com/wistia/nsq-ruby) to your Gemfile.
 
