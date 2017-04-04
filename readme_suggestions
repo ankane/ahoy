@@ -1,0 +1,15 @@
+This is a great gem truly.
+But I would like to ask for modifying the Readme file.
+Under `How It Works` and then uder Ruby section you just wrote
+   `ahoy.track "Viewed book", title: "Hot, Flat, and Crowded"`
+Which is very confusing about where to add this code whether 
+this should be added in model or in controller or in every 
+action of the controller.
+I am writing because I found that, a lot of developer 
+are seriously confused about the place to add this code 
+and you will find many questions regarding that at
+stackoverflow as well.
+So please update the readme file add the location of the code to 
+put on for both Javascript and Ruby.
+
+That will be very helpfull for everyone.
