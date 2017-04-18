@@ -10,7 +10,7 @@ Ahoy provides a solid foundation to track visits and events in Ruby, JavaScript,
 
 ## Installation
 
-Add this line to your application’s Gemfile:
+Ahoy is flexible, for a standard-rails installation add this line to your application’s Gemfile:
 
 ```ruby
 gem 'ahoy_matey'
@@ -22,6 +22,13 @@ And add the javascript file in `app/assets/javascripts/application.js` after jQu
 //= require jquery
 //= require ahoy
 ```
+## High-level overview for your standard rails app
+
+Ahoy works as an engine that comes with models (`Ahoy::Event` and `Visit`), provides controller helpers and JavaScript code.
+
+In your relevant controllers you will create `Event`s (`ahoy.track '', title: ''`).  From relevant views, you will use some JavaScript to finish off these events into `Visit`s.  The JavaScript will `POST` to endpoints provided by the Ahoy-engine.
+
+Ahoy is flexible, so you can also use it without the JavaScript part and also in non-Rails environments.  Read this README carefully to explore your options.
 
 ## Choose a Data Store
 
@@ -178,7 +185,7 @@ See the [ActiveRecordTokenStore](https://github.com/ankane/ahoy/blob/master/lib/
 
 ### Visits
 
-When someone visits your website, Ahoy creates a visit with lots of useful information.
+When someone visits your website, Ahoy can create a visit with lots of useful information.
 
 - **traffic source** - referrer, referring domain, landing page, search keyword
 - **location** - country, region, and city
@@ -208,6 +215,14 @@ ahoy.trackAll();
 See [Ahoy.js](https://github.com/ankane/ahoy.js) for a complete list of features.
 
 #### Ruby
+
+```ruby
+ahoy.track "Viewed book", title: "Hot, Flat, and Crowded"
+```
+
+Notice that no visits are created if you do not use the JavaScript part in this way.
+
+If you specifically want to create Visits, you will have to call
 
 ```ruby
 ahoy.track "Viewed book", title: "Hot, Flat, and Crowded"
@@ -359,6 +374,8 @@ Change this with:
 Ahoy.visit_duration = 30.minutes
 ```
 
+In a rails application you would typically put these calls in `config/initializers/ahoy.rb`.
+
 ### ActiveRecord
 
 Let’s associate orders with visits.
@@ -383,13 +400,15 @@ class Order < ActiveRecord::Base
 end
 ```
 
-When a visitor places an order, the `visit_id` column is automatically set. :tada:
+When a visitor places (`create`s) an order, the `visit_id` column is automatically set. :tada:
 
 Customize the column and class name with:
 
 ```ruby
 visitable :sign_up_visit, class_name: "Visit"
 ```
+
+Internally this works by a `after_create` hook.
 
 ### Doorkeeper
 
@@ -442,6 +461,8 @@ You can exclude API endpoints and other actions with:
 ```ruby
 skip_before_action :track_ahoy_visit
 ```
+
+In a rails application you would typically put these calls in `config/initializers/ahoy.rb`.
 
 ## Development
 
