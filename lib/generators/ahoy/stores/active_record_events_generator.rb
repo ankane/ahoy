@@ -28,7 +28,7 @@ module Ahoy
           unless @database.in?([nil, "postgresql", "postgresql-jsonb", "mysql", "sqlite"])
             raise Thor::Error, "Unknown database option"
           end
-          migration_template "active_record_events_migration.rb", "db/migrate/create_ahoy_events.rb"
+          migration_template "active_record_events_migration.rb", "db/migrate/create_ahoy_events.rb", migration_version: migration_version
         end
 
         def generate_model
@@ -45,6 +45,12 @@ module Ahoy
             "postgresql-jsonb"
           elsif postgresql_version >= 90200
             "postgresql"
+          end
+        end
+
+        def migration_version
+          if ActiveRecord::VERSION::MAJOR >= 5
+            "[#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}]"
           end
         end
       end

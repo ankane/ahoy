@@ -1,3 +1,7 @@
+## 1.6.0 [unreleased]
+
+- Added support for Rails 5.1
+
 ## 1.5.5
 
 - Added support for Rails API

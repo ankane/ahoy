@@ -27,7 +27,7 @@ module Ahoy
           unless options["database"].in?([nil, "postgresql", "postgresql-jsonb"])
             raise Thor::Error, "Unknown database option"
           end
-          migration_template "active_record_visits_migration.rb", "db/migrate/create_visits.rb"
+          migration_template "active_record_visits_migration.rb", "db/migrate/create_visits.rb", migration_version: migration_version
         end
 
         def generate_model
@@ -36,6 +36,12 @@ module Ahoy
 
         def create_initializer
           template "active_record_initializer.rb", "config/initializers/ahoy.rb"
+        end
+
+        def migration_version
+          if ActiveRecord::VERSION::MAJOR >= 5
+            "[#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}]"
+          end
         end
       end
     end
