@@ -1,3 +1,7 @@
+## 1.6.1 [unreleased]
+
+- Added `gin` index on properties for events
+
 ## 1.6.0
 
 - Added support for Rails 5.1
