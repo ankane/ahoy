@@ -4,6 +4,7 @@ ActiveRecord::Base.establish_connection adapter: "postgresql", database: "ahoy_t
 
 ActiveRecord::Migration.create_table :postgresql_jsonb_events, force: true do |t|
   t.jsonb :properties
+  t.index :properties, using: 'gin'
 end
 
 class PostgresqlJsonbEvent < PostgresqlBase
