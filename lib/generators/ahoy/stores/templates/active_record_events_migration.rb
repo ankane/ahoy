@@ -15,6 +15,6 @@ class <%= migration_class_name %> < ActiveRecord::Migration<%= migration_version
     add_index :ahoy_events, [:visit_id, :name]
     add_index :ahoy_events, [:user_id, :name]
     add_index :ahoy_events, [:name, :time]
-    <% if @database == "postgresql-jsonb" %>add_index :ahoy_events, :properties, using: 'gin'<% end %>
+    <% if @database == "postgresql-jsonb" && ActiveRecord::VERSION::MAJOR >= 5 %>add_index :ahoy_events, 'properties jsonb_path_ops', using: 'gin'<% end %>
   end
 end
