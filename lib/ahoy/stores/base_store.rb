@@ -72,8 +72,8 @@ module Ahoy
       end
 
       def geocode(visit)
-        if Ahoy.geocode == :async
-          Ahoy::GeocodeJob.set(queue: Ahoy.job_queue).perform_later(visit)
+        unless Ahoy.geocode == false
+          Ahoy.geocoder.geocode(visit)
         end
       end
 
