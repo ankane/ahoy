@@ -44,7 +44,7 @@ module PropertiesTest
   end
 
   def test_time
-    now = Time.now
+    now = Time.now.utc
     create_event value: now
     assert_equal 1, count_events(value: now)
   end
