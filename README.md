@@ -443,6 +443,26 @@ You can exclude API endpoints and other actions with:
 skip_before_action :track_ahoy_visit
 ```
 
+
+### Throttling
+
+By default, Ahoy throttles requests on all environments and responds with
+HTTP status `429 Too Many Requests` for an IP address that issues more than
+20 requests in a minute to any path beginning with `/ahoy/`.
+
+These are the throttle defaults, which you can customize in the initializer:
+
+```ruby
+Ahoy.throttle = true
+Ahoy.throttle_limit = 20
+Ahoy.throttle_period = 1.minute
+```
+
+For automated tests that assert an ahoy event is tracked, consider disabling
+the throttle or loosening the throttle limit and period restrictions to prevent
+false negative test failures.
+
+
 ## Development
 
 Ahoy is built with developers in mind.  You can run the following code in your browser’s console.
