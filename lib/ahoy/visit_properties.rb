@@ -4,7 +4,7 @@ module Ahoy
     TRAFFIC_SOURCE_KEYS = [:referring_domain, :search_keyword]
     UTM_PARAMETER_KEYS = [:utm_source, :utm_medium, :utm_term, :utm_content, :utm_campaign]
     TECHNOLOGY_KEYS = [:browser, :os, :device_type]
-    LOCATION_KEYS = [:country, :region, :city, :postal_code, :latitude, :longitude]
+    LOCATION_KEYS = [:country, :country_code, :region, :city, :postal_code, :latitude, :longitude]
 
     KEYS = REQUEST_KEYS + TRAFFIC_SOURCE_KEYS + UTM_PARAMETER_KEYS + TECHNOLOGY_KEYS + LOCATION_KEYS
 

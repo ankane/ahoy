@@ -17,6 +17,7 @@ class TestVisitProperties < Minitest::Test
       keys = @visit_properties.keys
 
       refute keys.include?(:country)
+      refute keys.include?(:country_code)      
       refute keys.include?(:region)
       refute keys.include?(:city)
     end
@@ -27,6 +28,7 @@ class TestVisitProperties < Minitest::Test
       keys = @visit_properties.keys
 
       refute keys.include?(:country)
+      refute keys.include?(:country_code)      
       refute keys.include?(:region)
       refute keys.include?(:city)
     end
