@@ -12,7 +12,7 @@ module Ahoy
 
         set_visit_properties(visit)
 
-        yield(visit) if block_given?
+        block.call(visit) if block_given?
 
         visit.upsert
         geocode(visit)
@@ -29,7 +29,7 @@ module Ahoy
             e.time = options[:time]
           end
 
-        yield(event) if block_given?
+        block.call(event) if block_given?
 
         event.upsert
       end

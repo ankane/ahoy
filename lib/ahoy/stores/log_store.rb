@@ -9,7 +9,7 @@ module Ahoy
         data[:user_id] = user.id if user
         data[:started_at] = options[:started_at]
 
-        yield(data) if block_given?
+        block.call(data) if block_given?
 
         log_visit(data)
       end
@@ -25,7 +25,7 @@ module Ahoy
         data[:user_id] = user.id if user
         data[:time] = options[:time]
 
-        yield(data) if block_given?
+        block.call(data) if block_given?
 
         log_event(data)
       end
