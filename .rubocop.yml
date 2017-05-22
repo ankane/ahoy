@@ -1,0 +1,50 @@
+require: rubocop-rspec
+
+Rails:
+  Enabled: true
+
+AllCops:
+  TargetRubyVersion: 2.2
+  Exclude:
+    - db/migrate/*
+
+LineLength:
+  Max: 100
+
+Metrics/MethodLength:
+  Max: 20
+
+Style/AlignHash:
+  EnforcedLastArgumentHashStyle: ignore_implicit
+
+Style/AlignParameters:
+  EnforcedStyle: with_fixed_indentation
+
+# Prevent Missing top-level class documentation comment.
+# Controllers documentation is not essential
+Documentation:
+  Enabled: false
+
+Lint/AmbiguousOperator:
+  Enabled: true
+
+Lint/Debugger:
+  Enabled: false
+
+Lint/UselessSetterCall:
+  Enabled: true
+
+Metrics/AbcSize:
+  Max: 15
+
+RSpec/FilePath:
+  Enabled: false
+
+RSpec/MultipleDescribes:
+  Enabled: false
+
+Style/NegatedIf:
+  Enabled: false
+
+Style/WhileUntilModifier:
+  Enabled: false
