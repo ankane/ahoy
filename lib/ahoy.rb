@@ -89,6 +89,10 @@ module Ahoy
   mattr_accessor :api_only
   self.api_only = false
 
+  mattr_accessor :preserve_callbacks
+  # Preserve Authlogic activation. Users of Authlogic will likely need this to properly obtain current_user.
+  self.preserve_callbacks = [:activate_authlogic]
+
   mattr_accessor :protect_from_forgery
   self.protect_from_forgery = false
 

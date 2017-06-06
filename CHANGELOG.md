@@ -1,3 +1,7 @@
+## 1.6.1
+
+- Added ability to define callbacks that should be preserved in Ahoy provided controllers
+
 ## 1.6.0
 
 - Added support for Rails 5.1
