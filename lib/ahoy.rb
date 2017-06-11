@@ -117,12 +117,11 @@ end
 
 if defined?(Rails)
   ActiveSupport.on_load(:action_controller) do
-    ActionController::Base.send :include, Ahoy::Controller
-    ActionController::API.send :include, Ahoy::Controller if defined?(ActionController::API)
+    include Ahoy::Controller
   end
 
   ActiveSupport.on_load(:active_record) do
-    ActiveRecord::Base.send(:extend, Ahoy::Model)
+    extend Ahoy::Model
   end
 
   # ensure logger silence will not be added by activerecord-session_store
