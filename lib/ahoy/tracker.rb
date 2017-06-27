@@ -1,11 +1,16 @@
+require 'forwardable'
+
 module Ahoy
   class Tracker
+    extend Forwardable
+
     attr_reader :request, :controller
 
     def initialize(options = {})
       @store = Ahoy::Store.new(options.merge(ahoy: self))
       @controller = options[:controller]
       @request = options[:request] || @controller.try(:request)
+      @cookie_jar = Ahoy::CookieJar.new(@request.cookie_jar)
       @options = options
     end
 
@@ -120,15 +125,7 @@ module Ahoy
       end
     end
 
-    def set_cookie(name, value, duration = nil, use_domain = true)
-      cookie = {
-        value: value
-      }
-      cookie[:expires] = duration.from_now if duration
-      domain = Ahoy.cookie_domain || Ahoy.domain
-      cookie[:domain] = domain if domain && use_domain
-      request.cookie_jar[name] = cookie
-    end
+    def_delegator :@cookie_jar, :set_cookie
 
     def trusted_time(time)
       if !time || (api? && !(1.minute.ago..Time.now).cover?(time))

@@ -15,6 +15,7 @@ require "ahoy/controller"
 require "ahoy/model"
 require "ahoy/visit_properties"
 require "ahoy/properties"
+require "ahoy/cookie_jar"
 require "ahoy/deckhands/location_deckhand"
 require "ahoy/deckhands/request_deckhand"
 require "ahoy/deckhands/technology_deckhand"
@@ -55,6 +56,9 @@ module Ahoy
   self.visitor_duration = 2.years
 
   mattr_accessor :cookie_domain
+
+  mattr_accessor :secure_cookies
+  self.secure_cookies = false
 
   mattr_accessor :track_visits_immediately
   self.track_visits_immediately = false
