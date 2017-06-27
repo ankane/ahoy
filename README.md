@@ -349,6 +349,17 @@ To track visits across multiple subdomains, use:
 Ahoy.cookie_domain = :all
 ```
 
+### Secure cookies
+
+To ensure that cookies set by Ahoy are sent only over secure
+connections, use:
+
+```ruby
+Ahoy.secure_cookies = true
+```
+
+This setting is disabled by default.
+
 ### Visit Duration
 
 By default, a new visit is created after 4 hours of inactivity.

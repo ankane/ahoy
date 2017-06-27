@@ -57,6 +57,9 @@ module Ahoy
 
   mattr_accessor :cookie_domain
 
+  mattr_accessor :secure_cookies
+  self.secure_cookies = false
+
   mattr_accessor :track_visits_immediately
   self.track_visits_immediately = false
 

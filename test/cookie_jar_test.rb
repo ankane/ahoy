@@ -45,6 +45,26 @@ class CookieJarTest < Minitest::Test
     end
   end
 
+  def test_dont_set_secure_cookie_when_secure_cookies_disabled
+    with_ahoy_setting(:secure_cookies, false) do
+      @subject.set_cookie("some_cookie", "some_value")
+    end
+
+    cookie = @cookies["some_cookie"]
+
+    refute cookie[:secure]
+  end
+
+  def test_set_secure_cookie_when_secure_cookies_enabled
+    with_ahoy_setting(:secure_cookies, true) do
+      @subject.set_cookie("some_cookie", "some_value")
+    end
+
+    cookie = @cookies["some_cookie"]
+
+    assert cookie[:secure]
+  end
+
   private
 
   def with_ahoy_setting(setting, value)
