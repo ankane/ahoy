@@ -2,8 +2,8 @@ module Ahoy
   module Model
     def visitable(name = nil, options = {})
       if name.is_a?(Hash)
-        name = nil
         options = name
+        name = nil
       end
       name ||= :visit
       class_eval do
