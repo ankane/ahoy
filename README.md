@@ -559,6 +559,10 @@ Ahoy.throttle_limit = 100
 Ahoy.throttle_period = 5.minutes
 ```
 
+## Tutorials
+
+- [Tracking Metrics with Ahoy and Blazer](https://gorails.com/episodes/internal-metrics-with-ahoy-and-blazer)
+
 ## Native Apps
 
 ### Visits
