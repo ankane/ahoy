@@ -15,7 +15,7 @@ module Ahoy
             seed_brokers: ENV["KAFKA_URL"],
             logger: Rails.logger
           )
-          at_exit { client.shutdown }
+          at_exit { producer.shutdown }
           client
         end
       end
