@@ -11,17 +11,19 @@ module Ahoy
 
       def client
         @client ||= begin
-          client = Kafka.new(
-            seed_brokers: ENV["KAFKA_URL"],
+          Kafka.new(
+            seed_brokers: ENV["KAFKA_URL"] || "localhost:9092",
             logger: Rails.logger
           )
-          at_exit { producer.shutdown }
-          client
         end
       end
 
       def producer
-        @producer ||= client.async_producer(delivery_interval: 3)
+        @producer ||= begin
+          producer = client.async_producer(delivery_interval: 3)
+          at_exit { producer.shutdown }
+          producer
+        end
       end
 
       def post(topic, data)
