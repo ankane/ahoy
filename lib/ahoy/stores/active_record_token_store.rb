@@ -2,6 +2,7 @@ module Ahoy
   module Stores
     class ActiveRecordTokenStore < BaseStore
       def track_visit(options, &block)
+        return if visit_model.where(visit_token: ahoy.visit_token).exists?
         @visit =
           visit_model.new do |v|
             v.visit_token = ahoy.visit_token
