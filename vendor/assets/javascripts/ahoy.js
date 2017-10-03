@@ -2,7 +2,7 @@
  * Ahoy.js
  * Simple, powerful JavaScript analytics
  * https://github.com/ankane/ahoy.js
- * v0.2.1
+ * v0.2.2
  * MIT License
  */
 
@@ -208,7 +208,7 @@
       id: $target.attr("id"),
       "class": $target.attr("class"),
       page: page(),
-      section: $target.closest("*[data-section]").data("section")
+      section: $target.closest("*[data-section]").attr("data-section")
     };
   }
 
