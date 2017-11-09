@@ -336,7 +336,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def track_action
-    ahoy.track "Viewed #{controller_name}##{action_name}"
+    ahoy.track "Viewed #{controller_path}##{action_name}", params: request.path_parameters
   end
 end
 ```
