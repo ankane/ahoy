@@ -642,7 +642,7 @@ remove_column :ahoy_events, :properties_json
 
 ### 1.0.0
 
-Add the following code to the end of `config/intializers/ahoy.rb`.
+Add the following code to the end of `config/initializers/ahoy.rb`.
 
 ```ruby
 class Ahoy::Store < Ahoy::Stores::ActiveRecordTokenStore
