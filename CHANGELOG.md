@@ -1,6 +1,7 @@
-## 1.6.1 [unreleased]
+## 1.6.1
 
 - Added `gin` index on properties for events
+- Fixed `visitable` options when name not provided
 
 ## 1.6.0
 
