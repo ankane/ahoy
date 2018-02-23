@@ -71,7 +71,7 @@
     if (domain) {
       cookieDomain = "; domain=" + domain;
     }
-    document.cookie = name + "=" + escape(value) + expires + cookieDomain + "; path=/";
+    document.cookie = name + "=" + encodeURIComponent(value) + expires + cookieDomain + "; path=/";
   }
 
   function getCookie(name) {
