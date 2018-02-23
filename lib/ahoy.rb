@@ -128,17 +128,19 @@ if defined?(Rails)
     extend Ahoy::Model
   end
 
-  # ensure logger silence will not be added by activerecord-session_store
-  # otherwise, we get SystemStackError: stack level too deep
-  begin
-    require "active_record/session_store/extension/logger_silencer"
-  rescue LoadError
-    require "ahoy/logger_silencer"
-    Logger.send :include, Ahoy::LoggerSilencer
-
+  if Rails.version < "4.2"
+    # ensure logger silence will not be added by activerecord-session_store
+    # otherwise, we get SystemStackError: stack level too deep
     begin
-      require "syslog/logger"
-      Syslog::Logger.send :include, Ahoy::LoggerSilencer
-    rescue LoadError; end
+      require "active_record/session_store/extension/logger_silencer"
+    rescue LoadError
+      require "ahoy/logger_silencer"
+      Logger.send :include, Ahoy::LoggerSilencer
+
+      begin
+        require "syslog/logger"
+        Syslog::Logger.send :include, Ahoy::LoggerSilencer
+      rescue LoadError; end
+    end
   end
 end
