@@ -1,3 +1,7 @@
+## 1.6.2 [unreleased]
+
+- Added `preserve_callbacks` option
+
 ## 1.6.1
 
 - Added `gin` index on properties for events
