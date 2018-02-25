@@ -9,6 +9,7 @@ require "safely/core"
 require "ahoy/base_store"
 require "ahoy/controller"
 require "ahoy/database_store"
+require "ahoy/helper"
 require "ahoy/model"
 require "ahoy/query_methods"
 require "ahoy/tracker"
@@ -100,6 +101,10 @@ end
 
 ActiveSupport.on_load(:active_record) do
   extend Ahoy::Model
+end
+
+ActiveSupport.on_load(:action_view) do
+  include Ahoy::Helper
 end
 
 # Mongoid
