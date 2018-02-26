@@ -131,19 +131,7 @@ See the [API spec](#api-spec).
 
 ### Associated Models
 
-Say we want to associate orders with visits. Ahoy can do this automatically.
-
-First, generate a migration and add a `visit_id` column (not needed for Mongoid).
-
-```ruby
-class AddVisitIdToOrders < ActiveRecord::Migration[5.1]
-  def change
-    add_column :orders, :visit_id, :bigint
-  end
-end
-```
-
-Then, add `visitable` to the model.
+Say we want to associate orders with visits. Ahoy can do this automatically. Just add `visitable` to the model.
 
 ```ruby
 class Order < ApplicationRecord
@@ -159,6 +147,16 @@ See where orders are coming from with simple joins:
 Order.joins(:visit).group("referring_domain").count
 Order.joins(:visit).group("city").count
 Order.joins(:visit).group("device_type").count
+```
+
+Here’s what the migration to add the `visit_id` column should look like:
+
+```ruby
+class AddVisitIdToOrders < ActiveRecord::Migration[5.1]
+  def change
+    add_column :orders, :visit_id, :bigint
+  end
+end
 ```
 
 Customize the column and class name with:
