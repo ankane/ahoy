@@ -1,4 +1,4 @@
-## 2.0.0 [unreleased]
+## 2.0.0
 
 - Removed dependency on jQuery
 - Use `navigator.sendBeacon` by default in supported browsers
