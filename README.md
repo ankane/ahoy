@@ -205,7 +205,7 @@ or use a proc
 Ahoy.user_method = ->(controller) { controller.true_user }
 ```
 
-### Doorkeeper
+#### Doorkeeper
 
 To attach the user with [Doorkeeper](https://github.com/doorkeeper-gem/doorkeeper), be sure you have a `current_resource_owner` method in `ApplicationController`.
 
