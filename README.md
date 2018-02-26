@@ -474,6 +474,20 @@ Send a `POST` request to `/ahoy/events` with `Content-Type: application/json` an
 }
 ```
 
+## Webpacker
+
+For Webpacker, use Yarn to install the JavaScript library:
+
+```sh
+yarn add ahoy.js
+```
+
+Then include it in your pack.
+
+```es6
+import ahoy from "ahoy.js";
+```
+
 ## History
 
 View the [changelog](https://github.com/ankane/ahoy/blob/master/CHANGELOG.md)
