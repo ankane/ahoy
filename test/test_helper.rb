@@ -3,22 +3,23 @@ Bundler.require(:default)
 require "minitest/autorun"
 require "minitest/pride"
 require "active_record"
+require "mongoid"
 
 ActiveRecord::Base.logger = ActiveSupport::Logger.new(STDOUT) if ENV["VERBOSE"]
 
 class PostgresqlBase < ActiveRecord::Base
-  include Ahoy::Properties
+  include Ahoy::QueryMethods
   establish_connection adapter: "postgresql", database: "ahoy_test"
   self.abstract_class = true
 end
 
 class MysqlBase < ActiveRecord::Base
-  include Ahoy::Properties
+  include Ahoy::QueryMethods
   establish_connection adapter: "mysql2", username: "root", database: "ahoy_test"
   self.abstract_class = true
 end
 
-module PropertiesTest
+module QueryMethodsTest
   def setup
     model.delete_all
   end

@@ -7,15 +7,9 @@ module Ahoy
         base.helper_method :current_visit
         base.helper_method :ahoy
       end
-      if base.respond_to?(:before_action)
-        base.before_action :set_ahoy_cookies, unless: -> { Ahoy.api_only }
-        base.before_action :track_ahoy_visit, unless: -> { Ahoy.api_only }
-        base.before_action :set_ahoy_request_store
-      else
-        base.before_filter :set_ahoy_cookies, unless: -> { Ahoy.api_only }
-        base.before_filter :track_ahoy_visit, unless: -> { Ahoy.api_only }
-        base.before_filter :set_ahoy_request_store
-      end
+      base.before_action :set_ahoy_cookies, unless: -> { Ahoy.api_only }
+      base.before_action :track_ahoy_visit, unless: -> { Ahoy.api_only }
+      base.before_action :set_ahoy_request_store
     end
 
     def ahoy
@@ -33,7 +27,7 @@ module Ahoy
 
     def track_ahoy_visit
       if ahoy.new_visit?
-        ahoy.track_visit(defer: !Ahoy.track_visits_immediately)
+        ahoy.track_visit(defer: !Ahoy.server_side_visits)
       end
     end
 

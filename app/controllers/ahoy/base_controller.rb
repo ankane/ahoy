@@ -6,12 +6,9 @@ module Ahoy
       skip_after_action(*filters, raise: false)
       skip_around_action(*filters, raise: false)
       before_action :verify_request_size
-    elsif respond_to?(:skip_action_callback)
+    else
       skip_action_callback *filters
       before_action :verify_request_size
-    else
-      skip_filter *filters
-      before_filter :verify_request_size
     end
 
     if respond_to?(:protect_from_forgery)

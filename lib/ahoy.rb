@@ -1,53 +1,21 @@
 require "active_support"
 require "active_support/core_ext"
 require "addressable/uri"
-require "browser"
 require "geocoder"
-require "referer-parser"
-require "user_agent_parser"
-require "request_store"
-require "uuidtools"
 require "safely/core"
 
-require "ahoy/version"
-require "ahoy/tracker"
+require "ahoy/base_store"
 require "ahoy/controller"
+require "ahoy/database_store"
 require "ahoy/model"
+require "ahoy/query_methods"
+require "ahoy/tracker"
+require "ahoy/version"
 require "ahoy/visit_properties"
-require "ahoy/properties"
-require "ahoy/deckhands/location_deckhand"
-require "ahoy/deckhands/request_deckhand"
-require "ahoy/deckhands/technology_deckhand"
-require "ahoy/deckhands/traffic_source_deckhand"
-require "ahoy/deckhands/utm_parameter_deckhand"
-require "ahoy/stores/base_store"
-require "ahoy/stores/active_record_store"
-require "ahoy/stores/active_record_token_store"
-require "ahoy/stores/log_store"
-require "ahoy/stores/fluentd_store"
-require "ahoy/stores/mongoid_store"
-require "ahoy/stores/kafka_store"
-require "ahoy/stores/nats_store"
-require "ahoy/stores/nsq_store"
-require "ahoy/stores/kinesis_firehose_store"
-require "ahoy/stores/bunny_store"
+
 require "ahoy/engine" if defined?(Rails)
-require "ahoy/warden" if defined?(Warden)
-
-# background jobs
-begin
-  require "active_job"
-rescue LoadError
-  # do nothing
-end
-require "ahoy/geocode_job" if defined?(ActiveJob)
-
-# deprecated
-require "ahoy/subscribers/active_record"
 
 module Ahoy
-  UUID_NAMESPACE = UUIDTools::UUID.parse("a82ae811-5011-45ab-a728-569df7499c5f")
-
   mattr_accessor :visit_duration
   self.visit_duration = 4.hours
 
@@ -56,8 +24,8 @@ module Ahoy
 
   mattr_accessor :cookie_domain
 
-  mattr_accessor :track_visits_immediately
-  self.track_visits_immediately = false
+  mattr_accessor :server_side_visits
+  self.server_side_visits = true
 
   mattr_accessor :quiet
   self.quiet = true
@@ -71,76 +39,44 @@ module Ahoy
   mattr_accessor :max_events_per_request
   self.max_events_per_request = 10
 
-  mattr_accessor :mount
-  self.mount = true
-
-  mattr_accessor :throttle
-  self.throttle = true
-
-  mattr_accessor :throttle_limit
-  self.throttle_limit = 20
-
-  mattr_accessor :throttle_period
-  self.throttle_period = 1.minute
-
   mattr_accessor :job_queue
   self.job_queue = :ahoy
+
+  mattr_accessor :api
+  self.api = false
 
   mattr_accessor :api_only
   self.api_only = false
 
+  mattr_accessor :protect_from_forgery
+  self.protect_from_forgery = true
+
   mattr_accessor :preserve_callbacks
-  # Preserve Authlogic activation. Users of Authlogic will likely need this to properly obtain current_user.
   self.preserve_callbacks = [:load_authlogic, :activate_authlogic]
 
-  mattr_accessor :protect_from_forgery
-  self.protect_from_forgery = false
-
-  def self.ensure_uuid(id)
-    valid = UUIDTools::UUID.parse(id) rescue nil
-    if valid
-      id
-    else
-      UUIDTools::UUID.sha1_create(UUID_NAMESPACE, id).to_s
-    end
+  mattr_accessor :user_method
+  self.user_method = lambda do |controller|
+    (controller.respond_to?(:current_user) && controller.current_user) || (controller.respond_to?(:current_resource_owner, true) && controller.send(:current_resource_owner)) || nil
   end
 
-  # deprecated
-
-  mattr_accessor :domain
-  mattr_accessor :visit_model
-  mattr_accessor :user_method
   mattr_accessor :exclude_method
-
-  mattr_accessor :subscribers
-  self.subscribers = []
 
   mattr_accessor :track_bots
   self.track_bots = false
+
+  mattr_accessor :token_generator
+  self.token_generator = -> { SecureRandom.uuid }
 end
 
-if defined?(Rails)
-  ActiveSupport.on_load(:action_controller) do
-    include Ahoy::Controller
-  end
+ActiveSupport.on_load(:action_controller) do
+  include Ahoy::Controller
+end
 
-  ActiveSupport.on_load(:active_record) do
-    extend Ahoy::Model
-  end
+ActiveSupport.on_load(:active_record) do
+  extend Ahoy::Model
+end
 
-  if Rails.version < "4.2"
-    # ensure logger silence will not be added by activerecord-session_store
-    # otherwise, we get SystemStackError: stack level too deep
-    begin
-      require "active_record/session_store/extension/logger_silencer"
-    rescue LoadError
-      require "ahoy/logger_silencer"
-      Logger.send :include, Ahoy::LoggerSilencer
-
-      begin
-        require "syslog/logger"
-        Syslog::Logger.send :include, Ahoy::LoggerSilencer
-      rescue LoadError; end
-    end
-  end
+# Mongoid
+if defined?(ActiveModel)
+  ActiveModel::Callbacks.include(Ahoy::Model)
 end

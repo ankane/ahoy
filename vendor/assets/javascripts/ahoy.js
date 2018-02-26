@@ -1,153 +1,266 @@
-/*
- * Ahoy.js
- * Simple, powerful JavaScript analytics
- * https://github.com/ankane/ahoy.js
- * v0.2.1
- * MIT License
- */
+(function webpackUniversalModuleDefinition(root, factory) {
+  if(typeof exports === 'object' && typeof module === 'object')
+    module.exports = factory();
+  else if(typeof define === 'function' && define.amd)
+    define([], factory);
+  else if(typeof exports === 'object')
+    exports["ahoy"] = factory();
+  else
+    root["ahoy"] = factory();
+})(typeof self !== 'undefined' ? self : this, function() {
+return /******/ (function(modules) { // webpackBootstrap
+/******/  // The module cache
+/******/  var installedModules = {};
+/******/
+/******/  // The require function
+/******/  function __webpack_require__(moduleId) {
+/******/
+/******/    // Check if module is in cache
+/******/    if(installedModules[moduleId]) {
+/******/      return installedModules[moduleId].exports;
+/******/    }
+/******/    // Create a new module (and put it into the cache)
+/******/    var module = installedModules[moduleId] = {
+/******/      i: moduleId,
+/******/      l: false,
+/******/      exports: {}
+/******/    };
+/******/
+/******/    // Execute the module function
+/******/    modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/    // Flag the module as loaded
+/******/    module.l = true;
+/******/
+/******/    // Return the exports of the module
+/******/    return module.exports;
+/******/  }
+/******/
+/******/
+/******/  // expose the modules object (__webpack_modules__)
+/******/  __webpack_require__.m = modules;
+/******/
+/******/  // expose the module cache
+/******/  __webpack_require__.c = installedModules;
+/******/
+/******/  // define getter function for harmony exports
+/******/  __webpack_require__.d = function(exports, name, getter) {
+/******/    if(!__webpack_require__.o(exports, name)) {
+/******/      Object.defineProperty(exports, name, {
+/******/        configurable: false,
+/******/        enumerable: true,
+/******/        get: getter
+/******/      });
+/******/    }
+/******/  };
+/******/
+/******/  // getDefaultExport function for compatibility with non-harmony modules
+/******/  __webpack_require__.n = function(module) {
+/******/    var getter = module && module.__esModule ?
+/******/      function getDefault() { return module['default']; } :
+/******/      function getModuleExports() { return module; };
+/******/    __webpack_require__.d(getter, 'a', getter);
+/******/    return getter;
+/******/  };
+/******/
+/******/  // Object.prototype.hasOwnProperty.call
+/******/  __webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/  // __webpack_public_path__
+/******/  __webpack_require__.p = "";
+/******/
+/******/  // Load entry module and return exports
+/******/  return __webpack_require__(__webpack_require__.s = 0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, exports, __webpack_require__) {
 
-/*jslint browser: true, indent: 2, plusplus: true, vars: true */
+"use strict";
 
-(function (window) {
-  "use strict";
 
-  var config = {
-    urlPrefix: "",
-    visitsUrl: "/ahoy/visits",
-    eventsUrl: "/ahoy/events",
-    cookieDomain: null,
-    page: null,
-    platform: "Web",
-    useBeacon: false,
-    startOnReady: true
-  };
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
 
-  var ahoy = window.ahoy || window.Ahoy || {};
+var _objectToFormdata = __webpack_require__(1);
 
-  ahoy.configure = function (options) {
-    for (var key in options) {
-      if (options.hasOwnProperty(key)) {
-        config[key] = options[key];
-      }
-    }
-  };
+var _objectToFormdata2 = _interopRequireDefault(_objectToFormdata);
 
-  // legacy
-  ahoy.configure(ahoy);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-  var $ = window.jQuery || window.Zepto || window.$;
-  var visitId, visitorId, track;
-  var visitTtl = 4 * 60; // 4 hours
-  var visitorTtl = 2 * 365 * 24 * 60; // 2 years
-  var isReady = false;
-  var queue = [];
-  var canStringify = typeof(JSON) !== "undefined" && typeof(JSON.stringify) !== "undefined";
-  var eventQueue = [];
+var config = {
+  urlPrefix: "",
+  visitsUrl: "/ahoy/visits",
+  eventsUrl: "/ahoy/events",
+  cookieDomain: null,
+  page: null,
+  platform: "Web",
+  useBeacon: true,
+  startOnReady: true
+}; /*
+    * Ahoy.js
+    * Simple, powerful JavaScript analytics
+    * https://github.com/ankane/ahoy.js
+    * v0.3.0
+    * MIT License
+    */
 
-  function visitsUrl() {
-    return config.urlPrefix + config.visitsUrl;
-  }
+var ahoy = window.ahoy || window.Ahoy || {};
 
-  function eventsUrl() {
-    return config.urlPrefix + config.eventsUrl;
-  }
-
-  function canTrackNow() {
-    return (config.useBeacon || config.trackNow) && canStringify && typeof(window.navigator.sendBeacon) !== "undefined";
-  }
-
-  // cookies
-
-  // http://www.quirksmode.org/js/cookies.html
-  function setCookie(name, value, ttl) {
-    var expires = "";
-    var cookieDomain = "";
-    if (ttl) {
-      var date = new Date();
-      date.setTime(date.getTime() + (ttl * 60 * 1000));
-      expires = "; expires=" + date.toGMTString();
-    }
-    var domain = config.cookieDomain || config.domain;
-    if (domain) {
-      cookieDomain = "; domain=" + domain;
-    }
-    document.cookie = name + "=" + escape(value) + expires + cookieDomain + "; path=/";
-  }
-
-  function getCookie(name) {
-    var i, c;
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for (i = 0; i < ca.length; i++) {
-      c = ca[i];
-      while (c.charAt(0) === ' ') {
-        c = c.substring(1, c.length);
-      }
-      if (c.indexOf(nameEQ) === 0) {
-        return unescape(c.substring(nameEQ.length, c.length));
-      }
-    }
-    return null;
-  }
-
-  function destroyCookie(name) {
-    setCookie(name, "", -1);
-  }
-
-  function log(message) {
-    if (getCookie("ahoy_debug")) {
-      window.console.log(message);
-    }
-  }
-
-  function setReady() {
-    var callback;
-    while (callback = queue.shift()) {
-      callback();
-    }
-    isReady = true;
-  }
-
-  function ready(callback) {
-    if (isReady) {
-      callback();
-    } else {
-      queue.push(callback);
-    }
-  }
-
-  // http://stackoverflow.com/a/2117523/1177228
-  function generateId() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
-      return v.toString(16);
-    });
-  }
-
-  function saveEventQueue() {
-    // TODO add stringify method for IE 7 and under
-    if (canStringify) {
-      setCookie("ahoy_events", JSON.stringify(eventQueue), 1);
+ahoy.configure = function (options) {
+  for (var key in options) {
+    if (options.hasOwnProperty(key)) {
+      config[key] = options[key];
     }
   }
+};
 
-  // from jquery-ujs
+// legacy
+ahoy.configure(ahoy);
 
-  function csrfToken() {
-    return $("meta[name=csrf-token]").attr("content");
+var $ = window.jQuery || window.Zepto || window.$;
+var visitId = void 0,
+    visitorId = void 0,
+    track = void 0;
+var visitTtl = 4 * 60; // 4 hours
+var visitorTtl = 2 * 365 * 24 * 60; // 2 years
+var isReady = false;
+var queue = [];
+var canStringify = typeof JSON !== "undefined" && typeof JSON.stringify !== "undefined";
+var eventQueue = [];
+
+function visitsUrl() {
+  return config.urlPrefix + config.visitsUrl;
+}
+
+function eventsUrl() {
+  return config.urlPrefix + config.eventsUrl;
+}
+
+function canTrackNow() {
+  return (config.useBeacon || config.trackNow) && canStringify && typeof window.navigator.sendBeacon !== "undefined";
+}
+
+// cookies
+
+// http://www.quirksmode.org/js/cookies.html
+function setCookie(name, value, ttl) {
+  var expires = "";
+  var cookieDomain = "";
+  if (ttl) {
+    var date = new Date();
+    date.setTime(date.getTime() + ttl * 60 * 1000);
+    expires = "; expires=" + date.toGMTString();
   }
-
-  function csrfParam() {
-    return $("meta[name=csrf-param]").attr("content");
+  var domain = config.cookieDomain || config.domain;
+  if (domain) {
+    cookieDomain = "; domain=" + domain;
   }
+  document.cookie = name + "=" + escape(value) + expires + cookieDomain + "; path=/";
+}
 
-  function CSRFProtection(xhr) {
-    var token = csrfToken();
-    if (token) xhr.setRequestHeader("X-CSRF-Token", token);
+function getCookie(name) {
+  var i = void 0,
+      c = void 0;
+  var nameEQ = name + "=";
+  var ca = document.cookie.split(';');
+  for (i = 0; i < ca.length; i++) {
+    c = ca[i];
+    while (c.charAt(0) === ' ') {
+      c = c.substring(1, c.length);
+    }
+    if (c.indexOf(nameEQ) === 0) {
+      return unescape(c.substring(nameEQ.length, c.length));
+    }
   }
+  return null;
+}
 
-  function sendRequest(url, data, success) {
-    if (canStringify) {
+function destroyCookie(name) {
+  setCookie(name, "", -1);
+}
+
+function log(message) {
+  if (getCookie("ahoy_debug")) {
+    window.console.log(message);
+  }
+}
+
+function setReady() {
+  var callback = void 0;
+  while (callback = queue.shift()) {
+    callback();
+  }
+  isReady = true;
+}
+
+function ready(callback) {
+  if (isReady) {
+    callback();
+  } else {
+    queue.push(callback);
+  }
+}
+
+function matchesSelector(element, selector) {
+  if (element.matches) {
+    return element.matches(selector);
+  } else {
+    return element.msMatchesSelector(selector);
+  }
+}
+
+function onEvent(eventName, selector, callback) {
+  document.addEventListener(eventName, function (e) {
+    if (matchesSelector(e.target, selector)) {
+      callback(e);
+    }
+  });
+}
+
+// http://beeker.io/jquery-document-ready-equivalent-vanilla-javascript
+function documentReady(callback) {
+  document.readyState === "interactive" || document.readyState === "complete" ? callback() : document.addEventListener("DOMContentLoaded", callback);
+}
+
+// http://stackoverflow.com/a/2117523/1177228
+function generateId() {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    var r = Math.random() * 16 | 0,
+        v = c == 'x' ? r : r & 0x3 | 0x8;
+    return v.toString(16);
+  });
+}
+
+function saveEventQueue() {
+  // TODO add stringify method for IE 7 and under
+  if (canStringify) {
+    setCookie("ahoy_events", JSON.stringify(eventQueue), 1);
+  }
+}
+
+// from rails-ujs
+
+function csrfToken() {
+  var meta = document.querySelector("meta[name=csrf-token]");
+  return meta && meta.content;
+}
+
+function csrfParam() {
+  var meta = document.querySelector("meta[name=csrf-param]");
+  return meta && meta.content;
+}
+
+function CSRFProtection(xhr) {
+  var token = csrfToken();
+  if (token) xhr.setRequestHeader("X-CSRF-Token", token);
+}
+
+function sendRequest(url, data, success) {
+  if (canStringify) {
+    if ($) {
       $.ajax({
         type: "POST",
         url: url,
@@ -157,246 +270,359 @@
         beforeSend: CSRFProtection,
         success: success
       });
+    } else {
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", url, true);
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.onload = function () {
+        if (xhr.status === 200) {
+          success();
+        }
+      };
+      CSRFProtection(xhr);
+      xhr.send(JSON.stringify(data));
+    }
+  }
+}
+
+function eventData(event) {
+  var data = {
+    events: [event],
+    visit_token: event.visit_token,
+    visitor_token: event.visitor_token
+  };
+  delete event.visit_token;
+  delete event.visitor_token;
+  return data;
+}
+
+function trackEvent(event) {
+  ready(function () {
+    sendRequest(eventsUrl(), eventData(event), function () {
+      // remove from queue
+      for (var i = 0; i < eventQueue.length; i++) {
+        if (eventQueue[i].id == event.id) {
+          eventQueue.splice(i, 1);
+          break;
+        }
+      }
+      saveEventQueue();
+    });
+  });
+}
+
+function trackEventNow(event) {
+  ready(function () {
+    var data = eventData(event);
+    var param = csrfParam();
+    var token = csrfToken();
+    if (param && token) data[param] = token;
+    // stringify so we keep the type
+    data.events_json = JSON.stringify(data.events);
+    delete data.events;
+    window.navigator.sendBeacon(eventsUrl(), (0, _objectToFormdata2.default)(data));
+  });
+}
+
+function page() {
+  return config.page || window.location.pathname;
+}
+
+function presence(str) {
+  return str && str.length > 0 ? str : null;
+}
+
+function cleanObject(obj) {
+  for (var key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      if (obj[key] === null) {
+        delete obj[key];
+      }
+    }
+  }
+  return obj;
+}
+
+function eventProperties(e) {
+  var target = e.target;
+  return cleanObject({
+    tag: target.tagName.toLowerCase(),
+    id: presence(target.id),
+    "class": presence(target.className),
+    page: page(),
+    section: getClosestSection(target)
+  });
+}
+
+function getClosestSection(element) {
+  for (; element && element !== document; element = element.parentNode) {
+    if (element.hasAttribute('data-section')) {
+      return element.getAttribute('data-section');
     }
   }
 
-  function eventData(event) {
-    var data = {
-      events: [event],
-      visit_token: event.visit_token,
-      visitor_token: event.visitor_token
-    };
-    delete event.visit_token;
-    delete event.visitor_token;
-    return data;
-  }
+  return null;
+}
 
-  function trackEvent(event) {
-    ready( function () {
-      sendRequest(eventsUrl(), eventData(event), function() {
-        // remove from queue
-        for (var i = 0; i < eventQueue.length; i++) {
-          if (eventQueue[i].id == event.id) {
-            eventQueue.splice(i, 1);
-            break;
-          }
-        }
-        saveEventQueue();
-      });
-    });
-  }
+function createVisit() {
+  isReady = false;
 
-  function trackEventNow(event) {
-    ready( function () {
-      var data = eventData(event);
-      var param = csrfParam();
-      var token = csrfToken();
-      if (param && token) data[param] = token;
-      var payload = new Blob([JSON.stringify(data)], {type : "application/json; charset=utf-8"});
-      navigator.sendBeacon(eventsUrl(), payload);
-    });
-  }
+  visitId = ahoy.getVisitId();
+  visitorId = ahoy.getVisitorId();
+  track = getCookie("ahoy_track");
 
-  function page() {
-    return config.page || window.location.pathname;
-  }
+  if (visitId && visitorId && !track) {
+    // TODO keep visit alive?
+    log("Active visit");
+    setReady();
+  } else {
+    if (track) {
+      destroyCookie("ahoy_track");
+    }
 
-  function eventProperties(e) {
-    var $target = $(e.currentTarget);
-    return {
-      tag: $target.get(0).tagName.toLowerCase(),
-      id: $target.attr("id"),
-      "class": $target.attr("class"),
-      page: page(),
-      section: $target.closest("*[data-section]").attr("data-section")
-    };
-  }
+    if (!visitId) {
+      visitId = generateId();
+      setCookie("ahoy_visit", visitId, visitTtl);
+    }
 
-  function createVisit() {
-    isReady = false;
+    // make sure cookies are enabled
+    if (getCookie("ahoy_visit")) {
+      log("Visit started");
 
-    visitId = ahoy.getVisitId();
-    visitorId = ahoy.getVisitorId();
-    track = getCookie("ahoy_track");
+      if (!visitorId) {
+        visitorId = generateId();
+        setCookie("ahoy_visitor", visitorId, visitorTtl);
+      }
 
-    if (visitId && visitorId && !track) {
-      // TODO keep visit alive?
-      log("Active visit");
+      var data = {
+        visit_token: visitId,
+        visitor_token: visitorId,
+        platform: config.platform,
+        landing_page: window.location.href,
+        screen_width: window.screen.width,
+        screen_height: window.screen.height
+      };
+
+      // referrer
+      if (document.referrer.length > 0) {
+        data.referrer = document.referrer;
+      }
+
+      log(data);
+
+      sendRequest(visitsUrl(), data, setReady);
+    } else {
+      log("Cookies disabled");
       setReady();
-    } else {
-      if (track) {
-        destroyCookie("ahoy_track");
-      }
-
-      if (!visitId) {
-        visitId = generateId();
-        setCookie("ahoy_visit", visitId, visitTtl);
-      }
-
-      // make sure cookies are enabled
-      if (getCookie("ahoy_visit")) {
-        log("Visit started");
-
-        if (!visitorId) {
-          visitorId = generateId();
-          setCookie("ahoy_visitor", visitorId, visitorTtl);
-        }
-
-        var data = {
-          visit_token: visitId,
-          visitor_token: visitorId,
-          platform: config.platform,
-          landing_page: window.location.href,
-          screen_width: window.screen.width,
-          screen_height: window.screen.height
-        };
-
-        // referrer
-        if (document.referrer.length > 0) {
-          data.referrer = document.referrer;
-        }
-
-        log(data);
-
-        sendRequest(visitsUrl(), data, setReady);
-      } else {
-        log("Cookies disabled");
-        setReady();
-      }
     }
   }
+}
 
-  ahoy.getVisitId = ahoy.getVisitToken = function () {
-    return getCookie("ahoy_visit");
-  };
+ahoy.getVisitId = ahoy.getVisitToken = function () {
+  return getCookie("ahoy_visit");
+};
 
-  ahoy.getVisitorId = ahoy.getVisitorToken = function () {
-    return getCookie("ahoy_visitor");
-  };
+ahoy.getVisitorId = ahoy.getVisitorToken = function () {
+  return getCookie("ahoy_visitor");
+};
 
-  ahoy.reset = function () {
-    destroyCookie("ahoy_visit");
-    destroyCookie("ahoy_visitor");
-    destroyCookie("ahoy_events");
-    destroyCookie("ahoy_track");
-    return true;
-  };
+ahoy.reset = function () {
+  destroyCookie("ahoy_visit");
+  destroyCookie("ahoy_visitor");
+  destroyCookie("ahoy_events");
+  destroyCookie("ahoy_track");
+  return true;
+};
 
-  ahoy.debug = function (enabled) {
-    if (enabled === false) {
-      destroyCookie("ahoy_debug");
-    } else {
-      setCookie("ahoy_debug", "t", 365 * 24 * 60); // 1 year
-    }
-    return true;
-  };
-
-  ahoy.track = function (name, properties) {
-    // generate unique id
-    var event = {
-      id: generateId(),
-      name: name,
-      properties: properties || {},
-      time: (new Date()).getTime() / 1000.0
-    };
-
-    // wait for createVisit to log
-    $( function () {
-      log(event);
-    });
-
-    ready( function () {
-      if (!ahoy.getVisitId()) {
-        createVisit();
-      }
-
-      event.visit_token = ahoy.getVisitId();
-      event.visitor_token = ahoy.getVisitorId();
-
-      if (canTrackNow()) {
-        trackEventNow(event);
-      } else {
-        eventQueue.push(event);
-        saveEventQueue();
-
-        // wait in case navigating to reduce duplicate events
-        setTimeout( function () {
-          trackEvent(event);
-        }, 1000);
-      }
-    });
-  };
-
-  ahoy.trackView = function (additionalProperties) {
-    var properties = {
-      url: window.location.href,
-      title: document.title,
-      page: page()
-    };
-
-    if (additionalProperties) {
-      for(var propName in additionalProperties) {
-        if (additionalProperties.hasOwnProperty(propName)) {
-          properties[propName] = additionalProperties[propName];
-        }
-      }
-    }
-    ahoy.track("$view", properties);
-  };
-
-  ahoy.trackClicks = function () {
-    $(document).on("click", "a, button, input[type=submit]", function (e) {
-      var $target = $(e.currentTarget);
-      var properties = eventProperties(e);
-      properties.text = properties.tag == "input" ? $target.val() : $.trim($target.text().replace(/[\s\r\n]+/g, " "));
-      properties.href = $target.attr("href");
-      ahoy.track("$click", properties);
-    });
-  };
-
-  ahoy.trackSubmits = function () {
-    $(document).on("submit", "form", function (e) {
-      var properties = eventProperties(e);
-      ahoy.track("$submit", properties);
-    });
-  };
-
-  ahoy.trackChanges = function () {
-    $(document).on("change", "input, textarea, select", function (e) {
-      var properties = eventProperties(e);
-      ahoy.track("$change", properties);
-    });
-  };
-
-  ahoy.trackAll = function() {
-    ahoy.trackView();
-    ahoy.trackClicks();
-    ahoy.trackSubmits();
-    ahoy.trackChanges();
-  };
-
-  // push events from queue
-  try {
-    eventQueue = JSON.parse(getCookie("ahoy_events") || "[]");
-  } catch (e) {
-    // do nothing
+ahoy.debug = function (enabled) {
+  if (enabled === false) {
+    destroyCookie("ahoy_debug");
+  } else {
+    setCookie("ahoy_debug", "t", 365 * 24 * 60); // 1 year
   }
+  return true;
+};
 
-  for (var i = 0; i < eventQueue.length; i++) {
-    trackEvent(eventQueue[i]);
-  }
-
-  ahoy.start = function () {
-    createVisit();
-
-    ahoy.start = function () {};
+ahoy.track = function (name, properties) {
+  // generate unique id
+  var event = {
+    name: name,
+    properties: properties || {},
+    time: new Date().getTime() / 1000.0,
+    id: generateId()
   };
 
-  $( function () {
-    if (config.startOnReady) {
-      ahoy.start();
-    }
+  // wait for createVisit to log
+  documentReady(function () {
+    log(event);
   });
 
-  window.ahoy = ahoy;
-}(window));
+  ready(function () {
+    if (!ahoy.getVisitId()) {
+      createVisit();
+    }
+
+    event.visit_token = ahoy.getVisitId();
+    event.visitor_token = ahoy.getVisitorId();
+
+    if (canTrackNow()) {
+      trackEventNow(event);
+    } else {
+      eventQueue.push(event);
+      saveEventQueue();
+
+      // wait in case navigating to reduce duplicate events
+      setTimeout(function () {
+        trackEvent(event);
+      }, 1000);
+    }
+  });
+};
+
+ahoy.trackView = function (additionalProperties) {
+  var properties = {
+    url: window.location.href,
+    title: document.title,
+    page: page()
+  };
+
+  if (additionalProperties) {
+    for (var propName in additionalProperties) {
+      if (additionalProperties.hasOwnProperty(propName)) {
+        properties[propName] = additionalProperties[propName];
+      }
+    }
+  }
+  ahoy.track("$view", properties);
+};
+
+ahoy.trackClicks = function () {
+  onEvent("click", "a, button, input[type=submit]", function (e) {
+    var target = e.target;
+    var properties = eventProperties(e);
+    properties.text = properties.tag == "input" ? target.value : (target.textContent || target.innerText || target.innerHTML).replace(/[\s\r\n]+/g, " ").trim();
+    properties.href = target.href;
+    ahoy.track("$click", properties);
+  });
+};
+
+ahoy.trackSubmits = function () {
+  onEvent("submit", "form", function (e) {
+    var properties = eventProperties(e);
+    ahoy.track("$submit", properties);
+  });
+};
+
+ahoy.trackChanges = function () {
+  onEvent("change", "input, textarea, select", function (e) {
+    var properties = eventProperties(e);
+    ahoy.track("$change", properties);
+  });
+};
+
+ahoy.trackAll = function () {
+  ahoy.trackView();
+  ahoy.trackClicks();
+  ahoy.trackSubmits();
+  ahoy.trackChanges();
+};
+
+// push events from queue
+try {
+  eventQueue = JSON.parse(getCookie("ahoy_events") || "[]");
+} catch (e) {
+  // do nothing
+}
+
+for (var i = 0; i < eventQueue.length; i++) {
+  trackEvent(eventQueue[i]);
+}
+
+ahoy.start = function () {
+  createVisit();
+
+  ahoy.start = function () {};
+};
+
+documentReady(function () {
+  if (config.startOnReady) {
+    ahoy.start();
+  }
+});
+
+exports.default = ahoy;
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+function isUndefined (value) {
+  return value === undefined
+}
+
+function isObject (value) {
+  return value === Object(value)
+}
+
+function isArray (value) {
+  return Array.isArray(value)
+}
+
+function isBlob (value) {
+  return value != null &&
+      typeof value.size === 'number' &&
+      typeof value.type === 'string' &&
+      typeof value.slice === 'function'
+}
+
+function isFile (value) {
+  return isBlob(value) &&
+      typeof value.lastModified === 'number' &&
+      typeof value.name === 'string'
+}
+
+function isDate (value) {
+  return value instanceof Date
+}
+
+function objectToFormData (obj, fd, pre) {
+  fd = fd || new FormData()
+
+  if (isUndefined(obj)) {
+    return fd
+  } else if (isArray(obj)) {
+    obj.forEach(function (value) {
+      var key = pre + '[]'
+
+      objectToFormData(value, fd, key)
+    })
+  } else if (isObject(obj) && !isFile(obj) && !isDate(obj)) {
+    Object.keys(obj).forEach(function (prop) {
+      var value = obj[prop]
+
+      if (isArray(value)) {
+        while (prop.length > 2 && prop.lastIndexOf('[]') === prop.length - 2) {
+          prop = prop.substring(0, prop.length - 2)
+        }
+      }
+
+      var key = pre ? (pre + '[' + prop + ']') : prop
+
+      objectToFormData(value, fd, key)
+    })
+  } else {
+    fd.append(pre, obj)
+  }
+
+  return fd
+}
+
+module.exports = objectToFormData
+
+
+/***/ })
+/******/ ])["default"];
+});

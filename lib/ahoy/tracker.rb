@@ -2,48 +2,70 @@ module Ahoy
   class Tracker
     attr_reader :request, :controller
 
-    def initialize(options = {})
+    def initialize(**options)
       @store = Ahoy::Store.new(options.merge(ahoy: self))
       @controller = options[:controller]
       @request = options[:request] || @controller.try(:request)
+      @visit_token = options[:visit_token]
       @options = options
     end
 
+    # can't use keyword arguments here
     def track(name, properties = {}, options = {})
       if exclude?
         debug "Event excluded"
       elsif missing_params?
         debug "Missing required parameters"
       else
-        options = options.dup
+        data = {
+          visit_token: visit_token,
+          user_id: user.try(:id),
+          name: name.to_s,
+          properties: properties,
+          time: trusted_time(options[:time]),
+          event_id: options[:id] || generate_id
+        }.select { |_, v| v }
 
-        options[:time] = trusted_time(options[:time])
-        options[:id] = ensure_uuid(options[:id] || generate_id)
-
-        @store.track_event(name, properties, options)
+        @store.track_event(data)
       end
       true
     rescue => e
       report_exception(e)
     end
 
-    def track_visit(options = {})
+    def track_visit(defer: false)
       if exclude?
         debug "Visit excluded"
       elsif missing_params?
         debug "Missing required parameters"
       else
-        if options[:defer]
+        if defer
           set_cookie("ahoy_track", true, nil, false)
         else
-          options = options.dup
+          data = {
+            visit_token: visit_token,
+            visitor_token: visitor_token,
+            user_id: user.try(:id),
+            started_at: trusted_time,
+          }.merge(visit_properties).select { |_, v| v }
 
-          options[:started_at] ||= Time.zone.now
+          @store.track_visit(data)
 
-          @store.track_visit(options)
+          Ahoy::GeocodeV2Job.perform_later(visit_token, data[:ip]) if Ahoy.geocode
         end
       end
       true
+    rescue => e
+      report_exception(e)
+    end
+
+    def geocode(data)
+      if exclude?
+        debug "Geocode excluded"
+      else
+        @store.geocode(data.select { |_, v| v })
+        true
+      end
     rescue => e
       report_exception(e)
     end
@@ -52,7 +74,13 @@ module Ahoy
       if exclude?
         debug "Authentication excluded"
       else
-        @store.authenticate(user)
+        @store.user = user
+
+        data = {
+          visit_token: visit_token,
+          user_id: user.try(:id)
+        }
+        @store.authenticate(data)
       end
       true
     rescue => e
@@ -61,14 +89,6 @@ module Ahoy
 
     def visit
       @visit ||= @store.visit
-    end
-
-    def visit_id
-      @visit_id ||= ensure_uuid(visit_token_helper)
-    end
-
-    def visitor_id
-      @visitor_id ||= ensure_uuid(visitor_token_helper)
     end
 
     def new_visit?
@@ -80,12 +100,12 @@ module Ahoy
     end
 
     def set_visit_cookie
-      set_cookie("ahoy_visit", visit_id, Ahoy.visit_duration)
+      set_cookie("ahoy_visit", visit_token, Ahoy.visit_duration)
     end
 
     def set_visitor_cookie
       if new_visitor?
-        set_cookie("ahoy_visitor", visitor_id, Ahoy.visitor_duration)
+        set_cookie("ahoy_visitor", visitor_token, Ahoy.visitor_duration)
       end
     end
 
@@ -95,15 +115,28 @@ module Ahoy
 
     # TODO better name
     def visit_properties
-      @visit_properties ||= Ahoy::VisitProperties.new(request, api: api?)
+      @visit_properties ||= Ahoy::VisitProperties.new(request, api: api?).generate
     end
 
     def visit_token
       @visit_token ||= ensure_token(visit_token_helper)
     end
+    alias_method :visit_id, :visit_token
 
     def visitor_token
       @visitor_token ||= ensure_token(visitor_token_helper)
+    end
+    alias_method :visitor_id, :visitor_token
+
+    def reset
+      reset_visit
+      request.cookie_jar.delete("ahoy_visitor")
+    end
+
+    def reset_visit
+      request.cookie_jar.delete("ahoy_visit")
+      request.cookie_jar.delete("ahoy_events")
+      request.cookie_jar.delete("ahoy_track")
     end
 
     protected
@@ -125,12 +158,12 @@ module Ahoy
         value: value
       }
       cookie[:expires] = duration.from_now if duration
-      domain = Ahoy.cookie_domain || Ahoy.domain
+      domain = Ahoy.cookie_domain
       cookie[:domain] = domain if domain && use_domain
       request.cookie_jar[name] = cookie
     end
 
-    def trusted_time(time)
+    def trusted_time(time = nil)
       if !time || (api? && !(1.minute.ago..Time.now).cover?(time))
         Time.zone.now
       else
@@ -142,15 +175,8 @@ module Ahoy
       @store.exclude?
     end
 
-    # odd pattern for backwards compatibility
-    # TODO remove this method in next major release
     def report_exception(e)
-      Safely.safely do
-        @store.report_exception(e)
-        if Rails.env.development? || Rails.env.test?
-          raise e
-        end
-      end
+      Safely.report_exception(e)
     end
 
     def generate_id
@@ -213,10 +239,6 @@ module Ahoy
 
     def visitor_param
       @visitor_param ||= request && request.params["visitor_token"]
-    end
-
-    def ensure_uuid(id)
-      Ahoy.ensure_uuid(id) if id
     end
 
     def ensure_token(token)

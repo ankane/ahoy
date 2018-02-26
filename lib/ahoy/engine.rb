@@ -1,10 +1,8 @@
 module Ahoy
   class Engine < ::Rails::Engine
-    initializer "ahoy.middleware", after: "sprockets.environment" do |app|
-      if Ahoy.throttle
-        require "ahoy/throttle"
-        app.middleware.use Ahoy::Throttle
-      end
+    initializer "ahoy", after: "sprockets.environment" do |app|
+      # allow Devise to be loaded after Ahoy
+      require "ahoy/warden" if defined?(Warden)
 
       next unless Ahoy.quiet
 
@@ -14,8 +12,8 @@ module Ahoy
       # Just create an alias for call in middleware
       Rails::Rack::Logger.class_eval do
         def call_with_quiet_ahoy(env)
-          if env["PATH_INFO"].start_with?(AHOY_PREFIX) && logger.respond_to?(:silence_logger)
-            logger.silence_logger do
+          if env["PATH_INFO"].start_with?(AHOY_PREFIX) && logger.respond_to?(:silence)
+            logger.silence do
               call_without_quiet_ahoy(env)
             end
           else

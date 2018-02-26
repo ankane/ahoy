@@ -1,6 +1,24 @@
-## 1.6.2 [unreleased]
+## 2.0.0 [unreleased]
 
+- Removed dependency on jQuery
+- Use `navigator.sendBeacon` by default in supported browsers
+- Added `geocode` event
+- Added `where_event` method for querying events
+- Added support for `visitable` and `where_props` to Mongoid
 - Added `preserve_callbacks` option
+- Use `json` for MySQL by default
+- Fixed log silencing
+
+Breaking changes
+
+- Simpler interface for data stores
+- Renamed `track_visits_immediately` to `server_side_visits` and enabled by default
+- Renamed `mount` option to `api` and disabled by default
+- Enabled `protect_from_forgery` by default
+- Removed deprecated options
+- Removed throttling
+- Removed most built-in stores
+- Removed support for Rails < 4.2
 
 ## 1.6.1
 

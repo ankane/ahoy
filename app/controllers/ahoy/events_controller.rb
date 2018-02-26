@@ -8,8 +8,14 @@ module Ahoy
         elsif params[:events]
           request.params[:events]
         else
+          data =
+            if params[:events_json]
+              request.params[:events_json]
+            else
+              request.body.read
+            end
           begin
-            ActiveSupport::JSON.decode(request.body.read)
+            ActiveSupport::JSON.decode(data)
           rescue ActiveSupport::JSON.parse_error
             # do nothing
             []

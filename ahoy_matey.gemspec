@@ -9,7 +9,6 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Andrew Kane"]
   spec.email         = ["andrew@chartkick.com"]
   spec.summary       = "Simple, powerful visit tracking for Rails"
-  spec.description   = "Simple, powerful visit tracking for Rails"
   spec.homepage      = "https://github.com/ankane/ahoy"
   spec.license       = "MIT"
 
@@ -18,21 +17,20 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "railties"
+  spec.add_dependency "railties", ">= 4.2"
   spec.add_dependency "addressable"
-  spec.add_dependency "browser", "~> 2.0"
   spec.add_dependency "geocoder"
-  spec.add_dependency "referer-parser", ">= 0.3.0"
+  spec.add_dependency "browser", "~> 2.0"
+  spec.add_dependency "referer-parser", ">= 0.3"
   spec.add_dependency "user_agent_parser"
   spec.add_dependency "request_store"
-  spec.add_dependency "uuidtools"
-  spec.add_dependency "safely_block", ">= 0.1.1"
-  spec.add_dependency "rack-attack", "< 6"
+  spec.add_dependency "safely_block", ">= 0.2.1"
 
-  spec.add_development_dependency "bundler", "~> 1.5"
+  spec.add_development_dependency "bundler"
   spec.add_development_dependency "rake"
   spec.add_development_dependency "minitest"
   spec.add_development_dependency "activerecord"
   spec.add_development_dependency "pg"
   spec.add_development_dependency "mysql2"
+  spec.add_development_dependency "mongoid"
 end

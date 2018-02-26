@@ -1,60 +1,86 @@
+require "browser"
+require "referer-parser"
+require "user_agent_parser"
+
 module Ahoy
   class VisitProperties
-    REQUEST_KEYS = [:ip, :user_agent, :referrer, :landing_page, :platform, :app_version, :os_version, :screen_height, :screen_width]
-    TRAFFIC_SOURCE_KEYS = [:referring_domain, :search_keyword]
-    UTM_PARAMETER_KEYS = [:utm_source, :utm_medium, :utm_term, :utm_content, :utm_campaign]
-    TECHNOLOGY_KEYS = [:browser, :os, :device_type]
-    LOCATION_KEYS = [:country, :region, :city, :postal_code, :latitude, :longitude]
+    attr_reader :request, :params, :referrer, :landing_page
 
-    KEYS = REQUEST_KEYS + TRAFFIC_SOURCE_KEYS + UTM_PARAMETER_KEYS + TECHNOLOGY_KEYS + LOCATION_KEYS
-
-    delegate(*REQUEST_KEYS, to: :request_deckhand)
-    delegate(*TRAFFIC_SOURCE_KEYS, to: :traffic_source_deckhand)
-    delegate(*(UTM_PARAMETER_KEYS + [:landing_params]), to: :utm_parameter_deckhand)
-    delegate(*TECHNOLOGY_KEYS, to: :technology_deckhand)
-    delegate(*LOCATION_KEYS, to: :location_deckhand)
-
-    def initialize(request, options = {})
+    def initialize(request, api:)
       @request = request
-      @options = options
+      @params = request.params
+      @referrer = api ? params["referrer"] : request.referer
+      @landing_page = api ? params["landing_page"] : request.original_url
     end
 
-    def [](key)
-      send(key)
+    def generate
+      @generate ||= request_properties.merge(tech_properties).merge(traffic_properties).merge(utm_properties)
     end
 
-    def keys
-      if Ahoy.geocode == true # no location keys for :async
-        KEYS
-      else
-        KEYS - LOCATION_KEYS
+    private
+
+    def utm_properties
+      landing_uri = Addressable::URI.parse(landing_page) rescue nil
+      landing_params = (landing_uri && landing_uri.query_values) || {}
+
+      props = {}
+      %w(utm_source utm_medium utm_term utm_content utm_campaign).each do |name|
+        props[name.to_sym] = params[name] || landing_params[name]
       end
+      props
     end
 
-    def to_hash
-      keys.inject({}) { |memo, key| memo[key] = send(key); memo }
+    def traffic_properties
+      # cache for performance
+      @@referrer_parser ||= RefererParser::Parser.new
+
+      {
+        referring_domain: (Addressable::URI.parse(referrer).host.first(255) rescue nil),
+        search_keyword: (@@referrer_parser.parse(@referrer)[:term][0..255] rescue nil).presence
+      }
     end
 
-    protected
+    def tech_properties
+      # cache for performance
+      @@user_agent_parser ||= UserAgentParser::Parser.new
 
-    def request_deckhand
-      @request_deckhand ||= Deckhands::RequestDeckhand.new(@request, @options)
+      user_agent = request.user_agent
+      agent = @@user_agent_parser.parse(user_agent)
+      browser = Browser.new(user_agent)
+      device_type =
+        if browser.bot?
+          "Bot"
+        elsif browser.device.tv?
+          "TV"
+        elsif browser.device.console?
+          "Console"
+        elsif browser.device.tablet?
+          "Tablet"
+        elsif browser.device.mobile?
+          "Mobile"
+        else
+          "Desktop"
+        end
+
+      {
+        browser: agent.name,
+        os: agent.os.name,
+        device_type: device_type,
+      }
     end
 
-    def traffic_source_deckhand
-      @traffic_source_deckhand ||= Deckhands::TrafficSourceDeckhand.new(request_deckhand.referrer)
-    end
-
-    def utm_parameter_deckhand
-      @utm_parameter_deckhand ||= Deckhands::UtmParameterDeckhand.new(request_deckhand.landing_page, request_deckhand.params)
-    end
-
-    def technology_deckhand
-      @technology_deckhand ||= Deckhands::TechnologyDeckhand.new(request_deckhand.user_agent)
-    end
-
-    def location_deckhand
-      @location_deckhand ||= Deckhands::LocationDeckhand.new(request_deckhand.ip)
+    def request_properties
+      {
+        ip: request.remote_ip,
+        user_agent: request.user_agent,
+        referrer: referrer,
+        landing_page: landing_page,
+        platform: params["platform"],
+        app_version: params["app_version"],
+        os_version: params["os_version"],
+        screen_height: params["screen_height"],
+        screen_width: params["screen_width"]
+      }
     end
   end
 end
