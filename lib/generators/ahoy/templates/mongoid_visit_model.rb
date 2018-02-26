@@ -3,7 +3,7 @@ class Ahoy::Visit
 
   # associations
   has_many :events, class_name: "Ahoy::Event"
-  belongs_to :user<%= Rails::VERSION::MAJOR >= 5 ? ", optional: true" : nil %>
+  belongs_to :user, index: true<%= rails5? ? ", optional: true" : nil %>
 
   # required
   field :visit_token, type: String
@@ -44,5 +44,4 @@ class Ahoy::Visit
   field :started_at, type: Time
 
   index({visit_token: 1}, {unique: true})
-  index({user_id: 1})
 end
