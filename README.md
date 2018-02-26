@@ -221,7 +221,7 @@ end
 
 ### Exclusions
 
-Bots are excluded from tracking by default. To enable, use:
+Bots are excluded from tracking by default. To include them, use:
 
 ```ruby
 Ahoy.track_bots = true
