@@ -131,7 +131,7 @@ See the [API spec](#api-spec).
 
 ### Associated Models
 
-Say we want to associate orders with visits. Ahoy can do this automatically. Just add `visitable` to the model.
+Say we want to associate orders with visits. Just add `visitable` to the model.
 
 ```ruby
 class Order < ApplicationRecord
