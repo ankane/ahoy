@@ -357,10 +357,6 @@ function createVisit() {
     log("Active visit");
     setReady();
   } else {
-    if (track) {
-      destroyCookie("ahoy_track");
-    }
-
     if (!visitId) {
       visitId = generateId();
       setCookie("ahoy_visit", visitId, visitTtl);
@@ -392,7 +388,11 @@ function createVisit() {
 
       log(data);
 
-      sendRequest(visitsUrl(), data, setReady);
+      sendRequest(visitsUrl(), data, function () {
+        // wait until successful to destroy
+        destroyCookie("ahoy_track");
+        setReady();
+      });
     } else {
       log("Cookies disabled");
       setReady();
@@ -431,7 +431,8 @@ ahoy.track = function (name, properties) {
     name: name,
     properties: properties || {},
     time: new Date().getTime() / 1000.0,
-    id: generateId()
+    id: generateId(),
+    js: true
   };
 
   ready(function () {

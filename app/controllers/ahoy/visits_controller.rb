@@ -3,9 +3,6 @@ module Ahoy
     def create
       ahoy.track_visit
 
-      # set proper ttl if cookie generated from JavaScript
-      set_ahoy_cookies if params[:js] && !Ahoy.api_only
-
       render json: {
         visit_token: ahoy.visit_token,
         visitor_token: ahoy.visitor_token,
