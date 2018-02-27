@@ -256,7 +256,7 @@ module Ahoy
     end
 
     def debug(message)
-      Rails.logger.debug { "[ahoy] #{message}" }
+      Ahoy.log message
     end
   end
 end

@@ -20,7 +20,7 @@ module Ahoy
           raise e unless unique_exception?(e)
         end
       else
-        Rails.logger.warn "[ahoy] Event excluded since visit not created: #{data[:visit_token]}"
+        Ahoy.log "Event excluded since visit not created: #{data[:visit_token]}"
       end
     end
 
@@ -32,7 +32,7 @@ module Ahoy
       elsif visit
         visit.update_attributes(data)
       else
-        Rails.logger.warn "[ahoy] Visit for geocode not found: #{data[:visit_token]}"
+        Ahoy.log "Visit for geocode not found: #{data[:visit_token]}"
       end
     end
 

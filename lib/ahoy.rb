@@ -66,6 +66,10 @@ module Ahoy
 
   mattr_accessor :token_generator
   self.token_generator = -> { SecureRandom.uuid }
+
+  def self.log(message)
+    Rails.logger.info { "[ahoy] #{message}" }
+  end
 end
 
 ActiveSupport.on_load(:action_controller) do
