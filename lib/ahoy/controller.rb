@@ -27,7 +27,7 @@ module Ahoy
 
     def track_ahoy_visit
       if ahoy.new_visit?
-        ahoy.track_visit(defer: !Ahoy.server_side_visits)
+        ahoy.track_visit(defer: Ahoy.server_side_visits != true)
       end
     end
 
