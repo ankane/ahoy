@@ -42,6 +42,8 @@ module Ahoy
         if defer
           set_cookie("ahoy_track", true, nil, false)
         else
+          delete_cookie("ahoy_track")
+
           data = {
             visit_token: visit_token,
             visitor_token: visitor_token,
@@ -130,13 +132,13 @@ module Ahoy
 
     def reset
       reset_visit
-      request.cookie_jar.delete("ahoy_visitor")
+      delete_cookie("ahoy_visitor")
     end
 
     def reset_visit
-      request.cookie_jar.delete("ahoy_visit")
-      request.cookie_jar.delete("ahoy_events")
-      request.cookie_jar.delete("ahoy_track")
+      delete_cookie("ahoy_visit")
+      delete_cookie("ahoy_events")
+      delete_cookie("ahoy_track")
     end
 
     protected
@@ -161,6 +163,10 @@ module Ahoy
       domain = Ahoy.cookie_domain
       cookie[:domain] = domain if domain && use_domain
       request.cookie_jar[name] = cookie
+    end
+
+    def delete_cookie(name)
+      request.cookie_jar.delete(name)
     end
 
     def trusted_time(time = nil)
