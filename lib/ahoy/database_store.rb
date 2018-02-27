@@ -4,6 +4,8 @@ module Ahoy
       @visit = visit_model.create!(slice_data(visit_model, data))
     rescue => e
       raise e unless unique_exception?(e)
+
+      # so next call to visit will try to fetch from DB
       remove_instance_variable(:@visit)
     end
 
