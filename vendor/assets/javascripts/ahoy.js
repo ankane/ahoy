@@ -186,10 +186,13 @@ function ready(callback) {
 }
 
 function matchesSelector(element, selector) {
-  if (element.matches) {
-    return element.matches(selector);
+  var matches = element.matches || element.matchesSelector || element.mozMatchesSelector || element.msMatchesSelector || element.oMatchesSelector || element.webkitMatchesSelector;
+
+  if (matches) {
+    return matches.apply(element, [selector]);
   } else {
-    return element.msMatchesSelector(selector);
+    log("Unable to match");
+    return false;
   }
 }
 
