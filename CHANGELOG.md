@@ -2,6 +2,7 @@
 
 - Create visit for `visitable` if needed
 - Better handling of visit duration and expiration in JavaScript
+- Added `:manual` option for server-side visits
 
 ## 2.0.0
 

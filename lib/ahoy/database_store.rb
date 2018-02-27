@@ -51,7 +51,7 @@ module Ahoy
 
     # if we don't have a visit, let's try to create one first
     def visit_or_create
-      ahoy.track_visit unless visit
+      ahoy.track_visit if !visit && Ahoy.server_side_visits != :manual
       visit
     end
 
