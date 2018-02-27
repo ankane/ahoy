@@ -22,7 +22,7 @@ module Ahoy
     end
 
     # set proper ttl if cookie generated from JavaScript
-    # approach is not perfecr, as user must reload the page
+    # approach is not perfect, as user must reload the page
     # for new cookie settings to take effect
     def renew_cookies
       set_ahoy_cookies if params[:js] && !Ahoy.api_only
