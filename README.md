@@ -79,7 +79,7 @@ skip_before_action :track_ahoy_visit
 
 This is typically useful for APIs.
 
-You can also defer visit tracking to JavaScript. This is useful for preventing bots (that aren’t detected by their user agent) and users with cookies disabled from creating a new visit on each request.
+You can also defer visit tracking to JavaScript. This is useful for preventing bots (that aren’t detected by their user agent) and users with cookies disabled from creating a new visit on each request. `:when_needed` will create visits server-side when needed by events, and `false` will discard events without a visit.
 
 ```ruby
 Ahoy.server_side_visits = :when_needed
