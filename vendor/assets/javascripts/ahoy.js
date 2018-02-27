@@ -1,76 +1,76 @@
 (function webpackUniversalModuleDefinition(root, factory) {
-  if(typeof exports === 'object' && typeof module === 'object')
-    module.exports = factory();
-  else if(typeof define === 'function' && define.amd)
-    define([], factory);
-  else if(typeof exports === 'object')
-    exports["ahoy"] = factory();
-  else
-    root["ahoy"] = factory();
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else if(typeof exports === 'object')
+		exports["ahoy"] = factory();
+	else
+		root["ahoy"] = factory();
 })(typeof self !== 'undefined' ? self : this, function() {
 return /******/ (function(modules) { // webpackBootstrap
-/******/  // The module cache
-/******/  var installedModules = {};
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
 /******/
-/******/  // The require function
-/******/  function __webpack_require__(moduleId) {
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
 /******/
-/******/    // Check if module is in cache
-/******/    if(installedModules[moduleId]) {
-/******/      return installedModules[moduleId].exports;
-/******/    }
-/******/    // Create a new module (and put it into the cache)
-/******/    var module = installedModules[moduleId] = {
-/******/      i: moduleId,
-/******/      l: false,
-/******/      exports: {}
-/******/    };
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
 /******/
-/******/    // Execute the module function
-/******/    modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
 /******/
-/******/    // Flag the module as loaded
-/******/    module.l = true;
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
 /******/
-/******/    // Return the exports of the module
-/******/    return module.exports;
-/******/  }
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
 /******/
 /******/
-/******/  // expose the modules object (__webpack_modules__)
-/******/  __webpack_require__.m = modules;
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
 /******/
-/******/  // expose the module cache
-/******/  __webpack_require__.c = installedModules;
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
 /******/
-/******/  // define getter function for harmony exports
-/******/  __webpack_require__.d = function(exports, name, getter) {
-/******/    if(!__webpack_require__.o(exports, name)) {
-/******/      Object.defineProperty(exports, name, {
-/******/        configurable: false,
-/******/        enumerable: true,
-/******/        get: getter
-/******/      });
-/******/    }
-/******/  };
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
 /******/
-/******/  // getDefaultExport function for compatibility with non-harmony modules
-/******/  __webpack_require__.n = function(module) {
-/******/    var getter = module && module.__esModule ?
-/******/      function getDefault() { return module['default']; } :
-/******/      function getModuleExports() { return module; };
-/******/    __webpack_require__.d(getter, 'a', getter);
-/******/    return getter;
-/******/  };
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
 /******/
-/******/  // Object.prototype.hasOwnProperty.call
-/******/  __webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 /******/
-/******/  // __webpack_public_path__
-/******/  __webpack_require__.p = "";
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
 /******/
-/******/  // Load entry module and return exports
-/******/  return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -88,7 +88,19 @@ var _objectToFormdata = __webpack_require__(1);
 
 var _objectToFormdata2 = _interopRequireDefault(_objectToFormdata);
 
+var _cookies = __webpack_require__(2);
+
+var _cookies2 = _interopRequireDefault(_cookies);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/*
+ * Ahoy.js
+ * Simple, powerful JavaScript analytics
+ * https://github.com/ankane/ahoy.js
+ * v0.3.0
+ * MIT License
+ */
 
 var config = {
   urlPrefix: "",
@@ -99,13 +111,7 @@ var config = {
   platform: "Web",
   useBeacon: true,
   startOnReady: true
-}; /*
-    * Ahoy.js
-    * Simple, powerful JavaScript analytics
-    * https://github.com/ankane/ahoy.js
-    * v0.3.0
-    * MIT License
-    */
+};
 
 var ahoy = window.ahoy || window.Ahoy || {};
 
@@ -145,41 +151,16 @@ function canTrackNow() {
 
 // cookies
 
-// http://www.quirksmode.org/js/cookies.html
 function setCookie(name, value, ttl) {
-  var expires = "";
-  var cookieDomain = "";
-  if (ttl) {
-    var date = new Date();
-    date.setTime(date.getTime() + ttl * 60 * 1000);
-    expires = "; expires=" + date.toGMTString();
-  }
-  var domain = config.cookieDomain || config.domain;
-  if (domain) {
-    cookieDomain = "; domain=" + domain;
-  }
-  document.cookie = name + "=" + escape(value) + expires + cookieDomain + "; path=/";
+  _cookies2.default.set(name, value, ttl, config.cookieDomain || config.domain);
 }
 
 function getCookie(name) {
-  var i = void 0,
-      c = void 0;
-  var nameEQ = name + "=";
-  var ca = document.cookie.split(';');
-  for (i = 0; i < ca.length; i++) {
-    c = ca[i];
-    while (c.charAt(0) === ' ') {
-      c = c.substring(1, c.length);
-    }
-    if (c.indexOf(nameEQ) === 0) {
-      return unescape(c.substring(nameEQ.length, c.length));
-    }
-  }
-  return null;
+  return _cookies2.default.get(name);
 }
 
 function destroyCookie(name) {
-  setCookie(name, "", -1);
+  _cookies2.default.set(name, "", -1);
 }
 
 function log(message) {
@@ -400,7 +381,8 @@ function createVisit() {
         platform: config.platform,
         landing_page: window.location.href,
         screen_width: window.screen.width,
-        screen_height: window.screen.height
+        screen_height: window.screen.height,
+        js: true
       };
 
       // referrer
@@ -452,31 +434,32 @@ ahoy.track = function (name, properties) {
     id: generateId()
   };
 
-  // wait for createVisit to log
-  documentReady(function () {
-    log(event);
-  });
-
   ready(function () {
     if (!ahoy.getVisitId()) {
       createVisit();
     }
 
-    event.visit_token = ahoy.getVisitId();
-    event.visitor_token = ahoy.getVisitorId();
+    ready(function () {
+      log(event);
 
-    if (canTrackNow()) {
-      trackEventNow(event);
-    } else {
-      eventQueue.push(event);
-      saveEventQueue();
+      event.visit_token = ahoy.getVisitId();
+      event.visitor_token = ahoy.getVisitorId();
 
-      // wait in case navigating to reduce duplicate events
-      setTimeout(function () {
-        trackEvent(event);
-      }, 1000);
-    }
+      if (canTrackNow()) {
+        trackEventNow(event);
+      } else {
+        eventQueue.push(event);
+        saveEventQueue();
+
+        // wait in case navigating to reduce duplicate events
+        setTimeout(function () {
+          trackEvent(event);
+        }, 1000);
+      }
+    });
   });
+
+  return true;
 };
 
 ahoy.trackView = function (additionalProperties) {
@@ -622,6 +605,50 @@ function objectToFormData (obj, fd, pre) {
 
 module.exports = objectToFormData
 
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+// http://www.quirksmode.org/js/cookies.html
+
+exports.default = {
+  set: function set(name, value, ttl, domain) {
+    var expires = "";
+    var cookieDomain = "";
+    if (ttl) {
+      var date = new Date();
+      date.setTime(date.getTime() + ttl * 60 * 1000);
+      expires = "; expires=" + date.toGMTString();
+    }
+    if (domain) {
+      cookieDomain = "; domain=" + domain;
+    }
+    document.cookie = name + "=" + escape(value) + expires + cookieDomain + "; path=/";
+  },
+  get: function get(name) {
+    var i = void 0,
+        c = void 0;
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for (i = 0; i < ca.length; i++) {
+      c = ca[i];
+      while (c.charAt(0) === ' ') {
+        c = c.substring(1, c.length);
+      }
+      if (c.indexOf(nameEQ) === 0) {
+        return unescape(c.substring(nameEQ.length, c.length));
+      }
+    }
+    return null;
+  }
+};
 
 /***/ })
 /******/ ])["default"];
