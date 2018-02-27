@@ -4,7 +4,7 @@ module Ahoy
       @visit = visit_model.create!(slice_data(visit_model, data))
     rescue => e
       raise e unless unique_exception?(e)
-      @visit = nil
+      remove_instance_variable(:@visit)
     end
 
     def track_event(data)
@@ -46,7 +46,10 @@ module Ahoy
     end
 
     def visit
-      @visit ||= visit_model.where(visit_token: ahoy.visit_token).first if ahoy.visit_token
+      unless defined?(@visit)
+        @visit = visit_model.where(visit_token: ahoy.visit_token).first if ahoy.visit_token
+      end
+      @visit
     end
 
     # if we don't have a visit, let's try to create one first
