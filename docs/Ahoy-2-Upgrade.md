@@ -27,6 +27,8 @@ Ahoy.api = true
 Ahoy.server_side_visits = false
 ```
 
+You can also try the new `Ahoy.server_side_visits = :when_needed` to automatically create visits server-side when needed for events and `visitable`.
+
 If you use `visitable`, add `class_name` to each instance:
 
 ```ruby

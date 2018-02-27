@@ -1,6 +1,6 @@
 ## 2.0.1 [unreleased]
 
-- Added `:needed` option for server-side visits
+- Added `Ahoy.server_side_visits = :when_needed` to automatically create visits server-side when needed for events and `visitable`
 - Better handling of visit duration and expiration in JavaScript
 
 ## 2.0.0
