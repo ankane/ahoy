@@ -11,12 +11,16 @@ module Ahoy
       # if we don't have a visit, let's try to create one first
       ahoy.track_visit unless visit
 
-      event = event_model.new(slice_data(event_model, data))
-      event.visit = visit
-      begin
-        event.save!
-      rescue => e
-        raise e unless unique_exception?(e)
+      if visit
+        event = event_model.new(slice_data(event_model, data))
+        event.visit = visit
+        begin
+          event.save!
+        rescue => e
+          raise e unless unique_exception?(e)
+        end
+      else
+        Rails.logger.warn "[ahoy] Event excluded since visit not created: #{data[:visit_token]}"
       end
     end
 
@@ -28,7 +32,7 @@ module Ahoy
       elsif visit
         visit.update_attributes(data)
       else
-        $stderr.puts "[ahoy] Visit for geocode not found: #{data[:visit_token]}"
+        Rails.logger.warn "[ahoy] Visit for geocode not found: #{data[:visit_token]}"
       end
     end
 
