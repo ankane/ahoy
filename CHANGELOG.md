@@ -1,8 +1,7 @@
 ## 2.0.1 [unreleased]
 
-- Create visit for `visitable` if needed
+- Added `:needed` option for server-side visits
 - Better handling of visit duration and expiration in JavaScript
-- Added `:manual` option for server-side visits
 
 ## 2.0.0
 
