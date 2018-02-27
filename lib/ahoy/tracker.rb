@@ -93,6 +93,10 @@ module Ahoy
       @visit ||= @store.visit
     end
 
+    def visit_or_create
+      @visit ||= @store.visit_or_create
+    end
+
     def new_visit?
       !existing_visit_token
     end

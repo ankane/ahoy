@@ -8,9 +8,7 @@ module Ahoy
     end
 
     def track_event(data)
-      # if we don't have a visit, let's try to create one first
-      ahoy.track_visit unless visit
-
+      visit = visit_or_create
       if visit
         event = event_model.new(slice_data(event_model, data))
         event.visit = visit
@@ -49,6 +47,12 @@ module Ahoy
 
     def visit
       @visit ||= visit_model.where(visit_token: ahoy.visit_token).first if ahoy.visit_token
+    end
+
+    # if we don't have a visit, let's try to create one first
+    def visit_or_create
+      ahoy.track_visit unless visit
+      visit
     end
 
     protected

@@ -39,6 +39,10 @@ module Ahoy
       Ahoy.token_generator.call
     end
 
+    def visit_or_create
+      visit
+    end
+
     protected
 
     def bot?

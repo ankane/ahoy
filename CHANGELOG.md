@@ -1,3 +1,8 @@
+## 2.0.1 [unreleased]
+
+- Create visit for `visitable` if needed
+- Better handling of visit duration and expiration in JavaScript
+
 ## 2.0.0
 
 - Removed dependency on jQuery
