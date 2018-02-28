@@ -263,6 +263,27 @@ Change the job queue with:
 Ahoy.job_queue = :low_priority
 ```
 
+#### Geocoding Performance
+
+To avoid calls to a remote API, download the [GeoLite2 City database](https://dev.maxmind.com/geoip/geoip2/geolite2/) and configure Geocoder to use it.
+
+Add this line to your application’s Gemfile:
+
+```ruby
+gem 'maxminddb'
+```
+
+And create an initializer at `config/initializers/geocoder.rb` with:
+
+```ruby
+Geocoder.configure(
+  ip_lookup: :geoip2,
+  geoip2: {
+    file: Rails.root.join("lib", "GeoLite2-City.mmdb")
+  }
+)
+```
+
 ### Token Generation
 
 Ahoy uses random UUIDs for visit and visitor tokens by default, but you can use your own generator like [Druuid](https://github.com/recurly/druuid).
