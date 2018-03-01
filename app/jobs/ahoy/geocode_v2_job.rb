@@ -11,9 +11,9 @@ module Ahoy
           nil
         end
 
-      if location
+      if location && location.country.present?
         data = {
-          country: location.try(:country).presence,
+          country: location.country,
           region: location.try(:state).presence,
           city: location.try(:city).presence,
           postal_code: location.try(:postal_code).presence,
