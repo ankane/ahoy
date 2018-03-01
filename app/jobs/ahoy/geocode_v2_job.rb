@@ -13,7 +13,6 @@ module Ahoy
 
       if location
         data = {
-          visit_token: visit_token,
           country: location.try(:country).presence,
           region: location.try(:state).presence,
           city: location.try(:city).presence,

@@ -25,14 +25,15 @@ module Ahoy
     end
 
     def geocode(data)
-      data = slice_data(visit_model, data.except(:visit_token))
+      visit_token = data.delete(:visit_token)
+      data = slice_data(visit_model, data)
       if defined?(Mongoid::Document) && visit_model < Mongoid::Document
         # upsert since visit might not be found due to eventual consistency
-        visit_model.where(visit_token: ahoy.visit_token).find_one_and_update({"$set": data}, {upsert: true})
+        visit_model.where(visit_token: visit_token).find_one_and_update({"$set": data}, {upsert: true})
       elsif visit
         visit.update_attributes(data)
       else
-        Ahoy.log "Visit for geocode not found: #{data[:visit_token]}"
+        Ahoy.log "Visit for geocode not found: #{visit_token}"
       end
     end
 

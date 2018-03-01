@@ -65,7 +65,11 @@ module Ahoy
       if exclude?
         debug "Geocode excluded"
       else
-        @store.geocode(data.select { |_, v| v })
+        data = {
+          visit_token: visit_token
+          }.merge(data).select { |_, v| v }
+
+        @store.geocode(data)
         true
       end
     rescue => e
