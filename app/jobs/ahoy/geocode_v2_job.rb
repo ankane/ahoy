@@ -7,7 +7,7 @@ module Ahoy
         begin
           Geocoder.search(ip).first
         rescue => e
-          Rails.logger.warn "[ahoy] Geocode error: #{e.class.name}: #{e.message}"
+          Ahoy.log "Geocode error: #{e.class.name}: #{e.message}"
           nil
         end
 
