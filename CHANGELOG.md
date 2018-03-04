@@ -1,3 +1,10 @@
+## 2.0.2 [unreleased]
+
+- Fixed error on duplicate records
+- Fixed message when visit not found for geocoding
+- Better compatibility with GeoLite2
+- Better browser compatibility for Ahoy.js
+
 ## 2.0.1
 
 - Added `Ahoy.server_side_visits = :when_needed` to automatically create visits server-side when needed for events and `visitable`
