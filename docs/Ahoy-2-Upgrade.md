@@ -17,7 +17,7 @@ gem 'ahoy_matey', '~> 2'
 And run:
 
 ```sh
-bundle install
+bundle update ahoy_matey
 ```
 
 Add to `config/initializers/ahoy.rb`:
