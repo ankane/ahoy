@@ -6,7 +6,9 @@ module Ahoy
       raise e unless unique_exception?(e)
 
       # so next call to visit will try to fetch from DB
-      remove_instance_variable(:@visit)
+      if defined?(@visit)
+        remove_instance_variable(:@visit)
+      end
     end
 
     def track_event(data)
