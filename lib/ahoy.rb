@@ -67,6 +67,9 @@ module Ahoy
   mattr_accessor :token_generator
   self.token_generator = -> { SecureRandom.uuid }
 
+  mattr_accessor :automount
+  self.automount = true
+
   def self.log(message)
     Rails.logger.info { "[ahoy] #{message}" }
   end

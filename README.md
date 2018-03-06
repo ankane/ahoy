@@ -314,6 +314,20 @@ Exceptions are rescued so analytics do not break your app. Ahoy uses [Safely](ht
 Safely.report_exception_method = ->(e) { Rollbar.error(e) }
 ```
 
+###  Mount Ahoy Manually
+If you have a catch-all route you will need to mount ahoy manually to avoid conflicts.
+Add the following code to the your config/intializers/ahoy.rb.
+
+```ruby
+Ahoy.automount = false
+```
+
+then mount it on your own config/route.rb, before the catch-all route.
+
+```ruby
+mount Ahoy::Engine => "/ahoy"
+```
+
 ## Development
 
 Ahoy is built with developers in mind. You can run the following code in your browser’s console.
