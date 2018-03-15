@@ -1,4 +1,4 @@
-## 2.0.2 [unreleased]
+## 2.0.2
 
 - Fixed error on duplicate records
 - Fixed message when visit not found for geocoding
