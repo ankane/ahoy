@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "railties", ">= 4.2"
   spec.add_dependency "addressable"
-  spec.add_dependency "geocoder"
+  spec.add_dependency "geocoder", ">= 1.4.5"
   spec.add_dependency "browser", "~> 2.0"
   spec.add_dependency "referer-parser", ">= 0.3"
   spec.add_dependency "user_agent_parser"
