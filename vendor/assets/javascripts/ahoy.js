@@ -98,7 +98,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * Ahoy.js
  * Simple, powerful JavaScript analytics
  * https://github.com/ankane/ahoy.js
- * v0.3.0
+ * v0.3.1
  * MIT License
  */
 
@@ -219,7 +219,6 @@ function generateId() {
 }
 
 function saveEventQueue() {
-  // TODO add stringify method for IE 7 and under
   if (canStringify) {
     setCookie("ahoy_events", JSON.stringify(eventQueue), 1);
   }
