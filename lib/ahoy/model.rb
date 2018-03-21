@@ -2,7 +2,9 @@ module Ahoy
   module Model
     def visitable(name = :visit, **options)
       class_eval do
-        belongs_to(name, optional: true, class_name: "Ahoy::Visit", **options)
+        safe_options = options.dup
+        safe_options[:optional] = true if Rails::VERSION::MAJOR >= 5
+        belongs_to(name, class_name: "Ahoy::Visit", **safe_options)
         before_create :set_ahoy_visit
       end
       class_eval %{
