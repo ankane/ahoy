@@ -1,3 +1,7 @@
+## 2.0.3 [unreleased]
+
+- Fixed `visitable` for Rails 4.2
+
 ## 2.0.2
 
 - Fixed error on duplicate records
