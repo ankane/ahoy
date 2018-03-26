@@ -414,7 +414,7 @@ Ahoy::Visit.group(:country).count
 Ahoy::Visit.group(:referring_domain).count
 ```
 
-[Chartkick](http://chartkick.com/) and [Groupdate](https://github.com/ankane/groupdate) make it easy to visualize the data.
+[Chartkick](https://www.chartkick.com/) and [Groupdate](https://github.com/ankane/groupdate) make it easy to visualize the data.
 
 ```erb
 <%= line_chart Ahoy::Visit.group_by_day(:started_at).count %>
@@ -456,7 +456,7 @@ The same approach also works with visitor tokens.
 
 ### Visits
 
-Generate visit and visitor tokens as [UUIDs](http://en.wikipedia.org/wiki/Universally_unique_identifier), and include these values in the `Ahoy-Visit` and `Ahoy-Visitor` headers with all requests.
+Generate visit and visitor tokens as [UUIDs](https://en.wikipedia.org/wiki/Universally_unique_identifier), and include these values in the `Ahoy-Visit` and `Ahoy-Visitor` headers with all requests.
 
 Send a `POST` request to `/ahoy/visits` with `Content-Type: application/json` and a body like:
 
