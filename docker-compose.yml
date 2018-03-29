@@ -2,7 +2,7 @@ version: '3.5'
 volumes:
   gems:
 services:
-  app:
+  ahoy:
     image: ruby:2.5
     working_dir: /home/app
     volumes:
