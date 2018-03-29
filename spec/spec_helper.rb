@@ -4,7 +4,7 @@ require 'bundler'
 # Or, load just what you need:
 # Combustion.initialize! :active_record, :action_controller
 require 'combustion'
-Combustion.initialize! :active_record, :active_support
+Combustion.initialize! :active_record, :active_support, :active_job
 
 require 'rspec/rails'
 Bundler.require :default, :development
