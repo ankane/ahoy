@@ -1,0 +1,9 @@
+test:
+  adapter: mysql2
+  encoding: utf8
+  pool: 5
+  host: db
+  port: 3306
+  username: root
+  password: mypass
+  database: ahoy_test
