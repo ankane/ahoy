@@ -13,3 +13,4 @@ Bundler.require :default, :development
 RSpec.configure do |config|
   config.use_transactional_fixtures = true
 end
+include FactoryBot::Syntax::Methods
