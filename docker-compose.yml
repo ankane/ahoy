@@ -8,6 +8,4 @@ services:
     volumes:
       - gems:/usr/local/bundle
       - ./:/home/app
-    command: rake test
-    environment:
-      - VERBOSE=true
+    command: rspec
