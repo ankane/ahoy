@@ -8,4 +8,11 @@ services:
     volumes:
       - gems:/usr/local/bundle
       - ./:/home/app
+    links:
+      - db
     command: rspec
+  db:
+    image: mysql:5.7
+    command: "--sql-mode='NO_ENGINE_SUBSTITUTION'"
+    environment:
+      - MYSQL_ROOT_PASSWORD=mypass

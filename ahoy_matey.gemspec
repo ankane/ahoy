@@ -28,12 +28,8 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler"
   spec.add_development_dependency "rake"
-  spec.add_development_dependency "minitest"
   spec.add_development_dependency "activerecord"
-  spec.add_development_dependency "pg"
-  spec.add_development_dependency "mysql2"
-  spec.add_development_dependency "mongoid"
+  spec.add_development_dependency 'mysql2', "~> 0.4.4"
   spec.add_development_dependency 'combustion'
   spec.add_development_dependency 'rspec-rails'
-  spec.add_development_dependency 'sqlite3'
 end
