@@ -36,7 +36,7 @@ module Ahoy
 
       {
         referring_domain: (Addressable::URI.parse(referrer).host.first(255) rescue nil),
-        search_keyword: (@@referrer_parser.parse(@referrer)[:term][0..255] rescue nil).presence
+        search_keyword: (@@referrer_parser.parse(@referrer)[:term].first(255) rescue nil).presence
       }
     end
 
