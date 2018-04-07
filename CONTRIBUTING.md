@@ -26,6 +26,26 @@ If the above steps don’t help, create an issue. Include:
 - Detailed steps to reproduce
 - Complete backtraces for exceptions
 
+## Setup
+This project is containerized with docker to avoid conflicts with other projects or the necessity of excessive configurations in your machine. This steps are optional but will speedup your setup.
+
+1. Install [Docker](https://docs.docker.com/install/linux/docker-ce/ubuntu/#install-docker-ce)
+2. Install [Docker Compose](https://docs.docker.com/compose/install/#install-compose)
+3. Install the necessary gems running `docker-compose run ahoy bundle`
+
+## Running Tests
+We use Rspec to run tests, actually we only test the suite in a MySQL environment.
+
+- Just run `docker-compose run ahoy rspec`
+
+or
+
+- Start a bash inside a container with `docker-compose run ahoy bash` and run `rspec` when necessary
+
+or if you isn't using docker
+
+- `rspec` You'll need a local MySQL server
+
 ## Pull Requests
 
 Fork the project and create a pull request. A few tips:
