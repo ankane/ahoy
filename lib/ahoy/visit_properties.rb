@@ -72,7 +72,7 @@ module Ahoy
     def request_properties
       {
         ip: request.remote_ip,
-        user_agent: request.user_agent,
+        user_agent: request.user_agent.encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: ''),
         referrer: referrer,
         landing_page: landing_page,
         platform: params["platform"],
