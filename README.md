@@ -56,7 +56,7 @@ And track an event with:
 ahoy.track("My second event", {language: "JavaScript"});
 ```
 
-For native apps, see the [API spec](#api-spec).
+For Android, check out [Ahoy Android](https://github.com/instacart/ahoy-android). For other platforms, see the [API spec](#api-spec).
 
 ## How It Works
 
@@ -127,7 +127,7 @@ end
 
 #### Native Apps
 
-See the [API spec](#api-spec).
+For Android, check out [Ahoy Android](https://github.com/instacart/ahoy-android). For other platforms, see the [API spec](#api-spec).
 
 ### Associated Models
 
