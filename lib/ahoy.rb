@@ -67,6 +67,9 @@ module Ahoy
   mattr_accessor :token_generator
   self.token_generator = -> { SecureRandom.uuid }
 
+  mattr_accessor :mask_ip
+  self.mask_ip = false
+
   def self.log(message)
     Rails.logger.info { "[ahoy] #{message}" }
   end

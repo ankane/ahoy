@@ -1,5 +1,6 @@
 ## 2.0.3 [unreleased]
 
+- Added IP masking
 - Fixed `visitable` for Rails 4.2
 
 ## 2.0.2

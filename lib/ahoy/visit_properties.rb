@@ -1,3 +1,4 @@
+require "ipaddr"
 require "browser"
 require "referer-parser"
 require "user_agent_parser"
@@ -69,9 +70,27 @@ module Ahoy
       }
     end
 
+    # masking based on Google Analytics anonymization
+    # https://support.google.com/analytics/answer/2763052
+    def ip
+      ip = request.remote_ip
+      if ip && Ahoy.mask_ip
+        addr = IPAddr.new(ip)
+        if addr.ipv4?
+          # set last octet to 0
+          addr.mask(24).to_s
+        else
+          # set last 80 bits to zeros
+          addr.mask(48).to_s
+        end
+      else
+        ip
+      end
+    end
+
     def request_properties
       {
-        ip: request.remote_ip,
+        ip: ip,
         user_agent: ensure_utf8(request.user_agent),
         referrer: referrer,
         landing_page: landing_page,
