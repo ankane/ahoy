@@ -352,7 +352,7 @@ ahoy.configure({cookies: false});
 Ahoy can mask IPs with the same approach [Google Analytics uses for IP anonymization](https://support.google.com/analytics/answer/2763052). This means:
 
 - For IPv4, the last octet is set to 0 (`8.8.4.4` becomes `8.8.4.0`)
-- For IPv6, the last 80 bits are set to zeros (`2a03:2880:2110:df07:face:b00c::1` becomes `2a03:2880:2110::`)
+- For IPv6, the last 80 bits are set to zeros (`2001:4860:4860:0:0:0:0:8844` becomes `2001:4860:4860::`)
 
 ```ruby
 Ahoy.mask_ips = true
