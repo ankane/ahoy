@@ -1,6 +1,7 @@
-## 2.0.3 [unreleased]
+## 2.1.0 [unreleased]
 
-- Added IP masking
+- Added option for IP masking
+- Added option to use anonymity sets instead of cookies
 - Fixed `visitable` for Rails 4.2
 
 ## 2.0.2

@@ -117,7 +117,8 @@
     platform: "Web",
     useBeacon: true,
     startOnReady: true,
-    trackVisits: true
+    trackVisits: true,
+    cookies: true
   };
 
   var ahoy = window.ahoy || window.Ahoy || {};
@@ -228,7 +229,7 @@
   }
 
   function saveEventQueue() {
-    if (canStringify) {
+    if (config.cookies && canStringify) {
       setCookie("ahoy_events", JSON.stringify(eventQueue), 1);
     }
   }
@@ -279,11 +280,12 @@
 
   function eventData(event) {
     var data = {
-      events: [event],
-      visit_token: event.visit_token,
-      visitor_token: event.visitor_token
+      events: [event]
     };
-    delete event.visit_token;
+    if (config.cookies) {
+      data.visit_token = event.visit_token;
+      data.visitor_token = event.visitor_token;
+    }  delete event.visit_token;
     delete event.visitor_token;
     return data;
   }
@@ -363,7 +365,7 @@
     visitorId = ahoy.getVisitorId();
     track = getCookie("ahoy_track");
 
-    if (config.trackVisits == false) {
+    if (config.cookies === false || config.trackVisits === false) {
       log("Visit tracking disabled");
       setReady();
     } else if (visitId && visitorId && !track) {
@@ -450,7 +452,7 @@
     };
 
     ready( function () {
-      if (!ahoy.getVisitId()) {
+      if (config.cookies && !ahoy.getVisitId()) {
         createVisit();
       }
 

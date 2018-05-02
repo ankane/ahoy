@@ -21,8 +21,13 @@ module Ahoy
     end
 
     def set_ahoy_cookies
-      ahoy.set_visitor_cookie
-      ahoy.set_visit_cookie
+      if Ahoy.cookies
+        ahoy.set_visitor_cookie
+        ahoy.set_visit_cookie
+      else
+        # delete cookies if exist
+        ahoy.reset
+      end
     end
 
     def track_ahoy_visit

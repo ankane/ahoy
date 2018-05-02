@@ -1,5 +1,9 @@
+require "active_support/core_ext/digest/uuid"
+
 module Ahoy
   class Tracker
+    UUID_NAMESPACE = "a82ae811-5011-45ab-a728-569df7499c5f"
+
     attr_reader :request, :controller
 
     def initialize(**options)
@@ -102,7 +106,7 @@ module Ahoy
     end
 
     def new_visit?
-      !existing_visit_token
+      Ahoy.cookies ? !existing_visit_token : visit.nil?
     end
 
     def new_visitor?
@@ -156,7 +160,7 @@ module Ahoy
     end
 
     def missing_params?
-      if api? && Ahoy.protect_from_forgery
+      if Ahoy.cookies && api? && Ahoy.protect_from_forgery
         !(existing_visit_token && existing_visitor_token)
       else
         false
@@ -164,6 +168,9 @@ module Ahoy
     end
 
     def set_cookie(name, value, duration = nil, use_domain = true)
+      # safety net
+      return unless Ahoy.cookies
+
       cookie = {
         value: value
       }
@@ -174,7 +181,7 @@ module Ahoy
     end
 
     def delete_cookie(name)
-      request.cookie_jar.delete(name)
+      request.cookie_jar.delete(name) if request.cookie_jar[name]
     end
 
     def trusted_time(time = nil)
@@ -200,6 +207,7 @@ module Ahoy
     def visit_token_helper
       @visit_token_helper ||= begin
         token = existing_visit_token
+        token ||= visit_hash unless Ahoy.cookies
         token ||= generate_id unless Ahoy.api_only
         token
       end
@@ -208,6 +216,7 @@ module Ahoy
     def visitor_token_helper
       @visitor_token_helper ||= begin
         token = existing_visitor_token
+        token ||= visitor_hash unless Ahoy.cookies
         token ||= generate_id unless Ahoy.api_only
         token
       end
@@ -216,7 +225,7 @@ module Ahoy
     def existing_visit_token
       @existing_visit_token ||= begin
         token = visit_header
-        token ||= visit_cookie unless api? && Ahoy.protect_from_forgery
+        token ||= visit_cookie if Ahoy.cookies && !(api? && Ahoy.protect_from_forgery)
         token ||= visit_param if api?
         token
       end
@@ -225,10 +234,18 @@ module Ahoy
     def existing_visitor_token
       @existing_visitor_token ||= begin
         token = visitor_header
-        token ||= visitor_cookie unless api? && Ahoy.protect_from_forgery
+        token ||= visitor_cookie if Ahoy.cookies && !(api? && Ahoy.protect_from_forgery)
         token ||= visitor_param if api?
         token
       end
+    end
+
+    def visit_hash
+      @visit_hash ||= Digest::UUID.uuid_v5(UUID_NAMESPACE, [Ahoy.mask_ip(request.remote_ip), request.user_agent].join("/"))
+    end
+
+    def visitor_hash
+      visit_hash
     end
 
     def visit_cookie

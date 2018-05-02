@@ -58,6 +58,37 @@ ahoy.track("My second event", {language: "JavaScript"});
 
 For Android, check out [Ahoy Android](https://github.com/instacart/ahoy-android). For other platforms, see the [API spec](#api-spec).
 
+### GDPR Compliance [master]
+
+Ahoy provides a number of options to help with [GDPR compliance](https://en.wikipedia.org/wiki/General_Data_Protection_Regulation).
+
+Update `config/initializers/ahoy.rb` with:
+
+```ruby
+class Ahoy::Store < Ahoy::DatabaseStore
+  def authenticate(data)
+    # disables automatic linking of visits and users
+  end
+end
+
+Ahoy.mask_ips = true
+Ahoy.cookies = false
+```
+
+This:
+
+- Masks IP addresses
+- Switches from cookies to anonymity sets
+- Disables linking visits and users
+
+If you use JavaScript tracking, also set:
+
+```javascript
+ahoy.configure({cookies: false});
+```
+
+Set [extended GDPR section](#gdpr-compliance-master-1) for more info.
+
 ## How It Works
 
 ### Visits
@@ -312,6 +343,27 @@ Exceptions are rescued so analytics do not break your app. Ahoy uses [Safely](ht
 
 ```ruby
 Safely.report_exception_method = ->(e) { Rollbar.error(e) }
+```
+
+## GDPR Compliance [master]
+
+### IP Masking
+
+Ahoy can mask IPs with the same approach [Google Analytics uses for IP anonymization](https://support.google.com/analytics/answer/2763052). This means:
+
+- For IPv4, the last octet is set to 0 (`8.8.4.4` becomes `8.8.4.0`)
+- For IPv6, the last 80 bits are set to zeros (`2a03:2880:2110:df07:face:b00c::1` becomes `2a03:2880:2110::`)
+
+```ruby
+Ahoy.mask_ips = true
+```
+
+### Anonymity Sets & Cookies
+
+Ahoy can switch from cookies to [anonymity sets](https://privacypatterns.org/patterns/Anonymity-set). Instead of cookies, visitors with the same IP mask and user agent are grouped together in an anonymity set.
+
+```ruby
+Ahoy.cookies = false
 ```
 
 ## Development

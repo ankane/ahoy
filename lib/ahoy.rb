@@ -24,6 +24,9 @@ module Ahoy
   mattr_accessor :visitor_duration
   self.visitor_duration = 2.years
 
+  mattr_accessor :cookies
+  self.cookies = true
+
   mattr_accessor :cookie_domain
 
   mattr_accessor :server_side_visits
