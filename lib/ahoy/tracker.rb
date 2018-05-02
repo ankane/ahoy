@@ -241,11 +241,11 @@ module Ahoy
     end
 
     def visit_hash
-      @visit_hash ||= Digest::UUID.uuid_v5(UUID_NAMESPACE, [Ahoy.mask_ip(request.remote_ip), request.user_agent].join("/"))
+      @visit_hash ||= Digest::UUID.uuid_v5(UUID_NAMESPACE, ["visit", Ahoy.mask_ip(request.remote_ip), request.user_agent].join("/"))
     end
 
     def visitor_hash
-      visit_hash
+      @visitor_hash ||= Digest::UUID.uuid_v5(UUID_NAMESPACE, ["visitor", Ahoy.mask_ip(request.remote_ip), request.user_agent].join("/"))
     end
 
     def visit_cookie
