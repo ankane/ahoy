@@ -339,7 +339,7 @@ This:
 
 - Masks IP addresses
 - Switches from cookies to anonymity sets
-- Disables linking visits and users
+- Disables automatic linking of visits and users
 
 If you use JavaScript tracking, also set:
 
