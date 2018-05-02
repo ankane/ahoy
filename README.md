@@ -60,34 +60,7 @@ For Android, check out [Ahoy Android](https://github.com/instacart/ahoy-android)
 
 ### GDPR Compliance [master]
 
-Ahoy provides a number of options to help with [GDPR compliance](https://en.wikipedia.org/wiki/General_Data_Protection_Regulation).
-
-Update `config/initializers/ahoy.rb` with:
-
-```ruby
-class Ahoy::Store < Ahoy::DatabaseStore
-  def authenticate(data)
-    # disables automatic linking of visits and users
-  end
-end
-
-Ahoy.mask_ips = true
-Ahoy.cookies = false
-```
-
-This:
-
-- Masks IP addresses
-- Switches from cookies to anonymity sets
-- Disables linking visits and users
-
-If you use JavaScript tracking, also set:
-
-```javascript
-ahoy.configure({cookies: false});
-```
-
-Set [extended GDPR section](#gdpr-compliance-master-1) for more info.
+Ahoy provides a number of options to help with [GDPR compliance](https://en.wikipedia.org/wiki/General_Data_Protection_Regulation). See the [GDPR section](#gdpr-compliance-master-1) for more info.
 
 ## How It Works
 
@@ -346,6 +319,33 @@ Safely.report_exception_method = ->(e) { Rollbar.error(e) }
 ```
 
 ## GDPR Compliance [master]
+
+Ahoy provides a number of options to help with [GDPR compliance](https://en.wikipedia.org/wiki/General_Data_Protection_Regulation).
+
+Update `config/initializers/ahoy.rb` with:
+
+```ruby
+class Ahoy::Store < Ahoy::DatabaseStore
+  def authenticate(data)
+    # disables automatic linking of visits and users
+  end
+end
+
+Ahoy.mask_ips = true
+Ahoy.cookies = false
+```
+
+This:
+
+- Masks IP addresses
+- Switches from cookies to anonymity sets
+- Disables linking visits and users
+
+If you use JavaScript tracking, also set:
+
+```javascript
+ahoy.configure({cookies: false});
+```
 
 ### IP Masking
 
