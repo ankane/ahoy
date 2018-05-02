@@ -358,6 +358,14 @@ Ahoy can mask IPs with the same approach [Google Analytics uses for IP anonymiza
 Ahoy.mask_ips = true
 ```
 
+To mask previously collected IPs, use:
+
+```ruby
+Ahoy::Visit.find_each do |visit|
+  visit.update_column :ip, Ahoy.mask_ip(visit.ip)
+end
+```
+
 ### Anonymity Sets & Cookies
 
 Ahoy can switch from cookies to [anonymity sets](https://privacypatterns.org/patterns/Anonymity-set). Instead of cookies, visitors with the same IP mask and user agent are grouped together in an anonymity set.
