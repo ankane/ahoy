@@ -1,3 +1,5 @@
+require "ipaddr"
+
 require "active_support"
 require "active_support/core_ext"
 require "addressable/uri"
@@ -67,11 +69,22 @@ module Ahoy
   mattr_accessor :token_generator
   self.token_generator = -> { SecureRandom.uuid }
 
-  mattr_accessor :mask_ip
-  self.mask_ip = false
+  mattr_accessor :mask_ips
+  self.mask_ips = false
 
   def self.log(message)
     Rails.logger.info { "[ahoy] #{message}" }
+  end
+
+  def self.mask_ip(ip)
+    addr = IPAddr.new(ip)
+    if addr.ipv4?
+      # set last octet to 0
+      addr.mask(24).to_s
+    else
+      # set last 80 bits to zeros
+      addr.mask(48).to_s
+    end
   end
 end
 

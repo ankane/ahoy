@@ -1,4 +1,3 @@
-require "ipaddr"
 require "browser"
 require "referer-parser"
 require "user_agent_parser"
@@ -74,15 +73,8 @@ module Ahoy
     # https://support.google.com/analytics/answer/2763052
     def ip
       ip = request.remote_ip
-      if ip && Ahoy.mask_ip
-        addr = IPAddr.new(ip)
-        if addr.ipv4?
-          # set last octet to 0
-          addr.mask(24).to_s
-        else
-          # set last 80 bits to zeros
-          addr.mask(48).to_s
-        end
+      if ip && Ahoy.mask_ips
+        Ahoy.mask_ip(ip)
       else
         ip
       end
