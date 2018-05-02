@@ -374,6 +374,8 @@ Ahoy can switch from cookies to [anonymity sets](https://privacypatterns.org/pat
 Ahoy.cookies = false
 ```
 
+Previously set cookies are automatically deleted.
+
 ## Development
 
 Ahoy is built with developers in mind. You can run the following code in your browser’s console.
