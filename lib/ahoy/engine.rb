@@ -2,7 +2,7 @@ module Ahoy
   class Engine < ::Rails::Engine
     initializer "ahoy", after: "sprockets.environment" do |app|
       # allow Devise to be loaded after Ahoy
-      require "ahoy/warden" if defined?(Warden)
+      require "ahoy/warden" if defined?(Warden) && Ahoy.integrate_with_warden
 
       next unless Ahoy.quiet
 

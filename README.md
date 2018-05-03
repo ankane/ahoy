@@ -173,6 +173,8 @@ visitable :sign_up_visit, class_name: "Visit"
 
 Ahoy automatically attaches the `current_user` to the visit. With [Devise](https://github.com/plataformatec/devise), it attaches the user even if he or she signs in after the visit starts.
 
+If you don't want this behavior, you can set `Ahoy.integrate_with_warden = false` in the initializer.
+
 With other authentication frameworks, add this to the end of your sign in method:
 
 ```ruby
