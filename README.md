@@ -513,6 +513,7 @@ The same approach also works with visitor tokens.
 ## Tutorials
 
 - [Tracking Metrics with Ahoy and Blazer](https://gorails.com/episodes/internal-metrics-with-ahoy-and-blazer)
+-[A Guide to Use Ahoy 2.0 on Ruby on Rails](http://blog.tamuztech.com/a-guide-to-using-ahoy-2-0-on-ruby-on-rails/)
 
 ## API Spec
 
