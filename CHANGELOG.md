@@ -3,6 +3,7 @@
 - Added option for IP masking
 - Added option to use anonymity sets instead of cookies
 - Fixed `visitable` for Rails 4.2
+- Removed `search_keyword` from new installs
 
 ## 2.0.2
 

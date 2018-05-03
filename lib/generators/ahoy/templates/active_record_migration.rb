@@ -15,7 +15,6 @@ class <%= migration_class_name %> < ActiveRecord::Migration<%= migration_version
       t.text :user_agent
       t.text :referrer
       t.string :referring_domain
-      t.string :search_keyword
       t.text :landing_page
 
       # technology
