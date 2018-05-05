@@ -569,6 +569,32 @@ Then include it in your pack.
 import ahoy from "ahoy.js";
 ```
 
+## Upgrading
+
+### 2.1 [master]
+
+Ahoy recommends [Device Detector](https://github.com/podigee/device_detector) for user agent parsing and makes it the default for new installations. To switch, add to `config/initializers/ahoy.rb`:
+
+```ruby
+Ahoy.user_agent_parser = :device_detector
+```
+
+Backfill existing records with:
+
+```ruby
+Ahoy::Visit.find_each do |visit|
+  client = DeviceDetector.new(visit.user_agent)
+  visit.browser = client.name
+  visit.os = client.os_name
+  visit.device_type = client.device_type.try(:titleize)
+  visit.save(validate: false)
+end
+```
+
+### 2.0
+
+See the [upgrade guide](docs/Ahoy-2-Upgrade.md)
+
 ## History
 
 View the [changelog](https://github.com/ankane/ahoy/blob/master/CHANGELOG.md)
