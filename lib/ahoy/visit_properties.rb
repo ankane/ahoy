@@ -1,4 +1,5 @@
 require "browser"
+require "device_detector"
 require "referer-parser"
 require "user_agent_parser"
 
@@ -41,32 +42,42 @@ module Ahoy
     end
 
     def tech_properties
-      # cache for performance
-      @@user_agent_parser ||= UserAgentParser::Parser.new
+      if Ahoy.user_agent_parser == :device_detector
+        client = DeviceDetector.new(request.user_agent)
 
-      user_agent = request.user_agent
-      agent = @@user_agent_parser.parse(user_agent)
-      browser = Browser.new(user_agent)
-      device_type =
-        if browser.bot?
-          "Bot"
-        elsif browser.device.tv?
-          "TV"
-        elsif browser.device.console?
-          "Console"
-        elsif browser.device.tablet?
-          "Tablet"
-        elsif browser.device.mobile?
-          "Mobile"
-        else
-          "Desktop"
-        end
+        {
+          browser: client.name,
+          os: client.os_name,
+          device_type: client.device_type.try(:titleize)
+        }
+      else
+        # cache for performance
+        @@user_agent_parser ||= UserAgentParser::Parser.new
 
-      {
-        browser: agent.name,
-        os: agent.os.name,
-        device_type: device_type,
-      }
+        user_agent = request.user_agent
+        agent = @@user_agent_parser.parse(user_agent)
+        browser = Browser.new(user_agent)
+        device_type =
+          if browser.bot?
+            "Bot"
+          elsif browser.device.tv?
+            "TV"
+          elsif browser.device.console?
+            "Console"
+          elsif browser.device.tablet?
+            "Tablet"
+          elsif browser.device.mobile?
+            "Mobile"
+          else
+            "Desktop"
+          end
+
+        {
+          browser: agent.name,
+          os: agent.os.name,
+          device_type: device_type
+        }
+      end
     end
 
     # masking based on Google Analytics anonymization

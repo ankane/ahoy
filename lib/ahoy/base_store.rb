@@ -46,7 +46,21 @@ module Ahoy
     protected
 
     def bot?
-      @bot ||= request ? Browser.new(request.user_agent).bot? : false
+      unless defined?(@bot)
+        @bot = begin
+          if request
+            if Ahoy.user_agent_parser == :device_detector
+              DeviceDetector.new(request.user_agent).bot?
+            else
+              Browser.new(request.user_agent).bot?
+            end
+          else
+            false
+          end
+        end
+      end
+
+      @bot
     end
 
     def exclude_by_method?

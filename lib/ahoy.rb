@@ -75,6 +75,9 @@ module Ahoy
   mattr_accessor :mask_ips
   self.mask_ips = false
 
+  mattr_accessor :user_agent_parser
+  self.user_agent_parser = :legacy
+
   def self.log(message)
     Rails.logger.info { "[ahoy] #{message}" }
   end
