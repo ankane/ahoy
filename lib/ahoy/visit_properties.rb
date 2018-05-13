@@ -44,11 +44,20 @@ module Ahoy
     def tech_properties
       if Ahoy.user_agent_parser == :device_detector
         client = DeviceDetector.new(request.user_agent)
+        device_type =
+          case client.device_type
+          when "smartphone"
+            "Mobile"
+          when "tv"
+            "TV"
+          else
+            client.device_type.try(:titleize)
+          end
 
         {
           browser: client.name,
           os: client.os_name,
-          device_type: client.device_type.try(:titleize)
+          device_type: device_type
         }
       else
         # cache for performance
