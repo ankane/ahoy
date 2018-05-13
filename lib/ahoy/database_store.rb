@@ -24,6 +24,7 @@ module Ahoy
       else
         Ahoy.log "Event excluded since visit not created: #{data[:visit_token]}"
       end
+      event if event
     end
 
     def geocode(data)
