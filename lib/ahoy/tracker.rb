@@ -273,7 +273,10 @@ module Ahoy
     end
 
     def ensure_token(token)
-      token.to_s.gsub(/[^a-z0-9\-]/i, "").first(64) if token
+      token.
+        to_s.
+        encode('UTF-8', 'binary', invalid: :replace, undef: :replace, replace: '').
+        gsub(/[^a-z0-9\-]/i, "").first(64) if token
     end
 
     def debug(message)
