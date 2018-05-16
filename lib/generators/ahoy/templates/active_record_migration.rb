@@ -1,6 +1,6 @@
 class <%= migration_class_name %> < ActiveRecord::Migration<%= migration_version %>
   def change
-   create_table :ahoy_visits do |t|
+    create_table :ahoy_visits do |t|
       t.string :visit_token
       t.string :visitor_token
 
