@@ -1,4 +1,4 @@
-## 2.1.0 [unreleased]
+## 2.1.0
 
 - Added option for IP masking
 - Added option to use anonymity sets instead of cookies

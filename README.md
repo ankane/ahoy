@@ -58,9 +58,9 @@ ahoy.track("My second event", {language: "JavaScript"});
 
 For Android, check out [Ahoy Android](https://github.com/instacart/ahoy-android). For other platforms, see the [API spec](#api-spec).
 
-### GDPR Compliance [master]
+### GDPR Compliance
 
-Ahoy provides a number of options to help with [GDPR compliance](https://en.wikipedia.org/wiki/General_Data_Protection_Regulation). See the [GDPR section](#gdpr-compliance-master-1) for more info.
+Ahoy provides a number of options to help with GDPR compliance. See the [GDPR section](#gdpr-compliance-1) for more info.
 
 ## How It Works
 
@@ -318,7 +318,7 @@ Exceptions are rescued so analytics do not break your app. Ahoy uses [Safely](ht
 Safely.report_exception_method = ->(e) { Rollbar.error(e) }
 ```
 
-## GDPR Compliance [master]
+## GDPR Compliance
 
 Ahoy provides a number of options to help with [GDPR compliance](https://en.wikipedia.org/wiki/General_Data_Protection_Regulation).
 
@@ -571,7 +571,7 @@ import ahoy from "ahoy.js";
 
 ## Upgrading
 
-### 2.1 [master]
+### 2.1
 
 Ahoy recommends [Device Detector](https://github.com/podigee/device_detector) for user agent parsing and makes it the default for new installations. To switch, add to `config/initializers/ahoy.rb`:
 
