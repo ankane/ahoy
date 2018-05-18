@@ -49,6 +49,6 @@ class <%= migration_class_name %> < ActiveRecord::Migration<%= migration_version
     end
 
     add_index :ahoy_events, [:name, :time]<% if properties_type == "jsonb" && rails5? %>
-    add_index :ahoy_events, "properties jsonb_path_ops", using: "gin"<% end %>
+    add_index :ahoy_events, [:properties], using: "gin", opclass: "jsonb_path_ops"<% end %>
   end
 end
