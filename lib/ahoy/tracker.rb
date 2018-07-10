@@ -37,7 +37,7 @@ module Ahoy
       report_exception(e)
     end
 
-    def track_visit(defer: false)
+    def track_visit(defer: false, started_at: nil)
       if exclude?
         debug "Visit excluded"
       elsif missing_params?
@@ -52,7 +52,7 @@ module Ahoy
             visit_token: visit_token,
             visitor_token: visitor_token,
             user_id: user.try(:id),
-            started_at: trusted_time,
+            started_at: trusted_time(started_at),
           }.merge(visit_properties).select { |_, v| v }
 
           @store.track_visit(data)
