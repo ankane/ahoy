@@ -9,7 +9,7 @@ module Ahoy
       end
       class_eval %{
         def set_ahoy_visit
-          self.#{name} ||= Thread.current[:ahoy].try(:visit_or_create)
+          self.#{name} ||= RequestStore.store[:ahoy].try(:visit_or_create)
         end
       }
     end
