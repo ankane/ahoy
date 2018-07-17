@@ -1,3 +1,7 @@
+## 2.1.1 [unreleased]
+
+- Removed dependency on request_store
+
 ## 2.1.0
 
 - Added option for IP masking

@@ -23,7 +23,6 @@ Gem::Specification.new do |spec|
   spec.add_dependency "browser", "~> 2.0"
   spec.add_dependency "referer-parser", ">= 0.3"
   spec.add_dependency "user_agent_parser"
-  spec.add_dependency "request_store"
   spec.add_dependency "safely_block", ">= 0.2.1"
   spec.add_dependency "device_detector"
 
