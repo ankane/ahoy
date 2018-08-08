@@ -45,7 +45,7 @@ module Ahoy
         begin
           visit.user = user
           visit.save!
-        rescue ActiveRecord::AssociationTypeMismatch
+        rescue ActiveRecord::AssociationTypeMismatch # rubocop:disable Lint/HandleExceptions
           # do nothing
         end
       end
