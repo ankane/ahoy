@@ -27,7 +27,7 @@ module Ahoy
                 v = "true"
               end
 
-              relation = relation.where("JSON_UNQUOTE(properties -> ?) = ?", "$.#{k.to_s}", v.as_json)
+              relation = relation.where("JSON_UNQUOTE(properties -> ?) = ?", "$.#{k}", v.as_json)
             end
           else
             properties.each do |k, v|

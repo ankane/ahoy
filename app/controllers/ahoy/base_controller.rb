@@ -6,7 +6,7 @@ module Ahoy
       skip_after_action(*filters, raise: false)
       skip_around_action(*filters, raise: false)
     else
-      skip_action_callback *filters
+      skip_action_callback(*filters)
     end
     before_action :verify_request_size
     before_action :renew_cookies
