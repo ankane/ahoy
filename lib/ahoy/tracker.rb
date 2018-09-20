@@ -197,6 +197,7 @@ module Ahoy
     end
 
     def report_exception(e)
+      raise e if Rails.env.development? || Rails.env.test?
       Safely.report_exception(e)
     end
 
