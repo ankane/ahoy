@@ -14,7 +14,7 @@ module Ahoy
           random: "RANDOM"
         )
       )
-      url = "#{url}&visit_token=${clientId(site-user-id)}&visitor_token=${clientId(site-user-id)}"
+      url = "#{url}&visit_token=${clientId(ahoy_visit)}&visitor_token=${clientId(ahoy_visitor)}"
 
       content_tag "amp-analytics" do
         content_tag "script", type: "application/json" do
