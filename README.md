@@ -129,21 +129,20 @@ class ApplicationController < ActionController::Base
 end
 ```
 
-#### AMP
+#### Native Apps
+
+For Android, check out [Ahoy Android](https://github.com/instacart/ahoy-android). For other platforms, see the [API spec](#api-spec).
+
+#### AMP [master]
 
 ```erb
 <head>
   <script async custom-element="amp-analytics" src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>
 </head>
 <body>
-  <%= amp_analytics %>
-  <!-- ... -->
+  <%= amp_event "Viewed article", title: "Analytics with Rails" %>
 </body>
 ```
-
-#### Native Apps
-
-For Android, check out [Ahoy Android](https://github.com/instacart/ahoy-android). For other platforms, see the [API spec](#api-spec).
 
 ### Associated Models
 

@@ -1,6 +1,6 @@
-## 2.1.1 (unreleased)
+## 2.1.1 [unreleased]
 
-- Added `amp_analytics` helper
+- Added `amp_event` helper
 
 ## 2.1.0
 

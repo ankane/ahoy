@@ -3,7 +3,7 @@ module Ahoy
     def create
       events =
         if params[:name]
-          # legacy API
+          # legacy API and AMP
           [request.params]
         elsif params[:events]
           request.params[:events]

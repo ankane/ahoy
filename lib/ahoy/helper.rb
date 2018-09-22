@@ -1,27 +1,28 @@
 module Ahoy
   module Helper
-    def amp_analytics options={}
-      content_tag 'amp-analytics', options do
-        content_tag 'script', type: 'application/json' do
-          JSON::dump({
+    def amp_event(name, properties = {})
+      default_url_options = ActionController::Base.default_url_options || {}
+      url = Ahoy::Engine.routes.url_helpers.events_url(
+        default_url_options.merge(
+          name: name,
+          properties: properties,
+          landing_page: "AMPDOC_URL",
+          referrer: "DOCUMENT_REFERRER",
+          random: "RANDOM"
+        )
+      )
+      url = "#{url}&visit_token=${clientId(site-user-id)}&visitor_token=${clientId(site-user-id)}"
+
+      content_tag "amp-analytics" do
+        content_tag "script", type: "application/json" do
+          json_escape({
             requests: {
-              pageview: Ahoy::Engine.routes.url_helpers.visits_url(
-                protocol: '//',
-                host: request.host_with_port,
-                visit_token: ahoy.visit_token,
-                visitor_token: ahoy.visitor_token,
-                screen_width: 'SCREEN_WIDTH',
-                screen_height: 'SCREEN_HEIGHT',
-                platform: 'Web',
-                landing_page: 'AMPDOC_URL',
-                referrer: 'DOCUMENT_REFERRER',
-                random: 'RANDOM'
-              )
+              pageview: url
             },
             triggers: {
               trackPageview: {
-                on: 'ini-load',
-                request: 'pageview'
+                on: "visible",
+                request: "pageview"
               }
             },
             transport: {
@@ -29,7 +30,7 @@ module Ahoy
               xhrpost: true,
               image: false
             }
-          }).html_safe
+          }.to_json).html_safe
         end
       end
     end
