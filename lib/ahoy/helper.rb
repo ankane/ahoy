@@ -1,9 +1,8 @@
 module Ahoy
   module Helper
     def amp_event(name, properties = {})
-      default_url_options = ActionController::Base.default_url_options || {}
       url = Ahoy::Engine.routes.url_helpers.events_url(
-        default_url_options.merge(
+        url_options.slice(:host, :port, :protocol).merge(
           name: name,
           properties: properties,
           screen_width: "SCREEN_WIDTH",
