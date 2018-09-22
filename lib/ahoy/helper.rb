@@ -6,6 +6,9 @@ module Ahoy
         default_url_options.merge(
           name: name,
           properties: properties,
+          screen_width: "SCREEN_WIDTH",
+          screen_height: "SCREEN_HEIGHT",
+          platform: "Web",
           landing_page: "AMPDOC_URL",
           referrer: "DOCUMENT_REFERRER",
           random: "RANDOM"
