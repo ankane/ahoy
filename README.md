@@ -93,7 +93,7 @@ Ahoy.server_side_visits = :when_needed
 
 Each event has a `name` and `properties`.
 
-There are three ways to track events.
+There are several ways to track events.
 
 #### JavaScript
 
@@ -127,6 +127,18 @@ class ApplicationController < ActionController::Base
     ahoy.track "Ran action", request.path_parameters
   end
 end
+```
+
+#### AMP
+
+```erb
+<head>
+  <script async custom-element="amp-analytics" src="https://cdn.ampproject.org/v0/amp-analytics-0.1.js"></script>
+</head>
+<body>
+  <%= amp_analytics %>
+  <!-- ... -->
+</body>
 ```
 
 #### Native Apps

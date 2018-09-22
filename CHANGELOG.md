@@ -1,3 +1,7 @@
+## 2.1.1 (unreleased)
+
+- Added `amp_analytics` helper
+
 ## 2.1.0
 
 - Added option for IP masking
