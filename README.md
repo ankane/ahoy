@@ -34,7 +34,7 @@ Track your first event from a controller with:
 ahoy.track "My first event", {language: "Ruby"}
 ```
 
-### JavaScript & Native Apps
+### JavaScript, Native Apps, & AMP
 
 First, enable the API in `config/initializers/ahoy.rb`:
 
@@ -57,6 +57,12 @@ ahoy.track("My second event", {language: "JavaScript"});
 ```
 
 For Android, check out [Ahoy Android](https://github.com/instacart/ahoy-android). For other platforms, see the [API spec](#api-spec).
+
+For AMP, track an event with: [master]
+
+```erb
+<%= amp_event "My third event", language: "AMP" %>
+```
 
 ### GDPR Compliance
 
