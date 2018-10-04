@@ -181,7 +181,7 @@ end
 Customize the column and class name with:
 
 ```ruby
-visitable :sign_up_visit, class_name: "Visit"
+visitable :sign_up_visit, class_name: "Ahoy::Visit"
 ```
 
 ### Users
