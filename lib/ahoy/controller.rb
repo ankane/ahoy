@@ -31,8 +31,12 @@ module Ahoy
     end
 
     def track_ahoy_visit
-      if ahoy.new_visit?
-        ahoy.track_visit(defer: Ahoy.server_side_visits != true)
+      defer = Ahoy.server_side_visits != true
+
+      if defer && !Ahoy.cookies
+        # avoid calling new_visit?, which triggers a database call
+      elsif ahoy.new_visit?
+        ahoy.track_visit(defer: defer)
       end
     end
 
