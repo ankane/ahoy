@@ -1,6 +1,7 @@
-## 2.1.1 [unreleased]
+## 2.2.0 [unreleased]
 
 - Added `amp_event` helper
+- Improved bot detection
 
 ## 2.1.0
 
