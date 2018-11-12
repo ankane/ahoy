@@ -41,6 +41,11 @@ class Ahoy::Visit
   field :utm_content, type: String
   field :utm_campaign, type: String
 
+  # native apps
+  field :app_version, type: String
+  field :os_version, type: String
+  field :platform, type: String
+
   field :started_at, type: Time
 
   index({visit_token: 1}, {unique: true})

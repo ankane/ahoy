@@ -34,6 +34,11 @@ class <%= migration_class_name %> < ActiveRecord::Migration<%= migration_version
       t.string :utm_content
       t.string :utm_campaign
 
+      # native apps
+      t.string :app_version
+      t.string :os_version
+      t.string :platform
+
       t.timestamp :started_at
     end
 
