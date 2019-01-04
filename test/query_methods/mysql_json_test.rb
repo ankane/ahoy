@@ -7,6 +7,8 @@ ActiveRecord::Migration.create_table :mysql_json_events, force: true do |t|
 end
 
 class MysqlJsonEvent < MysqlBase
+  # uncomment for MariaDB
+  # serialize :properties, JSON
 end
 
 class MysqlJsonTest < Minitest::Test
