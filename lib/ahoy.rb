@@ -71,6 +71,9 @@ module Ahoy
   mattr_accessor :track_bots
   self.track_bots = false
 
+  mattr_accessor :bot_detection_version
+  self.bot_detection_version = 1
+
   mattr_accessor :token_generator
   self.token_generator = -> { SecureRandom.uuid }
 
