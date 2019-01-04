@@ -1,7 +1,7 @@
-## 2.2.0 [unreleased]
+## 2.2.0
 
 - Added `amp_event` helper
-- Improved bot detection
+- Improved bot detection for Device Detector
 
 ## 2.1.0
 

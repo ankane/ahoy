@@ -56,7 +56,7 @@ ahoy.track("My second event", {language: "JavaScript"});
 
 For Android, check out [Ahoy Android](https://github.com/instacart/ahoy-android). For other platforms, see the [API spec](#api-spec).
 
-For AMP, track an event with: [master]
+For AMP, track an event with:
 
 ```erb
 <%= amp_event "My third event", language: "AMP" %>
@@ -137,7 +137,7 @@ end
 
 For Android, check out [Ahoy Android](https://github.com/instacart/ahoy-android). For other platforms, see the [API spec](#api-spec).
 
-#### AMP [master]
+#### AMP
 
 ```erb
 <head>
@@ -585,6 +585,14 @@ import ahoy from "ahoy.js";
 ```
 
 ## Upgrading
+
+### 2.2
+
+Ahoy now ships with better bot detection if you use Device Detector. This should be more accurate but can significantly reduce the number of visits recorded. For existing installs, it’s opt-in to start. To use it, add to `config/initializers/ahoy.rb`:
+
+```ruby
+Ahoy.bot_detection_version = 2
+```
 
 ### 2.1
 
