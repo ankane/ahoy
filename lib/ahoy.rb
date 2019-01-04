@@ -6,6 +6,7 @@ require "addressable/uri"
 require "geocoder"
 require "safely/core"
 
+require "ahoy/utils"
 require "ahoy/base_store"
 require "ahoy/controller"
 require "ahoy/database_store"

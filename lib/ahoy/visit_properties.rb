@@ -103,7 +103,7 @@ module Ahoy
     def request_properties
       {
         ip: ip,
-        user_agent: ensure_utf8(request.user_agent),
+        user_agent: Ahoy::Utils.ensure_utf8(request.user_agent),
         referrer: referrer,
         landing_page: landing_page,
         platform: params["platform"],
@@ -112,12 +112,6 @@ module Ahoy
         screen_height: params["screen_height"],
         screen_width: params["screen_width"]
       }
-    end
-
-    def ensure_utf8(str)
-      if str
-        str.encode("UTF-8", "binary", invalid: :replace, undef: :replace, replace: "")
-      end
     end
   end
 end

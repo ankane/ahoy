@@ -1,54 +1,36 @@
-require 'minitest/autorun'
-require 'ahoy/tracker'
-require 'ahoy/base_store'
-require 'active_support'
-require 'active_support/core_ext'
+require_relative "test_helper"
 
 module Ahoy
   class Store < Ahoy::BaseStore
   end
 end
 
-module Ahoy
-  mattr_accessor :cookies
-  self.cookies = true
+class TrackerTest < Minitest::Test
+  def test_ensure_token_removes_invalid_utf8_bytes_from_visit_token_cookie
+    tracker = build_tracker(cookies: {"ahoy_visit" => "bad token\255"})
+    assert tracker.visit_token, "bad token"
+  end
 
-  mattr_accessor :api_only
-  self.api_only = false
-end
+  def test_ensure_token_removes_invalid_utf8_bytes_from_visitor_token_cookie
+    tracker = build_tracker(cookies: {"ahoy_visitor" => "bad token\255"})
+    assert tracker.visitor_token, "bad token"
+  end
 
-module Ahoy
-  class TestTracker < Minitest::Test
-    def test_ensure_token_removes_invalid_utf8_bytes_from_visit_token_cookie
-      mock_request = Struct.new(:cookies, :headers)
-      request = mock_request.new({ 'ahoy_visit' => "bad token\255" }, {})
-      tracker = Tracker.new(request: request)
+  def test_ensure_token_removes_invalid_utf8_bytes_from_visit_token_header
+    tracker = build_tracker(headers: {"Ahoy-Visit" => "bad token\255"})
+    assert tracker.visit_token, "bad token"
+  end
 
-      assert tracker.visit_token, 'bad token'
-    end
+  def test_ensure_token_removes_invalid_utf8_bytes_from_visitor_token_header
+    tracker = build_tracker(headers: {"Ahoy-Visitor" => "bad token\255"})
+    assert tracker.visitor_token, "bad token"
+  end
 
-    def test_ensure_token_removes_invalid_utf8_bytes_from_visitor_token_cookie
-      mock_request = Struct.new(:cookies, :headers)
-      request = mock_request.new({ 'ahoy_visitor' => "bad token\255" }, {})
-      tracker = Tracker.new(request: request)
+  private
 
-      assert tracker.visitor_token, 'bad token'
-    end
-
-    def test_ensure_token_removes_invalid_utf8_bytes_from_visit_token_header
-      mock_request = Struct.new(:cookies, :headers)
-      request = mock_request.new({}, 'Ahoy-Visit' => "bad token\255")
-      tracker = Tracker.new(request: request)
-
-      assert tracker.visit_token, 'bad token'
-    end
-
-    def test_ensure_token_removes_invalid_utf8_bytes_from_visitor_token_header
-      mock_request = Struct.new(:cookies, :headers)
-      request = mock_request.new({}, 'Ahoy-Visitor' => "bad token\255")
-      tracker = Tracker.new(request: request)
-
-      assert tracker.visitor_token, 'bad token'
-    end
+  def build_tracker(cookies: {}, headers: {})
+    mock_request = Struct.new(:cookies, :headers)
+    request = mock_request.new(cookies, headers)
+    Ahoy::Tracker.new(request: request)
   end
 end
