@@ -156,34 +156,34 @@ Say we want to associate orders with visits. Just add `visitable` to the model.
 
 ```ruby
 class Order < ApplicationRecord
-  visitable
+  visitable :ahoy_visit
 end
 ```
 
-When a visitor places an order, the `visit_id` column is automatically set :tada:
+When a visitor places an order, the `ahoy_visit_id` column is automatically set :tada:
 
 See where orders are coming from with simple joins:
 
 ```ruby
-Order.joins(:visit).group("referring_domain").count
-Order.joins(:visit).group("city").count
-Order.joins(:visit).group("device_type").count
+Order.joins(:ahoy_visit).group("referring_domain").count
+Order.joins(:ahoy_visit).group("city").count
+Order.joins(:ahoy_visit).group("device_type").count
 ```
 
-Here’s what the migration to add the `visit_id` column should look like:
+Here’s what the migration to add the `ahoy_visit_id` column should look like:
 
 ```ruby
 class AddVisitIdToOrders < ActiveRecord::Migration[5.1]
   def change
-    add_column :orders, :visit_id, :bigint
+    add_column :orders, :ahoy_visit_id, :bigint
   end
 end
 ```
 
-Customize the column and class name with:
+Customize the column with:
 
 ```ruby
-visitable :sign_up_visit, class_name: "Ahoy::Visit"
+visitable :sign_up_visit
 ```
 
 ### Users
