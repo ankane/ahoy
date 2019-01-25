@@ -57,7 +57,7 @@ module Ahoy
 
           @store.track_visit(data)
 
-          Ahoy::GeocodeV2Job.perform_later(visit_token, data[:ip]) if Ahoy.geocode
+          Ahoy.geocode_job_class.constantize.perform_later(visit_token, data[:ip]) if Ahoy.geocode
         end
       end
       true
