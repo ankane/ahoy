@@ -39,6 +39,9 @@ module Ahoy
 
   mattr_accessor :geocode
   self.geocode = true
+  
+  mattr_accessor :geocode_job_class
+  self.geocode_job_class = "Ahoy::GeocodeV2Job"
 
   mattr_accessor :max_content_length
   self.max_content_length = 8192
