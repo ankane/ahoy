@@ -493,6 +493,23 @@ end
 
 Two useful methods you can use are `request` and `controller`.
 
+You can pass additional visit data from JavaScript with: [master]
+
+```javascript
+ahoy.configure({visitParams: {referral_code: 123}});
+```
+
+And use:
+
+```ruby
+class Ahoy::Store < Ahoy::DatabaseStore
+  def track_visit(data)
+    data[:referral_code] = request.parameters[:referral_code]
+    super(data)
+  end
+end
+```
+
 ### Use Different Models
 
 ```ruby
