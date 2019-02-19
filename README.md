@@ -87,7 +87,11 @@ Prevent certain Rails actions from creating visits with:
 skip_before_action :track_ahoy_visit
 ```
 
-This is typically useful for APIs.
+This is typically useful for APIs. If your entire Rails app is an API, you can use:
+
+```ruby
+Ahoy.api_only = true
+```
 
 You can also defer visit tracking to JavaScript. This is useful for preventing bots (that aren’t detected by their user agent) and users with cookies disabled from creating a new visit on each request. `:when_needed` will create visits server-side only when needed by events, and `false` will disable server-side creation completely, discarding events without a visit.
 
