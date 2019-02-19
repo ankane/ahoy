@@ -331,6 +331,8 @@ Geocoder.configure(
 )
 ```
 
+If you use Heroku, you can use an unofficial buildpack like [this one](https://github.com/temedica/heroku-buildpack-maxmind-geolite2) to avoid including the database in your repo.
+
 ### Token Generation
 
 Ahoy uses random UUIDs for visit and visitor tokens by default, but you can use your own generator like [Druuid](https://github.com/recurly/druuid).
