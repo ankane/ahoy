@@ -2,7 +2,7 @@
  * Ahoy.js
  * Simple, powerful JavaScript analytics
  * https://github.com/ankane/ahoy.js
- * v0.3.3
+ * v0.3.4
  * MIT License
  */
 
@@ -12,48 +12,82 @@
   (global.ahoy = factory());
 }(this, (function () { 'use strict';
 
-  function isUndefined (value) {
-    return value === undefined
+  function isUndefined(value) {
+    return value === undefined;
   }
 
-  function isObject (value) {
-    return value === Object(value)
+  function isNull(value) {
+    return value === null;
   }
 
-  function isArray (value) {
-    return Array.isArray(value)
+  function isObject(value) {
+    return value === Object(value);
   }
 
-  function isBlob (value) {
-    return value != null &&
-        typeof value.size === 'number' &&
-        typeof value.type === 'string' &&
-        typeof value.slice === 'function'
+  function isArray(value) {
+    return Array.isArray(value);
   }
 
-  function isFile (value) {
-    return isBlob(value) &&
-        typeof value.lastModified === 'number' &&
-        typeof value.name === 'string'
+  function isDate(value) {
+    return value instanceof Date;
   }
 
-  function isDate (value) {
-    return value instanceof Date
+  function isBlob(value) {
+    return (
+      value &&
+      typeof value.size === 'number' &&
+      typeof value.type === 'string' &&
+      typeof value.slice === 'function'
+    );
   }
 
-  function objectToFormData (obj, fd, pre) {
+  function isFile(value) {
+    return (
+      isBlob(value) &&
+      (typeof value.lastModifiedDate === 'object' ||
+        typeof value.lastModified === 'number') &&
+      typeof value.name === 'string'
+    );
+  }
+
+  function isFormData(value) {
+    return value instanceof FormData;
+  }
+
+  function objectToFormData(obj, cfg, fd, pre) {
+    if (isFormData(cfg)) {
+      pre = fd;
+      fd = cfg;
+      cfg = null;
+    }
+
+    cfg = cfg || {};
+    cfg.indices = isUndefined(cfg.indices) ? false : cfg.indices;
+    cfg.nulls = isUndefined(cfg.nulls) ? true : cfg.nulls;
     fd = fd || new FormData();
 
     if (isUndefined(obj)) {
-      return fd
+      return fd;
+    } else if (isNull(obj)) {
+      if (cfg.nulls) {
+        fd.append(pre, '');
+      }
     } else if (isArray(obj)) {
-      obj.forEach(function (value) {
+      if (!obj.length) {
         var key = pre + '[]';
 
-        objectToFormData(value, fd, key);
-      });
-    } else if (isObject(obj) && !isFile(obj) && !isDate(obj)) {
-      Object.keys(obj).forEach(function (prop) {
+        fd.append(key, '');
+      } else {
+        obj.forEach(function(value, index) {
+          var key = pre + '[' + (cfg.indices ? index : '') + ']';
+
+          objectToFormData(value, cfg, fd, key);
+        });
+      }
+    } else if (isDate(obj)) {
+      fd.append(pre, obj.toISOString());
+    } else if (isObject(obj) && !isFile(obj) && !isBlob(obj)) {
+      Object.keys(obj).forEach(function(prop) {
         var value = obj[prop];
 
         if (isArray(value)) {
@@ -62,20 +96,20 @@
           }
         }
 
-        var key = pre ? (pre + '[' + prop + ']') : prop;
+        var key = pre ? pre + '[' + prop + ']' : prop;
 
-        objectToFormData(value, fd, key);
+        objectToFormData(value, cfg, fd, key);
       });
     } else {
       fd.append(pre, obj);
     }
 
-    return fd
+    return fd;
   }
 
   var objectToFormdata = objectToFormData;
 
-  // http://www.quirksmode.org/js/cookies.html
+  // https://www.quirksmode.org/js/cookies.html
 
   var Cookies = {
     set: function (name, value, ttl, domain) {
@@ -112,13 +146,16 @@
     urlPrefix: "",
     visitsUrl: "/ahoy/visits",
     eventsUrl: "/ahoy/events",
-    cookieDomain: null,
     page: null,
     platform: "Web",
     useBeacon: true,
     startOnReady: true,
     trackVisits: true,
-    cookies: true
+    cookies: true,
+    cookieDomain: null,
+    headers: {},
+    visitParams: {},
+    withCredentials: false
   };
 
   var ahoy = window.ahoy || window.Ahoy || {};
@@ -151,8 +188,12 @@
     return config.urlPrefix + config.eventsUrl;
   }
 
+  function isEmpty(obj) {
+    return Object.keys(obj).length === 0;
+  }
+
   function canTrackNow() {
-    return (config.useBeacon || config.trackNow) && canStringify && typeof(window.navigator.sendBeacon) !== "undefined";
+    return (config.useBeacon || config.trackNow) && isEmpty(config.headers) && canStringify && typeof(window.navigator.sendBeacon) !== "undefined" && !config.withCredentials;
   }
 
   // cookies
@@ -220,7 +261,7 @@
     document.readyState === "interactive" || document.readyState === "complete" ? callback() : document.addEventListener("DOMContentLoaded", callback);
   }
 
-  // http://stackoverflow.com/a/2117523/1177228
+  // https://stackoverflow.com/a/2117523/1177228
   function generateId() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
       var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
@@ -261,12 +302,22 @@
           contentType: "application/json; charset=utf-8",
           dataType: "json",
           beforeSend: CSRFProtection,
-          success: success
+          success: success,
+          headers: config.headers,
+          xhrFields: {
+            withCredentials: config.withCredentials
+          }
         });
       } else {
         var xhr = new XMLHttpRequest();
         xhr.open("POST", url, true);
+        xhr.withCredentials = config.withCredentials;
         xhr.setRequestHeader("Content-Type", "application/json");
+        for (var header in config.headers) {
+          if (config.headers.hasOwnProperty(header)) {
+            xhr.setRequestHeader(header, config.headers[header]);
+          }
+        }
         xhr.onload = function() {
           if (xhr.status === 200) {
             success();
@@ -285,7 +336,8 @@
     if (config.cookies) {
       data.visit_token = event.visit_token;
       data.visitor_token = event.visitor_token;
-    }  delete event.visit_token;
+    }
+    delete event.visit_token;
     delete event.visitor_token;
     return data;
   }
@@ -400,6 +452,12 @@
         // referrer
         if (document.referrer.length > 0) {
           data.referrer = document.referrer;
+        }
+
+        for (var key in config.visitParams) {
+          if (config.visitParams.hasOwnProperty(key)) {
+            data[key] = config.visitParams[key];
+          }
         }
 
         log(data);

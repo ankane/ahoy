@@ -1,3 +1,7 @@
+## 2.2.1 [unreleased]
+
+- Updated Ahoy.js to 0.3.4
+
 ## 2.2.0
 
 - Added `amp_event` helper
