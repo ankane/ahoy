@@ -244,7 +244,7 @@ end
 
 #### Knock
 
-To attach the user with [Knock](https://github.com/nsarno/knock), either include `Knock::Authenticable`in `ApplicationController`.
+To attach the user with [Knock](https://github.com/nsarno/knock), either include `Knock::Authenticable`in `ApplicationController`:
 
 ```ruby
 class ApplicationController < ActionController::API
@@ -252,7 +252,7 @@ class ApplicationController < ActionController::API
 end
 ```
 
-Or include it in Ahoy.
+Or include it in Ahoy:
 
 ```ruby
 Ahoy::BaseController.include Knock::Authenticable
