@@ -244,7 +244,15 @@ end
 
 #### Knock
 
-To attach the user with [Knock](https://github.com/nsarno/knock), use:
+To attach the user with [Knock](https://github.com/nsarno/knock), be sure `Knock::Authenticable` is included in `ApplicationController`.
+
+```ruby
+class ApplicationController < ActionController::API
+  include Knock::Authenticable
+end
+```
+
+And use:
 
 ```ruby
 Ahoy.user_method = ->(controller) { controller.send(:authenticate_entity, "user") }
