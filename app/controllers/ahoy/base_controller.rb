@@ -28,7 +28,7 @@ module Ahoy
     def verify_request_size
       if request.content_length > Ahoy.max_content_length
         logger.info "[ahoy] Payload too large"
-        render text: "Payload too large\n", status: 413
+        render plain: "Payload too large\n", status: 413
       end
     end
   end
