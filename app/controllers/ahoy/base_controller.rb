@@ -1,13 +1,10 @@
 module Ahoy
   class BaseController < ApplicationController
     filters = _process_action_callbacks.map(&:filter) - Ahoy.preserve_callbacks
-    if Rails::VERSION::MAJOR >= 5
-      skip_before_action(*filters, raise: false)
-      skip_after_action(*filters, raise: false)
-      skip_around_action(*filters, raise: false)
-    else
-      skip_action_callback(*filters)
-    end
+    skip_before_action(*filters, raise: false)
+    skip_after_action(*filters, raise: false)
+    skip_around_action(*filters, raise: false)
+
     before_action :verify_request_size
     before_action :renew_cookies
 
