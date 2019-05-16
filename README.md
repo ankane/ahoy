@@ -44,13 +44,25 @@ Ahoy.api = true
 
 And restart your web server.
 
-For JavaScript, add to `app/assets/javascripts/application.js`:
+For JavaScript and Rails 6 / Webpacker, run:
+
+```sh
+yarn add ahoy.js
+```
+
+And add to `app/javascript/packs/application.js`:
+
+```javascript
+import ahoy from "ahoy.js";
+```
+
+For JavaScript and Rails 5 / Sprockets, add to `app/assets/javascripts/application.js`:
 
 ```javascript
 //= require ahoy
 ```
 
-And track an event with:
+Track an event with:
 
 ```javascript
 ahoy.track("My second event", {language: "JavaScript"});
@@ -615,20 +627,6 @@ Send a `POST` request to `/ahoy/events` with `Content-Type: application/json` an
     }
   ]
 }
-```
-
-## Webpacker
-
-For Webpacker, use Yarn to install the JavaScript library:
-
-```sh
-yarn add ahoy.js
-```
-
-Then include it in your pack.
-
-```es6
-import ahoy from "ahoy.js";
 ```
 
 ## Upgrading
