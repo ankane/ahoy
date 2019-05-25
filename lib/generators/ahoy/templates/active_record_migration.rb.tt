@@ -26,6 +26,8 @@ class <%= migration_class_name %> < ActiveRecord::Migration<%= migration_version
       t.string :country
       t.string :region
       t.string :city
+      t.decimal :latitude, precision: 10, scale: 8
+      t.decimal :longitude, precision: 11, scale: 8
 
       # utm parameters
       t.string :utm_source

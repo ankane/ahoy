@@ -2,6 +2,7 @@
 
 - Updated Ahoy.js to 0.3.4
 - Fixed v2 bot detection
+- Added latitude and longitude to installation
 
 ## 2.2.0
 
