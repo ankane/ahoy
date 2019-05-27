@@ -123,7 +123,7 @@ There are several ways to track events.
 ahoy.track "Viewed book", title: "Hot, Flat, and Crowded"
 ```
 
-or track actions automatically with:
+Track actions automatically with:
 
 ```ruby
 class ApplicationController < ActionController::Base
@@ -143,7 +143,7 @@ end
 ahoy.track("Viewed book", {title: "The World is Flat"});
 ```
 
-or track events automatically with:
+Track events automatically with:
 
 ```javascript
 ahoy.trackAll();
