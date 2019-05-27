@@ -31,7 +31,7 @@ Restart your web server, open a page in your browser, and a visit will be create
 Track your first event from a controller with:
 
 ```ruby
-ahoy.track "My first event", {language: "Ruby"}
+ahoy.track "My first event", language: "Ruby"
 ```
 
 ### JavaScript, Native Apps, & AMP
