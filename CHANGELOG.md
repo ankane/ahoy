@@ -1,4 +1,4 @@
-## 2.2.1 [unreleased]
+## 2.2.1
 
 - Updated Ahoy.js to 0.3.4
 - Fixed v2 bot detection
