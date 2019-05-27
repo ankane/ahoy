@@ -44,7 +44,9 @@ Ahoy.api = true
 
 And restart your web server.
 
-For JavaScript and Rails 6 / Webpacker, run:
+### JavaScript
+
+For Rails 6 / Webpacker, run:
 
 ```sh
 yarn add ahoy.js
@@ -56,7 +58,7 @@ And add to `app/javascript/packs/application.js`:
 import ahoy from "ahoy.js";
 ```
 
-For JavaScript and Rails 5 / Sprockets, add to `app/assets/javascripts/application.js`:
+For Rails 5 / Sprockets, add to `app/assets/javascripts/application.js`:
 
 ```javascript
 //= require ahoy
