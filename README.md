@@ -499,7 +499,7 @@ end
 
 Two useful methods you can use are `request` and `controller`.
 
-You can pass additional visit data from JavaScript with: [master]
+You can pass additional visit data from JavaScript with:
 
 ```javascript
 ahoy.configure({visitParams: {referral_code: 123}});
