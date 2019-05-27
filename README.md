@@ -36,7 +36,7 @@ ahoy.track "My first event", language: "Ruby"
 
 ### JavaScript, Native Apps, & AMP
 
-First, enable the API in `config/initializers/ahoy.rb`:
+Enable the API in `config/initializers/ahoy.rb`:
 
 ```ruby
 Ahoy.api = true
@@ -44,9 +44,7 @@ Ahoy.api = true
 
 And restart your web server.
 
-#### JavaScript
-
-For Rails 6 / Webpacker, run:
+For JavaScript and Rails 6 / Webpacker, run:
 
 ```sh
 yarn add ahoy.js
@@ -58,7 +56,7 @@ And add to `app/javascript/packs/application.js`:
 import ahoy from "ahoy.js";
 ```
 
-For Rails 5 / Sprockets, add to `app/assets/javascripts/application.js`:
+For JavaScript and Rails 5 / Sprockets, add to `app/assets/javascripts/application.js`:
 
 ```javascript
 //= require ahoy
@@ -69,10 +67,6 @@ Track an event with:
 ```javascript
 ahoy.track("My second event", {language: "JavaScript"});
 ```
-
-#### Native Apps & AMP
-
-No additional server-side setup is needed. Check out [the docs](#native-apps) to get started.
 
 ### GDPR Compliance
 
