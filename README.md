@@ -23,7 +23,7 @@ And run:
 ```sh
 bundle install
 rails generate ahoy:install
-rails db:migrate
+rake db:migrate
 ```
 
 Restart your web server, open a page in your browser, and a visit will be created :tada:
