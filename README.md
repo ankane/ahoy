@@ -72,7 +72,7 @@ ahoy.track("My second event", {language: "JavaScript"});
 
 #### Native Apps & AMP
 
-No additional setup is needed. Check out [the docs](#native-apps) to get started.
+No additional server-side setup is needed. Check out [the docs](#native-apps) to get started.
 
 ### GDPR Compliance
 
