@@ -117,20 +117,6 @@ Each event has a `name` and `properties`.
 
 There are several ways to track events.
 
-#### JavaScript
-
-```javascript
-ahoy.track("Viewed book", {title: "The World is Flat"});
-```
-
-or track events automatically with:
-
-```javascript
-ahoy.trackAll();
-```
-
-See [Ahoy.js](https://github.com/ankane/ahoy.js) for a complete list of features.
-
 #### Ruby
 
 ```ruby
@@ -150,6 +136,20 @@ class ApplicationController < ActionController::Base
   end
 end
 ```
+
+#### JavaScript
+
+```javascript
+ahoy.track("Viewed book", {title: "The World is Flat"});
+```
+
+or track events automatically with:
+
+```javascript
+ahoy.trackAll();
+```
+
+See [Ahoy.js](https://github.com/ankane/ahoy.js) for a complete list of features.
 
 #### Native Apps
 
