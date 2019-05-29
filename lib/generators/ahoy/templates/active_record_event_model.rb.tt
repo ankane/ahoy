@@ -1,10 +1,10 @@
-class Ahoy::Event < <%= rails5? ? "ApplicationRecord" : "ActiveRecord::Base" %>
+class Ahoy::Event < ApplicationRecord
   include Ahoy::QueryMethods
 
   self.table_name = "ahoy_events"
 
   belongs_to :visit
-  belongs_to :user<%= rails5? ? ", optional: true" : nil %><% if properties_type == "text" %>
+  belongs_to :user, optional: true<% if properties_type == "text" %>
 
   serialize :properties, JSON<% end %>
 end

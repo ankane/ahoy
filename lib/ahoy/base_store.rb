@@ -57,6 +57,8 @@ module Ahoy
                 detector.bot?
               end
             else
+              # no need to throw friendly error if browser isn't defined
+              # since will error in visit_properties
               Browser.new(request.user_agent).bot?
             end
           else

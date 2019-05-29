@@ -34,7 +34,7 @@ module Ahoy
         # upsert since visit might not be found due to eventual consistency
         visit_model.where(visit_token: visit_token).find_one_and_update({"$set": data}, {upsert: true})
       elsif visit
-        visit.update_attributes(data)
+        visit.update!(data)
       else
         Ahoy.log "Visit for geocode not found: #{visit_token}"
       end

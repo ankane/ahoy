@@ -1,11 +1,12 @@
 require "ipaddr"
 
+# dependencies
 require "active_support"
 require "active_support/core_ext"
-require "addressable/uri"
 require "geocoder"
 require "safely/core"
 
+# modules
 require "ahoy/utils"
 require "ahoy/base_store"
 require "ahoy/controller"
@@ -72,7 +73,7 @@ module Ahoy
   self.track_bots = false
 
   mattr_accessor :bot_detection_version
-  self.bot_detection_version = 1
+  self.bot_detection_version = 2
 
   mattr_accessor :token_generator
   self.token_generator = -> { SecureRandom.uuid }
@@ -81,10 +82,12 @@ module Ahoy
   self.mask_ips = false
 
   mattr_accessor :user_agent_parser
-  self.user_agent_parser = :legacy
+  self.user_agent_parser = :device_detector
+
+  mattr_accessor :logger
 
   def self.log(message)
-    Rails.logger.info { "[ahoy] #{message}" }
+    logger.info { "[ahoy] #{message}" } if logger
   end
 
   def self.mask_ip(ip)

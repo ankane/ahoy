@@ -16,15 +16,10 @@ Gem::Specification.new do |spec|
   spec.files         = Dir["*.{md,txt}", "{app,config,lib,vendor}/**/*"]
   spec.require_path  = "lib"
 
-  spec.required_ruby_version = ">= 2.2"
+  spec.required_ruby_version = ">= 2.4"
 
-  spec.add_dependency "railties", ">= 4.2"
-  spec.add_dependency "addressable"
+  spec.add_dependency "activesupport", ">= 5"
   spec.add_dependency "geocoder", ">= 1.4.5"
-  spec.add_dependency "browser", "~> 2.0"
-  spec.add_dependency "referer-parser", ">= 0.3"
-  spec.add_dependency "user_agent_parser"
-  spec.add_dependency "request_store"
   spec.add_dependency "safely_block", ">= 0.2.1"
   spec.add_dependency "device_detector"
 

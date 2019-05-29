@@ -127,7 +127,6 @@ module Ahoy
       @user ||= @store.user
     end
 
-    # TODO better name
     def visit_properties
       @visit_properties ||= Ahoy::VisitProperties.new(request, api: api?).generate
     end
@@ -186,7 +185,7 @@ module Ahoy
 
     def trusted_time(time = nil)
       if !time || (api? && !(1.minute.ago..Time.now).cover?(time))
-        Time.zone.now
+        Time.current
       else
         time
       end
@@ -197,7 +196,7 @@ module Ahoy
     end
 
     def report_exception(e)
-      raise e if Rails.env.development? || Rails.env.test?
+      raise e if !defined?(Rails) || Rails.env.development? || Rails.env.test?
       Safely.report_exception(e)
     end
 

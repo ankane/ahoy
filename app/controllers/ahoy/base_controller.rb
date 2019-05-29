@@ -1,13 +1,10 @@
 module Ahoy
   class BaseController < ApplicationController
     filters = _process_action_callbacks.map(&:filter) - Ahoy.preserve_callbacks
-    if Rails::VERSION::MAJOR >= 5
-      skip_before_action(*filters, raise: false)
-      skip_after_action(*filters, raise: false)
-      skip_around_action(*filters, raise: false)
-    else
-      skip_action_callback(*filters)
-    end
+    skip_before_action(*filters, raise: false)
+    skip_after_action(*filters, raise: false)
+    skip_around_action(*filters, raise: false)
+
     before_action :verify_request_size
     before_action :renew_cookies
 
@@ -31,7 +28,7 @@ module Ahoy
     def verify_request_size
       if request.content_length > Ahoy.max_content_length
         logger.info "[ahoy] Payload too large"
-        render text: "Payload too large\n", status: 413
+        render plain: "Payload too large\n", status: 413
       end
     end
   end

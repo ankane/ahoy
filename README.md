@@ -80,9 +80,9 @@ Ahoy provides a number of options to help with GDPR compliance. See the [GDPR se
 
 When someone visits your website, Ahoy creates a visit with lots of useful information.
 
-- **traffic source** - referrer, referring domain, landing page, search keyword
-- **location** - country, region, and city
-- **technology** - browser, OS, and device type
+- **traffic source** - referrer, referring domain, landing page
+- **location** - country, region, city, latitude, longitude
+- **technology** - browser, OS, device type
 - **utm parameters** - source, medium, term, content, campaign
 
 Use the `current_visit` method to access it.
@@ -407,6 +407,8 @@ Ahoy can mask IPs with the same approach [Google Analytics uses for IP anonymiza
 Ahoy.mask_ips = true
 ```
 
+IPs are masked before geolocation is performed.
+
 To mask previously collected IPs, use:
 
 ```ruby
@@ -622,6 +624,21 @@ Send a `POST` request to `/ahoy/events` with `Content-Type: application/json` an
 ```
 
 ## Upgrading
+
+### 3.0
+
+If you installed Ahoy before 2.1 and want to keep legacy user agent parsing and bot detection, add to your Gemfile:
+
+```ruby
+gem "browser", "~> 2.0"
+gem "user_agent_parser"
+```
+
+And add to `config/initializers/ahoy.rb`:
+
+```ruby
+Ahoy.user_agent_parser = :legacy
+```
 
 ### 2.2
 

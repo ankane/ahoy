@@ -1,5 +1,3 @@
-require "request_store"
-
 module Ahoy
   module Controller
     def self.included(base)
@@ -9,7 +7,7 @@ module Ahoy
       end
       base.before_action :set_ahoy_cookies, unless: -> { Ahoy.api_only }
       base.before_action :track_ahoy_visit, unless: -> { Ahoy.api_only }
-      base.before_action :set_ahoy_request_store
+      base.around_action :set_ahoy_request_store
     end
 
     def ahoy
@@ -41,7 +39,13 @@ module Ahoy
     end
 
     def set_ahoy_request_store
-      RequestStore.store[:ahoy] ||= ahoy
+      previous_value = Thread.current[:ahoy]
+      begin
+        Thread.current[:ahoy] = ahoy
+        yield
+      ensure
+        Thread.current[:ahoy] = previous_value
+      end
     end
   end
 end

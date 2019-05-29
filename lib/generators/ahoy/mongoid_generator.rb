@@ -11,10 +11,6 @@ module Ahoy
         template "mongoid_event_model.rb", "app/models/ahoy/event.rb"
         puts "\nAlmost set! Last, run:\n\n    rake db:mongoid:create_indexes"
       end
-
-      def rails5?
-        Rails::VERSION::MAJOR >= 5
-      end
     end
   end
 end

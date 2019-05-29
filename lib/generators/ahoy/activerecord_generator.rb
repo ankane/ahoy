@@ -27,8 +27,7 @@ module Ahoy
         template "active_record_visit_model.rb", "app/models/ahoy/visit.rb"
         template "active_record_event_model.rb", "app/models/ahoy/event.rb"
         migration_template "active_record_migration.rb", "db/migrate/create_ahoy_visits_and_events.rb", migration_version: migration_version
-        migrate_command = rails5? ? "rails" : "rake"
-        puts "\nAlmost set! Last, run:\n\n    #{migrate_command} db:migrate"
+        puts "\nAlmost set! Last, run:\n\n    rails db:migrate"
       end
 
       def properties_type
@@ -44,14 +43,12 @@ module Ahoy
         end
       end
 
-      def rails5?
-        Rails::VERSION::MAJOR >= 5
+      def rails52?
+        ActiveRecord::VERSION::STRING >= "5.2"
       end
 
       def migration_version
-        if rails5?
-          "[#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}]"
-        end
+        "[#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}]"
       end
     end
   end
