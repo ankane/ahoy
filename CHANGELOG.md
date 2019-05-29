@@ -1,4 +1,4 @@
-## 3.0.0 [unreleased]
+## 3.0.0
 
 - Made Device Detector the default user agent parser
 - Made v2 the default bot detection version
