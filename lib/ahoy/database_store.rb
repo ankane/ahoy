@@ -76,7 +76,7 @@ module Ahoy
 
     def slice_data(model, data)
       column_names = model.try(:column_names) || model.attribute_names
-      data.slice(*column_names.map(&:to_sym)).select { |_, v| v }
+      data.slice(*column_names.map(&:to_sym)).select { |_, v| !v.nil? }
     end
 
     def unique_exception?(e)

@@ -1,3 +1,7 @@
+## 3.0.1 [unreleased]
+
+- Fixed storage of `false` values with customized store
+
 ## 3.0.0
 
 - Made Device Detector the default user agent parser
