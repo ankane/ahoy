@@ -30,4 +30,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "pg"
   spec.add_development_dependency "mysql2"
   spec.add_development_dependency "mongoid"
+  spec.add_development_dependency "combustion"
+  spec.add_development_dependency "rails"
+  spec.add_development_dependency "sqlite3", "~> 1.3.0"
 end
