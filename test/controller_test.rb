@@ -1,9 +1,23 @@
 require_relative "test_helper"
 
 class ControllerTest < ActionDispatch::IntegrationTest
+  def setup
+    # restore original connection
+    @@once ||= ActiveRecord::Base.establish_connection(:test) && true
+
+    Ahoy::Visit.delete_all
+    Ahoy::Event.delete_all
+  end
+
   def test_works
     get products_url
     assert :success
+
+    assert_equal 1, Ahoy::Visit.count
+    assert_equal 1, Ahoy::Event.count
+
+    event = Ahoy::Event.last
+    assert_equal "Viewed products", event.name
   end
 
   def test_bad_visit_cookie

@@ -17,8 +17,6 @@ Combustion.initialize! :all do
   config.action_mailer.logger = logger if ENV["VERBOSE"]
 end
 
-ActiveRecord::Base.logger = ActiveSupport::Logger.new(STDOUT) if ENV["VERBOSE"]
-
 class PostgresqlBase < ActiveRecord::Base
   include Ahoy::QueryMethods
   establish_connection adapter: "postgresql", database: "ahoy_test"
