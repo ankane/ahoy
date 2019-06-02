@@ -2,9 +2,6 @@ require_relative "test_helper"
 
 class ControllerTest < ActionDispatch::IntegrationTest
   def setup
-    # restore original connection
-    @@once ||= ActiveRecord::Base.establish_connection(:test) && true
-
     Ahoy::Visit.delete_all
     Ahoy::Event.delete_all
   end
