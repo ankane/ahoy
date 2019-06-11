@@ -1,26 +1,12 @@
-# taken from https://github.com/collectiveidea/audited/blob/master/lib/generators/audited/install_generator.rb
-require "rails/generators"
-require "rails/generators/migration"
-require "active_record"
 require "rails/generators/active_record"
 
 module Ahoy
   module Generators
     class ActiverecordGenerator < Rails::Generators::Base
-      include Rails::Generators::Migration
-      source_root File.expand_path("../templates", __FILE__)
+      include ActiveRecord::Generators::Migration
+      source_root File.join(__dir__, "templates")
 
       class_option :database, type: :string, aliases: "-d"
-
-      # Implement the required interface for Rails::Generators::Migration.
-      def self.next_migration_number(dirname) #:nodoc:
-        next_migration_number = current_migration_number(dirname) + 1
-        if ::ActiveRecord::Base.timestamped_migrations
-          [Time.now.utc.strftime("%Y%m%d%H%M%S"), "%.14d" % next_migration_number].max
-        else
-          "%.3d" % next_migration_number
-        end
-      end
 
       def copy_templates
         template "database_store_initializer.rb", "config/initializers/ahoy.rb"
