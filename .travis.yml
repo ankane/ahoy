@@ -1,7 +1,9 @@
 dist: xenial
 language: ruby
 rvm: 2.6.3
-gemfile: Gemfile
+gemfile:
+  - Gemfile
+  - test/gemfiles/rails52.gemfile
 services:
   - postgresql
   - mysql
