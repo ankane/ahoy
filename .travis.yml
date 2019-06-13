@@ -10,8 +10,8 @@ services:
   - mongodb
 script: bundle exec rake test
 before_install:
-  - mysql -e 'CREATE DATABASE ahoy_test;'
-  - psql -c 'CREATE DATABASE ahoy_test;' -U postgres
+  - mysqladmin create ahoy_test
+  - createdb ahoy_test
 notifications:
   email:
     on_success: never
