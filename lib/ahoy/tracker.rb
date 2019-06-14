@@ -196,8 +196,12 @@ module Ahoy
     end
 
     def report_exception(e)
-      raise e if !defined?(Rails) || Rails.env.development? || Rails.env.test?
-      Safely.report_exception(e)
+      if defined?(ActionDispatch::RemoteIp::IpSpoofAttackError) && e.is_a?(ActionDispatch::RemoteIp::IpSpoofAttackError)
+        debug "Tracking excluded due to IP spoofing"
+      else
+        raise e if !defined?(Rails) || Rails.env.development? || Rails.env.test?
+        Safely.report_exception(e)
+      end
     end
 
     def generate_id

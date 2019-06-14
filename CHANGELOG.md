@@ -1,6 +1,7 @@
 ## 3.0.1 [unreleased]
 
 - Fixed storage of `false` values with customized store
+- Gracefully handle `ActionDispatch::RemoteIp::IpSpoofAttackError`
 
 ## 3.0.0
 
