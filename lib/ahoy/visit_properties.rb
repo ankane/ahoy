@@ -33,7 +33,8 @@ module Ahoy
       %w(utm_source utm_medium utm_term utm_content utm_campaign).each do |name|
         props[name.to_sym] = params[name] || landing_params[name].try(:first)
       end
-      props
+
+      props.merge(Ahoy::Attribution.new(referrer: referrer, **props).generate)
     end
 
     def traffic_properties

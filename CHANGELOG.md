@@ -1,3 +1,7 @@
+## 3.1.0 [unreleased]
+
+- Added channel and source
+
 ## 3.0.1 [unreleased]
 
 - Fixed storage of `false` values with customized store

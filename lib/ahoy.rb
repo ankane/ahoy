@@ -7,6 +7,7 @@ require "geocoder"
 require "safely/core"
 
 # modules
+require "ahoy/attribution"
 require "ahoy/utils"
 require "ahoy/base_store"
 require "ahoy/controller"
@@ -98,6 +99,21 @@ module Ahoy
     else
       # set last 80 bits to zeros
       addr.mask(48).to_s
+    end
+  end
+
+  def self.backfill_channel(all: false)
+    relation = Ahoy::Visit
+    relation = relation.where(channel: nil) unless all
+    relation.find_each do |visit|
+      data = {
+        referrer: visit.referrer,
+        utm_medium: visit.utm_medium,
+        utm_source: visit.utm_source,
+        utm_campaign: visit.utm_campaign
+      }
+
+      visit.update_columns(Ahoy::Attribution.new(data).generate)
     end
   end
 end

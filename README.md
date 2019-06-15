@@ -625,6 +625,25 @@ Send a `POST` request to `/ahoy/events` with `Content-Type: application/json` an
 
 ## Upgrading
 
+### 3.1
+
+Ahoy 3.1 adds channel and source fields. Create a migration with:
+
+```ruby
+class AddAhoyAttribution < ActiveRecord::Migration[5.2]
+  def change
+    add_column :ahoy_visits, :channel, :string
+    add_column :ahoy_visits, :source, :string
+  end
+end
+```
+
+And run:
+
+```ruby
+Ahoy.backfill_channel
+```
+
 ### 3.0
 
 If you installed Ahoy before 2.1 and want to keep legacy user agent parsing and bot detection, add to your Gemfile:

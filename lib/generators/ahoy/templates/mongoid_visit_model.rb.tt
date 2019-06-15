@@ -19,6 +19,10 @@ class Ahoy::Visit
   field :referring_domain, type: String
   field :landing_page, type: String
 
+  # channel
+  field :channel, type: String
+  field :source, type: String
+
   # technology
   field :browser, type: String
   field :os, type: String

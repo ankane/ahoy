@@ -17,6 +17,10 @@ class <%= migration_class_name %> < ActiveRecord::Migration<%= migration_version
       t.string :referring_domain
       t.text :landing_page
 
+      # channel
+      t.string :channel
+      t.string :source
+
       # technology
       t.string :browser
       t.string :os
