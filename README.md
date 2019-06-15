@@ -532,6 +532,39 @@ class Ahoy::Store < Ahoy::DatabaseStore
 end
 ```
 
+### Channels [master]
+
+Ahoy categorizes traffic in channels. These include:
+
+- Direct
+- Email
+- Search
+- Site
+- Social
+- Other
+
+This is only meant to serve as a starting point for your own attribution.
+
+Add additional logic with:
+
+```ruby
+class Ahoy::Store < Ahoy::DatabaseStore
+  def track_visit(data)
+    if data[:referring_domain] == "rubyweekly.com"
+      data[:channel] = "Newsletter"
+      data[:source] = "Ruby Weekly"
+    elsif data[:landing_page] == "https://example.com/demo"
+      data[:channel] = "Demo"
+    elsif data[:utm_source] == "drip"
+      data[:channel] = "Drip"
+      data[:source] = data[:utm_campaign]
+    end
+
+    super(data)
+  end
+end
+```
+
 ## Explore the Data
 
 [Blazer](https://github.com/ankane/blazer) is a great tool for exploring your data.
