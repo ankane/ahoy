@@ -534,7 +534,7 @@ end
 
 ### Channels [master]
 
-Ahoy categorizes traffic in channels. These include:
+Ahoy categorizes traffic into channels. These include:
 
 - Direct
 - Email
