@@ -30,6 +30,7 @@ module Ahoy
     def geocode(data)
       visit_token = data.delete(:visit_token)
       data = slice_data(visit_model, data)
+      
       if defined?(Mongoid::Document) && visit_model < Mongoid::Document
         # upsert since visit might not be found due to eventual consistency
         visit_model.where(visit_token: visit_token).find_one_and_update({"$set": data}, {upsert: true})
@@ -41,21 +42,20 @@ module Ahoy
     end
 
     def authenticate(_)
-      if visit && visit.respond_to?(:user) && !visit.user
-        begin
-          visit.user = user
-          visit.save!
-        rescue ActiveRecord::AssociationTypeMismatch
-          # do nothing
-        end
+      return unless visit && visit.respond_to?(:user) && !visit.user
+
+      begin
+        visit.user = user
+        visit.save!
+      rescue ActiveRecord::AssociationTypeMismatch
+        # do nothing
       end
     end
 
     def visit
-      unless defined?(@visit)
-        @visit = visit_model.where(visit_token: ahoy.visit_token).first if ahoy.visit_token
-      end
-      @visit
+      return @visit if defined?(@visit)
+      return unless ahoy.visit_token
+      @visit = visit_model.where(visit_token: ahoy.visit_token).first
     end
 
     # if we don't have a visit, let's try to create one first
