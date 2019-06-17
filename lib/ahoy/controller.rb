@@ -11,7 +11,7 @@ module Ahoy
     end
 
     def ahoy
-      @ahoy ||= Ahoy::Tracker.new(controller: self)
+      @ahoy ||= Ahoy::ControllerTracker.new(self)
     end
 
     def current_visit

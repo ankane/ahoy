@@ -15,7 +15,7 @@ module Ahoy
     protected
 
     def ahoy
-      @ahoy ||= Ahoy::Tracker.new(controller: self, api: true)
+      @ahoy ||= Ahoy::ControllerTracker.new(self, api: true)
     end
 
     # set proper ttl if cookie generated from JavaScript

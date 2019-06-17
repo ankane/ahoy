@@ -15,6 +15,8 @@ require "ahoy/helper"
 require "ahoy/model"
 require "ahoy/query_methods"
 require "ahoy/tracker"
+require "ahoy/request_tracker"
+require "ahoy/controller_tracker"
 require "ahoy/version"
 require "ahoy/visit_properties"
 
