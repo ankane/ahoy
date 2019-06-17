@@ -4,12 +4,14 @@ module Ahoy
   class Tracker
     UUID_NAMESPACE = "a82ae811-5011-45ab-a728-569df7499c5f"
 
-    attr_reader :request, :controller
+    attr_reader :params
 
     def initialize(**options)
       @store = Ahoy::Store.new(options.merge(ahoy: self))
-      @controller = options[:controller]
-      @request = options[:request] || @controller.try(:request)
+      @params = options.fetch(:params, {})
+      @headers = options.fetch(:headers, {})
+      @cookies = options.fetch(:cookies, {})
+      @cookie_jar = options.fetch(:cookie_jar, {})
       @visit_token = options[:visit_token]
       @options = options
     end
@@ -128,7 +130,7 @@ module Ahoy
     end
 
     def visit_properties
-      @visit_properties ||= Ahoy::VisitProperties.new(request, api: api?).generate
+      @visit_properties ||= Ahoy::VisitProperties.new(@params, api: api?).generate
     end
 
     def visit_token
@@ -176,11 +178,14 @@ module Ahoy
       cookie[:expires] = duration.from_now if duration
       domain = Ahoy.cookie_domain
       cookie[:domain] = domain if domain && use_domain
-      request.cookie_jar[name] = cookie
+      @cookie_jar[name] = cookie
     end
 
     def delete_cookie(name)
-      request.cookie_jar.delete(name) if request.cookie_jar[name]
+      # safety net
+      return unless Ahoy.cookies
+
+      @cookie_jar.delete(name) if @cookie_jar[name]
     end
 
     def trusted_time(time = nil)
@@ -245,35 +250,37 @@ module Ahoy
     end
 
     def visit_anonymity_set
-      @visit_anonymity_set ||= Digest::UUID.uuid_v5(UUID_NAMESPACE, ["visit", Ahoy.mask_ip(request.remote_ip), request.user_agent].join("/"))
+      return if @params["remote_ip"].blank?
+      @visit_anonymity_set ||= Digest::UUID.uuid_v5(UUID_NAMESPACE, ["visit", Ahoy.mask_ip(@params["remote_ip"]), @params["user_agent"]].join("/"))
     end
 
     def visitor_anonymity_set
-      @visitor_anonymity_set ||= Digest::UUID.uuid_v5(UUID_NAMESPACE, ["visitor", Ahoy.mask_ip(request.remote_ip), request.user_agent].join("/"))
+      return if @params["remote_ip"].blank?
+      @visitor_anonymity_set ||= Digest::UUID.uuid_v5(UUID_NAMESPACE, ["visitor", Ahoy.mask_ip(@params["remote_ip"]), @params["user_agent"]].join("/"))
     end
 
     def visit_cookie
-      @visit_cookie ||= request && request.cookies["ahoy_visit"]
+      @cookies["ahoy_visit"]
     end
 
     def visitor_cookie
-      @visitor_cookie ||= request && request.cookies["ahoy_visitor"]
+      @cookies["ahoy_visitor"]
     end
 
     def visit_header
-      @visit_header ||= request && request.headers["Ahoy-Visit"]
+      @headers["Ahoy-Visit"]
     end
 
     def visitor_header
-      @visitor_header ||= request && request.headers["Ahoy-Visitor"]
+      @headers["Ahoy-Visitor"]
     end
 
     def visit_param
-      @visit_param ||= request && request.params["visit_token"]
+      @params["visit_token"]
     end
 
     def visitor_param
-      @visitor_param ||= request && request.params["visitor_token"]
+      @params["visitor_token"]
     end
 
     def ensure_token(token)

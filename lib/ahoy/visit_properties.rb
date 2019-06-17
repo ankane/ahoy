@@ -4,13 +4,14 @@ require "uri"
 
 module Ahoy
   class VisitProperties
-    attr_reader :request, :params, :referrer, :landing_page
+    attr_reader :params, :referrer, :landing_page, :user_agent, :remote_ip
 
-    def initialize(request, api:)
-      @request = request
-      @params = request.params
-      @referrer = api ? params["referrer"] : request.referer
-      @landing_page = api ? params["landing_page"] : request.original_url
+    def initialize(params, api:)
+      @params = params
+      @referrer = params["referrer"]
+      @landing_page = params["landing_page"]
+      @user_agent = params["user_agent"]
+      @remote_ip = params["remote_ip"]
     end
 
     def generate
@@ -29,11 +30,9 @@ module Ahoy
         # do nothing
       end
 
-      props = {}
-      %w(utm_source utm_medium utm_term utm_content utm_campaign).each do |name|
+      %w(utm_source utm_medium utm_term utm_content utm_campaign).each_with_object({}) do |name, props|
         props[name.to_sym] = params[name] || landing_params[name].try(:first)
       end
-      props
     end
 
     def traffic_properties
@@ -45,7 +44,7 @@ module Ahoy
 
     def tech_properties
       if Ahoy.user_agent_parser == :device_detector
-        client = DeviceDetector.new(request.user_agent)
+        client = DeviceDetector.new(user_agent)
         device_type =
           case client.device_type
           when "smartphone"
@@ -68,7 +67,6 @@ module Ahoy
         # cache for performance
         @@user_agent_parser ||= UserAgentParser::Parser.new
 
-        user_agent = request.user_agent
         agent = @@user_agent_parser.parse(user_agent)
         browser = Browser.new(user_agent)
         device_type =
@@ -97,18 +95,17 @@ module Ahoy
     # masking based on Google Analytics anonymization
     # https://support.google.com/analytics/answer/2763052
     def ip
-      ip = request.remote_ip
-      if ip && Ahoy.mask_ips
-        Ahoy.mask_ip(ip)
+      if remote_ip && Ahoy.mask_ips
+        Ahoy.mask_ip(remote_ip)
       else
-        ip
+        remote_ip
       end
     end
 
     def request_properties
       {
         ip: ip,
-        user_agent: Ahoy::Utils.ensure_utf8(request.user_agent),
+        user_agent: Ahoy::Utils.ensure_utf8(user_agent),
         referrer: referrer,
         landing_page: landing_page,
         platform: params["platform"],
