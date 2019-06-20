@@ -26,6 +26,13 @@ class TrackerTest < Minitest::Test
     assert tracker.visitor_token, "bad token"
   end
 
+  def test_ensure_tracking_works_without_controller
+    tracker = Ahoy::Tracker.new(controller: nil)
+    # require 'pry'
+    # binding.pry
+    assert_equal tracker.track('Some event', some_prop: true), true
+  end
+
   private
 
   def build_tracker(cookies: {}, headers: {})

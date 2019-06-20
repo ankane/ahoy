@@ -128,7 +128,7 @@ module Ahoy
     end
 
     def visit_properties
-      @visit_properties ||= Ahoy::VisitProperties.new(request, api: api?).generate
+      @visit_properties ||= request.present? ? Ahoy::VisitProperties.new(request, api: api?).generate : {}
     end
 
     def visit_token
@@ -176,11 +176,11 @@ module Ahoy
       cookie[:expires] = duration.from_now if duration
       domain = Ahoy.cookie_domain
       cookie[:domain] = domain if domain && use_domain
-      request.cookie_jar[name] = cookie
+      request.try { |r| r.cookie_jar[name] = cookie }
     end
 
     def delete_cookie(name)
-      request.cookie_jar.delete(name) if request.cookie_jar[name]
+      request.try { |r| r.cookie_jar.delete(name) if r.request.cookie_jar[name] }
     end
 
     def trusted_time(time = nil)
