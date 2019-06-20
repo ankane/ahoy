@@ -5,6 +5,7 @@ module Ahoy
     UUID_NAMESPACE = "a82ae811-5011-45ab-a728-569df7499c5f"
 
     attr_reader :request, :controller
+    attr_accessor :user
 
     def initialize(**options)
       @store = Ahoy::Store.new(options.merge(ahoy: self))
