@@ -27,14 +27,13 @@ class TrackerTest < Minitest::Test
   end
 
   def test_ensure_tracking_works_without_controller
-    tracker = Ahoy::Tracker.new(controller: nil)
+    tracker = Ahoy::Tracker.new
     assert_equal tracker.track('Some event', some_prop: true), true
   end
 
   def test_can_track_custom_user
-    tracker = Ahoy::Tracker.new(controller: nil)
     user = OpenStruct.new(id: 'cafebabedadb00d')
-    tracker.user = user
+    tracker = Ahoy::Tracker.new(user: user)
     tracker.track('Some event')
     assert_equal tracker.user.id, user.id
   end

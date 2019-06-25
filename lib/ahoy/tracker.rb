@@ -13,6 +13,7 @@ module Ahoy
       @request = options[:request] || @controller.try(:request)
       @visit_token = options[:visit_token]
       @options = options
+      @user = options[:user]
     end
 
     # can't use keyword arguments here
@@ -169,7 +170,7 @@ module Ahoy
 
     def set_cookie(name, value, duration = nil, use_domain = true)
       # safety net
-      return unless Ahoy.cookies
+      return if request.nil? || !Ahoy.cookies
 
       cookie = {
         value: value
@@ -177,11 +178,13 @@ module Ahoy
       cookie[:expires] = duration.from_now if duration
       domain = Ahoy.cookie_domain
       cookie[:domain] = domain if domain && use_domain
-      request.try { |r| r.cookie_jar[name] = cookie }
+      request.cookie_jar[name] = cookie
     end
 
     def delete_cookie(name)
-      request.try { |r| r.cookie_jar.delete(name) if r.cookie_jar[name] }
+      return if request.nil?
+
+      request.cookie_jar.delete(name) if request.cookie_jar[name] }
     end
 
     def trusted_time(time = nil)
