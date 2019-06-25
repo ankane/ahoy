@@ -181,7 +181,7 @@ module Ahoy
     end
 
     def delete_cookie(name)
-      request.try { |r| r.cookie_jar.delete(name) if r.request.cookie_jar[name] }
+      request.try { |r| r.cookie_jar.delete(name) if r.cookie_jar[name] }
     end
 
     def trusted_time(time = nil)
