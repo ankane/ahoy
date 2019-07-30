@@ -172,7 +172,8 @@ module Ahoy
       return unless Ahoy.cookies && request
 
       cookie = {
-        value: value
+        value: value,
+        httponly: true
       }
       cookie[:expires] = duration.from_now if duration
       domain = Ahoy.cookie_domain
