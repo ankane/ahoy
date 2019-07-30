@@ -417,6 +417,14 @@ Ahoy::Visit.find_each do |visit|
 end
 ```
 
+### Httponly Cookies
+
+Httponly cookies are disabled by default. To enabled them, do this in your initializer file:
+```ruby
+Ahoy.force_httponly_cookies = true
+```
+
+
 ### Anonymity Sets & Cookies
 
 Ahoy can switch from cookies to [anonymity sets](https://privacypatterns.org/patterns/Anonymity-set). Instead of cookies, visitors with the same IP mask and user agent are grouped together in an anonymity set.

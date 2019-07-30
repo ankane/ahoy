@@ -172,9 +172,10 @@ module Ahoy
       return unless Ahoy.cookies && request
 
       cookie = {
-        value: value,
-        httponly: true
+        value: value
       }
+      cookie[:httponly] = true if Ahoy.force_httponly_cookies
+
       cookie[:expires] = duration.from_now if duration
       domain = Ahoy.cookie_domain
       cookie[:domain] = domain if domain && use_domain

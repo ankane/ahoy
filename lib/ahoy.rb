@@ -62,6 +62,9 @@ module Ahoy
   mattr_accessor :preserve_callbacks
   self.preserve_callbacks = [:load_authlogic, :activate_authlogic]
 
+  mattr_accessor :force_httponly_cookies
+  self.force_httponly_cookies = false
+
   mattr_accessor :user_method
   self.user_method = lambda do |controller|
     (controller.respond_to?(:current_user, true) && controller.send(:current_user)) || (controller.respond_to?(:current_resource_owner, true) && controller.send(:current_resource_owner)) || nil
