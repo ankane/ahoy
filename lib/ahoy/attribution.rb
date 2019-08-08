@@ -27,6 +27,7 @@ module Ahoy
               source = "Facebook"
             when "com.Slack"
               source = "Slack"
+              channel = "Other"
             else
               channel = "Other"
             end
