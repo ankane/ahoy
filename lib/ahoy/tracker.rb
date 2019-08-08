@@ -11,6 +11,7 @@ module Ahoy
       @controller = options[:controller]
       @request = options[:request] || @controller.try(:request)
       @visit_token = options[:visit_token]
+      @user = options[:user]
       @options = options
     end
 
@@ -57,7 +58,7 @@ module Ahoy
 
           @store.track_visit(data)
 
-          Ahoy::GeocodeV2Job.perform_later(visit_token, data[:ip]) if Ahoy.geocode
+          Ahoy::GeocodeV2Job.perform_later(visit_token, data[:ip]) if Ahoy.geocode && data[:ip]
         end
       end
       true
@@ -128,7 +129,7 @@ module Ahoy
     end
 
     def visit_properties
-      @visit_properties ||= Ahoy::VisitProperties.new(request, api: api?).generate
+      @visit_properties ||= request ? Ahoy::VisitProperties.new(request, api: api?).generate : {}
     end
 
     def visit_token
@@ -168,7 +169,7 @@ module Ahoy
 
     def set_cookie(name, value, duration = nil, use_domain = true)
       # safety net
-      return unless Ahoy.cookies
+      return unless Ahoy.cookies && request
 
       cookie = {
         value: value
@@ -180,7 +181,7 @@ module Ahoy
     end
 
     def delete_cookie(name)
-      request.cookie_jar.delete(name) if request.cookie_jar[name]
+      request.cookie_jar.delete(name) if request && request.cookie_jar[name]
     end
 
     def trusted_time(time = nil)
