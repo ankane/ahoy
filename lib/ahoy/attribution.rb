@@ -18,6 +18,9 @@ module Ahoy
       elsif data[:utm_source]
         channel = "Tagged"
         source = data[:utm_source]
+      elsif landing_params["ref"]
+        channel = "Tagged"
+        source = landing_params["ref"]
       elsif landing_params["fbclid"]
         channel = "Social"
         source = "Facebook"
