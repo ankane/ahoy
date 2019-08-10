@@ -10,10 +10,20 @@ module Ahoy
 
     def generate
       referrer = data[:referrer]
+      landing_params = Rack::Utils.parse_nested_query(URI.parse(data[:landing_page]).query) rescue {}
 
       if data[:utm_medium] == "email"
         channel = "Email"
-        source = data[:utm_campaign] || data[:utm_source]
+        source = data[:utm_source]
+      elsif data[:utm_source]
+        channel = "Tagged"
+        source = data[:utm_source]
+      elsif landing_params["fbclid"]
+        channel = "Social"
+        source = "Facebook"
+      elsif landing_params["mc_cid"]
+        # mailchimp
+        channel = "Email"
       elsif referrer
         uri = URI.parse(referrer) rescue nil
         if uri
