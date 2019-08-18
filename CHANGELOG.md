@@ -2,6 +2,7 @@
 
 - Made `Ahoy::Tracker` work outside of requests
 - Fixed storage of `false` values with customized store
+- Fixed error with `user_method` and `Rails::InfoController`
 - Gracefully handle `ActionDispatch::RemoteIp::IpSpoofAttackError`
 
 ## 3.0.0
