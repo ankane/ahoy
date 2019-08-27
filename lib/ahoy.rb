@@ -41,6 +41,9 @@ module Ahoy
   mattr_accessor :geocode
   self.geocode = true
 
+  mattr_accessor :geocode_inline
+  self.geocode_inline = false
+
   mattr_accessor :max_content_length
   self.max_content_length = 8192
 
