@@ -314,6 +314,8 @@ Change the job queue with:
 Ahoy.job_queue = :low_priority
 ```
 
+If you use Sidekiq, add `ahoy` to queues in the configuration file or add `-q ahoy` as an argument when you start sidekiq.
+
 #### Geocoding Performance
 
 To avoid calls to a remote API, download the [GeoLite2 City database](https://dev.maxmind.com/geoip/geoip2/geolite2/) and configure Geocoder to use it.
