@@ -1,4 +1,4 @@
-## 3.0.1 [unreleased]
+## 3.0.1
 
 - Made `Ahoy::Tracker` work outside of requests
 - Fixed storage of `false` values with customized store
