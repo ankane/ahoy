@@ -308,7 +308,7 @@ Disable geocoding with:
 Ahoy.geocode = false
 ```
 
-By default, the job queue is `:ahoy`. Change this with:
+The default job queue is `:ahoy`. Change this with:
 
 ```ruby
 Ahoy.job_queue = :low_priority
