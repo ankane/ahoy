@@ -30,6 +30,7 @@ module Ahoy
   mattr_accessor :cookies
   self.cookies = true
 
+  # TODO deprecate in favor of cookie_options
   mattr_accessor :cookie_domain
 
   mattr_accessor :cookie_options
