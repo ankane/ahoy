@@ -84,6 +84,9 @@ module Ahoy
   mattr_accessor :user_agent_parser
   self.user_agent_parser = :device_detector
 
+  mattr_accessor :cookie_options
+  self.cookie_options = {}
+
   mattr_accessor :logger
 
   def self.log(message)
