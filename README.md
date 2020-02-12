@@ -300,6 +300,14 @@ To track visits across multiple subdomains, use:
 Ahoy.cookie_domain = :all
 ```
 
+### Cookies [master]
+
+Set cookie options with:
+
+```ruby
+Ahoy.cookie_options = {same_site: :lax}
+```
+
 ### Geocoding
 
 Disable geocoding with:
