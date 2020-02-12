@@ -171,9 +171,7 @@ module Ahoy
       # safety net
       return unless Ahoy.cookies && request
 
-      cookie = {
-        value: value
-      }
+      cookie = Ahoy.cookie_options.merge(value: value)
       cookie[:expires] = duration.from_now if duration
       domain = Ahoy.cookie_domain
       cookie[:domain] = domain if domain && use_domain

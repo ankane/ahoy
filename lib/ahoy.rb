@@ -32,6 +32,9 @@ module Ahoy
 
   mattr_accessor :cookie_domain
 
+  mattr_accessor :cookie_options
+  self.cookie_options = {}
+
   mattr_accessor :server_side_visits
   self.server_side_visits = true
 
