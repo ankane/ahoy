@@ -173,8 +173,9 @@ module Ahoy
 
       cookie = Ahoy.cookie_options.merge(value: value)
       cookie[:expires] = duration.from_now if duration
-      domain = Ahoy.cookie_domain
-      cookie[:domain] = domain if domain && use_domain
+      # prefer cookie_options[:domain] over cookie_domain
+      cookie[:domain] ||= Ahoy.cookie_domain if Ahoy.cookie_domain
+      cookie.delete(:domain) unless use_domain
       request.cookie_jar[name] = cookie
     end
 
