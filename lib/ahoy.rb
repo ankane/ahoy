@@ -32,6 +32,9 @@ module Ahoy
 
   mattr_accessor :cookie_domain
 
+  mattr_accessor :cookie_options
+  self.cookie_options = {}
+
   mattr_accessor :server_side_visits
   self.server_side_visits = true
 
@@ -83,9 +86,6 @@ module Ahoy
 
   mattr_accessor :user_agent_parser
   self.user_agent_parser = :device_detector
-
-  mattr_accessor :cookie_options
-  self.cookie_options = {}
 
   mattr_accessor :logger
 
