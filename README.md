@@ -292,7 +292,7 @@ By default, a new visit is created after 4 hours of inactivity. Change this with
 Ahoy.visit_duration = 30.minutes
 ```
 
-### Multiple Subdomains
+### Cookies
 
 To track visits across multiple subdomains, use:
 
@@ -300,9 +300,7 @@ To track visits across multiple subdomains, use:
 Ahoy.cookie_domain = :all
 ```
 
-### Cookies [master]
-
-Set cookie options with:
+Set other [cookie options](https://api.rubyonrails.org/classes/ActionDispatch/Cookies.html) with: [master]
 
 ```ruby
 Ahoy.cookie_options = {same_site: :lax}
