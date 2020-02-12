@@ -1,3 +1,7 @@
+## 3.0.2 (unreleased)
+
+- Added `cookie_options`
+
 ## 3.0.1 (2019-09-21)
 
 - Made `Ahoy::Tracker` work outside of requests
