@@ -1,9 +1,20 @@
-dist: xenial
+dist: bionic
 language: ruby
-rvm: 2.6.3
-gemfile:
-  - Gemfile
-  - test/gemfiles/rails52.gemfile
+jobs:
+  include:
+    - rvm: 2.7
+      gemfile: Gemfile
+    - rvm: 2.6
+      gemfile: test/gemfiles/rails52.gemfile
+    - rvm: 2.5
+      gemfile: test/gemfiles/rails51.gemfile
+    - rvm: 2.4
+      gemfile: test/gemfiles/rails50.gemfile
+services:
+  - postgresql
+  - mysql
+addons:
+  postgresql: 10
 services:
   - postgresql
   - mysql
