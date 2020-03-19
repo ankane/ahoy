@@ -10,9 +10,6 @@ jobs:
       gemfile: test/gemfiles/rails51.gemfile
     - rvm: 2.4
       gemfile: test/gemfiles/rails50.gemfile
-services:
-  - postgresql
-  - mysql
 addons:
   postgresql: 10
 services:
