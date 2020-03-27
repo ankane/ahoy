@@ -1,6 +1,6 @@
 # Ahoy
 
-:fire: Simple, powerful analytics for Rails
+:fire: Simple, powerful, first-party analytics for Rails
 
 Track visits and events in Ruby, JavaScript, and native apps. Data is stored in your database by default so you can easily combine it with other data.
 
