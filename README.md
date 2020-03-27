@@ -4,7 +4,7 @@
 
 Track visits and events in Ruby, JavaScript, and native apps. Data is stored in your database by default so you can easily combine it with other data.
 
-:postbox: To track emails, check out [Ahoy Email](https://github.com/ankane/ahoy_email), and for A/B testing, check out [Field Test](https://github.com/ankane/field_test)
+:postbox: Check out [Ahoy Email](https://github.com/ankane/ahoy_email) for emails and [Field Test](https://github.com/ankane/field_test) for A/B testing
 
 :tangerine: Battle-tested at [Instacart](https://www.instacart.com/opensource)
 
