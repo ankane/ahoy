@@ -1,4 +1,4 @@
-## 3.0.2 (unreleased)
+## 3.0.2 (2020-04-03)
 
 - Added `cookie_options`
 

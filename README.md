@@ -300,7 +300,7 @@ To track visits across multiple subdomains, use:
 Ahoy.cookie_domain = :all
 ```
 
-Set other [cookie options](https://api.rubyonrails.org/classes/ActionDispatch/Cookies.html) with: [master]
+Set other [cookie options](https://api.rubyonrails.org/classes/ActionDispatch/Cookies.html) with:
 
 ```ruby
 Ahoy.cookie_options = {same_site: :lax}
