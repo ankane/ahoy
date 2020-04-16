@@ -1,3 +1,7 @@
+## 3.0.3 (unreleased)
+
+- Updated Ahoy.js to 0.3.5
+
 ## 3.0.2 (2020-04-03)
 
 - Added `cookie_options`

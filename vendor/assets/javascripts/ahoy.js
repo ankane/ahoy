@@ -2,112 +2,17 @@
  * Ahoy.js
  * Simple, powerful JavaScript analytics
  * https://github.com/ankane/ahoy.js
- * v0.3.4
+ * v0.3.5
  * MIT License
  */
 
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
-  (global.ahoy = factory());
+  (global = global || self, global.ahoy = factory());
 }(this, (function () { 'use strict';
 
-  function isUndefined(value) {
-    return value === undefined;
-  }
-
-  function isNull(value) {
-    return value === null;
-  }
-
-  function isObject(value) {
-    return value === Object(value);
-  }
-
-  function isArray(value) {
-    return Array.isArray(value);
-  }
-
-  function isDate(value) {
-    return value instanceof Date;
-  }
-
-  function isBlob(value) {
-    return (
-      value &&
-      typeof value.size === 'number' &&
-      typeof value.type === 'string' &&
-      typeof value.slice === 'function'
-    );
-  }
-
-  function isFile(value) {
-    return (
-      isBlob(value) &&
-      (typeof value.lastModifiedDate === 'object' ||
-        typeof value.lastModified === 'number') &&
-      typeof value.name === 'string'
-    );
-  }
-
-  function isFormData(value) {
-    return value instanceof FormData;
-  }
-
-  function objectToFormData(obj, cfg, fd, pre) {
-    if (isFormData(cfg)) {
-      pre = fd;
-      fd = cfg;
-      cfg = null;
-    }
-
-    cfg = cfg || {};
-    cfg.indices = isUndefined(cfg.indices) ? false : cfg.indices;
-    cfg.nulls = isUndefined(cfg.nulls) ? true : cfg.nulls;
-    fd = fd || new FormData();
-
-    if (isUndefined(obj)) {
-      return fd;
-    } else if (isNull(obj)) {
-      if (cfg.nulls) {
-        fd.append(pre, '');
-      }
-    } else if (isArray(obj)) {
-      if (!obj.length) {
-        var key = pre + '[]';
-
-        fd.append(key, '');
-      } else {
-        obj.forEach(function(value, index) {
-          var key = pre + '[' + (cfg.indices ? index : '') + ']';
-
-          objectToFormData(value, cfg, fd, key);
-        });
-      }
-    } else if (isDate(obj)) {
-      fd.append(pre, obj.toISOString());
-    } else if (isObject(obj) && !isFile(obj) && !isBlob(obj)) {
-      Object.keys(obj).forEach(function(prop) {
-        var value = obj[prop];
-
-        if (isArray(value)) {
-          while (prop.length > 2 && prop.lastIndexOf('[]') === prop.length - 2) {
-            prop = prop.substring(0, prop.length - 2);
-          }
-        }
-
-        var key = pre ? pre + '[' + prop + ']' : prop;
-
-        objectToFormData(value, cfg, fd, key);
-      });
-    } else {
-      fd.append(pre, obj);
-    }
-
-    return fd;
-  }
-
-  var objectToFormdata = objectToFormData;
+  var n=function(n){return void 0===n},e=function(n){return Array.isArray(n)},t=function(n){return n&&"number"==typeof n.size&&"string"==typeof n.type&&"function"==typeof n.slice},s=function(o,i,r,f){return (i=i||{}).indices=!n(i.indices)&&i.indices,i.nullsAsUndefineds=!n(i.nullsAsUndefineds)&&i.nullsAsUndefineds,i.booleansAsIntegers=!n(i.booleansAsIntegers)&&i.booleansAsIntegers,r=r||new FormData,n(o)?r:(null===o?i.nullsAsUndefineds||r.append(f,""):"boolean"!=typeof o?e(o)?o.length&&o.forEach(function(n,e){s(n,i,r,f+"["+(i.indices?e:"")+"]");}):o instanceof Date?r.append(f,o.toISOString()):o!==Object(o)||function(n){return t(n)&&"string"==typeof n.name&&("object"==typeof n.lastModifiedDate||"number"==typeof n.lastModified)}(o)||t(o)?r.append(f,o):Object.keys(o).forEach(function(n){var t=o[n];if(e(t)){ for(;n.length>2&&n.lastIndexOf("[]")===n.length-2;){ n=n.substring(0,n.length-2); } }s(t,i,r,f?f+"["+n+"]":n);}):r.append(f,i.booleansAsIntegers?o?1:0:o),r)};
 
   // https://www.quirksmode.org/js/cookies.html
 
@@ -258,7 +163,11 @@
 
   // http://beeker.io/jquery-document-ready-equivalent-vanilla-javascript
   function documentReady(callback) {
-    document.readyState === "interactive" || document.readyState === "complete" ? callback() : document.addEventListener("DOMContentLoaded", callback);
+    if (document.readyState === "interactive" || document.readyState === "complete") {
+      setTimeout(callback, 0);
+    } else {
+      document.addEventListener("DOMContentLoaded", callback);
+    }
   }
 
   // https://stackoverflow.com/a/2117523/1177228
@@ -294,7 +203,7 @@
 
   function sendRequest(url, data, success) {
     if (canStringify) {
-      if ($) {
+      if ($ && $.ajax) {
         $.ajax({
           type: "POST",
           url: url,
@@ -366,7 +275,7 @@
       // stringify so we keep the type
       data.events_json = JSON.stringify(data.events);
       delete data.events;
-      window.navigator.sendBeacon(eventsUrl(), objectToFormdata(data));
+      window.navigator.sendBeacon(eventsUrl(), s(data));
     });
   }
 
