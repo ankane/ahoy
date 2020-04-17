@@ -1,4 +1,4 @@
-## 3.0.3 (unreleased)
+## 3.0.3 (2020-04-17)
 
 - Updated Ahoy.js to 0.3.5
 
