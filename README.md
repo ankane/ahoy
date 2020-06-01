@@ -445,7 +445,7 @@ Ahoy::Visit.where("started_at < ?", 2.years.ago).find_in_batches do |visits|
 end
 ```
 
-Delete data for a specific user:
+Delete data for a specific user with:
 
 ```ruby
 user_id = 123
