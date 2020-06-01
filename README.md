@@ -433,6 +433,18 @@ Ahoy.cookies = false
 
 Previously set cookies are automatically deleted.
 
+## Data Retention
+
+Delete older data with:
+
+```ruby
+Ahoy::Visit.where("started_at < ?", 2.years.ago).find_in_batches do |visits|
+  visit_ids = visits.map(&:id)
+  Ahoy::Event.where(visit_id: visit_ids).delete_all
+  Ahoy::Visit.where(id: visit_ids).delete_all
+end
+```
+
 ## Development
 
 Ahoy is built with developers in mind. You can run the following code in your browser’s console.
