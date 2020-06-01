@@ -445,6 +445,16 @@ Ahoy::Visit.where("started_at < ?", 2.years.ago).find_in_batches do |visits|
 end
 ```
 
+Delete data for a specific user:
+
+```ruby
+user_id = 123
+visit_ids = Ahoy::Visit.where(user_id: user_id).map(&:id)
+Ahoy::Event.where(visit_id: visit_ids).delete_all
+Ahoy::Visit.where(id: visit_ids).delete_all
+Ahoy::Event.where(user_id: user_id).delete_all
+```
+
 ## Development
 
 Ahoy is built with developers in mind. You can run the following code in your browser’s console.
