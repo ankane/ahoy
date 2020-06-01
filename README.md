@@ -449,7 +449,7 @@ Delete data for a specific user:
 
 ```ruby
 user_id = 123
-visit_ids = Ahoy::Visit.where(user_id: user_id).map(&:id)
+visit_ids = Ahoy::Visit.where(user_id: user_id).pluck(:id)
 Ahoy::Event.where(visit_id: visit_ids).delete_all
 Ahoy::Visit.where(id: visit_ids).delete_all
 Ahoy::Event.where(user_id: user_id).delete_all
