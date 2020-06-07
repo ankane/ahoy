@@ -2,7 +2,7 @@
  * Ahoy.js
  * Simple, powerful JavaScript analytics
  * https://github.com/ankane/ahoy.js
- * v0.3.5
+ * v0.3.6
  * MIT License
  */
 
@@ -60,7 +60,9 @@
     cookieDomain: null,
     headers: {},
     visitParams: {},
-    withCredentials: false
+    withCredentials: false,
+    visitDuration: 4 * 60, // default 4 hours
+    visitorDuration: 2 * 365 * 24 * 60 // default 2 years
   };
 
   var ahoy = window.ahoy || window.Ahoy || {};
@@ -78,8 +80,6 @@
 
   var $ = window.jQuery || window.Zepto || window.$;
   var visitId, visitorId, track;
-  var visitTtl = 4 * 60; // 4 hours
-  var visitorTtl = 2 * 365 * 24 * 60; // 2 years
   var isReady = false;
   var queue = [];
   var canStringify = typeof(JSON) !== "undefined" && typeof(JSON.stringify) !== "undefined";
@@ -129,13 +129,13 @@
     isReady = true;
   }
 
-  function ready(callback) {
+  ahoy.ready = function (callback) {
     if (isReady) {
       callback();
     } else {
       queue.push(callback);
     }
-  }
+  };
 
   function matchesSelector(element, selector) {
     var matches = element.matches ||
@@ -252,7 +252,7 @@
   }
 
   function trackEvent(event) {
-    ready( function () {
+    ahoy.ready( function () {
       sendRequest(eventsUrl(), eventData(event), function() {
         // remove from queue
         for (var i = 0; i < eventQueue.length; i++) {
@@ -267,7 +267,7 @@
   }
 
   function trackEventNow(event) {
-    ready( function () {
+    ahoy.ready( function () {
       var data = eventData(event);
       var param = csrfParam();
       var token = csrfToken();
@@ -336,7 +336,7 @@
     } else {
       if (!visitId) {
         visitId = generateId();
-        setCookie("ahoy_visit", visitId, visitTtl);
+        setCookie("ahoy_visit", visitId, config.visitDuration);
       }
 
       // make sure cookies are enabled
@@ -345,7 +345,7 @@
 
         if (!visitorId) {
           visitorId = generateId();
-          setCookie("ahoy_visitor", visitorId, visitorTtl);
+          setCookie("ahoy_visitor", visitorId, config.visitorDuration);
         }
 
         var data = {
@@ -418,12 +418,12 @@
       js: true
     };
 
-    ready( function () {
+    ahoy.ready( function () {
       if (config.cookies && !ahoy.getVisitId()) {
         createVisit();
       }
 
-      ready( function () {
+      ahoy.ready( function () {
         log(event);
 
         event.visit_token = ahoy.getVisitId();
