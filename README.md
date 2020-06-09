@@ -124,7 +124,7 @@ class ApplicationController < ActionController::Base
   protected
 
   def track_action
-    ahoy.track "Ran action", request.path_parameters
+    ahoy.track "Ran action", request.path_parameters.to_json
   end
 end
 ```
