@@ -14,7 +14,6 @@ Combustion.initialize! :active_record, :action_controller, :active_job do
 
   logger = ActiveSupport::Logger.new(STDOUT)
   config.active_record.logger = logger if ENV["VERBOSE"]
-  config.action_mailer.logger = logger if ENV["VERBOSE"]
 end
 
 # run setup / migrations
