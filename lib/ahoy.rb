@@ -119,6 +119,7 @@ ActiveSupport.on_load(:action_view) do
 end
 
 # Mongoid
+# TODO in 4.0 - use ActiveSupport.on_load(:mongoid)
 if defined?(ActiveModel)
   ActiveModel::Callbacks.include(Ahoy::Model)
 end
