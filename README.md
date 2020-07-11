@@ -730,5 +730,12 @@ git clone https://github.com/ankane/ahoy.git
 cd ahoy
 bundle install
 bundle exec rake test
-bundle exec rake test:query_methods # for query methods
+```
+
+To test query methods, start PostgreSQL, MySQL, and Mongoid and use:
+
+```sh
+createdb ahoy_test
+mysqladmin create ahoy_test
+bundle exec rake test:query_methods
 ```
