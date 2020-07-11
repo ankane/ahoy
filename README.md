@@ -732,7 +732,7 @@ bundle install
 bundle exec rake test
 ```
 
-To test query methods, start PostgreSQL, MySQL, and Mongoid and use:
+To test query methods, start PostgreSQL, MySQL, and MongoDB and use:
 
 ```sh
 createdb ahoy_test
