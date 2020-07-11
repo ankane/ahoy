@@ -606,6 +606,22 @@ viewed_checkout_ids = Ahoy::Event.where(user_id: added_item_ids, name: "Viewed c
 
 The same approach also works with visitor tokens.
 
+### Forecasting
+
+To forecast future visits and events, check out [Prophet](https://github.com/ankane/prophet).
+
+```ruby
+daily_visits = Ahoy::Visit.group_by_day(:started_at).count # uses Groupdate
+df = Rover::DataFrame.new({"ds" => daily_visits.keys, "y" => daily_visits.values})
+
+m = Prophet.new
+m.fit(df)
+
+future = m.make_future_dataframe(periods: 30, include_history: false)
+forecast = m.predict(future)
+forecast[["ds", "yhat"]].to_a.map { |v| [v["ds"].to_date, v["yhat"].round]  }.to_h
+```
+
 ## Tutorials
 
 - [Tracking Metrics with Ahoy and Blazer](https://gorails.com/episodes/internal-metrics-with-ahoy-and-blazer)
