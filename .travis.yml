@@ -16,7 +16,7 @@ services:
   - postgresql
   - mysql
   - mongodb
-script: bundle exec rake test
+script: bundle exec rake test test:query_methods
 before_install:
   - mysqladmin create ahoy_test
   - createdb ahoy_test
