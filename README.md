@@ -612,14 +612,7 @@ To forecast future visits and events, check out [Prophet](https://github.com/ank
 
 ```ruby
 daily_visits = Ahoy::Visit.group_by_day(:started_at).count # uses Groupdate
-df = Rover::DataFrame.new({"ds" => daily_visits.keys, "y" => daily_visits.values})
-
-m = Prophet.new
-m.fit(df)
-
-future = m.make_future_dataframe(periods: 30, include_history: false)
-forecast = m.predict(future)
-forecast[["ds", "yhat"]].to_a.map { |v| [v["ds"].to_date, v["yhat"].round]  }.to_h
+Prophet.forecast(daily_visits)
 ```
 
 ## Tutorials
