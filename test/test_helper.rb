@@ -1,10 +1,7 @@
 require "bundler/setup"
-require "combustion"
-Bundler.require(:default)
+Bundler.require(:development)
 require "minitest/autorun"
 require "minitest/pride"
-require "active_record"
-require "mongoid"
 
 logger = ActiveSupport::Logger.new(ENV["VERBOSE"] ? STDOUT : nil)
 
