@@ -70,6 +70,13 @@ class ControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  def test_server_side_visits_true
+    with_options(server_side_visits: true) do
+      get list_products_url
+      assert_equal 1, Ahoy::Visit.count
+    end
+  end
+
   def test_server_side_visits_false
     with_options(server_side_visits: false) do
       get products_url
