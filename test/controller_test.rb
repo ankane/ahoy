@@ -13,8 +13,28 @@ class ControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, Ahoy::Visit.count
     assert_equal 1, Ahoy::Event.count
 
+    visit = Ahoy::Visit.last
+    assert_equal "http://www.example.com/products", visit.landing_page
+
     event = Ahoy::Event.last
     assert_equal "Viewed products", event.name
+  end
+
+  def test_utm_params
+    get products_url(
+      utm_source: "test-source",
+      utm_medium: "test-medium",
+      utm_term: "test-term",
+      utm_content: "test-content",
+      utm_campaign: "test-campaign"
+    )
+
+    visit = Ahoy::Visit.last
+    assert_equal "test-source", visit.utm_source
+    assert_equal "test-medium", visit.utm_medium
+    assert_equal "test-term", visit.utm_term
+    assert_equal "test-content", visit.utm_content
+    assert_equal "test-campaign", visit.utm_campaign
   end
 
   def test_visitable
