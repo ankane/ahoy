@@ -32,18 +32,25 @@ class ApiTest < ActionDispatch::IntegrationTest
   end
 
   def test_event
-    skip
-
-    visit = Ahoy::Visit.create!(visit_token: random_token, visitor_token: random_token)
+    visit =
+      Ahoy::Visit.create!(
+        visit_token: random_token,
+        visitor_token: random_token,
+        started_at: Time.current
+      )
 
     name = "Test"
     event_params = {
-      id: random_token,
-      name: name,
-      properties: {},
-      time: Time.current.iso8601,
       visit_token: visit.visit_token,
-      visitor_token: visit.visitor_token
+      visitor_token: visit.visitor_token,
+      events_json: [
+        {
+          id: random_token,
+          name: name,
+          properties: {},
+          time: Time.current.iso8601
+        }
+      ].to_json
     }
     post ahoy_engine.events_url, params: event_params
     assert :success
