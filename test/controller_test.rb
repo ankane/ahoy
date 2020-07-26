@@ -17,6 +17,12 @@ class ControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Viewed products", event.name
   end
 
+  def test_visitable
+    post products_url
+    visit = Ahoy::Visit.last
+    assert_equal visit, Product.last.ahoy_visit
+  end
+
   def test_bad_visit_cookie
     make_request(cookies: {"ahoy_visit" => "badtoken\255"})
     assert_equal ahoy.visit_token, "badtoken"

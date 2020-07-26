@@ -55,4 +55,9 @@ ActiveRecord::Schema.define do
   end
 
   add_index :ahoy_events, [:name, :time]
+
+  create_table :products do |t|
+    t.string :name
+    t.references :ahoy_visit
+  end
 end

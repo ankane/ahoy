@@ -1,6 +1,11 @@
 class ProductsController < ActionController::Base
   def index
     ahoy.track "Viewed products"
-    render json: {}
+    head :ok
+  end
+
+  def create
+    Product.create!
+    head :ok
   end
 end
