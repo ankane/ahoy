@@ -70,6 +70,14 @@ class ControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  def test_server_side_visits_false
+    with_options(server_side_visits: false) do
+      get products_url
+      assert_equal 0, Ahoy::Visit.count
+      assert_equal ["ahoy_track", "ahoy_visit", "ahoy_visitor"], response.cookies.keys.sort
+    end
+  end
+
   def test_cookies_true
     get products_url
     assert_equal ["ahoy_visit", "ahoy_visitor"], response.cookies.keys.sort
