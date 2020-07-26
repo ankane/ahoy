@@ -35,6 +35,7 @@ class ApiTest < ActionDispatch::IntegrationTest
     visit = random_visit
 
     name = "Test"
+    time = Time.current.round
     event_params = {
       visit_token: visit.visit_token,
       visitor_token: visit.visitor_token,
@@ -43,7 +44,7 @@ class ApiTest < ActionDispatch::IntegrationTest
           id: random_token,
           name: name,
           properties: {},
-          time: Time.current.iso8601
+          time: time
         }
       ].to_json
     }
@@ -55,6 +56,7 @@ class ApiTest < ActionDispatch::IntegrationTest
     event = Ahoy::Event.last
     assert_equal visit, event.visit
     assert_equal name, event.name
+    assert_equal time, event.time
   end
 
   def test_event_params
@@ -77,11 +79,15 @@ class ApiTest < ActionDispatch::IntegrationTest
     assert_equal name, event.name
   end
 
+  def test_time
+    # todo
+  end
+
   def random_visit
     Ahoy::Visit.create!(
       visit_token: random_token,
       visitor_token: random_token,
-      started_at: Time.current
+      started_at: Time.current.round # so it's not ahead of event
     )
   end
 
