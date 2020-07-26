@@ -64,9 +64,23 @@ class ControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_mask_ips
-    with_mask_ips do
+    with_options(mask_ips: true) do
       get products_url
       assert_equal "127.0.0.0", Ahoy::Visit.last.ip
+    end
+  end
+
+  def test_track_bots_true
+    with_options(track_bots: true) do
+      get products_url, headers: {"User-Agent" => bot_user_agent}
+      assert_equal 1, Ahoy::Visit.count
+    end
+  end
+
+  def test_track_bots_false
+    with_options(track_bots: false) do
+      get products_url, headers: {"User-Agent" => bot_user_agent}
+      assert_equal 0, Ahoy::Visit.count
     end
   end
 
@@ -104,13 +118,24 @@ class ControllerTest < ActionDispatch::IntegrationTest
     controller.ahoy
   end
 
-  def with_mask_ips
-    previous_value = Ahoy.mask_ips
+  def bot_user_agent
+    "Mozilla/5.0 (compatible; DuckDuckBot-Https/1.1; https://duckduckgo.com/duckduckbot)"
+  end
+
+  def with_options(options)
+    previous_options = {}
+    options.each_key do |k|
+      previous_options[k] = Ahoy.send(k)
+    end
     begin
-      Ahoy.mask_ips = true
+      options.each do |k, v|
+        Ahoy.send("#{k}=", v)
+      end
       yield
     ensure
-      Ahoy.mask_ips = previous_value
+      previous_options.each do |k, v|
+        Ahoy.send("#{k}=", v)
+      end
     end
   end
 end
