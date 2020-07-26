@@ -13,9 +13,14 @@ class ProductsController < ActionController::Base
     head :ok
   end
 
+  def authenticate
+    ahoy.authenticate(User.last)
+    head :ok
+  end
+
   private
 
   def current_user
-    @current_user ||= User.first_or_create!
+    @current_user ||= User.last
   end
 end

@@ -4,6 +4,7 @@ class ControllerTest < ActionDispatch::IntegrationTest
   def setup
     Ahoy::Visit.delete_all
     Ahoy::Event.delete_all
+    User.delete_all
   end
 
   def test_works
@@ -19,6 +20,7 @@ class ControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_user
+    User.create!
     get products_url
     visit = Ahoy::Visit.last
     assert_equal visit.user, User.last
@@ -67,6 +69,16 @@ class ControllerTest < ActionDispatch::IntegrationTest
     post products_url
     visit = Ahoy::Visit.last
     assert_equal visit, Product.last.ahoy_visit
+  end
+
+  def test_authenticate
+    get products_url
+    visit = Ahoy::Visit.last
+    assert_nil visit.user
+    user = User.create!
+    get authenticate_products_url
+    visit.reload
+    assert_equal user, visit.user
   end
 
   def test_mask_ips
