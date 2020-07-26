@@ -1,4 +1,4 @@
-class ProductsController < ActionController::Base
+class ProductsController < ApplicationController
   def index
     ahoy.track "Viewed products"
     head :ok
