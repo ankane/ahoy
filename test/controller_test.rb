@@ -18,6 +18,12 @@ class ControllerTest < ActionDispatch::IntegrationTest
     assert_equal({}, event.properties)
   end
 
+  def test_user
+    get products_url
+    visit = Ahoy::Visit.last
+    assert_equal visit.user, User.last
+  end
+
   def test_standard
     referrer = "http://www.example.com"
     get products_url, headers: {"Referer" => referrer}

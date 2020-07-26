@@ -12,4 +12,10 @@ class ProductsController < ActionController::Base
     Product.create!
     head :ok
   end
+
+  private
+
+  def current_user
+    @current_user ||= User.first_or_create!
+  end
 end

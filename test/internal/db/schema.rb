@@ -60,4 +60,8 @@ ActiveRecord::Schema.define do
     t.string :name
     t.references :ahoy_visit
   end
+
+  create_table :users do |t|
+    t.string :name
+  end
 end
