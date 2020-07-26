@@ -120,6 +120,20 @@ class ControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  def test_cookie_options
+    with_options(cookie_options: {same_site: :lax}) do
+      get products_url
+      assert_match "SameSite=Lax", response.header["Set-Cookie"]
+    end
+  end
+
+  def test_cookie_domain
+    with_options(cookie_domain: :all) do
+      get products_url
+      assert_match "domain=.example.com", response.header["Set-Cookie"]
+    end
+  end
+
   def test_track_bots_true
     with_options(track_bots: true) do
       get products_url, headers: {"User-Agent" => bot_user_agent}
