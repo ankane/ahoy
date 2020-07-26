@@ -19,6 +19,8 @@ Combustion.initialize! :active_record, :action_controller, :active_job do
   config.active_job.logger = logger
 end
 
+Ahoy.logger = logger
+
 # run setup / migrations
 require_relative "support/mysql"
 require_relative "support/postgresql"
