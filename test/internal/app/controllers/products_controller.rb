@@ -4,6 +4,10 @@ class ProductsController < ActionController::Base
     head :ok
   end
 
+  def list
+    head :ok
+  end
+
   def create
     Product.create!
     head :ok

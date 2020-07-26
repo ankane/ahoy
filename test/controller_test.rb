@@ -78,6 +78,23 @@ class ControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  def test_server_side_visits_when_needed
+    with_options(server_side_visits: :when_needed) do
+      get list_products_url
+      assert_equal 0, Ahoy::Visit.count
+      get products_url
+      assert_equal 1, Ahoy::Visit.count
+    end
+  end
+
+  def test_api_only
+    with_options(api_only: true) do
+      get list_products_url
+      assert_equal 0, Ahoy::Visit.count
+      assert_empty response.cookies
+    end
+  end
+
   def test_cookies_true
     get products_url
     assert_equal ["ahoy_visit", "ahoy_visitor"], response.cookies.keys.sort
@@ -86,7 +103,7 @@ class ControllerTest < ActionDispatch::IntegrationTest
   def test_cookies_false
     with_options(cookies: false) do
       get products_url
-      assert_equal({}, response.cookies)
+      assert_empty response.cookies
     end
   end
 
