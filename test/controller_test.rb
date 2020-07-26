@@ -70,6 +70,18 @@ class ControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  def test_cookies_true
+    get products_url
+    assert_equal ["ahoy_visit", "ahoy_visitor"], response.cookies.keys.sort
+  end
+
+  def test_cookies_false
+    with_options(cookies: false) do
+      get products_url
+      assert_equal({}, response.cookies)
+    end
+  end
+
   def test_track_bots_true
     with_options(track_bots: true) do
       get products_url, headers: {"User-Agent" => bot_user_agent}
