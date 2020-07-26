@@ -13,11 +13,19 @@ class ControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, Ahoy::Visit.count
     assert_equal 1, Ahoy::Event.count
 
-    visit = Ahoy::Visit.last
-    assert_equal "http://www.example.com/products", visit.landing_page
-
     event = Ahoy::Event.last
     assert_equal "Viewed products", event.name
+  end
+
+  def test_standard
+    referrer = "http://www.example.com"
+    get products_url, headers: {"Referer" => referrer}
+
+    visit = Ahoy::Visit.last
+    assert_equal referrer, visit.referrer
+    assert_equal "www.example.com", visit.referring_domain
+    assert_equal "http://www.example.com/products", visit.landing_page
+    assert_equal "127.0.0.1", visit.ip
   end
 
   def test_utm_params
