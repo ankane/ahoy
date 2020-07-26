@@ -104,6 +104,18 @@ class ControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  def tset_exclude_method
+    exclude_method = lambda do |controller, request|
+      request.parameters["exclude"] == "t"
+    end
+    with_options(exclude_method: exclude_method) do
+      get products_url, params: {"exclude" => "t"}
+      assert_equal 0, Ahoy::Visit.count
+      get products_url
+      assert_equal 1, Ahoy::Visit.count
+    end
+  end
+
   def test_bad_visit_cookie
     make_request(cookies: {"ahoy_visit" => "badtoken\255"})
     assert_equal ahoy.visit_token, "badtoken"
