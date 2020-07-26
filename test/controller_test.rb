@@ -15,6 +15,7 @@ class ControllerTest < ActionDispatch::IntegrationTest
 
     event = Ahoy::Event.last
     assert_equal "Viewed products", event.name
+    assert_equal({}, event.properties)
   end
 
   def test_standard
