@@ -32,12 +32,7 @@ class ApiTest < ActionDispatch::IntegrationTest
   end
 
   def test_event
-    visit =
-      Ahoy::Visit.create!(
-        visit_token: random_token,
-        visitor_token: random_token,
-        started_at: Time.current
-      )
+    visit = random_visit
 
     name = "Test"
     event_params = {
@@ -60,6 +55,34 @@ class ApiTest < ActionDispatch::IntegrationTest
     event = Ahoy::Event.last
     assert_equal visit, event.visit
     assert_equal name, event.name
+  end
+
+  def test_event_params
+    visit = random_visit
+
+    name = "Test"
+    event_params = {
+      visit_token: visit.visit_token,
+      visitor_token: visit.visitor_token,
+      name: name,
+      properties: {}
+    }
+    post ahoy_engine.events_url, params: event_params
+    assert :success
+
+    assert_equal 1, Ahoy::Event.count
+
+    event = Ahoy::Event.last
+    assert_equal visit, event.visit
+    assert_equal name, event.name
+  end
+
+  def random_visit
+    Ahoy::Visit.create!(
+      visit_token: random_token,
+      visitor_token: random_token,
+      started_at: Time.current
+    )
   end
 
   def random_token
