@@ -23,6 +23,13 @@ class ControllerTest < ActionDispatch::IntegrationTest
     assert_equal visit, Product.last.ahoy_visit
   end
 
+  def test_mask_ips
+    with_mask_ips do
+      get products_url
+      assert_equal "127.0.0.0", Ahoy::Visit.last.ip
+    end
+  end
+
   def test_bad_visit_cookie
     make_request(cookies: {"ahoy_visit" => "badtoken\255"})
     assert_equal ahoy.visit_token, "badtoken"
@@ -55,5 +62,15 @@ class ControllerTest < ActionDispatch::IntegrationTest
 
   def ahoy
     controller.ahoy
+  end
+
+  def with_mask_ips
+    previous_value = Ahoy.mask_ips
+    begin
+      Ahoy.mask_ips = true
+      yield
+    ensure
+      Ahoy.mask_ips = previous_value
+    end
   end
 end
