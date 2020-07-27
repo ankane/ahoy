@@ -160,7 +160,7 @@ class ControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def tset_exclude_method
+  def test_exclude_method
     exclude_method = lambda do |controller, request|
       request.parameters["exclude"] == "t"
     end
@@ -169,6 +169,16 @@ class ControllerTest < ActionDispatch::IntegrationTest
       assert_equal 0, Ahoy::Visit.count
       get products_url
       assert_equal 1, Ahoy::Visit.count
+    end
+  end
+
+  def test_token_generator
+    token_generator = -> { "test-token" }
+    with_options(token_generator: token_generator) do
+      get products_url
+      visit = Ahoy::Visit.last
+      assert_equal "test-token", visit.visit_token
+      assert_equal "test-token", visit.visitor_token
     end
   end
 
