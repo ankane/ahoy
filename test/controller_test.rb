@@ -170,6 +170,18 @@ class ControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  def test_cookies_false_deletes_cookies
+    self.cookies["ahoy_visit"] = "test-token"
+    self.cookies["ahoy_visitor"] = "test-token"
+    self.cookies["ahoy_track"] = "true"
+
+    with_options(cookies: false) do
+      get products_url
+      expired = "max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT"
+      assert_equal 3, response.headers["Set-Cookie"].scan(expired).size
+    end
+  end
+
   def test_cookie_options
     with_options(cookie_options: {same_site: :lax}) do
       get products_url
