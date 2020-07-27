@@ -182,6 +182,19 @@ class ControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  def test_geocode_true
+    assert_enqueued_with(job: Ahoy::GeocodeV2Job) do
+      get products_url
+    end
+  end
+
+  def test_geocode_false
+    with_options(geocode: false) do
+      get products_url
+      assert_equal 0, enqueued_jobs.size
+    end
+  end
+
   def test_bad_visit_cookie
     make_request(cookies: {"ahoy_visit" => "badtoken\255"})
     assert_equal ahoy.visit_token, "badtoken"
