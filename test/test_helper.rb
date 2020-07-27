@@ -27,3 +27,22 @@ require_relative "support/mongoid"
 ActiveRecord::Base.establish_connection(:test)
 
 require_relative "support/query_methods_test"
+
+class Minitest::Test
+  def with_options(options)
+    previous_options = {}
+    options.each_key do |k|
+      previous_options[k] = Ahoy.send(k)
+    end
+    begin
+      options.each do |k, v|
+        Ahoy.send("#{k}=", v)
+      end
+      yield
+    ensure
+      previous_options.each do |k, v|
+        Ahoy.send("#{k}=", v)
+      end
+    end
+  end
+end

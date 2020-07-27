@@ -280,21 +280,4 @@ class ControllerTest < ActionDispatch::IntegrationTest
   def bot_user_agent
     "Mozilla/5.0 (compatible; DuckDuckBot-Https/1.1; https://duckduckgo.com/duckduckbot)"
   end
-
-  def with_options(options)
-    previous_options = {}
-    options.each_key do |k|
-      previous_options[k] = Ahoy.send(k)
-    end
-    begin
-      options.each do |k, v|
-        Ahoy.send("#{k}=", v)
-      end
-      yield
-    ensure
-      previous_options.each do |k, v|
-        Ahoy.send("#{k}=", v)
-      end
-    end
-  end
 end

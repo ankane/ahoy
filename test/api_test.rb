@@ -13,7 +13,7 @@ class ApiTest < ActionDispatch::IntegrationTest
     visitor_token = random_token
 
     post ahoy_engine.visits_url, params: {visit_token: visit_token, visitor_token: visitor_token}
-    assert :success
+    assert_response :success
 
     body = JSON.parse(response.body)
     expected_body = {
@@ -49,7 +49,7 @@ class ApiTest < ActionDispatch::IntegrationTest
       ].to_json
     }
     post ahoy_engine.events_url, params: event_params
-    assert :success
+    assert_response :success
 
     assert_equal 1, Ahoy::Event.count
 
@@ -70,7 +70,7 @@ class ApiTest < ActionDispatch::IntegrationTest
       properties: {}
     }
     post ahoy_engine.events_url, params: event_params
-    assert :success
+    assert_response :success
 
     assert_equal 1, Ahoy::Event.count
 
@@ -84,10 +84,21 @@ class ApiTest < ActionDispatch::IntegrationTest
   end
 
   def test_before_action
-    visit_token = random_token
-    visitor_token = random_token
-    post ahoy_engine.visits_url, params: {visit_token: visit_token, visitor_token: visitor_token}
+    post ahoy_engine.visits_url, params: {visit_token: random_token, visitor_token: random_token}
     assert_nil controller.ran_before_action
+  end
+
+  def test_renew_cookies
+    post ahoy_engine.visits_url, params: {visit_token: random_token, visitor_token: random_token, js: true}
+    assert_equal ["ahoy_visit"], response.cookies.keys
+  end
+
+  def test_max_content_length
+    with_options(max_content_length: 1) do
+      post ahoy_engine.visits_url, params: {visit_token: random_token, visitor_token: random_token}
+      assert_response 413
+      assert_equal "Payload too large\n", response.body
+    end
   end
 
   def random_visit
