@@ -160,6 +160,20 @@ class ControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  def test_bot_detection_version_1
+    with_options(track_bots: false, bot_detection_version: 1) do
+      get products_url, headers: {"User-Agent" => ""}
+      assert_equal 1, Ahoy::Visit.count
+    end
+  end
+
+  def test_bot_detection_version_2
+    with_options(track_bots: false, bot_detection_version: 2) do
+      get products_url, headers: {"User-Agent" => ""}
+      assert_equal 0, Ahoy::Visit.count
+    end
+  end
+
   def test_exclude_method
     exclude_method = lambda do |controller, request|
       request.parameters["exclude"] == "t"
