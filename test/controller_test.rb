@@ -163,6 +163,10 @@ class ControllerTest < ActionDispatch::IntegrationTest
     with_options(cookies: false) do
       get products_url
       assert_empty response.cookies
+      visit = Ahoy::Visit.last
+      # deterministic tokens
+      assert_equal "8924a60c-5c50-5d80-b38d-e6c68fcd0958", visit.visit_token
+      assert_equal "64dcde66-9659-5473-897e-5abd59f8b89f", visit.visitor_token
     end
   end
 
