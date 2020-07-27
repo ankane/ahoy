@@ -23,4 +23,8 @@ class ProductsController < ApplicationController
   def current_user
     @current_user ||= User.last
   end
+
+  def true_user
+    @true_user ||= User.create!(name: "True User")
+  end
 end

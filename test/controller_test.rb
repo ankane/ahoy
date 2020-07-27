@@ -20,10 +20,18 @@ class ControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_user
-    User.create!
+    User.create!(name: "Test User")
     get products_url
     visit = Ahoy::Visit.last
-    assert_equal visit.user, User.last
+    assert_equal "Test User", visit.user.name
+  end
+
+  def test_user_method
+    with_options(user_method: ->(controller) { controller.send(:true_user) }) do
+      get products_url
+      visit = Ahoy::Visit.last
+      assert_equal "True User", visit.user.name
+    end
   end
 
   def test_standard
