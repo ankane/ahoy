@@ -65,6 +65,19 @@ class ControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Desktop", visit.device_type
   end
 
+  def test_legacy_user_agent_parser
+    with_options(user_agent_parser: :legacy) do
+      user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0) Gecko/20100101 Firefox/78.0"
+      get products_url, headers: {"User-Agent" => user_agent}
+
+      visit = Ahoy::Visit.last
+      assert_equal user_agent, visit.user_agent
+      assert_equal "Firefox", visit.browser
+      assert_equal "Mac OS X", visit.os
+      assert_equal "Desktop", visit.device_type
+    end
+  end
+
   def test_visitable
     post products_url
     visit = Ahoy::Visit.last

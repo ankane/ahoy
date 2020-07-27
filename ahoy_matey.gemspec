@@ -29,4 +29,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "pg"
   spec.add_development_dependency "mysql2"
   spec.add_development_dependency "mongoid"
+  spec.add_development_dependency "browser", "~> 2.0"
+  spec.add_development_dependency "user_agent_parser"
 end
