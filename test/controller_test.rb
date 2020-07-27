@@ -26,7 +26,15 @@ class ControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Test User", visit.user.name
   end
 
-  def test_user_method
+  def test_user_method_symbol
+    with_options(user_method: :true_user) do
+      get products_url
+      visit = Ahoy::Visit.last
+      assert_equal "True User", visit.user.name
+    end
+  end
+
+  def test_user_method_lambda
     with_options(user_method: ->(controller) { controller.send(:true_user) }) do
       get products_url
       visit = Ahoy::Visit.last
