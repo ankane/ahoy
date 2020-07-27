@@ -1,6 +1,8 @@
 require_relative "test_helper"
 
 class ControllerTest < ActionDispatch::IntegrationTest
+  include ActiveJob::TestHelper # for Rails < 6
+
   def setup
     Ahoy::Visit.delete_all
     Ahoy::Event.delete_all
