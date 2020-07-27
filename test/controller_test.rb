@@ -9,7 +9,7 @@ class ControllerTest < ActionDispatch::IntegrationTest
 
   def test_works
     get products_url
-    assert :success
+    assert_response :success
 
     assert_equal 1, Ahoy::Visit.count
     assert_equal 1, Ahoy::Event.count
