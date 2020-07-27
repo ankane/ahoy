@@ -1,4 +1,6 @@
 class ProductsController < ApplicationController
+  skip_before_action :track_ahoy_visit, only: [:no_visit]
+
   def index
     ahoy.track "Viewed products"
     head :ok
@@ -15,6 +17,10 @@ class ProductsController < ApplicationController
 
   def authenticate
     ahoy.authenticate(User.last)
+    head :ok
+  end
+
+  def no_visit
     head :ok
   end
 
