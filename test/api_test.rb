@@ -83,6 +83,13 @@ class ApiTest < ActionDispatch::IntegrationTest
     # todo
   end
 
+  def test_before_action
+    visit_token = random_token
+    visitor_token = random_token
+    post ahoy_engine.visits_url, params: {visit_token: visit_token, visitor_token: visitor_token}
+    assert_nil controller.ran_before_action
+  end
+
   def random_visit
     Ahoy::Visit.create!(
       visit_token: random_token,
