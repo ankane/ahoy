@@ -615,6 +615,10 @@ daily_visits = Ahoy::Visit.group_by_day(:started_at).count # uses Groupdate
 Prophet.forecast(daily_visits)
 ```
 
+### Recommendations
+
+To make recommendations based on events, check out [Disco](https://github.com/ankane/disco#ahoy).
+
 ## Tutorials
 
 - [Tracking Metrics with Ahoy and Blazer](https://gorails.com/episodes/internal-metrics-with-ahoy-and-blazer)
