@@ -594,6 +594,12 @@ Or just query properties with:
 Ahoy::Event.where_props(product_id: 123).count
 ```
 
+Group by a property with: [unreleased]
+
+```ruby
+Ahoy::Event.group_prop(:product_id).count
+```
+
 ### Funnels
 
 It’s easy to create funnels.

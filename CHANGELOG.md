@@ -1,3 +1,7 @@
+## 3.0.5 (unreleased)
+
+- Added `group_prop` method
+
 ## 3.0.4 (2020-06-07)
 
 - Updated Ahoy.js to 0.3.6
