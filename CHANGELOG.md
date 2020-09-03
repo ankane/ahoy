@@ -19,7 +19,6 @@
 - Added `cookie_options`
 
 ## 3.0.1 (2019-09-21)
->>>>>>> master
 
 - Made `Ahoy::Tracker` work outside of requests
 - Fixed storage of `false` values with customized store
