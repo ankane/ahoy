@@ -580,7 +580,7 @@ Ahoy::Visit.group(:referring_domain).count
 
 ### Querying Events
 
-Ahoy provides two methods on the event model to make querying easier.
+Ahoy provides a few methods on the event model to make querying easier.
 
 To query on both name and properties, you can use:
 
