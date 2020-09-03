@@ -66,6 +66,44 @@ module Ahoy
         relation
       end
       alias_method :where_properties, :where_props
+
+      def group_prop(name)
+        relation = self
+        if respond_to?(:columns_hash)
+          column_type = columns_hash["properties"].type
+          quoted_name = connection.quote(name)
+          adapter_name = connection.adapter_name.downcase
+        else
+          adapter_name = "mongoid"
+        end
+        case adapter_name
+        when "mongoid"
+          raise "Adapter not supported: #{adapter_name}"
+        when /mysql/
+          raise "MySQL and MariaDB not supported yet"
+          # mariadb = connection.try(:mariadb?)
+          # if mariadb
+          #   # relation = relation.group("JSON_VALUE(properties, #{connection.quote("$.#{name}")})")
+          # elsif column_type == :json
+          #   relation = relation.group("properties -> #{quoted_name}")
+          # else
+          #   relation = relation.group("CAST(properties AS JSON) -> #{quoted_name}")
+          # end
+        when /postgres|postgis/
+          case column_type
+          when :jsonb, :hstore
+            relation = relation.group("properties -> #{quoted_name}")
+          else
+            # convert to jsonb to fix
+            # could not identify an equality operator for type json
+            # and for text columns
+            relation = relation.group("properties::jsonb -> #{quoted_name}")
+          end
+        else
+          raise "Adapter not supported: #{adapter_name}"
+        end
+        relation
+      end
     end
   end
 end

@@ -69,11 +69,67 @@ module QueryMethodsTest
     assert_equal 0, count_events(value: 1)
   end
 
+  def test_group_string
+    skip unless group_supported?
+
+    create_event value: "hello"
+    create_event value: "hello"
+    create_event value: "world"
+    expected = {"hello" => 2, "world" => 1}
+    assert_equal expected, group_events
+  end
+
+  def test_group_number
+    skip unless group_supported?
+
+    skip "Values are always strings" if hstore?
+
+    create_event value: 1
+    create_event value: 1
+    create_event value: 9
+    expected = {1 => 2, 9 => 1}
+    assert_equal expected, group_events
+  end
+
+  def test_group_boolean
+    skip unless group_supported?
+
+    skip "Values are always strings" if hstore?
+
+    create_event value: true
+    create_event value: true
+    create_event value: false
+    expected = {true => 2, false => 1}
+    assert_equal expected, group_events
+  end
+
+  def test_group_nil
+    skip unless group_supported?
+
+    create_event value: nil
+    create_event value: nil
+    create_event value: "world"
+    expected = {nil => 2, "world" => 1}
+    assert_equal expected, group_events
+  end
+
   def create_event(properties)
     model.create(properties: properties)
   end
 
   def count_events(properties)
-    model.where_properties(properties).count
+    model.where_props(properties).count
+  end
+
+  def group_events
+    model.group_prop(:value).count
+  end
+
+  def hstore?
+    self.class.name == "PostgresqlHstoreTest"
+  end
+
+  def group_supported?
+    self.class.name != "MongoidTest" && self.class.name !~ /mysql/i
   end
 end

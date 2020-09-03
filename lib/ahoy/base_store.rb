@@ -26,7 +26,7 @@ module Ahoy
         if Ahoy.user_method.respond_to?(:call)
           Ahoy.user_method.call(controller)
         else
-          controller.send(Ahoy.user_method)
+          controller.send(Ahoy.user_method) if controller.respond_to?(Ahoy.user_method, true)
         end
       end
     end

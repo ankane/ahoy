@@ -3,7 +3,7 @@ require_relative "lib/ahoy/version"
 Gem::Specification.new do |spec|
   spec.name          = "ahoy_matey"
   spec.version       = Ahoy::VERSION
-  spec.summary       = "Simple, powerful analytics for Rails"
+  spec.summary       = "Simple, powerful, first-party analytics for Rails"
   spec.homepage      = "https://github.com/ankane/ahoy"
   spec.license       = "MIT"
 
@@ -30,4 +30,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "pg"
   spec.add_development_dependency "mysql2"
   spec.add_development_dependency "mongoid"
+  spec.add_development_dependency "browser", "~> 2.0"
+  spec.add_development_dependency "user_agent_parser"
 end

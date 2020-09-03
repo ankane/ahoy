@@ -31,7 +31,11 @@ module Ahoy
   mattr_accessor :cookies
   self.cookies = true
 
+  # TODO deprecate in favor of cookie_options
   mattr_accessor :cookie_domain
+
+  mattr_accessor :cookie_options
+  self.cookie_options = {}
 
   mattr_accessor :server_side_visits
   self.server_side_visits = true
@@ -131,6 +135,10 @@ ActiveSupport.on_load(:action_view) do
 end
 
 # Mongoid
+# TODO use
+# ActiveSupport.on_load(:mongoid) do
+#   Mongoid::Document::ClassMethods.include(Ahoy::Model)
+# end
 if defined?(ActiveModel)
   ActiveModel::Callbacks.include(Ahoy::Model)
 end
