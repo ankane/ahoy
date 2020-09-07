@@ -87,7 +87,7 @@ module QueryMethodsTest
     create_event value: 1
     create_event value: 1
     create_event value: 9
-    expected = {1 => 2, 9 => 1}
+    expected = mysql? ? {"1" => 2, "9" => 1} : {1 => 2, 9 => 1}
     assert_equal expected, group_events
   end
 
@@ -99,7 +99,7 @@ module QueryMethodsTest
     create_event value: true
     create_event value: true
     create_event value: false
-    expected = {true => 2, false => 1}
+    expected = mysql? ? {"true" => 2, "false" => 1} : {true => 2, false => 1}
     assert_equal expected, group_events
   end
 
@@ -109,7 +109,7 @@ module QueryMethodsTest
     create_event value: nil
     create_event value: nil
     create_event value: "world"
-    expected = {nil => 2, "world" => 1}
+    expected = mysql? ? {"null" => 2, "world" => 1} : {nil => 2, "world" => 1}
     assert_equal expected, group_events
   end
 
@@ -125,11 +125,15 @@ module QueryMethodsTest
     model.group_prop(:value).count
   end
 
+  def mysql?
+    self.class.name =~ /mysql/i && !model.connection.try(:mariadb?)
+  end
+
   def hstore?
     self.class.name == "PostgresqlHstoreTest"
   end
 
   def group_supported?
-    self.class.name != "MongoidTest" && self.class.name !~ /mysql/i
+    self.class.name != "MongoidTest" && !model.connection.try(:mariadb?)
   end
 end

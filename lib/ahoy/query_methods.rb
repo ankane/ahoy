@@ -79,15 +79,14 @@ module Ahoy
         when "mongoid"
           raise "Adapter not supported: #{adapter_name}"
         when /mysql/
-          raise "MySQL and MariaDB not supported yet"
-          # quoted_name = connection.quote("$.#{name}")
-          # if connection.try(:mariadb?)
-          #   relation = relation.group("JSON_VALUE(properties, #{connection.quote("$.#{name}")})")
-          # elsif column_type == :json
-          #   relation = relation.group("properties -> #{quoted_name}")
-          # else
-          #   relation = relation.group("CAST(properties AS JSON) -> #{quoted_name}")
-          # end
+          quoted_name = connection.quote("$.#{name}")
+          if connection.try(:mariadb?)
+            raise "MariaDB not supported yet"
+            # relation = relation.group("JSON_VALUE(properties, #{quoted_name)})")
+          else
+            column = column_type == :json ? "properties" : "CAST(properties AS JSON)"
+            relation = relation.group("JSON_UNQUOTE(JSON_EXTRACT(#{column}, #{quoted_name}))")
+          end
         when /postgres|postgis/
           quoted_name = connection.quote(name)
 
