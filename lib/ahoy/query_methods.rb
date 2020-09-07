@@ -71,7 +71,6 @@ module Ahoy
         relation = self
         if respond_to?(:columns_hash)
           column_type = columns_hash["properties"].type
-          quoted_name = connection.quote(name)
           adapter_name = connection.adapter_name.downcase
         else
           adapter_name = "mongoid"
@@ -81,24 +80,23 @@ module Ahoy
           raise "Adapter not supported: #{adapter_name}"
         when /mysql/
           raise "MySQL and MariaDB not supported yet"
-          # mariadb = connection.try(:mariadb?)
-          # if mariadb
-          #   # relation = relation.group("JSON_VALUE(properties, #{connection.quote("$.#{name}")})")
+          # quoted_name = connection.quote("$.#{name}")
+          # if connection.try(:mariadb?)
+          #   relation = relation.group("JSON_VALUE(properties, #{connection.quote("$.#{name}")})")
           # elsif column_type == :json
           #   relation = relation.group("properties -> #{quoted_name}")
           # else
           #   relation = relation.group("CAST(properties AS JSON) -> #{quoted_name}")
           # end
         when /postgres|postgis/
-          case column_type
-          when :jsonb, :hstore
-            relation = relation.group("properties -> #{quoted_name}")
-          else
-            # convert to jsonb to fix
-            # could not identify an equality operator for type json
-            # and for text columns
-            relation = relation.group("properties::jsonb -> #{quoted_name}")
-          end
+          quoted_name = connection.quote(name)
+
+          # convert to jsonb to fix
+          # could not identify an equality operator for type json
+          # and for text columns
+          cast = [:jsonb, :hstore].include?(column_type) ? "" : "::jsonb"
+
+          relation = relation.group("properties#{cast} -> #{quoted_name}")
         else
           raise "Adapter not supported: #{adapter_name}"
         end
