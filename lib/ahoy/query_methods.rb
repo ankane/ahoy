@@ -31,6 +31,7 @@ module Ahoy
             end
           else
             properties.each do |k, v|
+              # TODO cast to json instead
               relation = relation.where("properties REGEXP ?", "[{,]#{{k.to_s => v}.to_json.sub(/\A\{/, "").sub(/\}\z/, "").gsub("+", "\\\\+")}[,}]")
             end
           end
@@ -57,6 +58,7 @@ module Ahoy
             end
           else
             properties.each do |k, v|
+              # TODO cast to jsonb instead
               relation = relation.where("properties SIMILAR TO ?", "%[{,]#{{k.to_s => v}.to_json.sub(/\A\{/, "").sub(/\}\z/, "").gsub("+", "\\\\+")}[,}]%")
             end
           end
