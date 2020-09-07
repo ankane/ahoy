@@ -130,6 +130,6 @@ module QueryMethodsTest
   end
 
   def group_supported?
-    self.class.name != "MongoidTest" && !model.connection.try(:mariadb?)
+    self.class.name != "MongoidTest" && self.class.name !~ /mysql/i
   end
 end
