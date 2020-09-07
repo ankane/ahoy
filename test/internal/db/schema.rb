@@ -40,7 +40,7 @@ ActiveRecord::Schema.define do
     t.string :os_version
     t.string :platform
 
-    t.timestamp :started_at
+    t.datetime :started_at
   end
 
   add_index :ahoy_visits, [:visit_token], unique: true
@@ -51,7 +51,7 @@ ActiveRecord::Schema.define do
 
     t.string :name
     t.text :properties
-    t.timestamp :time
+    t.datetime :time
   end
 
   add_index :ahoy_events, [:name, :time]
