@@ -591,13 +591,13 @@ Ahoy::Event.where_event("Viewed product", product_id: 123).count
 Or just query properties with:
 
 ```ruby
-Ahoy::Event.where_props(product_id: 123).count
+Ahoy::Event.where_props(product_id: 123, category: "Books").count
 ```
 
-Group by a property with: [unreleased]
+Group by properties with: [unreleased]
 
 ```ruby
-Ahoy::Event.group_prop(:product_id).count
+Ahoy::Event.group_prop(:product_id, :category).count
 ```
 
 ### Funnels
