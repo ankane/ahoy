@@ -14,8 +14,13 @@ jobs:
       rvm: 2.7
       gemfile: Gemfile
       addons:
-        mariadb: 10.2
+        mariadb: 10.3
         postgresql: 10
+      before_script:
+        - mysqladmin create ahoy_test
+        - mysql -e 'create user travis@localhost;'
+        - mysql -e 'grant all on *.* to travis@localhost;'
+        - createdb ahoy_test
       services:
         - postgresql
         - mariadb
