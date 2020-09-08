@@ -1,4 +1,4 @@
-dist: bionic
+dist: focal
 language: ruby
 jobs:
   include:
@@ -15,7 +15,6 @@ jobs:
       gemfile: Gemfile
       addons:
         mariadb: 10.3
-        postgresql: 10
       before_install:
         - mysqladmin create ahoy_test
         - mysql -e 'create user travis@localhost;'
@@ -23,10 +22,7 @@ jobs:
         - createdb ahoy_test
       services:
         - postgresql
-        - mariadb
         - mongodb
-addons:
-  postgresql: 10
 services:
   - postgresql
   - mysql
