@@ -82,24 +82,26 @@ module QueryMethodsTest
   def test_group_number
     skip unless group_supported?
 
-    skip "Values are always strings" if hstore?
-
     create_event value: 1
     create_event value: 1
     create_event value: 9
-    expected = mysql? ? {"1" => 2, "9" => 1} : {1 => 2, 9 => 1}
+
+    expected = {1 => 2, 9 => 1}
+    expected.transform_keys!(&:to_s) if mysql? || hstore?
+
     assert_equal expected, group_events
   end
 
   def test_group_boolean
     skip unless group_supported?
 
-    skip "Values are always strings" if hstore?
-
     create_event value: true
     create_event value: true
     create_event value: false
-    expected = mysql? ? {"true" => 2, "false" => 1} : {true => 2, false => 1}
+
+    expected = {true => 2, false => 1}
+    expected.transform_keys!(&:to_s) if mysql? || hstore?
+
     assert_equal expected, group_events
   end
 
@@ -109,8 +111,26 @@ module QueryMethodsTest
     create_event value: nil
     create_event value: nil
     create_event value: "world"
-    expected = mysql? ? {"null" => 2, "world" => 1} : {nil => 2, "world" => 1}
+
+    expected = {nil => 2, "world" => 1}
+    expected.transform_keys! { |k| k.nil? ? "null" : k.to_s } if mysql?
+
     assert_equal expected, group_events
+  end
+
+  def test_group_multiple
+    skip unless group_supported?
+
+    create_event value: "hello", other: 1
+    create_event value: "hello", other: 1
+    create_event value: "hello", other: 2
+    create_event value: "world", other: 2
+
+    expected = {["hello", 1] => 2, ["hello", 2] => 1, ["world", 2] => 1}
+    expected.transform_keys! { |k| k.map(&:to_s) } if mysql? || hstore?
+
+    assert_equal expected, model.group_prop(:value, :other).count
+    assert_equal expected, model.group_prop([:value, :other]).count
   end
 
   def create_event(properties)

@@ -69,7 +69,10 @@ module Ahoy
       end
       alias_method :where_properties, :where_props
 
-      def group_prop(name)
+      def group_prop(*props)
+        # like with group
+        props.flatten!
+
         relation = self
         if respond_to?(:columns_hash)
           column_type = columns_hash["properties"].type
@@ -81,23 +84,26 @@ module Ahoy
         when "mongoid"
           raise "Adapter not supported: #{adapter_name}"
         when /mysql/
-          quoted_name = connection.quote("$.#{name}")
           if connection.try(:mariadb?)
             raise "MariaDB not supported yet"
             # relation = relation.group("JSON_VALUE(properties, #{quoted_name)})")
           else
             column = column_type == :json ? "properties" : "CAST(properties AS JSON)"
-            relation = relation.group("JSON_UNQUOTE(JSON_EXTRACT(#{column}, #{quoted_name}))")
+            props.each do |prop|
+              quoted_prop = connection.quote("$.#{prop}")
+              relation = relation.group("JSON_UNQUOTE(JSON_EXTRACT(#{column}, #{quoted_prop}))")
+            end
           end
         when /postgres|postgis/
-          quoted_name = connection.quote(name)
-
           # convert to jsonb to fix
           # could not identify an equality operator for type json
           # and for text columns
           cast = [:jsonb, :hstore].include?(column_type) ? "" : "::jsonb"
 
-          relation = relation.group("properties#{cast} -> #{quoted_name}")
+          props.each do |prop|
+            quoted_prop = connection.quote(prop)
+            relation = relation.group("properties#{cast} -> #{quoted_prop}")
+          end
         else
           raise "Adapter not supported: #{adapter_name}"
         end
