@@ -16,7 +16,7 @@ jobs:
       addons:
         mariadb: 10.3
         postgresql: 10
-      before_script:
+      before_install:
         - mysqladmin create ahoy_test
         - mysql -e 'create user travis@localhost;'
         - mysql -e 'grant all on *.* to travis@localhost;'
