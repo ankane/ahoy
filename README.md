@@ -435,7 +435,7 @@ Previously set cookies are automatically deleted.
 
 ## Data Retention
 
-Delete older data with:
+Data should only be retained for as long as it’s needed. Delete older data with:
 
 ```ruby
 Ahoy::Visit.where("started_at < ?", 2.years.ago).find_in_batches do |visits|
@@ -443,6 +443,12 @@ Ahoy::Visit.where("started_at < ?", 2.years.ago).find_in_batches do |visits|
   Ahoy::Event.where(visit_id: visit_ids).delete_all
   Ahoy::Visit.where(id: visit_ids).delete_all
 end
+```
+
+You can use [Rollup](https://github.com/ankane/rollup) to aggregate important data before you do.
+
+```ruby
+Ahoy::Visit.rollup("Visits", interval: "hour")
 ```
 
 Delete data for a specific user with:
@@ -613,6 +619,16 @@ viewed_checkout_ids = Ahoy::Event.where(user_id: added_item_ids, name: "Viewed c
 ```
 
 The same approach also works with visitor tokens.
+
+### Rollups
+
+Improve query performance by pre-aggregating data with [Rollup](https://github.com/ankane/rollup).
+
+```ruby
+Ahoy::Event.where(name: "Viewed store").rollup("Store views")
+```
+
+This is only needed if you have a lot of data.
 
 ### Forecasting
 
