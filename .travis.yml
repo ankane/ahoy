@@ -15,6 +15,7 @@ jobs:
       gemfile: Gemfile
       addons:
         mariadb: 10.2
+        postgresql: 10
       services:
         - postgresql
         - mariadb
