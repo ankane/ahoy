@@ -10,6 +10,13 @@ jobs:
       gemfile: test/gemfiles/rails51.gemfile
     - rvm: 2.4
       gemfile: test/gemfiles/rails50.gemfile
+    - name: MariaDB
+      rvm: 2.7
+      gemfile: Gemfile
+      services:
+        - postgresql
+        - mariadb
+        - mongodb
 addons:
   postgresql: 10
 services:

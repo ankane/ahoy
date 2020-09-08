@@ -85,8 +85,10 @@ module Ahoy
           raise "Adapter not supported: #{adapter_name}"
         when /mysql/
           if connection.try(:mariadb?)
-            raise "MariaDB not supported yet"
-            # relation = relation.group("JSON_VALUE(properties, #{quoted_name)})")
+            props.each do |prop|
+              quoted_prop = connection.quote("$.#{prop}")
+              relation = relation.group("JSON_UNQUOTE(JSON_EXTRACT(properties, #{quoted_prop}))")
+            end
           else
             column = column_type == :json ? "properties" : "CAST(properties AS JSON)"
             props.each do |prop|

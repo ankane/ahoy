@@ -87,7 +87,7 @@ module QueryMethodsTest
     create_event value: 9
 
     expected = {1 => 2, 9 => 1}
-    expected.transform_keys!(&:to_s) if mysql? || hstore?
+    expected.transform_keys!(&:to_s) if mysql? || mariadb? || hstore?
 
     assert_equal expected, group_events
   end
@@ -100,7 +100,7 @@ module QueryMethodsTest
     create_event value: false
 
     expected = {true => 2, false => 1}
-    expected.transform_keys!(&:to_s) if mysql? || hstore?
+    expected.transform_keys!(&:to_s) if mysql? || mariadb? || hstore?
 
     assert_equal expected, group_events
   end
@@ -113,7 +113,7 @@ module QueryMethodsTest
     create_event value: "world"
 
     expected = {nil => 2, "world" => 1}
-    expected.transform_keys! { |k| k.nil? ? "null" : k.to_s } if mysql?
+    expected.transform_keys! { |k| k.nil? ? "null" : k.to_s } if mysql? || mariadb?
 
     assert_equal expected, group_events
   end
@@ -127,7 +127,7 @@ module QueryMethodsTest
     create_event value: "world", other: 2
 
     expected = {["hello", 1] => 2, ["hello", 2] => 1, ["world", 2] => 1}
-    expected.transform_keys! { |k| k.map(&:to_s) } if mysql? || hstore?
+    expected.transform_keys! { |k| k.map(&:to_s) } if mysql? || mariadb? || hstore?
 
     assert_equal expected, model.group_prop(:value, :other).count
     assert_equal expected, model.group_prop([:value, :other]).count
@@ -149,11 +149,15 @@ module QueryMethodsTest
     self.class.name =~ /mysql/i && !model.connection.try(:mariadb?)
   end
 
+  def mariadb?
+    self.class.name =~ /mysql/i && model.connection.try(:mariadb?)
+  end
+
   def hstore?
     self.class.name == "PostgresqlHstoreTest"
   end
 
   def group_supported?
-    self.class.name != "MongoidTest" && !model.connection.try(:mariadb?)
+    self.class.name != "MongoidTest"
   end
 end
