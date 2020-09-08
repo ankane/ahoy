@@ -13,6 +13,8 @@ jobs:
     - name: MariaDB
       rvm: 2.7
       gemfile: Gemfile
+      addons:
+        mariadb: 10.2
       services:
         - postgresql
         - mariadb
