@@ -600,7 +600,7 @@ Or just query properties with:
 Ahoy::Event.where_props(product_id: 123, category: "Books").count
 ```
 
-Group by properties with: [unreleased]
+Group by properties with:
 
 ```ruby
 Ahoy::Event.group_prop(:product_id, :category).count
