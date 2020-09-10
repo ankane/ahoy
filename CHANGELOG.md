@@ -1,4 +1,4 @@
-## 3.0.5 (unreleased)
+## 3.0.5 (2020-09-09)
 
 - Added `group_prop` method
 - Use `datetime` type in migration
