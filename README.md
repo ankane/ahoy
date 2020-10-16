@@ -70,6 +70,10 @@ Track an event with:
 ahoy.track("My second event", {language: "JavaScript"});
 ```
 
+### Native Apps
+
+Check out [Ahoy iOS](https://github.com/namolnad/ahoy-ios) and [Ahoy Android](https://github.com/instacart/ahoy-android).
+
 ### GDPR Compliance
 
 Ahoy provides a number of options to help with GDPR compliance. See the [GDPR section](#gdpr-compliance-1) for more info.
@@ -145,7 +149,7 @@ See [Ahoy.js](https://github.com/ankane/ahoy.js) for a complete list of features
 
 #### Native Apps
 
-For Android, check out [Ahoy Android](https://github.com/instacart/ahoy-android). For other platforms, see the [API spec](#api-spec).
+See the docs for [Ahoy iOS](https://github.com/namolnad/ahoy-ios) and [Ahoy Android](https://github.com/instacart/ahoy-android).
 
 #### AMP
 
