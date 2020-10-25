@@ -88,6 +88,15 @@ module Ahoy
   mattr_accessor :user_agent_parser
   self.user_agent_parser = :device_detector
 
+  mattr_accessor :engine_path
+  self.engine_path = "/ahoy"
+
+  mattr_accessor :visits_path
+  self.visits_path = 'visits'
+
+  mattr_accessor :events_path
+  self.events_path = 'events'
+
   mattr_accessor :logger
 
   def self.log(message)
