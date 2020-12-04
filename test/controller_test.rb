@@ -110,6 +110,19 @@ class ControllerTest < ActionDispatch::IntegrationTest
     assert_equal visit, Product.last.ahoy_visit
   end
 
+  def test_instance
+    post products_url
+    assert_response :success
+
+    assert_equal 1, Ahoy::Visit.count
+    assert_equal 1, Ahoy::Event.count
+
+    event = Ahoy::Event.last
+    assert_equal "Created product", event.name
+    product = Product.last
+    assert_equal({"product_id" => product.id}, event.properties)
+  end
+
   def test_authenticate
     get products_url
     visit = Ahoy::Visit.last

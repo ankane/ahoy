@@ -104,6 +104,14 @@ module Ahoy
       addr.mask(48).to_s
     end
   end
+
+  def self.instance
+    Thread.current[:ahoy]
+  end
+
+  def self.instance=(value)
+    Thread.current[:ahoy] = value
+  end
 end
 
 ActiveSupport.on_load(:action_controller) do
