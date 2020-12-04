@@ -2,6 +2,7 @@
 
 - Added `instance` method
 - Added `request` argument to `user_method`
+- Updated Ahoy.js to 0.3.8
 - Removed `exclude_method` call when geocoding
 
 ## 3.0.5 (2020-09-09)
