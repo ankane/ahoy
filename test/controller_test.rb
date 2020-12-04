@@ -36,8 +36,16 @@ class ControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def test_user_method_lambda
+  def test_user_method_callable
     with_options(user_method: ->(controller) { controller.send(:true_user) }) do
+      get products_url
+      visit = Ahoy::Visit.last
+      assert_equal "True User", visit.user.name
+    end
+  end
+
+  def test_user_method_callable_request
+    with_options(user_method: ->(controller, request) { request.env["action_controller.instance"].send(:true_user) }) do
       get products_url
       visit = Ahoy::Visit.last
       assert_equal "True User", visit.user.name

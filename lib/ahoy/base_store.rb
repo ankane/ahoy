@@ -24,7 +24,11 @@ module Ahoy
     def user
       @user ||= begin
         if Ahoy.user_method.respond_to?(:call)
-          Ahoy.user_method.call(controller)
+          if Ahoy.user_method.arity == 2
+            Ahoy.user_method.call(controller, request)
+          else
+            Ahoy.user_method.call(controller)
+          end
         else
           controller.send(Ahoy.user_method) if controller.respond_to?(Ahoy.user_method, true)
         end

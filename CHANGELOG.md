@@ -1,3 +1,7 @@
+## 3.0.6 (unreleased)
+
+- Added optional `request` to `user_method` option
+
 ## 3.0.5 (2020-09-09)
 
 - Added `group_prop` method
