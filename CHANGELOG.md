@@ -1,7 +1,7 @@
 ## 3.1.0 (unreleased)
 
 - Added `instance` method
-- Added optional `request` to `user_method` option
+- Added `request` argument to `user_method`
 
 ## 3.0.5 (2020-09-09)
 
