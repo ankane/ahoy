@@ -41,10 +41,10 @@ class <%= migration_class_name %> < ActiveRecord::Migration<%= migration_version
       t.string :os_version
       t.string :platform
 
-      t.timestamp :started_at
+      t.datetime :started_at
     end
 
-    add_index :ahoy_visits, [:visit_token], unique: true
+    add_index :ahoy_visits, :visit_token, unique: true
 
     create_table :ahoy_events do |t|
       t.references :visit
@@ -52,7 +52,7 @@ class <%= migration_class_name %> < ActiveRecord::Migration<%= migration_version
 
       t.string :name
       t.<%= properties_type %> :properties
-      t.timestamp :time
+      t.datetime :time
     end
 
     add_index :ahoy_events, [:name, :time]<% if properties_type == "jsonb" %><% if rails52? %>

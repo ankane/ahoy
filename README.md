@@ -1,14 +1,14 @@
 # Ahoy
 
-:fire: Simple, powerful analytics for Rails
+:fire: Simple, powerful, first-party analytics for Rails
 
 Track visits and events in Ruby, JavaScript, and native apps. Data is stored in your database by default so you can easily combine it with other data.
 
-:postbox: To track emails, check out [Ahoy Email](https://github.com/ankane/ahoy_email), and for A/B testing, check out [Field Test](https://github.com/ankane/field_test)
+:postbox: Check out [Ahoy Email](https://github.com/ankane/ahoy_email) for emails and [Field Test](https://github.com/ankane/field_test) for A/B testing
 
 :tangerine: Battle-tested at [Instacart](https://www.instacart.com/opensource)
 
-[![Build Status](https://travis-ci.org/ankane/ahoy.svg?branch=master)](https://travis-ci.org/ankane/ahoy)
+[![Build Status](https://github.com/ankane/ahoy/workflows/build/badge.svg?branch=master)](https://github.com/ankane/ahoy/actions)
 
 ## Installation
 
@@ -69,6 +69,10 @@ Track an event with:
 ```javascript
 ahoy.track("My second event", {language: "JavaScript"});
 ```
+
+### Native Apps
+
+Check out [Ahoy iOS](https://github.com/namolnad/ahoy-ios) and [Ahoy Android](https://github.com/instacart/ahoy-android).
 
 ### GDPR Compliance
 
@@ -145,7 +149,7 @@ See [Ahoy.js](https://github.com/ankane/ahoy.js) for a complete list of features
 
 #### Native Apps
 
-For Android, check out [Ahoy Android](https://github.com/instacart/ahoy-android). For other platforms, see the [API spec](#api-spec).
+See the docs for [Ahoy iOS](https://github.com/namolnad/ahoy-ios) and [Ahoy Android](https://github.com/instacart/ahoy-android).
 
 #### AMP
 
@@ -181,7 +185,7 @@ Order.joins(:ahoy_visit).group("device_type").count
 Here’s what the migration to add the `ahoy_visit_id` column should look like:
 
 ```ruby
-class AddVisitIdToOrders < ActiveRecord::Migration[5.2]
+class AddVisitIdToOrders < ActiveRecord::Migration[6.0]
   def change
     add_column :orders, :ahoy_visit_id, :bigint
   end
@@ -292,12 +296,18 @@ By default, a new visit is created after 4 hours of inactivity. Change this with
 Ahoy.visit_duration = 30.minutes
 ```
 
-### Multiple Subdomains
+### Cookies
 
 To track visits across multiple subdomains, use:
 
 ```ruby
 Ahoy.cookie_domain = :all
+```
+
+Set other [cookie options](https://api.rubyonrails.org/classes/ActionDispatch/Cookies.html) with:
+
+```ruby
+Ahoy.cookie_options = {same_site: :lax}
 ```
 
 ### Geocoding
@@ -308,7 +318,7 @@ Disable geocoding with:
 Ahoy.geocode = false
 ```
 
-Change the job queue with:
+The default job queue is `:ahoy`. Change this with:
 
 ```ruby
 Ahoy.job_queue = :low_priority
@@ -426,6 +436,34 @@ Ahoy.cookies = false
 ```
 
 Previously set cookies are automatically deleted.
+
+## Data Retention
+
+Data should only be retained for as long as it’s needed. Delete older data with:
+
+```ruby
+Ahoy::Visit.where("started_at < ?", 2.years.ago).find_in_batches do |visits|
+  visit_ids = visits.map(&:id)
+  Ahoy::Event.where(visit_id: visit_ids).delete_all
+  Ahoy::Visit.where(id: visit_ids).delete_all
+end
+```
+
+You can use [Rollup](https://github.com/ankane/rollup) to aggregate important data before you do.
+
+```ruby
+Ahoy::Visit.rollup("Visits", interval: "hour")
+```
+
+Delete data for a specific user with:
+
+```ruby
+user_id = 123
+visit_ids = Ahoy::Visit.where(user_id: user_id).pluck(:id)
+Ahoy::Event.where(visit_id: visit_ids).delete_all
+Ahoy::Visit.where(id: visit_ids).delete_all
+Ahoy::Event.where(user_id: user_id).delete_all
+```
 
 ## Development
 
@@ -552,7 +590,7 @@ Ahoy::Visit.group(:referring_domain).count
 
 ### Querying Events
 
-Ahoy provides two methods on the event model to make querying easier.
+Ahoy provides a few methods on the event model to make querying easier.
 
 To query on both name and properties, you can use:
 
@@ -563,8 +601,16 @@ Ahoy::Event.where_event("Viewed product", product_id: 123).count
 Or just query properties with:
 
 ```ruby
-Ahoy::Event.where_props(product_id: 123).count
+Ahoy::Event.where_props(product_id: 123, category: "Books").count
 ```
+
+Group by properties with:
+
+```ruby
+Ahoy::Event.group_prop(:product_id, :category).count
+```
+
+Note: MySQL and MariaDB always return string keys (include `"null"` for `nil`) for `group_prop`.
 
 ### Funnels
 
@@ -577,6 +623,29 @@ viewed_checkout_ids = Ahoy::Event.where(user_id: added_item_ids, name: "Viewed c
 ```
 
 The same approach also works with visitor tokens.
+
+### Rollups
+
+Improve query performance by pre-aggregating data with [Rollup](https://github.com/ankane/rollup).
+
+```ruby
+Ahoy::Event.where(name: "Viewed store").rollup("Store views")
+```
+
+This is only needed if you have a lot of data.
+
+### Forecasting
+
+To forecast future visits and events, check out [Prophet](https://github.com/ankane/prophet).
+
+```ruby
+daily_visits = Ahoy::Visit.group_by_day(:started_at).count # uses Groupdate
+Prophet.forecast(daily_visits)
+```
+
+### Recommendations
+
+To make recommendations based on events, check out [Disco](https://github.com/ankane/disco#ahoy).
 
 ## Tutorials
 
@@ -694,3 +763,20 @@ Everyone is encouraged to help improve this project. Here are a few ways you can
 - Fix bugs and [submit pull requests](https://github.com/ankane/ahoy/pulls)
 - Write, clarify, or fix documentation
 - Suggest or add new features
+
+To get started with development:
+
+```sh
+git clone https://github.com/ankane/ahoy.git
+cd ahoy
+bundle install
+bundle exec rake test
+```
+
+To test query methods, start PostgreSQL, MySQL, and MongoDB and use:
+
+```sh
+createdb ahoy_test
+mysqladmin create ahoy_test
+bundle exec rake test:query_methods
+```

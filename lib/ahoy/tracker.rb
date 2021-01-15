@@ -67,16 +67,12 @@ module Ahoy
     end
 
     def geocode(data)
-      if exclude?
-        debug "Geocode excluded"
-      else
-        data = {
-          visit_token: visit_token
-          }.merge(data).select { |_, v| v }
+      data = {
+        visit_token: visit_token
+      }.merge(data).select { |_, v| v }
 
-        @store.geocode(data)
-        true
-      end
+      @store.geocode(data)
+      true
     rescue => e
       report_exception(e)
     end
@@ -171,12 +167,11 @@ module Ahoy
       # safety net
       return unless Ahoy.cookies && request
 
-      cookie = {
-        value: value
-      }
+      cookie = Ahoy.cookie_options.merge(value: value)
       cookie[:expires] = duration.from_now if duration
-      domain = Ahoy.cookie_domain
-      cookie[:domain] = domain if domain && use_domain
+      # prefer cookie_options[:domain] over cookie_domain
+      cookie[:domain] ||= Ahoy.cookie_domain if Ahoy.cookie_domain
+      cookie.delete(:domain) unless use_domain
       request.cookie_jar[name] = cookie
     end
 

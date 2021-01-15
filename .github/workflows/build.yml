@@ -1,0 +1,39 @@
+name: build
+on: [push, pull_request]
+jobs:
+  build:
+    if: "!contains(github.event.head_commit.message, '[skip ci]')"
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+        - ruby: 2.7
+          gemfile: Gemfile
+        - ruby: 2.6
+          gemfile: gemfiles/rails52.gemfile
+        - ruby: 2.5
+          gemfile: gemfiles/rails51.gemfile
+        - ruby: 2.4
+          gemfile: gemfiles/rails50.gemfile
+        - ruby: 2.7
+          gemfile: Gemfile
+          mariadb: true
+    runs-on: ubuntu-latest
+    env:
+      BUNDLE_GEMFILE: ${{ matrix.gemfile }}
+    steps:
+    - uses: actions/checkout@v2
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: ${{ matrix.ruby }}
+        bundler-cache: true
+    - uses: ankane/setup-postgres@v1
+    - if: ${{ !matrix.mariadb }}
+      uses: ankane/setup-mysql@v1
+    - if: ${{ matrix.mariadb }}
+      uses: ankane/setup-mariadb@v1
+    - uses: ankane/setup-mongodb@v1
+    - run: |
+        mysqladmin create ahoy_test
+        createdb ahoy_test
+    - run: bundle exec rake test test:query_methods

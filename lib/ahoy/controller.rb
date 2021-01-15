@@ -39,12 +39,12 @@ module Ahoy
     end
 
     def set_ahoy_request_store
-      previous_value = Thread.current[:ahoy]
+      previous_value = Ahoy.instance
       begin
-        Thread.current[:ahoy] = ahoy
+        Ahoy.instance = ahoy
         yield
       ensure
-        Thread.current[:ahoy] = previous_value
+        Ahoy.instance = previous_value
       end
     end
   end
