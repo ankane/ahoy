@@ -1,3 +1,7 @@
+## 3.1.1 (unreleased)
+
+- Fixed deprecation warning with Active Record 6.1
+
 ## 3.1.0 (2020-12-04)
 
 - Added `instance` method

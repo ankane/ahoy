@@ -17,9 +17,7 @@ module Ahoy
       end
 
       def properties_type
-        # use connection_config instead of connection.adapter
-        # so database connection isn't needed
-        case ActiveRecord::Base.connection_config[:adapter].to_s
+        case adapter
         when /postg/i # postgres, postgis
           "jsonb"
         when /mysql/i
@@ -29,8 +27,18 @@ module Ahoy
         end
       end
 
+      # use connection_config instead of connection.adapter
+      # so database connection isn't needed
+      def adapter
+        if ActiveRecord::VERSION::STRING.to_f >= 6.1
+          ActiveRecord::Base.connection_db_config.adapter.to_s
+        else
+          ActiveRecord::Base.connection_config[:adapter].to_s
+        end
+      end
+
       def rails52?
-        ActiveRecord::VERSION::STRING >= "5.2"
+        ActiveRecord::VERSION::STRING.to_f >= 5.2
       end
 
       def migration_version
