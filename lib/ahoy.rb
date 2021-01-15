@@ -57,6 +57,9 @@ module Ahoy
   mattr_accessor :api
   self.api = false
 
+  mattr_accessor :api_automount
+  self.api_automount = true
+
   mattr_accessor :api_only
   self.api_only = false
 

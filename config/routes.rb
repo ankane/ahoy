@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  mount Ahoy::Engine => "/ahoy" if Ahoy.api
+  mount Ahoy::Engine => "/ahoy" if Ahoy.api && Ahoy.api_automount == true
 end
 
 Ahoy::Engine.routes.draw do

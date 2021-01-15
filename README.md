@@ -36,10 +36,24 @@ ahoy.track "My first event", language: "Ruby"
 
 ### JavaScript, Native Apps, & AMP
 
-Enable the API in `config/initializers/ahoy.rb`:
+API mode skips CSRF protection and lets you use Ahoy with any frontend application you like.
+
+Enable the API :
 
 ```ruby
+# config/initializers/ahoy.rb
 Ahoy.api = true
+```
+
+By default, when API mode is enabled, the Ahoy Engine is automatically mounted in your routes, you can skip this by disabling the api_aoutomount flag and mount Ahoy yourself
+
+```ruby
+# config/initializers/ahoy.rb
+Ahoy.api = true
+Ahoy.api_automount = false
+
+# config/routes.rb
+mount Ahoy::Engine => "/ahoy"
 ```
 
 And restart your web server.
