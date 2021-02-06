@@ -12,7 +12,7 @@ module Ahoy
     end
 
     def track_event(data)
-      visit = visit_or_create(started_at: data[:time])
+      visit = visit_or_create(started_at: data[:time], user_id: data[:user_id])
       if visit
         event = event_model.new(slice_data(event_model, data))
         event.visit = visit
@@ -59,8 +59,8 @@ module Ahoy
     end
 
     # if we don't have a visit, let's try to create one first
-    def visit_or_create(started_at: nil)
-      ahoy.track_visit(started_at: started_at) if !visit && Ahoy.server_side_visits
+    def visit_or_create(started_at: nil, user_id: nil)
+      ahoy.track_visit(started_at: started_at, user_id: user_id) if !visit && Ahoy.server_side_visits
       visit
     end
 

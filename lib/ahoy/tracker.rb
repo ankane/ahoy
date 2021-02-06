@@ -24,7 +24,7 @@ module Ahoy
       else
         data = {
           visit_token: visit_token,
-          user_id: user.try(:id),
+          user_id: options[:user_id] || user.try(:id),
           name: name.to_s,
           properties: properties,
           time: trusted_time(options[:time]),
@@ -38,7 +38,7 @@ module Ahoy
       report_exception(e)
     end
 
-    def track_visit(defer: false, started_at: nil)
+    def track_visit(defer: false, started_at: nil, user_id: nil)
       if exclude?
         debug "Visit excluded"
       elsif missing_params?
@@ -52,7 +52,7 @@ module Ahoy
           data = {
             visit_token: visit_token,
             visitor_token: visitor_token,
-            user_id: user.try(:id),
+            user_id: user_id || user.try(:id),
             started_at: trusted_time(started_at),
           }.merge(visit_properties).select { |_, v| v }
 

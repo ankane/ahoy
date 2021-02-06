@@ -1,5 +1,6 @@
 ## 3.1.1 (unreleased)
 
+- Added `user_id` option to `track` method
 - Fixed deprecation warning with Active Record 6.1
 
 ## 3.1.0 (2020-12-04)
