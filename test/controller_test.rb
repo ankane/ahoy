@@ -3,12 +3,6 @@ require_relative "test_helper"
 class ControllerTest < ActionDispatch::IntegrationTest
   include ActiveJob::TestHelper # for Rails < 6
 
-  def setup
-    Ahoy::Visit.delete_all
-    Ahoy::Event.delete_all
-    User.delete_all
-  end
-
   def test_works
     get products_url
     assert_response :success

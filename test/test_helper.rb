@@ -19,6 +19,12 @@ end
 Ahoy.logger = logger
 
 class Minitest::Test
+  def setup
+    Ahoy::Visit.delete_all
+    Ahoy::Event.delete_all
+    User.delete_all
+  end
+
   def with_options(options)
     previous_options = {}
     options.each_key do |k|
