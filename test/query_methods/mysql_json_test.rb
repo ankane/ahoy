@@ -1,4 +1,4 @@
-require_relative "../test_helper"
+require_relative "query_methods_helper"
 
 class MysqlJsonEvent < MysqlBase
   serialize :properties, JSON if connection.send(:mariadb?)
