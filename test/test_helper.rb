@@ -1,5 +1,6 @@
 require "bundler/setup"
-Bundler.require(:development)
+require "combustion"
+Bundler.require(:default)
 require "minitest/autorun"
 require "minitest/pride"
 
