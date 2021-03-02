@@ -348,7 +348,7 @@ Safely.report_exception_method = ->(e) { Rollbar.error(e) }
 
 ## Geocoding
 
-Ahoy uses [Geocoder](https://github.com/alexreisner/geocoder) for geocoding. We recommend configuring [local geocoding](#local-geocoding) so IP addresses are not sent to a 3rd party service. If you do use a 3rd party service, be sure to add it to your GDPR subprocessor list (if applicable). If Ahoy is configured to [mask ips](#ip-masking), the masked IP is used (this increases privacy but can reduce accuracy).
+Ahoy uses [Geocoder](https://github.com/alexreisner/geocoder) for geocoding. We recommend configuring [local geocoding](#local-geocoding) so IP addresses are not sent to a 3rd party service. If you do use a 3rd party service and adhere to GDPR, be sure to add it to your subprocessor list. If Ahoy is configured to [mask ips](#ip-masking), the masked IP is used (this increases privacy but can reduce accuracy).
 
 To enable geocoding, update `config/initializers/ahoy.rb`:
 
