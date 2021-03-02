@@ -78,6 +78,10 @@ Check out [Ahoy iOS](https://github.com/namolnad/ahoy-ios) and [Ahoy Android](ht
 
 Ahoy provides a number of options to help with GDPR compliance. See the [GDPR section](#gdpr-compliance-1) for more info.
 
+### Geocoding Setup
+
+To enable geocoding, see the [Geocoding section](#geocoding).
+
 ## How It Works
 
 ### Visits
@@ -312,40 +316,56 @@ Ahoy.cookie_options = {same_site: :lax}
 
 ### Geocoding
 
-Disable geocoding with:
+Ahoy uses [Geocoder](https://github.com/alexreisner/geocoder) for geocoding. We recommend configuring [local geocoding](#local-geocoding) so IP addresses are not sent to a 3rd party service. If you do use a 3rd party service, be sure to add it to your GDPR subprocessor list. If Ahoy is configured to [mask ips](#ip-masking), the masked IP is used (this increases privacy but can reduce accuracy).
+
+To enable geocoding, update `config/initializers/ahoy.rb`:
 
 ```ruby
-Ahoy.geocode = false
+Ahoy.geocode = true
 ```
 
-The default job queue is `:ahoy`. Change this with:
+Geocoding is performed in a background job so it doesn’t slow down web requests. The default job queue is `:ahoy`. Change this with:
 
 ```ruby
 Ahoy.job_queue = :low_priority
 ```
 
-#### Geocoding Performance
+### Local Geocoding
 
-To avoid calls to a remote API, download the [GeoLite2 City database](https://dev.maxmind.com/geoip/geoip2/geolite2/) and configure Geocoder to use it.
-
-Add this line to your application’s Gemfile:
+For privacy and performance, we recommend geocoding locally. Add this line to your application’s Gemfile:
 
 ```ruby
 gem 'maxminddb'
 ```
 
-And create an initializer at `config/initializers/geocoder.rb` with:
+For city-level geocoding, download the [GeoLite2 City database](https://dev.maxmind.com/geoip/geoip2/geolite2/) and create `config/initializers/geocoder.rb` with:
 
 ```ruby
 Geocoder.configure(
   ip_lookup: :geoip2,
   geoip2: {
-    file: Rails.root.join("lib", "GeoLite2-City.mmdb")
+    file: "path/to/GeoLite2-City.mmdb"
   }
 )
 ```
 
-If you use Heroku, you can use an unofficial buildpack like [this one](https://github.com/temedica/heroku-buildpack-maxmind-geolite2) to avoid including the database in your repo.
+For country-level geocoding, install the `geoip-database` package. It’s preinstalled on Heroku. For Ubuntu, use:
+
+```sh
+sudo apt-get install geoip-database
+```
+
+And create `config/initializers/geocoder.rb` with:
+
+```ruby
+Geocoder.configure(
+  ip_lookup: :maxmind_local,
+  maxmind_local: {
+    file: "/usr/share/GeoIP/GeoIP.dat",
+    package: :country
+  }
+)
+```
 
 ### Token Generation
 

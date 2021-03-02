@@ -1,5 +1,6 @@
-## 3.1.1 (unreleased)
+## 3.2.0 (unreleased)
 
+- Disabled geocoding by default for new installations
 - Fixed deprecation warning with Active Record 6.1
 
 ## 3.1.0 (2020-12-04)
