@@ -457,7 +457,11 @@ Ahoy can switch from cookies to [anonymity sets](https://privacypatterns.org/pat
 Ahoy.cookies = false
 ```
 
-Previously set cookies are automatically deleted.
+Previously set cookies are automatically deleted. If you use JavaScript tracking, also set:
+
+```javascript
+ahoy.configure({cookies: false});
+```
 
 ## Data Retention
 
