@@ -74,13 +74,13 @@ ahoy.track("My second event", {language: "JavaScript"});
 
 Check out [Ahoy iOS](https://github.com/namolnad/ahoy-ios) and [Ahoy Android](https://github.com/instacart/ahoy-android).
 
-### GDPR Compliance
-
-Ahoy provides a number of options to help with GDPR compliance. See the [GDPR section](#gdpr-compliance-1) for more info.
-
 ### Geocoding Setup
 
 To enable geocoding, see the [Geocoding section](#geocoding).
+
+### GDPR Compliance
+
+Ahoy provides a number of options to help with GDPR compliance. See the [GDPR section](#gdpr-compliance-1) for more info.
 
 ## How It Works
 
@@ -204,7 +204,7 @@ visitable :sign_up_visit
 
 ### Users
 
-Ahoy automatically attaches the `current_user` to the visit. With [Devise](https://github.com/plataformatec/devise), it attaches the user even if he or she signs in after the visit starts.
+Ahoy automatically attaches the `current_user` to the visit. With [Devise](https://github.com/plataformatec/devise), it attaches the user even if they sign in after the visit starts.
 
 With other authentication frameworks, add this to the end of your sign in method:
 
@@ -314,7 +314,39 @@ Set other [cookie options](https://api.rubyonrails.org/classes/ActionDispatch/Co
 Ahoy.cookie_options = {same_site: :lax}
 ```
 
-### Geocoding
+You can also [disable cookies](#anonymity-sets--cookies)
+
+### Token Generation
+
+Ahoy uses random UUIDs for visit and visitor tokens by default, but you can use your own generator like [Druuid](https://github.com/recurly/druuid).
+
+```ruby
+Ahoy.token_generator = -> { Druuid.gen }
+```
+
+### Throttling
+
+You can use [Rack::Attack](https://github.com/kickstarter/rack-attack) to throttle requests to the API.
+
+```ruby
+class Rack::Attack
+  throttle("ahoy/ip", limit: 20, period: 1.minute) do |req|
+    if req.path.start_with?("/ahoy/")
+      req.ip
+    end
+  end
+end
+```
+
+### Exceptions
+
+Exceptions are rescued so analytics do not break your app. Ahoy uses [Safely](https://github.com/ankane/safely) to try to report them to a service by default. To customize this, use:
+
+```ruby
+Safely.report_exception_method = ->(e) { Rollbar.error(e) }
+```
+
+## Geocoding
 
 Ahoy uses [Geocoder](https://github.com/alexreisner/geocoder) for geocoding. We recommend configuring [local geocoding](#local-geocoding) so IP addresses are not sent to a 3rd party service. If you do use a 3rd party service, be sure to add it to your GDPR subprocessor list. If Ahoy is configured to [mask ips](#ip-masking), the masked IP is used (this increases privacy but can reduce accuracy).
 
@@ -365,36 +397,6 @@ Geocoder.configure(
     package: :country
   }
 )
-```
-
-### Token Generation
-
-Ahoy uses random UUIDs for visit and visitor tokens by default, but you can use your own generator like [Druuid](https://github.com/recurly/druuid).
-
-```ruby
-Ahoy.token_generator = -> { Druuid.gen }
-```
-
-### Throttling
-
-You can use [Rack::Attack](https://github.com/kickstarter/rack-attack) to throttle requests to the API.
-
-```ruby
-class Rack::Attack
-  throttle("ahoy/ip", limit: 20, period: 1.minute) do |req|
-    if req.path.start_with?("/ahoy/")
-      req.ip
-    end
-  end
-end
-```
-
-### Exceptions
-
-Exceptions are rescued so analytics do not break your app. Ahoy uses [Safely](https://github.com/ankane/safely) to try to report them to a service by default. To customize this, use:
-
-```ruby
-Safely.report_exception_method = ->(e) { Rollbar.error(e) }
 ```
 
 ## GDPR Compliance
