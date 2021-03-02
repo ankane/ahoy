@@ -2,7 +2,7 @@
 
 :fire: Simple, powerful, first-party analytics for Rails
 
-Track visits and events in Ruby, JavaScript, and native apps. Data is stored in your database by default, but you can customize it for any data store.
+Track visits and events in Ruby, JavaScript, and native apps. Data is stored in your database by default, but you can customize it for any data store as you grow.
 
 :postbox: Check out [Ahoy Email](https://github.com/ankane/ahoy_email) for emails and [Field Test](https://github.com/ankane/field_test) for A/B testing
 
