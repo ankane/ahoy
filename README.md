@@ -348,7 +348,7 @@ Safely.report_exception_method = ->(e) { Rollbar.error(e) }
 
 ## Geocoding
 
-Ahoy uses [Geocoder](https://github.com/alexreisner/geocoder) for geocoding. We recommend configuring [local geocoding](#local-geocoding) so IP addresses are not sent to a 3rd party service. If you do use a 3rd party service and adhere to GDPR, be sure to add it to your subprocessor list. If Ahoy is configured to [mask IPs](#ip-masking), the masked IP is used (this can reduce accuracy but is better for privacy).
+Ahoy uses [Geocoder](https://github.com/alexreisner/geocoder) for geocoding. We recommend configuring [local geocoding](#local-geocoding) or [load balancer geocoding](#load-balancer-geocoding) so IP addresses are not sent to a 3rd party service. If you do use a 3rd party service and adhere to GDPR, be sure to add it to your subprocessor list. If Ahoy is configured to [mask IPs](#ip-masking), the masked IP is used (this can reduce accuracy but is better for privacy).
 
 To enable geocoding, update `config/initializers/ahoy.rb`:
 
@@ -397,6 +397,27 @@ Geocoder.configure(
     package: :country
   }
 )
+```
+
+### Load Balancer Geocoding
+
+Some load balancers can add geocoding information to request headers.
+
+- [nginx](https://nginx.org/en/docs/http/ngx_http_geoip_module.html)
+- [Google Cloud](https://cloud.google.com/load-balancing/docs/custom-headers)
+- [Cloudflare](https://support.cloudflare.com/hc/en-us/articles/200168236-Configuring-Cloudflare-IP-Geolocation)
+
+```ruby
+Ahoy.geocode = false
+
+class Ahoy::Store < Ahoy::DatabaseStore
+  def track_visit(data)
+    data[:country] = request.headers["<country-header>"]
+    data[:region] = request.headers["<region-header>"]
+    data[:city] = request.headers["<city-header>"]
+    super(data)
+  end
+end
 ```
 
 ## GDPR Compliance
