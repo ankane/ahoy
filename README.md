@@ -189,7 +189,7 @@ Order.joins(:ahoy_visit).group("device_type").count
 Here’s what the migration to add the `ahoy_visit_id` column should look like:
 
 ```ruby
-class AddVisitIdToOrders < ActiveRecord::Migration[6.0]
+class AddVisitIdToOrders < ActiveRecord::Migration[6.1]
   def change
     add_column :orders, :ahoy_visit_id, :bigint
   end
@@ -406,6 +406,8 @@ Some load balancers can add geocoding information to request headers.
 - [nginx](https://nginx.org/en/docs/http/ngx_http_geoip_module.html)
 - [Google Cloud](https://cloud.google.com/load-balancing/docs/custom-headers)
 - [Cloudflare](https://support.cloudflare.com/hc/en-us/articles/200168236-Configuring-Cloudflare-IP-Geolocation)
+
+Update `config/initializers/ahoy.rb` with:
 
 ```ruby
 Ahoy.geocode = false
