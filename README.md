@@ -621,7 +621,7 @@ end
 
 ## Explore the Data
 
-[Blazer](https://github.com/ankane/blazer) is a great tool for exploring your data.
+[Blazer](https://github.com/ankane/blazer) is a great tool for exploring your data. Check out the [example queries](docs/Example-Queries.md).
 
 With ActiveRecord, you can do:
 
