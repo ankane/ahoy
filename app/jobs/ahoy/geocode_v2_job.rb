@@ -14,6 +14,7 @@ module Ahoy
       if location && location.country.present?
         data = {
           country: location.country,
+          country_code: location.try(:country_code).presence,
           region: location.try(:state).presence,
           city: location.try(:city).presence,
           postal_code: location.try(:postal_code).presence,

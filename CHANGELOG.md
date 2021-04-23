@@ -1,3 +1,7 @@
+## 3.2.1 (unreleased)
+
+- Added `country_code` to geocoding
+
 ## 3.2.0 (2021-03-01)
 
 - Disabled geocoding by default for new installations
