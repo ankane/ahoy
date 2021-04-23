@@ -53,7 +53,7 @@ module Ahoy
 
     def visit
       unless defined?(@visit)
-        @visit = visit_model.where(visit_token: ahoy.visit_token).first if ahoy.visit_token
+        @visit = visit_model.find_by(visit_token: ahoy.visit_token) if ahoy.visit_token
       end
       @visit
     end
