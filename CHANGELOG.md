@@ -1,6 +1,7 @@
 ## 3.2.1 (unreleased)
 
 - Added `country_code` to geocoding
+- Fixed install generator for MariaDB
 
 ## 3.2.0 (2021-03-01)
 

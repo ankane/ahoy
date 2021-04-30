@@ -27,6 +27,11 @@ module Ahoy
         end
       end
 
+      # requires database connection to check for MariaDB
+      def serialize_properties?
+        properties_type == "text" || (properties_type == "json" && ActiveRecord::Base.connection.try(:mariadb?))
+      end
+
       # use connection_config instead of connection.adapter
       # so database connection isn't needed
       def adapter

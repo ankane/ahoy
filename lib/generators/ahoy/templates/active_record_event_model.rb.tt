@@ -4,7 +4,7 @@ class Ahoy::Event < ApplicationRecord
   self.table_name = "ahoy_events"
 
   belongs_to :visit
-  belongs_to :user, optional: true<% if properties_type == "text" %>
+  belongs_to :user, optional: true<% if serialize_properties? %>
 
   serialize :properties, JSON<% end %>
 end
