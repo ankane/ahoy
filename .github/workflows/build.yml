@@ -29,12 +29,15 @@ jobs:
         ruby-version: ${{ matrix.ruby }}
         bundler-cache: true
     - uses: ankane/setup-postgres@v1
+      with:
+        database: ahoy_test
     - if: ${{ !matrix.mariadb }}
       uses: ankane/setup-mysql@v1
+      with:
+        database: ahoy_test
     - if: ${{ matrix.mariadb }}
       uses: ankane/setup-mariadb@v1
+      with:
+        database: ahoy_test
     - uses: ankane/setup-mongodb@v1
-    - run: |
-        mysqladmin create ahoy_test
-        createdb ahoy_test
     - run: bundle exec rake test test:query_methods
