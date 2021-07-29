@@ -1,5 +1,7 @@
 ActiveRecord::Base.establish_connection adapter: "mysql2", database: "ahoy_test"
 
+# TODO use ActiveRecord::Schema.define when Active Record 5.0 is no longer supported
+# https://github.com/rails/rails/issues/28730
 ActiveRecord::Migration.create_table :mysql_text_events, force: true do |t|
   t.text :properties
 end
