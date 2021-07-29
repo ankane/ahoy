@@ -9,7 +9,6 @@ gem "combustion"
 gem "sqlite3"
 gem "pg"
 gem "mysql2"
-# TODO use rubygems when > 7.2.0 is released
-gem "mongoid", github: "mongodb/mongoid"
+gem "mongoid"
 gem "browser", "~> 2.0"
 gem "user_agent_parser"
