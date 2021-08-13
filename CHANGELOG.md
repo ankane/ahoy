@@ -1,6 +1,7 @@
-## 3.2.1 (unreleased)
+## 3.3.0 (unreleased)
 
 - Added `country_code` to geocoding
+- Updated Ahoy.js to 0.3.9
 - Fixed install generator for MariaDB
 
 ## 3.2.0 (2021-03-01)
