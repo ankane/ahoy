@@ -1,4 +1,4 @@
-## 3.3.0 (unreleased)
+## 3.3.0 (2021-08-13)
 
 - Added `country_code` to geocoding
 - Updated Ahoy.js to 0.3.9
