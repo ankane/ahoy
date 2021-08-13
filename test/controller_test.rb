@@ -264,8 +264,10 @@ class ControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_geocode_true
-    assert_enqueued_with(job: Ahoy::GeocodeV2Job, queue: "ahoy") do
-      get products_url
+    with_options(geocode: true) do
+      assert_enqueued_with(job: Ahoy::GeocodeV2Job, queue: "ahoy") do
+        get products_url
+      end
     end
   end
 
@@ -276,8 +278,13 @@ class ControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  def test_geocode_default
+    get products_url
+    assert_equal 0, enqueued_jobs.size
+  end
+
   def test_job_queue
-    with_options(job_queue: :low_priority) do
+    with_options(geocode: true, job_queue: :low_priority) do
       assert_enqueued_with(job: Ahoy::GeocodeV2Job, queue: "low_priority") do
         get products_url
       end

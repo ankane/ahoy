@@ -4,7 +4,6 @@ require "ipaddr"
 # dependencies
 require "active_support"
 require "active_support/core_ext"
-require "geocoder"
 require "safely/core"
 
 # modules
@@ -44,7 +43,7 @@ module Ahoy
   self.quiet = true
 
   mattr_accessor :geocode
-  self.geocode = true
+  self.geocode = false
 
   mattr_accessor :max_content_length
   self.max_content_length = 8192

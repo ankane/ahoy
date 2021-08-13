@@ -4,6 +4,8 @@
 
 Track visits and events in Ruby, JavaScript, and native apps. Data is stored in your database by default, and you can customize it for any data store as you grow.
 
+**Ahoy 4.0 was recently released** - see [how to upgrade](#upgrading)
+
 :postbox: Check out [Ahoy Email](https://github.com/ankane/ahoy_email) for emails and [Field Test](https://github.com/ankane/field_test) for A/B testing
 
 :tangerine: Battle-tested at [Instacart](https://www.instacart.com/opensource)
@@ -350,7 +352,13 @@ Safely.report_exception_method = ->(e) { Rollbar.error(e) }
 
 Ahoy uses [Geocoder](https://github.com/alexreisner/geocoder) for geocoding. We recommend configuring [local geocoding](#local-geocoding) or [load balancer geocoding](#load-balancer-geocoding) so IP addresses are not sent to a 3rd party service. If you do use a 3rd party service and adhere to GDPR, be sure to add it to your subprocessor list. If Ahoy is configured to [mask IPs](#ip-masking), the masked IP is used (this can reduce accuracy but is better for privacy).
 
-To enable geocoding, update `config/initializers/ahoy.rb`:
+To enable geocoding, add this line to your application’s Gemfile:
+
+```ruby
+gem 'geocoder'
+```
+
+And update `config/initializers/ahoy.rb`:
 
 ```ruby
 Ahoy.geocode = true
@@ -743,62 +751,17 @@ Send a `POST` request to `/ahoy/events` with `Content-Type: application/json` an
 
 ## Upgrading
 
-### 3.0
+### 4.0
 
-If you installed Ahoy before 2.1 and want to keep legacy user agent parsing and bot detection, add to your Gemfile:
+There are two notable changes to geocoding:
 
-```ruby
-gem "browser", "~> 2.0"
-gem "user_agent_parser"
-```
+1. Geocoding is now disabled by default (this was already the case for new installations with 3.2.0+). Check out the instructions for [how to enable it](#geocoding).
 
-And add to `config/initializers/ahoy.rb`:
+2. The `geocoder` gem is now an optional dependency. To use geocoding, add it to your Gemfile:
 
-```ruby
-Ahoy.user_agent_parser = :legacy
-```
-
-### 2.2
-
-Ahoy now ships with better bot detection if you use Device Detector. This should be more accurate but can significantly reduce the number of visits recorded. For existing installs, it’s opt-in to start. To use it, add to `config/initializers/ahoy.rb`:
-
-```ruby
-Ahoy.bot_detection_version = 2
-```
-
-### 2.1
-
-Ahoy recommends [Device Detector](https://github.com/podigee/device_detector) for user agent parsing and makes it the default for new installations. To switch, add to `config/initializers/ahoy.rb`:
-
-```ruby
-Ahoy.user_agent_parser = :device_detector
-```
-
-Backfill existing records with:
-
-```ruby
-Ahoy::Visit.find_each do |visit|
-  client = DeviceDetector.new(visit.user_agent)
-  device_type =
-    case client.device_type
-    when "smartphone"
-      "Mobile"
-    when "tv"
-      "TV"
-    else
-      client.device_type.try(:titleize)
-    end
-
-  visit.browser = client.name
-  visit.os = client.os_name
-  visit.device_type = device_type
-  visit.save(validate: false) if visit.changed?
-end
-```
-
-### 2.0
-
-See the [upgrade guide](docs/Ahoy-2-Upgrade.md)
+  ```ruby
+  gem 'geocoder'
+  ```
 
 ## History
 

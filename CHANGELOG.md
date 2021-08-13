@@ -1,5 +1,7 @@
 ## 4.0.0 (unreleased)
 
+- Disabled geocoding by default
+- Made the `geocoder` gem an optional dependency
 - Dropped support for Ruby < 2.6 and Rails < 5.2
 
 ## 3.3.0 (2021-08-13)
