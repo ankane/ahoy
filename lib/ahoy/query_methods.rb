@@ -19,35 +19,21 @@ module Ahoy
         when "mongoid"
           relation = where(Hash[properties.map { |k, v| ["properties.#{k}", v] }])
         when /mysql/
-          if column_type == :json
-            properties.each do |k, v|
-              if v.nil?
-                v = "null"
-              elsif v == true
-                v = "true"
-              end
+          column = column_type == :json || connection.try(:mariadb?) ? "properties" : "CAST(properties AS JSON)"
+          properties.each do |k, v|
+            if v.nil?
+              v = "null"
+            elsif v == true
+              v = "true"
+            end
 
-              relation = relation.where("JSON_UNQUOTE(properties -> ?) = ?", "$.#{k}", v.as_json)
-            end
-          else
-            properties.each do |k, v|
-              # TODO cast to json instead
-              relation = relation.where("properties REGEXP ?", "[{,]#{{k.to_s => v}.to_json.sub(/\A\{/, "").sub(/\}\z/, "").gsub("+", "\\\\+")}[,}]")
-            end
+            relation = relation.where("JSON_UNQUOTE(JSON_EXTRACT(#{column}, ?)) = ?", "$.#{k}", v.as_json)
           end
         when /postgres|postgis/
-          if column_type == :jsonb
+          case column_type
+          when :jsonb
             relation = relation.where("properties @> ?", properties.to_json)
-          elsif column_type == :json
-            properties.each do |k, v|
-              relation =
-                if v.nil?
-                  relation.where("properties ->> ? IS NULL", k.to_s)
-                else
-                  relation.where("properties ->> ? = ?", k.to_s, v.as_json.to_s)
-                end
-            end
-          elsif column_type == :hstore
+          when :hstore
             properties.each do |k, v|
               relation =
                 if v.nil?
@@ -57,10 +43,7 @@ module Ahoy
                 end
             end
           else
-            properties.each do |k, v|
-              # TODO cast to jsonb instead
-              relation = relation.where("properties SIMILAR TO ?", "%[{,]#{{k.to_s => v}.to_json.sub(/\A\{/, "").sub(/\}\z/, "").gsub("+", "\\\\+")}[,}]%")
-            end
+            relation = relation.where("properties::jsonb @> ?", properties.to_json)
           end
         else
           raise "Adapter not supported: #{adapter_name}"
@@ -84,17 +67,10 @@ module Ahoy
         when "mongoid"
           raise "Adapter not supported: #{adapter_name}"
         when /mysql/
-          if connection.try(:mariadb?)
-            props.each do |prop|
-              quoted_prop = connection.quote("$.#{prop}")
-              relation = relation.group("JSON_UNQUOTE(JSON_EXTRACT(properties, #{quoted_prop}))")
-            end
-          else
-            column = column_type == :json ? "properties" : "CAST(properties AS JSON)"
-            props.each do |prop|
-              quoted_prop = connection.quote("$.#{prop}")
-              relation = relation.group("JSON_UNQUOTE(JSON_EXTRACT(#{column}, #{quoted_prop}))")
-            end
+          column = column_type == :json || connection.try(:mariadb?) ? "properties" : "CAST(properties AS JSON)"
+          props.each do |prop|
+            quoted_prop = connection.quote("$.#{prop}")
+            relation = relation.group("JSON_UNQUOTE(JSON_EXTRACT(#{column}, #{quoted_prop}))")
           end
         when /postgres|postgis/
           # convert to jsonb to fix
