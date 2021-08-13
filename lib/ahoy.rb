@@ -128,10 +128,6 @@ ActiveSupport.on_load(:action_view) do
 end
 
 # Mongoid
-# TODO use
-# ActiveSupport.on_load(:mongoid) do
-#   Mongoid::Document::ClassMethods.include(Ahoy::Model)
-# end
-if defined?(ActiveModel)
-  ActiveModel::Callbacks.include(Ahoy::Model)
+ActiveSupport.on_load(:mongoid) do
+  Mongoid::Document::ClassMethods.include(Ahoy::Model)
 end
