@@ -2,6 +2,7 @@
 
 - Disabled geocoding by default
 - Made the `geocoder` gem an optional dependency
+- Updated API to return 400 status code when missing required parameters
 - Dropped support for Ruby < 2.6 and Rails < 5.2
 
 ## 3.3.0 (2021-08-13)

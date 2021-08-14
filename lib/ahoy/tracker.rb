@@ -19,8 +19,6 @@ module Ahoy
     def track(name, properties = {}, options = {})
       if exclude?
         debug "Event excluded"
-      elsif missing_params?
-        debug "Missing required parameters"
       else
         data = {
           visit_token: visit_token,
@@ -41,8 +39,6 @@ module Ahoy
     def track_visit(defer: false, started_at: nil)
       if exclude?
         debug "Visit excluded"
-      elsif missing_params?
-        debug "Missing required parameters"
       else
         if defer
           set_cookie("ahoy_track", true, nil, false)
@@ -155,6 +151,7 @@ module Ahoy
       @options[:api]
     end
 
+    # private, but used by API
     def missing_params?
       if Ahoy.cookies && api? && Ahoy.protect_from_forgery
         !(existing_visit_token && existing_visitor_token)
