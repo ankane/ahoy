@@ -1,4 +1,4 @@
-## 4.0.0 (unreleased)
+## 4.0.0 (2021-08-14)
 
 - Disabled geocoding by default
 - Made the `geocoder` gem an optional dependency
