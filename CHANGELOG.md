@@ -1,6 +1,6 @@
 ## 4.0.0 (2021-08-14)
 
-- Disabled geocoding by default
+- Disabled geocoding by default (this was already the case for new installations with 3.2.0+)
 - Made the `geocoder` gem an optional dependency
 - Updated Ahoy.js to 0.4.0
 - Updated API to return 400 status code when missing required parameters
