@@ -5,13 +5,13 @@ module Ahoy
     skip_after_action(*filters, raise: false)
     skip_around_action(*filters, raise: false)
 
-    before_action :verify_request_size
-    before_action :check_params
-    before_action :renew_cookies
-
     if respond_to?(:protect_from_forgery)
       protect_from_forgery with: :null_session, if: -> { Ahoy.protect_from_forgery }
     end
+
+    before_action :verify_request_size
+    before_action :check_params
+    before_action :renew_cookies
 
     protected
 
