@@ -145,12 +145,6 @@ end
 ahoy.track("Viewed book", {title: "The World is Flat"});
 ```
 
-Track events automatically with:
-
-```javascript
-ahoy.trackAll();
-```
-
 See [Ahoy.js](https://github.com/ankane/ahoy.js) for a complete list of features.
 
 #### Native Apps

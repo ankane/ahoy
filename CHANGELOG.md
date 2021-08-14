@@ -2,6 +2,7 @@
 
 - Disabled geocoding by default
 - Made the `geocoder` gem an optional dependency
+- Updated Ahoy.js to 0.4.0
 - Updated API to return 400 status code when missing required parameters
 - Dropped support for Ruby < 2.6 and Rails < 5.2
 
