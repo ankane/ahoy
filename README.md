@@ -757,6 +757,8 @@ There are two notable changes to geocoding:
   gem 'geocoder'
   ```
 
+Also, check out the [upgrade notes](https://github.com/ankane/ahoy.js#upgrading) for Ahoy.js.
+
 ## History
 
 View the [changelog](https://github.com/ankane/ahoy/blob/master/CHANGELOG.md)
