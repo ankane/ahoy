@@ -100,6 +100,7 @@ module QueryMethodsTest
     create_event value: false
 
     expected = {true => 2, false => 1}
+    expected.transform_keys! { |k| k ? 1 : 0 } if sqlite?
     expected.transform_keys!(&:to_s) if mysql? || mariadb? || hstore?
 
     assert_equal expected, group_events
@@ -143,6 +144,10 @@ module QueryMethodsTest
 
   def group_events
     model.group_prop(:value).count
+  end
+
+  def sqlite?
+    self.class.name =~ /sqlite/i
   end
 
   def mysql?

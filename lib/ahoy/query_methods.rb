@@ -45,6 +45,15 @@ module Ahoy
           else
             relation = relation.where("properties::jsonb @> ?", properties.to_json)
           end
+        when /sqlite/
+          properties.each do |k, v|
+            relation =
+              if v.nil?
+                relation.where("JSON_EXTRACT(properties, ?) IS NULL", "$.#{k}")
+              else
+                relation.where("JSON_EXTRACT(properties, ?) = ?", "$.#{k}", v.as_json)
+              end
+          end
         else
           raise "Adapter not supported: #{adapter_name}"
         end
@@ -81,6 +90,11 @@ module Ahoy
           props.each do |prop|
             quoted_prop = connection.quote(prop)
             relation = relation.group("properties#{cast} -> #{quoted_prop}")
+          end
+        when /sqlite/
+          props.each do |prop|
+            quoted_prop = connection.quote("$.#{prop}")
+            relation = relation.group("JSON_EXTRACT(properties, #{quoted_prop})")
           end
         else
           raise "Adapter not supported: #{adapter_name}"

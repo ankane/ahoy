@@ -1,3 +1,7 @@
+## 4.0.1 (unreleased)
+
+- Added support for `where_event`, `where_props`, and `where_group` for SQLite
+
 ## 4.0.0 (2021-08-14)
 
 - Disabled geocoding by default (this was already the case for new installations with 3.2.0+)
