@@ -134,6 +134,26 @@ module QueryMethodsTest
     assert_equal expected, model.group_prop([:value, :other]).count
   end
 
+  def test_where_event
+    model.create!(name: "Test 1", properties: {value: 1})
+    model.create!(name: "Test 1", properties: {value: 2})
+    model.create!(name: "Test 2", properties: {value: 1})
+    assert_equal 2, model.where_event("Test 1").count
+    assert_equal 1, model.where_event("Test 1", {value: 1}).count
+  end
+
+  def test_scopes
+    model.create!(name: "Test 1", properties: {value: "hello"})
+    model.create!(name: "Test 1", properties: {value: "world"})
+    model.create!(name: "Test 2", properties: {value: "hello"})
+    assert_equal 1, model.where(name: "Test 1").where_props(value: "hello").count
+
+    if group_supported?
+      assert_equal({"hello" => 1, "world" => 1}, model.where(name: "Test 1").group_prop(:value).count)
+      assert_equal({"hello" => 1, "world" => 1}, model.where_event("Test 1").group_prop(:value).count)
+    end
+  end
+
   def create_event(properties)
     model.create(properties: properties)
   end

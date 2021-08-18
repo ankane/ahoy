@@ -4,6 +4,7 @@ class MongoidEvent
   include Mongoid::Document
   include Ahoy::QueryMethods
 
+  field :name, type: String
   field :properties, type: Hash
 end
 

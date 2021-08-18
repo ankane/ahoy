@@ -1,6 +1,8 @@
 ## 4.0.1 (unreleased)
 
 - Added support for `where_event`, `where_props`, and `where_group` for SQLite
+- Fixed results with `where_event`
+- Fixed results with `where_props` and `where_group` when used with other scopes
 
 ## 4.0.0 (2021-08-14)
 

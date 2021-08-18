@@ -8,7 +8,9 @@ module Ahoy
       end
 
       def where_props(properties)
-        relation = self
+        return all if properties.empty?
+
+        relation = all
         if respond_to?(:columns_hash)
           column_type = columns_hash["properties"].type
           adapter_name = connection.adapter_name.downcase
@@ -56,7 +58,7 @@ module Ahoy
         # like with group
         props.flatten!
 
-        relation = self
+        relation = all
         if respond_to?(:columns_hash)
           column_type = columns_hash["properties"].type
           adapter_name = connection.adapter_name.downcase
