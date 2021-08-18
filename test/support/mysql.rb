@@ -14,6 +14,5 @@ end
 
 class MysqlBase < ActiveRecord::Base
   include Ahoy::QueryMethods
-  establish_connection adapter: "mysql2", database: "ahoy_test"
   self.abstract_class = true
 end

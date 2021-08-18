@@ -1,12 +1,18 @@
 require_relative "../test_helper"
 
-# run setup / migrations
-require_relative "../support/mysql"
-require_relative "../support/postgresql"
-require_relative "../support/mongoid"
-require_relative "../support/sqlite"
+adapter = ENV["ADAPTER"]
+abort "No adapter specified" unless adapter
 
-# restore connection
-ActiveRecord::Base.establish_connection(:test)
+puts "Using #{adapter}"
+case adapter
+when "mysql"
+  require_relative "../support/mysql"
+when "postgresql"
+  require_relative "../support/postgresql"
+when "mongoid"
+  require_relative "../support/mongoid"
+else
+  require_relative "../support/sqlite"
+end
 
 require_relative "../support/query_methods_test"

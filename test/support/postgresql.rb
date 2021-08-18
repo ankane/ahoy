@@ -27,6 +27,5 @@ end
 
 class PostgresqlBase < ActiveRecord::Base
   include Ahoy::QueryMethods
-  establish_connection adapter: "postgresql", database: "ahoy_test"
   self.abstract_class = true
 end
