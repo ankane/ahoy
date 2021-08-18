@@ -10,47 +10,38 @@ module Ahoy
       def where_props(properties)
         return all if properties.empty?
 
-        relation = all
-        if respond_to?(:columns_hash)
-          column_type = columns_hash["properties"].type
-          adapter_name = connection.adapter_name.downcase
-        else
-          adapter_name = "mongoid"
-        end
+        adapter_name = respond_to?(:connection) ? connection.adapter_name.downcase : "mongoid"
         case adapter_name
         when "mongoid"
-          relation = where(properties.to_h { |k, v| ["properties.#{k}", v] })
+          where(properties.to_h { |k, v| ["properties.#{k}", v] })
         when /mysql/
-          relation = relation.where("JSON_CONTAINS(properties, ?, '$') = 1", properties.to_json)
+          where("JSON_CONTAINS(properties, ?, '$') = 1", properties.to_json)
         when /postgres|postgis/
-          case column_type
-          when :jsonb
-            relation = relation.where("properties @> ?", properties.to_json)
+          case columns_hash["properties"].type
           when :hstore
-            properties.each do |k, v|
-              relation =
-                if v.nil?
-                  relation.where("properties -> ? IS NULL", k.to_s)
-                else
-                  relation.where("properties -> ? = ?", k.to_s, v.to_s)
-                end
+            properties.inject(all) do |relation, (k, v)|
+              if v.nil?
+                relation.where("properties -> ? IS NULL", k.to_s)
+              else
+                relation.where("properties -> ? = ?", k.to_s, v.to_s)
+              end
             end
+          when :jsonb
+            where("properties @> ?", properties.to_json)
           else
-            relation = relation.where("properties::jsonb @> ?", properties.to_json)
+            where("properties::jsonb @> ?", properties.to_json)
           end
         when /sqlite/
-          properties.each do |k, v|
-            relation =
-              if v.nil?
-                relation.where("JSON_EXTRACT(properties, ?) IS NULL", "$.#{k}")
-              else
-                relation.where("JSON_EXTRACT(properties, ?) = ?", "$.#{k}", v.as_json)
-              end
+          properties.inject(all) do |relation, (k, v)|
+            if v.nil?
+              relation.where("JSON_EXTRACT(properties, ?) IS NULL", "$.#{k}")
+            else
+              relation.where("JSON_EXTRACT(properties, ?) = ?", "$.#{k}", v.as_json)
+            end
           end
         else
           raise "Adapter not supported: #{adapter_name}"
         end
-        relation
       end
       alias_method :where_properties, :where_props
 
@@ -59,12 +50,7 @@ module Ahoy
         props.flatten!
 
         relation = all
-        if respond_to?(:columns_hash)
-          column_type = columns_hash["properties"].type
-          adapter_name = connection.adapter_name.downcase
-        else
-          adapter_name = "mongoid"
-        end
+        adapter_name = respond_to?(:connection) ? connection.adapter_name.downcase : "mongoid"
         case adapter_name
         when "mongoid"
           raise "Adapter not supported: #{adapter_name}"
@@ -77,6 +63,7 @@ module Ahoy
           # convert to jsonb to fix
           # could not identify an equality operator for type json
           # and for text columns
+          column_type = columns_hash["properties"].type
           cast = [:jsonb, :hstore].include?(column_type) ? "" : "::jsonb"
 
           props.each do |prop|
