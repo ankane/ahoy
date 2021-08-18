@@ -146,7 +146,10 @@ module QueryMethodsTest
     model.create!(name: "Test 1", properties: {value: "hello"})
     model.create!(name: "Test 1", properties: {value: "world"})
     model.create!(name: "Test 2", properties: {value: "hello"})
+
+    assert_equal 2, model.where_props(value: "hello").count
     assert_equal 1, model.where(name: "Test 1").where_props(value: "hello").count
+    assert_equal 1, model.where_props(value: "hello").where(name: "Test 1").count
 
     if group_supported?
       assert_equal({"hello" => 1, "world" => 1}, model.where(name: "Test 1").group_prop(:value).count)
