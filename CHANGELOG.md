@@ -1,8 +1,8 @@
 ## 4.0.1 (2021-08-18)
 
 - Added support for `where_event`, `where_props`, and `where_group` for SQLite
-- Fixed results with `where_event`
-- Fixed results with `where_props` and `where_group` when used with other scopes
+- Fixed results with `where_event` for MySQL, MariaDB, and Postgres `hstore`
+- Fixed results with `where_props` and `where_group` when used with other scopes for MySQL, MariaDB, and Postgres `hstore`
 
 ## 4.0.0 (2021-08-14)
 
