@@ -661,7 +661,7 @@ Group by properties with:
 Ahoy::Event.group_prop(:product_id, :category).count
 ```
 
-Note: MySQL and MariaDB always return string keys (include `"null"` for `nil`) for `group_prop`.
+Note: MySQL and MariaDB always return string keys (including `"null"` for `nil`) for `group_prop`.
 
 ### Funnels
 
