@@ -694,6 +694,24 @@ daily_visits = Ahoy::Visit.group_by_day(:started_at).count # uses Groupdate
 Prophet.forecast(daily_visits)
 ```
 
+### Anomaly Detection
+
+To detect anomalies in visits and events, check out [AnomalyDetection.rb](https://github.com/ankane/AnomalyDetection.rb).
+
+```ruby
+daily_visits = Ahoy::Visit.group_by_day(:started_at).count # uses Groupdate
+AnomalyDetection.detect(daily_visits, period: 7)
+```
+
+### Breakout Detection
+
+To detect breakouts in visits and events, check out [Breakout](https://github.com/ankane/breakout).
+
+```ruby
+daily_visits = Ahoy::Visit.group_by_day(:started_at).count # uses Groupdate
+Breakout.detect(daily_visits)
+```
+
 ### Recommendations
 
 To make recommendations based on events, check out [Disco](https://github.com/ankane/disco#ahoy).
