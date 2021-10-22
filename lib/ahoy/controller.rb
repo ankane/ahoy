@@ -29,8 +29,10 @@ module Ahoy
     end
 
     def track_ahoy_visit
-      defer = Ahoy.server_side_visits != true
+      # avoid database calls if we're excluding this anyway
+      return if ahoy.exclude?
 
+      defer = Ahoy.server_side_visits != true
       if defer && !Ahoy.cookies
         # avoid calling new_visit?, which triggers a database call
       elsif ahoy.new_visit?

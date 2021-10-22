@@ -145,6 +145,10 @@ module Ahoy
       delete_cookie("ahoy_track")
     end
 
+    def exclude?
+      @store.exclude?
+    end
+
     protected
 
     def api?
@@ -182,10 +186,6 @@ module Ahoy
       else
         time
       end
-    end
-
-    def exclude?
-      @store.exclude?
     end
 
     def report_exception(e)
