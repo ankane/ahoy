@@ -26,5 +26,13 @@ module Ahoy
         alias_method :call, :call_with_quiet_ahoy
       end
     end
+
+    # for importmap
+    if defined?(Importmap)
+      initializer "ahoy.importmap", after: "importmap" do |app|
+        app.importmap.draw(Engine.root.join("config/importmap.rb"))
+        app.config.assets.precompile << "ahoy.js"
+      end
+    end
   end
 end

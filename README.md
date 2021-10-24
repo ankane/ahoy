@@ -66,6 +66,12 @@ For Rails 5 / Sprockets, add to `app/assets/javascripts/application.js`:
 //= require ahoy
 ```
 
+For Rails 7 / Importmap (unreleased, experimental), add to `app/javascript/application.js`:
+
+```javascript
+import "ahoy"
+```
+
 Track an event with:
 
 ```javascript

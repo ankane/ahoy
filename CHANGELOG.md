@@ -1,3 +1,7 @@
+## 4.0.2 (unreleased)
+
+- Added experimental support for `importmap-rails`
+
 ## 4.0.1 (2021-08-18)
 
 - Added support for `where_event`, `where_props`, and `where_group` for SQLite
