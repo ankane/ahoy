@@ -121,6 +121,12 @@ You can also defer visit tracking to JavaScript. This is useful for preventing b
 Ahoy.server_side_visits = :when_needed
 ```
 
+If you need to disable setting ahoy cookies in a controller, you can do so with:
+
+```ruby
+skip_before_action :set_ahoy_cookies
+```
+
 ### Events
 
 Each event has a `name` and `properties`. There are several ways to track events.
