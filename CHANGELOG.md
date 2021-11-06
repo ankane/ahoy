@@ -1,4 +1,4 @@
-## 4.0.2 (unreleased)
+## 4.0.2 (2021-11-06)
 
 - Added experimental support for `importmap-rails`
 

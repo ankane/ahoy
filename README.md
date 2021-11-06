@@ -66,7 +66,7 @@ For Rails 5 / Sprockets, add to `app/assets/javascripts/application.js`:
 //= require ahoy
 ```
 
-For Rails 7 / Importmap (unreleased, experimental), add to `config/importmap.rb`:
+For Rails 7 / Importmap (experimental), add to `config/importmap.rb`:
 
 ```ruby
 pin "ahoy", to: "ahoy.js"
