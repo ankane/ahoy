@@ -1,3 +1,7 @@
+## 4.0.3 (unreleased)
+
+- Fixed asset precompilation error with `importmap-rails`
+
 ## 4.0.2 (2021-11-06)
 
 - Added experimental support for `importmap-rails`
