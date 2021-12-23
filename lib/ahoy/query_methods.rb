@@ -59,7 +59,7 @@ module Ahoy
             quoted_prop = connection.quote("$.#{prop}")
             relation = relation.group("JSON_UNQUOTE(JSON_EXTRACT(properties, #{quoted_prop}))")
           end
-        when /postgres|postgis/
+        when /postgres|postgis|cockroachdb/
           # convert to jsonb to fix
           # could not identify an equality operator for type json
           # and for text columns
