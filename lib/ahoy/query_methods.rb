@@ -16,7 +16,7 @@ module Ahoy
           where(properties.to_h { |k, v| ["properties.#{k}", v] })
         when /mysql/
           where("JSON_CONTAINS(properties, ?, '$') = 1", properties.to_json)
-        when /postgres|postgis/
+        when /postgres|postgis|cockroachdb/
           case columns_hash["properties"].type
           when :hstore
             properties.inject(all) do |relation, (k, v)|
