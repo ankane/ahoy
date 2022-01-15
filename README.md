@@ -48,6 +48,18 @@ And restart your web server.
 
 ### JavaScript
 
+For Rails 7 / Importmap, add to `config/importmap.rb`:
+
+```ruby
+pin "ahoy", to: "ahoy.js"
+```
+
+And add to `app/javascript/application.js`:
+
+```javascript
+import "ahoy"
+```
+
 For Rails 6 / Webpacker, run:
 
 ```sh
@@ -64,18 +76,6 @@ For Rails 5 / Sprockets, add to `app/assets/javascripts/application.js`:
 
 ```javascript
 //= require ahoy
-```
-
-For Rails 7 / Importmap (experimental), add to `config/importmap.rb`:
-
-```ruby
-pin "ahoy", to: "ahoy.js"
-```
-
-And add to `app/javascript/application.js`:
-
-```javascript
-import "ahoy"
 ```
 
 Track an event with:
