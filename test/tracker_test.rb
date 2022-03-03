@@ -11,6 +11,14 @@ class TrackerTest < Minitest::Test
     assert_nil event.user_id
   end
 
+  def test_no_cookies
+    with_options(cookies: false) do
+      request = ActionDispatch::TestRequest.create
+      ahoy = Ahoy::Tracker.new(request: request)
+      ahoy.track("Some event", some_prop: true)
+    end
+  end
+
   def test_user_option
     user = OpenStruct.new(id: 123)
     ahoy = Ahoy::Tracker.new(user: user)
