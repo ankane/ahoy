@@ -17,7 +17,7 @@ Track visits and events in Ruby, JavaScript, and native apps. Data is stored in 
 Add this line to your application’s Gemfile:
 
 ```ruby
-gem 'ahoy_matey'
+gem "ahoy_matey"
 ```
 
 And run:
@@ -361,7 +361,7 @@ Ahoy uses [Geocoder](https://github.com/alexreisner/geocoder) for geocoding. We 
 To enable geocoding, add this line to your application’s Gemfile:
 
 ```ruby
-gem 'geocoder'
+gem "geocoder"
 ```
 
 And update `config/initializers/ahoy.rb`:
@@ -381,7 +381,7 @@ Ahoy.job_queue = :low_priority
 For privacy and performance, we recommend geocoding locally. Add this line to your application’s Gemfile:
 
 ```ruby
-gem 'maxminddb'
+gem "maxminddb"
 ```
 
 For city-level geocoding, download the [GeoLite2 City database](https://dev.maxmind.com/geoip/geoip2/geolite2/) and create `config/initializers/geocoder.rb` with:
@@ -784,7 +784,7 @@ There are two notable changes to geocoding:
 2. The `geocoder` gem is now an optional dependency. To use geocoding, add it to your Gemfile:
 
   ```ruby
-  gem 'geocoder'
+  gem "geocoder"
   ```
 
 Also, check out the [upgrade notes](https://github.com/ankane/ahoy.js#upgrading) for Ahoy.js.
