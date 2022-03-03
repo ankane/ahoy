@@ -12,11 +12,17 @@ class TrackerTest < Minitest::Test
   end
 
   def test_no_cookies
+    request = ActionDispatch::TestRequest.create
+
     with_options(cookies: false) do
-      request = ActionDispatch::TestRequest.create
       ahoy = Ahoy::Tracker.new(request: request)
       ahoy.track("Some event", some_prop: true)
     end
+
+    event = Ahoy::Event.last
+    assert_equal "Some event", event.name
+    assert_equal({"some_prop" => true}, event.properties)
+    assert_nil event.user_id
   end
 
   def test_user_option
