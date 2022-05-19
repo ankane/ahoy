@@ -12,6 +12,10 @@ Combustion.initialize! :active_record, :action_controller, :active_job do
     config.active_record.sqlite3.represent_boolean_as_integer = true
   end
 
+  if ActiveRecord::VERSION::MAJOR >= 7
+    config.active_support.use_rfc4122_namespaced_uuids = true
+  end
+
   config.action_controller.logger = logger
   config.active_record.logger = logger
   config.active_job.logger = logger
