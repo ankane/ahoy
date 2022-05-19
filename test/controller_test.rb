@@ -246,15 +246,20 @@ class ControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  # TODO only call once per request
   def test_exclude_method
+    calls = 0
     exclude_method = lambda do |controller, request|
+      calls += 1
       request.parameters["exclude"] == "t"
     end
     with_options(exclude_method: exclude_method) do
       get products_url, params: {"exclude" => "t"}
       assert_equal 0, Ahoy::Visit.count
+      assert_equal 2, calls
       get products_url
       assert_equal 1, Ahoy::Visit.count
+      assert_equal 4, calls
     end
   end
 
