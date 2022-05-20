@@ -9,6 +9,6 @@ class BaseGeneratorTest < Rails::Generators::TestCase
 
   def test_works
     run_generator
-    assert_file "config/initializers/ahoy.rb"
+    assert_file "config/initializers/ahoy.rb", /BaseStore/
   end
 end

@@ -11,9 +11,9 @@ class ActiverecordGeneratorTest < Rails::Generators::TestCase
     skip if ENV["ADAPTER"] == "mongoid"
 
     run_generator
-    assert_file "config/initializers/ahoy.rb"
-    assert_file "app/models/ahoy/visit.rb"
-    assert_file "app/models/ahoy/event.rb"
-    assert_migration "db/migrate/create_ahoy_visits_and_events.rb"
+    assert_file "config/initializers/ahoy.rb", /DatabaseStore/
+    assert_file "app/models/ahoy/visit.rb", /Ahoy::Visit < ApplicationRecord/
+    assert_file "app/models/ahoy/event.rb", /Ahoy::Event < ApplicationRecord/
+    assert_migration "db/migrate/create_ahoy_visits_and_events.rb", /create_table/
   end
 end

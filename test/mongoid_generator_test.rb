@@ -9,8 +9,8 @@ class MongoidGeneratorTest < Rails::Generators::TestCase
 
   def test_works
     run_generator
-    assert_file "config/initializers/ahoy.rb"
-    assert_file "app/models/ahoy/visit.rb"
-    assert_file "app/models/ahoy/event.rb"
+    assert_file "config/initializers/ahoy.rb", /DatabaseStore/
+    assert_file "app/models/ahoy/visit.rb", /Mongoid::Document/
+    assert_file "app/models/ahoy/event.rb", /Mongoid::Document/
   end
 end
