@@ -199,7 +199,7 @@ Here’s what the migration to add the `ahoy_visit_id` column should look like:
 ```ruby
 class AddVisitIdToOrders < ActiveRecord::Migration[7.0]
   def change
-    add_column :orders, :ahoy_visit_id, :bigint
+    add_reference :orders, :ahoy_visit
   end
 end
 ```
