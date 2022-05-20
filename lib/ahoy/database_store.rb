@@ -56,7 +56,7 @@ module Ahoy
         if ahoy.send(:existing_visit_token)
           @visit = visit_model.find_by(visit_token: ahoy.visit_token)
         elsif !Ahoy.cookies && ahoy.visitor_token
-          @visit = visit_model.where(visitor_token: ahoy.visitor_token, started_at: Ahoy.visit_duration.ago..).order(started_at: :desc).first
+          @visit = visit_model.where(visitor_token: ahoy.visitor_token).where("started_at >= ?", Ahoy.visit_duration.ago).order(started_at: :desc).first
         end
       end
       @visit
