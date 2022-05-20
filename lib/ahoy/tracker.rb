@@ -185,7 +185,10 @@ module Ahoy
     end
 
     def exclude?
-      @store.exclude?
+      unless defined?(@exclude)
+        @exclude = @store.exclude?
+      end
+      @exclude
     end
 
     def report_exception(e)

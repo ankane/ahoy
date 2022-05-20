@@ -54,7 +54,12 @@ module Ahoy
     def visit
       unless defined?(@visit)
         if ahoy.send(:existing_visit_token)
-          @visit = visit_model.find_by(visit_token: ahoy.visit_token)
+          if defined?(Mongoid::Document) && visit_model < Mongoid::Document
+            # find_by raises error by default when not found
+            @visit = visit_model.where(visit_token: ahoy.visit_token).first if ahoy.visit_token
+          else
+            @visit = visit_model.find_by(visit_token: ahoy.visit_token) if ahoy.visit_token
+          end
         elsif !Ahoy.cookies && ahoy.visitor_token
           if defined?(Mongoid::Document) && visit_model < Mongoid::Document
             @visit = visit_model.where(visitor_token: ahoy.visitor_token).where(:started_at.gte => Ahoy.visit_duration.ago).order(started_at: :desc).first
