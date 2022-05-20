@@ -110,6 +110,13 @@ class ControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  def test_mask_ips_ipv6
+    with_options(mask_ips: true) do
+      get products_url, env: {"REMOTE_ADDR" => "2001:4860:4860:0:0:0:0:8844"}
+      assert_equal "2001:4860:4860::", Ahoy::Visit.last.ip
+    end
+  end
+
   def test_token_generator
     token_generator = -> { "test-token" }
     with_options(token_generator: token_generator) do
