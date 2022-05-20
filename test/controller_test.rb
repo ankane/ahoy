@@ -1,8 +1,6 @@
 require_relative "test_helper"
 
 class ControllerTest < ActionDispatch::IntegrationTest
-  include ActiveJob::TestHelper # for Rails < 6
-
   def test_works
     get products_url
     assert_response :success
@@ -262,66 +260,6 @@ class ControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def test_track_bots_true
-    with_options(track_bots: true) do
-      get products_url, headers: {"User-Agent" => bot_user_agent}
-      assert_equal 1, Ahoy::Visit.count
-    end
-  end
-
-  def test_track_bots_false
-    with_options(track_bots: false) do
-      get products_url, headers: {"User-Agent" => bot_user_agent}
-      assert_equal 0, Ahoy::Visit.count
-    end
-  end
-
-  def test_bot_detection_version_1
-    with_options(track_bots: false, bot_detection_version: 1) do
-      get products_url, headers: {"User-Agent" => ""}
-      assert_equal 1, Ahoy::Visit.count
-    end
-  end
-
-  def test_bot_detection_version_2
-    with_options(track_bots: false, bot_detection_version: 2) do
-      get products_url, headers: {"User-Agent" => ""}
-      assert_equal 0, Ahoy::Visit.count
-    end
-  end
-
-  def test_exclude_method
-    calls = 0
-    exclude_method = lambda do |controller, request|
-      calls += 1
-      request.parameters["exclude"] == "t"
-    end
-    with_options(exclude_method: exclude_method) do
-      get products_url, params: {"exclude" => "t"}
-      assert_equal 0, Ahoy::Visit.count
-      assert_equal 1, calls
-      get products_url
-      assert_equal 1, Ahoy::Visit.count
-      assert_equal 2, calls
-    end
-  end
-
-  def test_exclude_method_cookies_false
-    calls = 0
-    exclude_method = lambda do |controller, request|
-      calls += 1
-      request.parameters["exclude"] == "t"
-    end
-    with_options(exclude_method: exclude_method, cookies: false) do
-      get products_url, params: {"exclude" => "t"}
-      assert_equal 0, Ahoy::Visit.count
-      assert_equal 1, calls
-      get products_url
-      assert_equal 1, Ahoy::Visit.count
-      assert_equal 2, calls
-    end
-  end
-
   def test_token_generator
     token_generator = -> { "test-token" }
     with_options(token_generator: token_generator) do
@@ -329,34 +267,6 @@ class ControllerTest < ActionDispatch::IntegrationTest
       visit = Ahoy::Visit.last
       assert_equal "test-token", visit.visit_token
       assert_equal "test-token", visit.visitor_token
-    end
-  end
-
-  def test_geocode_true
-    with_options(geocode: true) do
-      assert_enqueued_with(job: Ahoy::GeocodeV2Job, queue: "ahoy") do
-        get products_url
-      end
-    end
-  end
-
-  def test_geocode_false
-    with_options(geocode: false) do
-      get products_url
-      assert_equal 0, enqueued_jobs.size
-    end
-  end
-
-  def test_geocode_default
-    get products_url
-    assert_equal 0, enqueued_jobs.size
-  end
-
-  def test_job_queue
-    with_options(geocode: true, job_queue: :low_priority) do
-      assert_enqueued_with(job: Ahoy::GeocodeV2Job, queue: "low_priority") do
-        get products_url
-      end
     end
   end
 
@@ -392,9 +302,5 @@ class ControllerTest < ActionDispatch::IntegrationTest
 
   def ahoy
     controller.ahoy
-  end
-
-  def bot_user_agent
-    "Mozilla/5.0 (compatible; DuckDuckBot-Https/1.1; https://duckduckgo.com/duckduckbot)"
   end
 end
