@@ -11,7 +11,7 @@ frameworks = [:action_controller, :active_job]
 if ENV["ADAPTER"] == "mongoid"
   require_relative "support/mongoid"
 
-  Dir.glob("internal/app/models_mongoid/**/*.rb", base: __dir__) do |file|
+  Dir.glob("support/mongoid_models/**/*.rb", base: __dir__) do |file|
     require_relative file
   end
 
