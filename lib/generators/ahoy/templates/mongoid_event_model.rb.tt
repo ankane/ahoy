@@ -2,7 +2,7 @@ class Ahoy::Event
   include Mongoid::Document
 
   # associations
-  belongs_to :visit, index: true
+  belongs_to :visit, class_name: "Ahoy::Visit", index: true
   belongs_to :user, index: true, optional: true
 
   # fields

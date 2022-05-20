@@ -1,3 +1,7 @@
+## 4.0.4 (unreleased)
+
+- Fixed association for Mongoid
+
 ## 4.0.3 (2022-01-15)
 
 - Support for `importmap-rails` is no longer experimental
