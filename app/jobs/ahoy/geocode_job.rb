@@ -1,4 +1,5 @@
 # for smooth update from Ahoy 1 -> 2
+# TODO remove in 5.0
 module Ahoy
   class GeocodeJob < ActiveJob::Base
     queue_as { Ahoy.job_queue }
