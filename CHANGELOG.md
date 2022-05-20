@@ -1,5 +1,6 @@
 ## 4.0.4 (unreleased)
 
+- Fixed error with Mongoid when `Mongoid.raise_not_found_error` is `true`
 - Fixed association for Mongoid
 
 ## 4.0.3 (2022-01-15)

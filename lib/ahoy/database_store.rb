@@ -53,7 +53,12 @@ module Ahoy
 
     def visit
       unless defined?(@visit)
-        @visit = visit_model.find_by(visit_token: ahoy.visit_token) if ahoy.visit_token
+        if defined?(Mongoid::Document) && visit_model < Mongoid::Document
+          # find_by raises error by default when not found
+          @visit = visit_model.where(visit_token: ahoy.visit_token).first if ahoy.visit_token
+        else
+          @visit = visit_model.find_by(visit_token: ahoy.visit_token) if ahoy.visit_token
+        end
       end
       @visit
     end

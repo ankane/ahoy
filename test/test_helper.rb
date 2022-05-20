@@ -17,9 +17,6 @@ if ENV["ADAPTER"] == "mongoid"
 
   Mongoid.logger = logger
   Mongo::Logger.logger = logger
-
-  # TODO remove
-  Mongoid.raise_not_found_error = false
 else
   frameworks << :active_record
 end
