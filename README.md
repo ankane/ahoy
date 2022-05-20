@@ -813,6 +813,12 @@ bundle install
 bundle exec rake test
 ```
 
+To test Mongoid, use:
+
+```sh
+ADAPTER=mongoid bundle exec rake test
+```
+
 To test query methods, use:
 
 ```sh
