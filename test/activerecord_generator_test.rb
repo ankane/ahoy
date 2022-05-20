@@ -14,5 +14,6 @@ class ActiverecordGeneratorTest < Rails::Generators::TestCase
     assert_file "config/initializers/ahoy.rb"
     assert_file "app/models/ahoy/visit.rb"
     assert_file "app/models/ahoy/event.rb"
+    assert_migration "db/migrate/create_ahoy_visits_and_events.rb"
   end
 end
