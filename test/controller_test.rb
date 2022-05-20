@@ -189,6 +189,10 @@ class ControllerTest < ActionDispatch::IntegrationTest
         assert_equal "8924a60c-5c50-5d80-b38d-e6c68fcd0958", visit.visit_token
         assert_equal "64dcde66-9659-5473-897e-5abd59f8b89f", visit.visitor_token
       end
+
+      get products_url
+      assert_equal 1, Ahoy::Visit.count
+      assert_equal 2, Ahoy::Visit.last.events.count
     end
   end
 
