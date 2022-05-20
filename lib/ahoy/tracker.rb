@@ -204,7 +204,9 @@ module Ahoy
     def visit_token_helper
       @visit_token_helper ||= begin
         token = existing_visit_token
-        token ||= visit_anonymity_set unless Ahoy.cookies
+        # could use a random id instead of visit_anonymity_set
+        # but we may want to query it directly in the future
+        token ||= visit&.visit_token || visit_anonymity_set unless Ahoy.cookies
         token ||= generate_id unless Ahoy.api_only
         token
       end
@@ -238,7 +240,7 @@ module Ahoy
     end
 
     def visit_anonymity_set
-      @visit_anonymity_set ||= Digest::UUID.uuid_v5(UUID_NAMESPACE, ["visit", Ahoy.mask_ip(request.remote_ip), request.user_agent].join("/"))
+      @visit_anonymity_set ||= Digest::UUID.uuid_v5(UUID_NAMESPACE, ["visit", Ahoy.mask_ip(request.remote_ip), request.user_agent, time_bucket(Time.now)].join("/"))
     end
 
     def visitor_anonymity_set
@@ -276,6 +278,10 @@ module Ahoy
 
     def debug(message)
       Ahoy.log message
+    end
+
+    def time_bucket(time)
+      Time.at(time.to_i / Ahoy.visit_duration.to_i * Ahoy.visit_duration.to_i).utc.iso8601(0)
     end
   end
 end
