@@ -177,7 +177,7 @@ class ControllerTest < ActionDispatch::IntegrationTest
       get products_url
     end
     assert_equal 2, Ahoy::Visit.count
-    assert_equal 1, Ahoy::Visit.distinct.count(:visitor_token)
+    assert_equal 1, Ahoy::Visit.pluck(:visitor_token).uniq.count
   end
 
   def test_visitor_duration
@@ -186,7 +186,7 @@ class ControllerTest < ActionDispatch::IntegrationTest
       get products_url
     end
     assert_equal 2, Ahoy::Visit.count
-    assert_equal 2, Ahoy::Visit.distinct.count(:visitor_token)
+    assert_equal 2, Ahoy::Visit.pluck(:visitor_token).uniq.count
   end
 
   def test_cookies_true
