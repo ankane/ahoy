@@ -13,12 +13,6 @@ class ControllerTest < ActionDispatch::IntegrationTest
     assert_equal({}, event.properties)
   end
 
-  def test_visitable
-    post products_url
-    visit = Ahoy::Visit.last
-    assert_equal visit, Product.last.ahoy_visit
-  end
-
   def test_instance
     post products_url
     assert_response :success
@@ -30,18 +24,6 @@ class ControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Created product", event.name
     product = Product.last
     assert_equal({"product_id" => product.id}, event.properties)
-  end
-
-  def test_mask_ips
-    with_options(mask_ips: true) do
-      get products_url
-      assert_equal "127.0.0.0", Ahoy::Visit.last.ip
-    end
-  end
-
-  def test_skip_before_action
-    get no_visit_products_url
-    assert_equal 0, Ahoy::Visit.count
   end
 
   def test_server_side_visits_true
@@ -66,6 +48,11 @@ class ControllerTest < ActionDispatch::IntegrationTest
       get products_url
       assert_equal 1, Ahoy::Visit.count
     end
+  end
+
+  def test_skip_before_action
+    get no_visit_products_url
+    assert_equal 0, Ahoy::Visit.count
   end
 
   def test_api_only
@@ -116,6 +103,13 @@ class ControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  def test_mask_ips
+    with_options(mask_ips: true) do
+      get products_url
+      assert_equal "127.0.0.0", Ahoy::Visit.last.ip
+    end
+  end
+
   def test_token_generator
     token_generator = -> { "test-token" }
     with_options(token_generator: token_generator) do
@@ -124,6 +118,12 @@ class ControllerTest < ActionDispatch::IntegrationTest
       assert_equal "test-token", visit.visit_token
       assert_equal "test-token", visit.visitor_token
     end
+  end
+
+  def test_visitable
+    post products_url
+    visit = Ahoy::Visit.last
+    assert_equal visit, Product.last.ahoy_visit
   end
 
   def test_bad_visit_cookie
