@@ -284,7 +284,6 @@ class ControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
-  # TODO only call once per request
   def test_exclude_method_cookies_false
     calls = 0
     exclude_method = lambda do |controller, request|
