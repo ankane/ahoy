@@ -6,18 +6,36 @@ require "minitest/pride"
 
 logger = ActiveSupport::Logger.new(ENV["VERBOSE"] ? STDOUT : nil)
 
+frameworks = [:action_controller, :active_job]
+
+if ENV["ADAPTER"] == "mongoid"
+  require_relative "support/mongoid"
+
+  Mongoid.logger = logger
+  Mongo::Logger.logger = logger
+
+  # TODO remove
+  Mongoid.raise_not_found_error = false
+else
+  frameworks << :active_record
+end
+
 Combustion.path = "test/internal"
-Combustion.initialize! :active_record, :action_controller, :active_job do
-  if ActiveRecord::VERSION::MAJOR < 6 && config.active_record.sqlite3.respond_to?(:represent_boolean_as_integer)
-    config.active_record.sqlite3.represent_boolean_as_integer = true
+Combustion.initialize!(*frameworks) do
+  if ENV["ADAPTER"] == "mongoid"
+    config.autoload_paths << Rails.root.join("app", "models_mongoid")
+  else
+    if ActiveRecord::VERSION::MAJOR < 6 && config.active_record.sqlite3.respond_to?(:represent_boolean_as_integer)
+      config.active_record.sqlite3.represent_boolean_as_integer = true
+    end
+    config.active_record.logger = logger
   end
 
-  if ActiveRecord::VERSION::MAJOR >= 7
+  if ActiveSupport::VERSION::MAJOR >= 7
     config.active_support.use_rfc4122_namespaced_uuids = true
   end
 
   config.action_controller.logger = logger
-  config.active_record.logger = logger
   config.active_job.logger = logger
 end
 
