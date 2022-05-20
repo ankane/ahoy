@@ -126,7 +126,6 @@ ActiveSupport.on_load(:action_view) do
   include Ahoy::Helper
 end
 
-# Mongoid
 ActiveSupport.on_load(:mongoid) do
   Mongoid::Document::ClassMethods.include(Ahoy::Model)
 end
