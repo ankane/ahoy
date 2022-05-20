@@ -171,6 +171,24 @@ class ControllerTest < ActionDispatch::IntegrationTest
     end
   end
 
+  def test_visit_duration
+    get products_url
+    travel 5.hours do
+      get products_url
+    end
+    assert_equal 2, Ahoy::Visit.count
+    assert_equal 1, Ahoy::Visit.distinct.count(:visitor_token)
+  end
+
+  def test_visitor_duration
+    get products_url
+    travel 3.years do
+      get products_url
+    end
+    assert_equal 2, Ahoy::Visit.count
+    assert_equal 2, Ahoy::Visit.distinct.count(:visitor_token)
+  end
+
   def test_cookies_true
     get products_url
     assert_equal ["ahoy_visit", "ahoy_visitor"], response.cookies.keys.sort
