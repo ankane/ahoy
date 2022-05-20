@@ -13,37 +13,6 @@ class ControllerTest < ActionDispatch::IntegrationTest
     assert_equal({}, event.properties)
   end
 
-  def test_user
-    User.create!(name: "Test User")
-    get products_url
-    visit = Ahoy::Visit.last
-    assert_equal "Test User", visit.user.name
-  end
-
-  def test_user_method_symbol
-    with_options(user_method: :true_user) do
-      get products_url
-      visit = Ahoy::Visit.last
-      assert_equal "True User", visit.user.name
-    end
-  end
-
-  def test_user_method_callable
-    with_options(user_method: ->(controller) { controller.send(:true_user) }) do
-      get products_url
-      visit = Ahoy::Visit.last
-      assert_equal "True User", visit.user.name
-    end
-  end
-
-  def test_user_method_callable_request
-    with_options(user_method: ->(controller, request) { request.env["action_controller.instance"].send(:true_user) }) do
-      get products_url
-      visit = Ahoy::Visit.last
-      assert_equal "True User", visit.user.name
-    end
-  end
-
   def test_standard
     referrer = "http://www.example.com"
     get products_url, headers: {"Referer" => referrer}
@@ -113,16 +82,6 @@ class ControllerTest < ActionDispatch::IntegrationTest
     assert_equal "Created product", event.name
     product = Product.last
     assert_equal({"product_id" => product.id}, event.properties)
-  end
-
-  def test_authenticate
-    get products_url
-    visit = Ahoy::Visit.last
-    assert_nil visit.user
-    user = User.create!
-    get authenticate_products_url
-    visit.reload
-    assert_equal user, visit.user
   end
 
   def test_mask_ips
@@ -206,57 +165,6 @@ class ControllerTest < ActionDispatch::IntegrationTest
       end
       assert_equal 1, Ahoy::Visit.count
       assert_equal 1, Ahoy::Visit.pluck(:visitor_token).uniq.count
-    end
-  end
-
-  def test_cookies_true
-    get products_url
-    assert_equal ["ahoy_visit", "ahoy_visitor"], response.cookies.keys.sort
-  end
-
-  def test_cookies_false
-    with_options(cookies: false) do
-      get products_url
-      assert_empty response.cookies
-      visit = Ahoy::Visit.last
-      # deterministic tokens
-      if Rails::VERSION::MAJOR >= 7
-        assert_equal "f53976f4-229b-5ff7-9b66-98bbbbfac543", visit.visit_token
-        assert_equal "93dc5253-3a3b-561d-8d53-fb5476f02eca", visit.visitor_token
-      else
-        assert_equal "8924a60c-5c50-5d80-b38d-e6c68fcd0958", visit.visit_token
-        assert_equal "64dcde66-9659-5473-897e-5abd59f8b89f", visit.visitor_token
-      end
-
-      get products_url
-      assert_equal 1, Ahoy::Visit.count
-      assert_equal 2, Ahoy::Visit.last.events.count
-    end
-  end
-
-  def test_cookies_false_deletes_cookies
-    self.cookies["ahoy_visit"] = "test-token"
-    self.cookies["ahoy_visitor"] = "test-token"
-    self.cookies["ahoy_track"] = "true"
-
-    with_options(cookies: false) do
-      get products_url
-      expired = "max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT"
-      assert_equal 3, response.headers["Set-Cookie"].scan(expired).size
-    end
-  end
-
-  def test_cookie_options
-    with_options(cookie_options: {same_site: :lax}) do
-      get products_url
-      assert_match "SameSite=Lax", response.header["Set-Cookie"]
-    end
-  end
-
-  def test_cookie_domain
-    with_options(cookie_domain: :all) do
-      get products_url
-      assert_match "domain=.example.com", response.header["Set-Cookie"]
     end
   end
 
