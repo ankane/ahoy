@@ -500,6 +500,8 @@ Previously set cookies are automatically deleted. If you use JavaScript tracking
 ahoy.configure({cookies: false});
 ```
 
+Note: With anonymity sets, visits no longer expire after 4 hours of inactivity. A new visit is only created when the IP mask or user agent changes (for instance, when a user updates their browser). There are plans to address this in the next major version.
+
 ## Data Retention
 
 Data should only be retained for as long as it’s needed. Delete older data with:
