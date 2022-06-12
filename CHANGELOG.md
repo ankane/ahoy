@@ -1,4 +1,4 @@
-## 4.1.0 (unreleased)
+## 4.1.0 (2022-06-12)
 
 - Ensure `exclude_method` is only called once per request
 - Fixed error with Mongoid when `Mongoid.raise_not_found_error` is `true`
