@@ -1,3 +1,3 @@
 test:
-  adapter:  <%= ENV["ADAPTER"] || "sqlite3" %>
-  database: <%= ["postgresql", "mysql2"].include?(ENV["ADAPTER"]) ? "ahoy_test" : "db/combustion_test.sqlite" %>
+  adapter:  <%= ENV["AR_ADAPTER"] %>
+  database: <%= ["postgresql", "mysql2"].include?(ENV["AR_ADAPTER"]) ? "ahoy_test" : "db/combustion_test.sqlite" %>

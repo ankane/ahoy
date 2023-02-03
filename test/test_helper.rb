@@ -8,12 +8,6 @@ logger = ActiveSupport::Logger.new(ENV["VERBOSE"] ? STDOUT : nil)
 
 frameworks = [:action_controller, :active_job]
 
-if ENV["ADAPTER"] == "mysql"
-  ENV["ADAPTER"] = "mysql2"
-elsif ENV["ADAPTER"] == "sqlite"
-  ENV["ADAPTER"] = "sqlite3"
-end
-
 if ENV["ADAPTER"] == "mongoid"
   require_relative "support/mongoid"
 
@@ -25,6 +19,18 @@ if ENV["ADAPTER"] == "mongoid"
   Mongo::Logger.logger = logger
 else
   frameworks << :active_record
+
+  ENV["AR_ADAPTER"] =
+    case ENV["ADAPTER"]
+    when "mysql"
+      "mysql2"
+    when "sqlite", nil
+      "sqlite3"
+    when "postgresql"
+      "postgresql"
+    else
+      ENV["ADAPTER"]
+    end
 end
 
 Combustion.path = "test/internal"
