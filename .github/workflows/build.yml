@@ -27,25 +27,26 @@ jobs:
           bundler-cache: true
 
       - run: bundle exec rake test
-
-      - uses: ankane/setup-mongodb@v1
-      - run: ADAPTER=mongoid bundle exec rake test
-
       - run: bundle exec rake test:query_methods:sqlite
 
       - uses: ankane/setup-postgres@v1
         with:
           database: ahoy_test
+      - run: ADAPTER=postgresql bundle exec rake test
       - run: bundle exec rake test:query_methods:postgresql
 
       - uses: ankane/setup-mysql@v1
         with:
           database: ahoy_test
+      - run: ADAPTER=mysql2 bundle exec rake test
       - run: bundle exec rake test:query_methods:mysql
 
       - uses: ankane/setup-mariadb@v1
         with:
           database: ahoy_test
+      - run: ADAPTER=mysql2 bundle exec rake test
       - run: bundle exec rake test:query_methods:mysql
 
+      - uses: ankane/setup-mongodb@v1
+      - run: ADAPTER=mongoid bundle exec rake test
       - run: bundle exec rake test:query_methods:mongoid
