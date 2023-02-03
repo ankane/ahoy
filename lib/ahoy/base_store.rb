@@ -22,17 +22,15 @@ module Ahoy
     end
 
     def user
-      @user ||= begin
-        if Ahoy.user_method.respond_to?(:call)
-          if Ahoy.user_method.arity == 1
-            Ahoy.user_method.call(controller)
-          else
-            Ahoy.user_method.call(controller, request)
-          end
-        else
-          controller.send(Ahoy.user_method) if controller.respond_to?(Ahoy.user_method, true)
-        end
-      end
+      @user ||= defineable_ahoy_method(:user_method)
+    end
+
+    def additional_event_values
+      @additional_event_values ||= defineable_ahoy_method(:additional_event_values_method)
+    end
+
+    def additional_visit_values
+      @additional_visit_values ||= defineable_ahoy_method(:additional_visit_values_method)
     end
 
     def exclude?
@@ -96,6 +94,20 @@ module Ahoy
 
     def ahoy
       @ahoy ||= @options[:ahoy]
+    end
+
+    private
+
+    def defineable_ahoy_method(name)
+      if Ahoy.send(name).respond_to?(:call)
+        if Ahoy.send(name).arity == 1
+          Ahoy.send(name).call(controller)
+        else
+          Ahoy.send(name).call(controller, request)
+        end
+      else
+        controller.send(Ahoy.send(name)) if controller.respond_to?(Ahoy.send(name), true)
+      end
     end
   end
 end

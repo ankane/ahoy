@@ -71,6 +71,16 @@ module Ahoy
     (controller.respond_to?(:current_user, true) && controller.send(:current_user)) || (controller.respond_to?(:current_resource_owner, true) && controller.send(:current_resource_owner)) || nil
   end
 
+  mattr_accessor :additional_event_values_method
+  self.additional_event_values_method = lambda do |controller|
+    (controller.respond_to?(:ahoy_event_values, true) && controller.send(:ahoy_event_values))|| {}
+  end
+
+  mattr_accessor :additional_visit_values_method
+  self.additional_visit_values_method = lambda do |controller|
+    (controller.respond_to?(:ahoy_visit_values, true) && controller.send(:ahoy_visit_values))|| {}
+  end
+
   mattr_accessor :exclude_method
 
   mattr_accessor :track_bots

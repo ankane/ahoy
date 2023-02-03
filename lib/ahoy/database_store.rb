@@ -1,7 +1,9 @@
 module Ahoy
   class DatabaseStore < BaseStore
     def track_visit(data)
-      @visit = visit_model.create!(slice_data(visit_model, data))
+      @visit = visit_model.new(slice_data(visit_model, data))
+      @visit.assign_attributes(additional_visit_values)
+      @visit.save!
     rescue => e
       raise e unless unique_exception?(e)
 
@@ -15,6 +17,7 @@ module Ahoy
       visit = visit_or_create(started_at: data[:time])
       if visit
         event = event_model.new(slice_data(event_model, data))
+        event.assign_attributes(additional_event_values)
         event.visit = visit
         event.time = visit.started_at if event.time < visit.started_at
         begin
@@ -43,6 +46,7 @@ module Ahoy
     def authenticate(_)
       if visit && visit.respond_to?(:user) && !visit.user
         begin
+          visit.assign_attributes(additional_visit_values)
           visit.user = user
           visit.save!
         rescue ActiveRecord::AssociationTypeMismatch
