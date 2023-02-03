@@ -7,18 +7,18 @@ require "active_support/core_ext"
 require "safely/core"
 
 # modules
-require "ahoy/utils"
-require "ahoy/base_store"
-require "ahoy/controller"
-require "ahoy/database_store"
-require "ahoy/helper"
-require "ahoy/model"
-require "ahoy/query_methods"
-require "ahoy/tracker"
-require "ahoy/version"
-require "ahoy/visit_properties"
+require_relative "ahoy/utils"
+require_relative "ahoy/base_store"
+require_relative "ahoy/controller"
+require_relative "ahoy/database_store"
+require_relative "ahoy/helper"
+require_relative "ahoy/model"
+require_relative "ahoy/query_methods"
+require_relative "ahoy/tracker"
+require_relative "ahoy/version"
+require_relative "ahoy/visit_properties"
 
-require "ahoy/engine" if defined?(Rails)
+require_relative "ahoy/engine" if defined?(Rails)
 
 module Ahoy
   mattr_accessor :visit_duration
