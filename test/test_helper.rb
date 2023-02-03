@@ -8,6 +8,12 @@ logger = ActiveSupport::Logger.new(ENV["VERBOSE"] ? STDOUT : nil)
 
 frameworks = [:action_controller, :active_job]
 
+if ENV["ADAPTER"] == "mysql"
+  ENV["ADAPTER"] = "mysql2"
+elsif ENV["ADAPTER"] == "sqlite"
+  ENV["ADAPTER"] = "sqlite3"
+end
+
 if ENV["ADAPTER"] == "mongoid"
   require_relative "support/mongoid"
 

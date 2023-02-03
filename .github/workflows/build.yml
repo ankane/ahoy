@@ -38,13 +38,13 @@ jobs:
       - uses: ankane/setup-mysql@v1
         with:
           database: ahoy_test
-      - run: ADAPTER=mysql2 bundle exec rake test
+      - run: ADAPTER=mysql bundle exec rake test
       - run: bundle exec rake test:query_methods:mysql
 
       - uses: ankane/setup-mariadb@v1
         with:
           database: ahoy_test
-      - run: ADAPTER=mysql2 bundle exec rake test
+      - run: ADAPTER=mysql bundle exec rake test
       - run: bundle exec rake test:query_methods:mysql
 
       - uses: ankane/setup-mongodb@v1
