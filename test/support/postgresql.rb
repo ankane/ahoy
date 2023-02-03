@@ -1,5 +1,3 @@
-ActiveRecord::Base.establish_connection adapter: "postgresql", database: "ahoy_test"
-
 ActiveRecord::Schema.define do
   enable_extension "hstore"
 

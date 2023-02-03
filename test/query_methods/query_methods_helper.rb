@@ -1,11 +1,7 @@
 require_relative "../test_helper"
 
-adapter = ENV["ADAPTER"]
-abort "No adapter specified" unless adapter
-
-puts "Using #{adapter}"
-case adapter
-when "mysql"
+case ENV["ADAPTER"]
+when "mysql2"
   require_relative "../support/mysql"
 when "postgresql"
   require_relative "../support/postgresql"

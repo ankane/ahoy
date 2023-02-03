@@ -4,6 +4,9 @@ Bundler.require(:default)
 require "minitest/autorun"
 require "minitest/pride"
 
+ENV["ADAPTER"] ||= "sqlite3"
+puts "Using #{ENV["ADAPTER"]}"
+
 logger = ActiveSupport::Logger.new(ENV["VERBOSE"] ? STDOUT : nil)
 
 frameworks = [:action_controller, :active_job]
@@ -19,18 +22,6 @@ if ENV["ADAPTER"] == "mongoid"
   Mongo::Logger.logger = logger
 else
   frameworks << :active_record
-
-  ENV["AR_ADAPTER"] =
-    case ENV["ADAPTER"]
-    when "mysql"
-      "mysql2"
-    when "sqlite", nil
-      "sqlite3"
-    when "postgresql"
-      "postgresql"
-    else
-      ENV["ADAPTER"]
-    end
 end
 
 Combustion.path = "test/internal"

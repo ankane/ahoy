@@ -811,26 +811,10 @@ bundle install
 bundle exec rake test
 ```
 
-To test Mongoid, use:
+To test different adapters, use:
 
 ```sh
+ADAPTER=postgresql bundle exec rake test
+ADAPTER=mysql2 bundle exec rake test
 ADAPTER=mongoid bundle exec rake test
-```
-
-To test query methods, use:
-
-```sh
-# Postgres
-createdb ahoy_test
-bundle exec rake test:query_methods:postgresql
-
-# SQLite
-bundle exec rake test:query_methods:sqlite
-
-# MySQL and MariaDB
-mysqladmin create ahoy_test
-bundle exec rake test:query_methods:mysql
-
-# MongoDB
-bundle exec rake test:query_methods:mongoid
 ```

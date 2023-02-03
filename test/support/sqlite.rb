@@ -1,5 +1,3 @@
-ActiveRecord::Base.establish_connection adapter: "sqlite3", database: ":memory:"
-
 ActiveRecord::Schema.define do
   create_table :text_events, force: true do |t|
     t.string :name
