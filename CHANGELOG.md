@@ -1,3 +1,7 @@
+## 4.2.0 (unreleased)
+
+- Added primary key type to generated migration
+
 ## 4.1.0 (2022-06-12)
 
 - Ensure `exclude_method` is only called once per request

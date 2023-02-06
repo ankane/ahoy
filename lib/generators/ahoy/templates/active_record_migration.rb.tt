@@ -1,6 +1,6 @@
 class <%= migration_class_name %> < ActiveRecord::Migration<%= migration_version %>
   def change
-    create_table :ahoy_visits do |t|
+    create_table :ahoy_visits<%= primary_key_type %> do |t|
       t.string :visit_token
       t.string :visitor_token
 
@@ -8,7 +8,7 @@ class <%= migration_class_name %> < ActiveRecord::Migration<%= migration_version
       # simply remove any you don't want
 
       # user
-      t.references :user
+      t.references :user<%= foreign_key_type %>
 
       # standard
       t.string :ip
@@ -46,9 +46,9 @@ class <%= migration_class_name %> < ActiveRecord::Migration<%= migration_version
 
     add_index :ahoy_visits, :visit_token, unique: true
 
-    create_table :ahoy_events do |t|
-      t.references :visit
-      t.references :user
+    create_table :ahoy_events<%= primary_key_type %> do |t|
+      t.references :visit<%= foreign_key_type %>
+      t.references :user<%= foreign_key_type %>
 
       t.string :name
       t.<%= properties_type %> :properties

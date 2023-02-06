@@ -16,4 +16,14 @@ class ActiverecordGeneratorTest < Rails::Generators::TestCase
     assert_file "app/models/ahoy/event.rb", /Ahoy::Event < ApplicationRecord/
     assert_migration "db/migrate/create_ahoy_visits_and_events.rb", /create_table/
   end
+
+  def test_primary_key_type
+    skip if ENV["ADAPTER"] == "mongoid"
+
+    Rails.configuration.generators.stub(:options, {active_record: {primary_key_type: :uuid}}) do
+      run_generator
+    end
+    assert_migration "db/migrate/create_ahoy_visits_and_events.rb", /id: :uuid/
+    assert_migration "db/migrate/create_ahoy_visits_and_events.rb", /type: :uuid/
+  end
 end
