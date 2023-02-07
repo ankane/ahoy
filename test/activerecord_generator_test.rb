@@ -7,9 +7,12 @@ class ActiverecordGeneratorTest < Rails::Generators::TestCase
   destination File.expand_path("../tmp", __dir__)
   setup :prepare_destination
 
-  def test_works
+  def setup
     skip if ENV["ADAPTER"] == "mongoid"
+    super
+  end
 
+  def test_works
     run_generator
     assert_file "config/initializers/ahoy.rb", /DatabaseStore/
     assert_file "app/models/ahoy/visit.rb", /Ahoy::Visit < ApplicationRecord/
@@ -18,8 +21,6 @@ class ActiverecordGeneratorTest < Rails::Generators::TestCase
   end
 
   def test_primary_key_type
-    skip if ENV["ADAPTER"] == "mongoid"
-
     Rails.configuration.generators.stub(:options, {active_record: {primary_key_type: :uuid}}) do
       run_generator
     end
