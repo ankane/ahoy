@@ -1,16 +1,15 @@
 /*!
- * Ahoy.js
+ * Ahoy.js v0.4.1
  * Simple, powerful JavaScript analytics
  * https://github.com/ankane/ahoy.js
- * v0.4.0
  * MIT License
  */
 
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
-  (global = global || self, global.ahoy = factory());
-}(this, (function () { 'use strict';
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.ahoy = factory());
+})(this, (function () { 'use strict';
 
   // https://www.quirksmode.org/js/cookies.html
 
@@ -67,7 +66,7 @@
 
   ahoy.configure = function (options) {
     for (var key in options) {
-      if (options.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(options, key)) {
         config[key] = options[key];
       }
     }
@@ -102,7 +101,7 @@
   function serialize(object) {
     var data = new FormData();
     for (var key in object) {
-      if (object.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(object, key)) {
         data.append(key, object[key]);
       }
     }
@@ -170,6 +169,9 @@
     document.addEventListener(eventName, function (e) {
       var matchedElement = matchesSelector(e.target, selector);
       if (matchedElement) {
+        var skip = getClosest(matchedElement, "data-ahoy-skip");
+        if (skip !== null && skip !== "false") { return; }
+
         callback.call(matchedElement, e);
       }
     });
@@ -186,8 +188,9 @@
 
   // https://stackoverflow.com/a/2117523/1177228
   function generateId() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = Math.random() * 16 | 0;
+      var v = c === 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
     });
   }
@@ -237,11 +240,11 @@
         xhr.withCredentials = config.withCredentials;
         xhr.setRequestHeader("Content-Type", "application/json");
         for (var header in config.headers) {
-          if (config.headers.hasOwnProperty(header)) {
+          if (Object.prototype.hasOwnProperty.call(config.headers, header)) {
             xhr.setRequestHeader(header, config.headers[header]);
           }
         }
-        xhr.onload = function() {
+        xhr.onload = function () {
           if (xhr.status === 200) {
             success();
           }
@@ -266,11 +269,11 @@
   }
 
   function trackEvent(event) {
-    ahoy.ready( function () {
-      sendRequest(eventsUrl(), eventData(event), function() {
+    ahoy.ready(function () {
+      sendRequest(eventsUrl(), eventData(event), function () {
         // remove from queue
         for (var i = 0; i < eventQueue.length; i++) {
-          if (eventQueue[i].id == event.id) {
+          if (eventQueue[i].id === event.id) {
             eventQueue.splice(i, 1);
             break;
           }
@@ -281,7 +284,7 @@
   }
 
   function trackEventNow(event) {
-    ahoy.ready( function () {
+    ahoy.ready(function () {
       var data = eventData(event);
       var param = csrfParam();
       var token = csrfToken();
@@ -303,7 +306,7 @@
 
   function cleanObject(obj) {
     for (var key in obj) {
-      if (obj.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
         if (obj[key] === null) {
           delete obj[key];
         }
@@ -318,14 +321,14 @@
       id: presence(this.id),
       "class": presence(this.className),
       page: page(),
-      section: getClosestSection(this)
+      section: getClosest(this, "data-section")
     });
   }
 
-  function getClosestSection(element) {
-    for ( ; element && element !== document; element = element.parentNode) {
-      if (element.hasAttribute('data-section')) {
-        return element.getAttribute('data-section');
+  function getClosest(element, attribute) {
+    for (; element && element !== document; element = element.parentNode) {
+      if (element.hasAttribute(attribute)) {
+        return element.getAttribute(attribute);
       }
     }
 
@@ -377,7 +380,7 @@
         }
 
         for (var key in config.visitParams) {
-          if (config.visitParams.hasOwnProperty(key)) {
+          if (Object.prototype.hasOwnProperty.call(config.visitParam, key)) {
             data[key] = config.visitParams[key];
           }
         }
@@ -431,12 +434,12 @@
       js: true
     };
 
-    ahoy.ready( function () {
+    ahoy.ready(function () {
       if (config.cookies && !ahoy.getVisitId()) {
         createVisit();
       }
 
-      ahoy.ready( function () {
+      ahoy.ready(function () {
         log(event);
 
         event.visit_token = ahoy.getVisitId();
@@ -449,7 +452,7 @@
           saveEventQueue();
 
           // wait in case navigating to reduce duplicate events
-          setTimeout( function () {
+          setTimeout(function () {
             trackEvent(event);
           }, 1000);
         }
@@ -467,8 +470,8 @@
     };
 
     if (additionalProperties) {
-      for(var propName in additionalProperties) {
-        if (additionalProperties.hasOwnProperty(propName)) {
+      for (var propName in additionalProperties) {
+        if (Object.prototype.hasOwnProperty.call(additionalProperties, propName)) {
           properties[propName] = additionalProperties[propName];
         }
       }
@@ -482,7 +485,7 @@
     }
     onEvent("click", selector, function (e) {
       var properties = eventProperties.call(this, e);
-      properties.text = properties.tag == "input" ? this.value : (this.textContent || this.innerText || this.innerHTML).replace(/[\s\r\n]+/g, " ").trim();
+      properties.text = properties.tag === "input" ? this.value : (this.textContent || this.innerText || this.innerHTML).replace(/[\s\r\n]+/g, " ").trim();
       properties.href = this.href;
       ahoy.track("$click", properties);
     });
@@ -526,7 +529,7 @@
     ahoy.start = function () {};
   };
 
-  documentReady(function() {
+  documentReady(function () {
     if (config.startOnReady) {
       ahoy.start();
     }
@@ -534,4 +537,4 @@
 
   return ahoy;
 
-})));
+}));
