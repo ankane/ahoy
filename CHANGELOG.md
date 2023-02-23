@@ -1,3 +1,7 @@
+## 4.2.1 (unreleased)
+
+- Updated Ahoy.js to 0.4.2
+
 ## 4.2.0 (2023-02-07)
 
 - Added primary key type to generated migration

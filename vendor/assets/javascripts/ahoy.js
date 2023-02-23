@@ -1,5 +1,5 @@
 /*!
- * Ahoy.js v0.4.1
+ * Ahoy.js v0.4.2
  * Simple, powerful JavaScript analytics
  * https://github.com/ankane/ahoy.js
  * MIT License
@@ -380,7 +380,7 @@
         }
 
         for (var key in config.visitParams) {
-          if (Object.prototype.hasOwnProperty.call(config.visitParam, key)) {
+          if (Object.prototype.hasOwnProperty.call(config.visitParams, key)) {
             data[key] = config.visitParams[key];
           }
         }
