@@ -1,4 +1,4 @@
-## 4.2.1 (unreleased)
+## 4.2.1 (2023-02-23)
 
 - Updated Ahoy.js to 0.4.2
 
