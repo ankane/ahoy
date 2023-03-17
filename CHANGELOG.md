@@ -1,3 +1,7 @@
+## 4.2.2 (unreleased)
+
+- Fixed deprecation warning with Rails 7.1
+
 ## 4.2.1 (2023-02-23)
 
 - Updated Ahoy.js to 0.4.2

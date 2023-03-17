@@ -33,6 +33,10 @@ module Ahoy
         properties_type == "text" || (properties_type == "json" && ActiveRecord::Base.connection.try(:mariadb?))
       end
 
+      def serialize_options
+        ActiveRecord::VERSION::STRING.to_f >= 7.1 ? "coder: JSON" : "JSON"
+      end
+
       # use connection_config instead of connection.adapter
       # so database connection isn't needed
       def adapter

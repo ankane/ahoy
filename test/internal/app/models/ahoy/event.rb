@@ -6,5 +6,9 @@ class Ahoy::Event < ApplicationRecord
   belongs_to :visit
   belongs_to :user, optional: true
 
-  serialize :properties, JSON
+  if ActiveRecord::VERSION::STRING.to_f >= 7.1
+    serialize :properties, coder: JSON
+  else
+    serialize :properties, JSON
+  end
 end

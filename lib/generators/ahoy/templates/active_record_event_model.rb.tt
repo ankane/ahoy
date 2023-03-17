@@ -6,5 +6,5 @@ class Ahoy::Event < ApplicationRecord
   belongs_to :visit
   belongs_to :user, optional: true<% if serialize_properties? %>
 
-  serialize :properties, JSON<% end %>
+  serialize :properties, <%= serialize_options %><% end %>
 end

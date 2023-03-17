@@ -37,21 +37,28 @@ class CookiesTest < ActionDispatch::IntegrationTest
     with_options(cookies: false) do
       get products_url
       expired = "max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT"
-      assert_equal 3, response.headers["Set-Cookie"].scan(expired).size
+      assert_equal 3, set_cookie_header.scan(expired).size
     end
   end
 
   def test_cookie_options
     with_options(cookie_options: {same_site: :lax}) do
       get products_url
-      assert_match "SameSite=Lax", response.header["Set-Cookie"]
+      assert_match "SameSite=Lax", set_cookie_header
     end
   end
 
   def test_cookie_domain
     with_options(cookie_domain: :all) do
       get products_url
-      assert_match "domain=.example.com", response.header["Set-Cookie"]
+      assert_match "domain=.example.com", set_cookie_header
     end
+  end
+
+  private
+
+  def set_cookie_header
+    header = response.header["Set-Cookie"]
+    header.is_a?(Array) ? header.join("\n") : header
   end
 end
