@@ -284,6 +284,14 @@ By default, a new visit is created after 4 hours of inactivity. Change this with
 Ahoy.visit_duration = 30.minutes
 ```
 
+### Visitor Duration
+
+By default, a new `visitor_token` is set after 2 years. Change this with:
+
+```ruby
+Ahoy.visitor_duration = 30.days
+```
+
 ### Cookies
 
 To track visits across multiple subdomains, use:
