@@ -3,6 +3,7 @@ module Ahoy
     attr_writer :user
 
     def initialize(options)
+      @user = options[:user]
       @options = options
     end
 
