@@ -14,8 +14,6 @@ jobs:
             gemfile: gemfiles/rails61.gemfile
           - ruby: 2.7
             gemfile: gemfiles/rails60.gemfile
-          - ruby: 2.6
-            gemfile: gemfiles/rails52.gemfile
     runs-on: ubuntu-latest
     env:
       BUNDLE_GEMFILE: ${{ matrix.gemfile }}

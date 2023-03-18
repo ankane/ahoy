@@ -1,6 +1,8 @@
-## 4.2.2 (unreleased)
+## 5.0.0 (unreleased)
 
 - Fixed deprecation warning with Rails 7.1
+- Dropped support for Ruby < 2.7 and Rails < 6
+- Dropped support for Mongoid 6
 
 ## 4.2.1 (2023-02-23)
 
