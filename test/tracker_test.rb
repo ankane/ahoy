@@ -36,19 +36,17 @@ class TrackerTest < Minitest::Test
     assert_equal user.id, event.user_id
   end
 
-  def test_user_option_with_user_usage_in_store
-    Ahoy::Store.define_method(:track_event) do |data|
+  def test_user_option_in_store
+    user = OpenStruct.new(id: 123, user_prop: 42)
+    ahoy = Ahoy::Tracker.new(user: user)
+    ahoy.instance_variable_get(:@store).define_singleton_method(:track_event) do |data|
       data[:properties][:user_prop] = user.try(:user_prop)
       super(data)
     end
 
-    user = OpenStruct.new(id: 123, user_prop: 42)
-    ahoy = Ahoy::Tracker.new(user: user)
-    ahoy.track('Some event', some_prop: true)
+    ahoy.track("Some event", some_prop: true)
 
     event = Ahoy::Event.last
-    assert_equal user.user_prop, event.properties['user_prop']
-  ensure
-    Ahoy::Store.remove_method :track_event
+    assert_equal user.user_prop, event.properties["user_prop"]
   end
 end
