@@ -1,8 +1,6 @@
 require_relative "test_helper"
 
 class GeocodeTest < ActionDispatch::IntegrationTest
-  include ActiveJob::TestHelper # for Rails < 6
-
   def test_geocode_true
     with_options(geocode: true) do
       assert_enqueued_with(job: Ahoy::GeocodeV2Job, queue: "ahoy") do
