@@ -368,7 +368,7 @@ For privacy and performance, we recommend geocoding locally. Add this line to yo
 gem "maxminddb"
 ```
 
-For city-level geocoding, download the [GeoLite2 City database](https://dev.maxmind.com/geoip/geoip2/geolite2/) and create `config/initializers/geocoder.rb` with:
+For city-level geocoding, download the [GeoLite2 City database](https://dev.maxmind.com/geoip/geolite2-free-geolocation-data) and create `config/initializers/geocoder.rb` with:
 
 ```ruby
 Geocoder.configure(
