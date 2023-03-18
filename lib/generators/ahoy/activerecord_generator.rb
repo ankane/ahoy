@@ -47,10 +47,6 @@ module Ahoy
         end
       end
 
-      def rails52?
-        ActiveRecord::VERSION::STRING.to_f >= 5.2
-      end
-
       def migration_version
         "[#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}]"
       end
