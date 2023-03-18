@@ -33,6 +33,10 @@ module Ahoy
 
       if defer && !Ahoy.cookies
         # avoid calling new_visit?, which triggers a database call
+      elsif !Ahoy.cookies && ahoy.exclude?
+        # avoid calling new_visit?, which triggers a database call
+        # may or may not be a new visit
+        Ahoy.log("Request excluded")
       elsif ahoy.new_visit?
         ahoy.track_visit(defer: defer)
       end
