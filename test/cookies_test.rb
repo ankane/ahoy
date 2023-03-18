@@ -16,10 +16,8 @@ class CookiesTest < ActionDispatch::IntegrationTest
       # https://github.com/rails/rails/issues/37681
       # https://github.com/rails/rails/pull/37682
       if Rails::VERSION::MAJOR >= 7
-        assert_equal "f53976f4-229b-5ff7-9b66-98bbbbfac543", visit.visit_token
         assert_equal "93dc5253-3a3b-561d-8d53-fb5476f02eca", visit.visitor_token
       else
-        assert_equal "8924a60c-5c50-5d80-b38d-e6c68fcd0958", visit.visit_token
         assert_equal "64dcde66-9659-5473-897e-5abd59f8b89f", visit.visitor_token
       end
 

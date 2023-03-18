@@ -1,5 +1,6 @@
 ## 5.0.0 (unreleased)
 
+- Changed visits to expire with anonymity sets
 - Fixed deprecation warning with Rails 7.1
 - Dropped support for Ruby < 2.7 and Rails < 6
 - Dropped support for Mongoid 6

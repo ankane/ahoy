@@ -207,7 +207,7 @@ module Ahoy
     def visit_token_helper
       @visit_token_helper ||= begin
         token = existing_visit_token
-        token ||= visit_anonymity_set unless Ahoy.cookies
+        token ||= visit&.visit_token unless Ahoy.cookies
         token ||= generate_id unless Ahoy.api_only
         token
       end
@@ -238,10 +238,6 @@ module Ahoy
         token ||= visitor_param if api?
         token
       end
-    end
-
-    def visit_anonymity_set
-      @visit_anonymity_set ||= Digest::UUID.uuid_v5(UUID_NAMESPACE, ["visit", Ahoy.mask_ip(request.remote_ip), request.user_agent].join("/"))
     end
 
     def visitor_anonymity_set

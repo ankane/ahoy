@@ -78,7 +78,7 @@ class ControllerTest < ActionDispatch::IntegrationTest
       travel 5.hours do
         get products_url
       end
-      assert_equal 1, Ahoy::Visit.count
+      assert_equal 2, Ahoy::Visit.count
       assert_equal 1, Ahoy::Visit.pluck(:visitor_token).uniq.count
     end
   end
@@ -98,7 +98,7 @@ class ControllerTest < ActionDispatch::IntegrationTest
       travel 3.years do
         get products_url
       end
-      assert_equal 1, Ahoy::Visit.count
+      assert_equal 2, Ahoy::Visit.count
       assert_equal 1, Ahoy::Visit.pluck(:visitor_token).uniq.count
     end
   end

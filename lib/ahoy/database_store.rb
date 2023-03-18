@@ -53,8 +53,12 @@ module Ahoy
 
     def visit
       unless defined?(@visit)
-        # find_by raises error by default with Mongoid when not found
-        @visit = visit_model.where(visit_token: ahoy.visit_token).take if ahoy.visit_token
+        if ahoy.send(:existing_visit_token)
+          # find_by raises error by default with Mongoid when not found
+          @visit = visit_model.where(visit_token: ahoy.visit_token).take if ahoy.visit_token
+        elsif !Ahoy.cookies && ahoy.visitor_token
+          @visit = visit_model.where(visitor_token: ahoy.visitor_token).where(started_at: Ahoy.visit_duration.ago..).order(started_at: :desc).first
+        end
       end
       @visit
     end
