@@ -464,7 +464,7 @@ end
 
 ### Anonymity Sets & Cookies
 
-Ahoy can switch from cookies to [anonymity sets](https://privacypatterns.org/patterns/Anonymity-set). Instead of cookies, visitors with the same IP mask and user agent are grouped together in an anonymity set.
+Ahoy can switch from cookies to [anonymity sets](https://privacypatterns.org/patterns/Anonymity-set). Instead of cookies, visitors with the same IP mask and user agent are grouped together in an anonymity set.
 
 ```ruby
 Ahoy.cookies = false
