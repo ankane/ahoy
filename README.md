@@ -318,7 +318,7 @@ Ahoy.token_generator = -> { ULID.generate }
 
 ### Throttling
 
-You can use [Rack::Attack](https://github.com/kickstarter/rack-attack) to throttle requests to the API.
+You can use [Rack::Attack](https://github.com/rack/rack-attack) to throttle requests to the API.
 
 ```ruby
 class Rack::Attack
