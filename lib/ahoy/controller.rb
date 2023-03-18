@@ -6,7 +6,7 @@ module Ahoy
         base.helper_method :ahoy
       end
       base.before_action :track_ahoy_visit, unless: -> { Ahoy.api_only }
-      base.around_action :set_ahoy_request_store
+      base.around_action :set_ahoy_request_store, unless: -> { Ahoy.api_only }
     end
 
     def ahoy
