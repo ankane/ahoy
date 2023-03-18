@@ -310,10 +310,10 @@ You can also [disable cookies](#anonymity-sets--cookies)
 
 ### Token Generation
 
-Ahoy uses random UUIDs for visit and visitor tokens by default, but you can use your own generator like [Druuid](https://github.com/recurly/druuid).
+Ahoy uses random UUIDs for visit and visitor tokens by default, but you can use your own generator like [ULID](https://github.com/rafaelsales/ulid).
 
 ```ruby
-Ahoy.token_generator = -> { Druuid.gen }
+Ahoy.token_generator = -> { ULID.generate }
 ```
 
 ### Throttling
