@@ -80,7 +80,27 @@ class ApiTest < ActionDispatch::IntegrationTest
   end
 
   def test_time
-    # todo
+    freeze_time
+
+    visit = random_visit(started_at: 1.hour.ago)
+    event_params = {
+      visit_token: visit.visit_token,
+      visitor_token: visit.visitor_token,
+      events_json: [
+        {
+          id: random_token,
+          name: "Test",
+          properties: {},
+          time: 2.minutes.ago
+        }
+      ].to_json
+    }
+
+    post ahoy_engine.events_url, params: event_params
+    assert_response :success
+
+    event = Ahoy::Event.last
+    assert_equal Time.current, event.time
   end
 
   def test_before_action
@@ -101,11 +121,11 @@ class ApiTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def random_visit
+  def random_visit(started_at: nil)
     Ahoy::Visit.create!(
       visit_token: random_token,
       visitor_token: random_token,
-      started_at: Time.current.round # so it's not ahead of event
+      started_at: started_at || Time.current.round # so it's not ahead of event
     )
   end
 
