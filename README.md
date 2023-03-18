@@ -286,7 +286,7 @@ Ahoy.visit_duration = 30.minutes
 
 ### Visitor Duration
 
-By default, a new `visitor_token` is set after 2 years. Change this with:
+By default, a new `visitor_token` is generated after 2 years. Change this with:
 
 ```ruby
 Ahoy.visitor_duration = 30.days
