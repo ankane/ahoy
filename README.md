@@ -210,7 +210,7 @@ visitable :sign_up_visit
 
 ### Users
 
-Ahoy automatically attaches the `current_user` to the visit. With [Devise](https://github.com/plataformatec/devise), it attaches the user even if they sign in after the visit starts.
+Ahoy automatically attaches the `current_user` to the visit. With [Devise](https://github.com/heartcombo/devise), it attaches the user even if they sign in after the visit starts.
 
 With other authentication frameworks, add this to the end of your sign in method:
 
