@@ -51,7 +51,7 @@ class ExcludeTest < ActionDispatch::IntegrationTest
       calls += 1
       request.parameters["exclude"] == "t"
     end
-    with_options(exclude_method: exclude_method, cookies: false) do
+    with_options(exclude_method: exclude_method, cookies: :none) do
       get products_url, params: {"exclude" => "t"}
       assert_equal 0, Ahoy::Visit.count
       assert_equal 1, calls

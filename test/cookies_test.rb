@@ -7,7 +7,14 @@ class CookiesTest < ActionDispatch::IntegrationTest
   end
 
   def test_cookies_false
-    with_options(cookies: false) do
+    error = assert_raises do
+      Ahoy.cookies = false
+    end
+    assert_match "This feature requires a new index", error.message
+  end
+
+  def test_cookies_none
+    with_options(cookies: :none) do
       get products_url
       assert_empty response.cookies
       visit = Ahoy::Visit.last
@@ -27,12 +34,12 @@ class CookiesTest < ActionDispatch::IntegrationTest
     end
   end
 
-  def test_cookies_false_deletes_cookies
+  def test_cookies_none_deletes_cookies
     self.cookies["ahoy_visit"] = "test-token"
     self.cookies["ahoy_visitor"] = "test-token"
     self.cookies["ahoy_track"] = "true"
 
-    with_options(cookies: false) do
+    with_options(cookies: :none) do
       get products_url
       expired = "max-age=0; expires=Thu, 01 Jan 1970 00:00:00 GMT"
       assert_equal 3, set_cookie_header.scan(expired).size

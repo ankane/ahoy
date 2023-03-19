@@ -72,8 +72,8 @@ class ControllerTest < ActionDispatch::IntegrationTest
     assert_equal 1, Ahoy::Visit.pluck(:visitor_token).uniq.count
   end
 
-  def test_visit_duration_cookies_false
-    with_options(cookies: false) do
+  def test_visit_duration_cookies_none
+    with_options(cookies: :none) do
       get products_url
       travel 5.hours do
         get products_url
@@ -92,8 +92,8 @@ class ControllerTest < ActionDispatch::IntegrationTest
     assert_equal 2, Ahoy::Visit.pluck(:visitor_token).uniq.count
   end
 
-  def test_visitor_duration_cookies_false
-    with_options(cookies: false) do
+  def test_visitor_duration_cookies_none
+    with_options(cookies: :none) do
       get products_url
       travel 3.years do
         get products_url

@@ -14,7 +14,7 @@ class TrackerTest < Minitest::Test
   def test_no_cookies
     request = ActionDispatch::TestRequest.create
 
-    with_options(cookies: false) do
+    with_options(cookies: :none) do
       ahoy = Ahoy::Tracker.new(request: request)
       ahoy.track("Some event", some_prop: true)
     end

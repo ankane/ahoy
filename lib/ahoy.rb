@@ -27,7 +27,23 @@ module Ahoy
   mattr_accessor :visitor_duration
   self.visitor_duration = 2.years
 
-  mattr_accessor :cookies
+  def self.cookies=(value)
+    if value == false
+      # TODO add Mongoid instructions
+      raise <<~EOS
+        This feature requires a new index in Ahoy 5. Create a migration:
+
+          add_index :ahoy_visits, [:visitor_token, :started_at]
+
+        Run it before upgrading, and set:
+
+          Ahoy.cookies = :none
+      EOS
+    end
+    @@cookies = value
+  end
+
+  mattr_reader :cookies
   self.cookies = true
 
   # TODO deprecate in favor of cookie_options
@@ -92,6 +108,10 @@ module Ahoy
 
   def self.log(message)
     logger.info { "[ahoy] #{message}" } if logger
+  end
+
+  def self.cookies?
+    cookies && cookies != :none
   end
 
   def self.mask_ip(ip)
