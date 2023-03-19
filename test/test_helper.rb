@@ -20,6 +20,11 @@ if ENV["ADAPTER"] == "mongoid"
 
   Mongoid.logger = logger
   Mongo::Logger.logger = logger
+
+  [Ahoy::Visit, Ahoy::Event].each do |model|
+    model.collection.drop
+    model.create_indexes
+  end
 else
   frameworks << :active_record
 end
