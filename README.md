@@ -306,6 +306,16 @@ Set other [cookie options](https://api.rubyonrails.org/classes/ActionDispatch/Co
 Ahoy.cookie_options = {same_site: :lax}
 ```
 
+The `ahoy_visit` cookie will automatically renew with each request and you can opt-in to the same
+behavior for the `ahoy_visitor` token using:
+
+```ruby
+Ahoy.renew_vistor_token_each_request = true
+```
+
+When enabled, the `ahoy_visitor` cookie will have its expiration set to `Ahoy.visitor_duration`
+from the time of the request. 
+
 You can also [disable cookies](#anonymity-sets--cookies)
 
 ### Token Generation

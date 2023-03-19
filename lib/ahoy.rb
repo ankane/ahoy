@@ -27,6 +27,9 @@ module Ahoy
   mattr_accessor :visitor_duration
   self.visitor_duration = 2.years
 
+  mattr_accessor :renew_vistor_token_each_request
+  self.renew_vistor_token_each_request = false
+
   def self.cookies=(value)
     if value == false
       # TODO add Mongoid instructions

@@ -111,7 +111,7 @@ module Ahoy
     end
 
     def set_visitor_cookie
-      if new_visitor?
+      if new_visitor? || Ahoy.renew_vistor_token_each_request
         set_cookie("ahoy_visitor", visitor_token, Ahoy.visitor_duration)
       end
     end
