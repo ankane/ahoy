@@ -207,7 +207,7 @@ module Ahoy
     def visit_token_helper
       @visit_token_helper ||= begin
         token = existing_visit_token
-        token ||= visit&.visit_token unless Ahoy.cookies?
+        token ||= visit&.visit_token || visit_anonymity_sets[1] unless Ahoy.cookies?
         token ||= generate_id unless Ahoy.api_only
         token
       end
@@ -237,6 +237,16 @@ module Ahoy
         token ||= visitor_cookie if Ahoy.cookies? && !(api? && Ahoy.protect_from_forgery)
         token ||= visitor_param if api?
         token
+      end
+    end
+
+    def visit_anonymity_sets
+      @visit_anonymity_sets ||= begin
+        now = Time.current
+        # get next, current, and previous to minimize clock sync issues
+        [now + Ahoy.visit_duration, now, now - Ahoy.visit_duration].map do |time|
+          Digest::UUID.uuid_v5(UUID_NAMESPACE, ["visit", Ahoy.mask_ip(request.remote_ip), request.user_agent, time_bucket(time)].join("/"))
+        end
       end
     end
 
@@ -275,6 +285,10 @@ module Ahoy
 
     def debug(message)
       Ahoy.log message
+    end
+
+    def time_bucket(time)
+      Time.at(time.to_i / Ahoy.visit_duration.to_i * Ahoy.visit_duration.to_i).utc.iso8601(0)
     end
   end
 end

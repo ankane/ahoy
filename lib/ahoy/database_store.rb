@@ -56,8 +56,16 @@ module Ahoy
         if ahoy.send(:existing_visit_token)
           # find_by raises error by default with Mongoid when not found
           @visit = visit_model.where(visit_token: ahoy.visit_token).take if ahoy.visit_token
-        elsif !Ahoy.cookies? && ahoy.visitor_token
-          @visit = visit_model.where(visitor_token: ahoy.visitor_token).where(started_at: Ahoy.visit_duration.ago..).order(started_at: :desc).first
+        elsif !Ahoy.cookies?
+          visit_tokens = ahoy.send(:visit_anonymity_sets)
+          visits =
+            if defined?(Mongoid::Document) && visit_model < Mongoid::Document
+              visit_model.in(visit_token: visit_tokens).to_a
+            else
+              visit_model.where(visit_token: visit_tokens).to_a
+            end
+          # TODO for next and current tokens, do not check started_at
+          @visit = visits.select { |v| v.started_at >= Ahoy.visit_duration.ago }.sort_by(&:started_at).last
         else
           @visit = nil
         end
