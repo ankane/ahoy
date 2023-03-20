@@ -58,6 +58,8 @@ module Ahoy
           @visit = visit_model.where(visit_token: ahoy.visit_token).take if ahoy.visit_token
         elsif !Ahoy.cookies? && ahoy.visitor_token
           @visit = visit_model.where(visitor_token: ahoy.visitor_token).where(started_at: Ahoy.visit_duration.ago..).order(started_at: :desc).first
+        else
+          @visit = nil
         end
       end
       @visit
