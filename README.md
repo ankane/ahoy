@@ -364,7 +364,7 @@ Ahoy.job_queue = :low_priority
 
 For privacy and performance, we recommend geocoding locally.
 
-For city-level geocoding, download the [GeoLite2 City database](https://dev.maxmind.com/geoip/geolite2-free-geolocation-data)
+For city-level geocoding, download the [GeoLite2 City database](https://dev.maxmind.com/geoip/geolite2-free-geolocation-data).
 
 Add this line to your application’s Gemfile:
 
