@@ -21,6 +21,9 @@ require_relative "ahoy/visit_properties"
 require_relative "ahoy/engine" if defined?(Rails)
 
 module Ahoy
+  # activejob optional
+  autoload :GeocodeV2Job, "ahoy/geocode_v2_job"
+
   mattr_accessor :visit_duration
   self.visit_duration = 4.hours
 
