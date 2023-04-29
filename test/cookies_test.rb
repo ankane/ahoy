@@ -56,7 +56,9 @@ class CookiesTest < ActionDispatch::IntegrationTest
   def test_cookie_domain
     with_options(cookie_domain: :all) do
       get products_url
-      assert_match "domain=.example.com", set_cookie_header
+      # leading dot removed in Rails 7.1
+      # https://github.com/rails/rails/pull/48036
+      assert_match /domain=.?example\.com/, set_cookie_header
     end
   end
 
