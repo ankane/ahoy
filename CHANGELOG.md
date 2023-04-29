@@ -3,7 +3,7 @@
 - Changed visits to expire with anonymity sets
 - Fixed error when Active Job is not available
 - Fixed deprecation warning with Rails 7.1
-- Dropped support for Ruby < 2.7 and Rails < 6
+- Dropped support for Ruby < 3 and Rails < 6
 - Dropped support for Mongoid 6
 
 ## 4.2.1 (2023-02-23)
