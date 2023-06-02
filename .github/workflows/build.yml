@@ -12,8 +12,6 @@ jobs:
             gemfile: Gemfile
           - ruby: "3.0"
             gemfile: gemfiles/rails61.gemfile
-          - ruby: "3.0"
-            gemfile: gemfiles/rails60.gemfile
     runs-on: ubuntu-latest
     env:
       BUNDLE_GEMFILE: ${{ matrix.gemfile }}
