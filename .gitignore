@@ -16,5 +16,5 @@ test/tmp
 test/version_tmp
 tmp
 *.log
-*.sqlite
+*.sqlite*
 *.lock
