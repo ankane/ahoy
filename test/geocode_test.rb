@@ -5,7 +5,11 @@ module Geocoder
     require "ostruct"
 
     [OpenStruct.new(
-      country: "Test"
+      country: "Country",
+      state: "Region",
+      city: "City",
+      latitude: 1,
+      longitude: 2
     )]
   end
 end
@@ -17,7 +21,12 @@ class GeocodeTest < ActionDispatch::IntegrationTest
         get products_url
       end
       perform_enqueued_jobs
-      assert_equal "Test", Ahoy::Visit.last.country
+      visit = Ahoy::Visit.last
+      assert_equal "Country", visit.country
+      assert_equal "Region", visit.region
+      assert_equal "City", visit.city
+      assert_equal 1, visit.latitude
+      assert_equal 2, visit.longitude
     end
   end
 
@@ -27,7 +36,12 @@ class GeocodeTest < ActionDispatch::IntegrationTest
         get products_url
       end
       perform_enqueued_jobs
-      assert_equal "Test", Ahoy::Visit.last.country
+      visit = Ahoy::Visit.last
+      assert_equal "Country", visit.country
+      assert_equal "Region", visit.region
+      assert_equal "City", visit.city
+      assert_equal 1, visit.latitude
+      assert_equal 2, visit.longitude
     end
   end
 
