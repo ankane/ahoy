@@ -45,6 +45,23 @@ class GeocodeTest < ActionDispatch::IntegrationTest
     end
   end
 
+  def test_geocode_failed
+    with_options(geocode: true) do
+      assert_enqueued_with(job: Ahoy::GeocodeV2Job, queue: "ahoy") do
+        get products_url
+      end
+      Geocoder.stub(:search, []) do
+        perform_enqueued_jobs
+      end
+      visit = Ahoy::Visit.last
+      assert_nil visit.country
+      assert_nil visit.region
+      assert_nil visit.city
+      assert_nil visit.latitude
+      assert_nil visit.longitude
+    end
+  end
+
   def test_geocode_false
     with_options(geocode: false) do
       get products_url
