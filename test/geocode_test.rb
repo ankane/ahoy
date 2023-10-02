@@ -20,8 +20,9 @@ class GeocodeTest < ActionDispatch::IntegrationTest
       assert_enqueued_with(job: Ahoy::GeocodeV2Job, queue: "ahoy") do
         get products_url
       end
-      perform_enqueued_jobs
       visit = Ahoy::Visit.last
+      perform_enqueued_jobs
+      visit.reload
       assert_equal "Country", visit.country
       assert_equal "Region", visit.region
       assert_equal "City", visit.city
@@ -35,8 +36,9 @@ class GeocodeTest < ActionDispatch::IntegrationTest
       assert_enqueued_with(job: Ahoy::GeocodeV2Job, queue: "ahoy") do
         get products_url
       end
-      perform_enqueued_jobs
       visit = Ahoy::Visit.last
+      perform_enqueued_jobs
+      visit.reload
       assert_equal "Country", visit.country
       assert_equal "Region", visit.region
       assert_equal "City", visit.city
@@ -50,10 +52,11 @@ class GeocodeTest < ActionDispatch::IntegrationTest
       assert_enqueued_with(job: Ahoy::GeocodeV2Job, queue: "ahoy") do
         get products_url
       end
+      visit = Ahoy::Visit.last
       Geocoder.stub(:search, []) do
         perform_enqueued_jobs
       end
-      visit = Ahoy::Visit.last
+      visit.reload
       assert_nil visit.country
       assert_nil visit.region
       assert_nil visit.city
