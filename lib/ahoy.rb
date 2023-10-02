@@ -32,16 +32,29 @@ module Ahoy
 
   def self.cookies=(value)
     if value == false
-      # TODO add Mongoid instructions
-      raise <<~EOS
-        This feature requires a new index in Ahoy 5. Create a migration:
+      if defined?(Mongoid::Document) && defined?(Ahoy::Visit) && Ahoy::Visit < Mongoid::Document
+        raise <<~EOS
+          This feature requires a new index in Ahoy 5. Set:
 
-          add_index :ahoy_visits, [:visitor_token, :started_at]
+            class Ahoy::Visit
+              index({visitor_token: 1, started_at: 1})
+            end
 
-        Run it before upgrading, and set:
+          Create the index before upgrading, and set:
 
-          Ahoy.cookies = :none
-      EOS
+            Ahoy.cookies = :none
+        EOS
+      else
+        raise <<~EOS
+          This feature requires a new index in Ahoy 5. Create a migration with:
+
+            add_index :ahoy_visits, [:visitor_token, :started_at]
+
+          Run it before upgrading, and set:
+
+            Ahoy.cookies = :none
+        EOS
+      end
     end
     @@cookies = value
   end
