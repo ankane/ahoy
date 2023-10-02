@@ -1,3 +1,7 @@
+## 5.0.1 (unreleased)
+
+- Fixed error with geocoding with anonymity sets
+
 ## 5.0.0 (2023-10-01)
 
 - Changed visits to expire with anonymity sets

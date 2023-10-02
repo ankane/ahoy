@@ -53,7 +53,7 @@ module Ahoy
 
     def visit
       unless defined?(@visit)
-        if ahoy.send(:existing_visit_token)
+        if ahoy.send(:existing_visit_token) || ahoy.instance_variable_get(:@visit_token)
           # find_by raises error by default with Mongoid when not found
           @visit = visit_model.where(visit_token: ahoy.visit_token).take if ahoy.visit_token
         elsif !Ahoy.cookies? && ahoy.visitor_token
