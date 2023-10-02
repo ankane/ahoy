@@ -1,4 +1,4 @@
-## 5.0.1 (unreleased)
+## 5.0.1 (2023-10-01)
 
 - Fixed error with geocoding with anonymity sets
 
