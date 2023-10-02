@@ -444,7 +444,7 @@ class Ahoy::Store < Ahoy::DatabaseStore
 end
 
 Ahoy.mask_ips = true
-Ahoy.cookies = false
+Ahoy.cookies = :none
 ```
 
 This:
@@ -485,16 +485,16 @@ end
 Ahoy can switch from cookies to [anonymity sets](https://privacypatterns.org/patterns/Anonymity-set). Instead of cookies, visitors with the same IP mask and user agent are grouped together in an anonymity set.
 
 ```ruby
-Ahoy.cookies = false
+Ahoy.cookies = :none
 ```
+
+Note: If Ahoy was installed before v5, [add an index](#5-0) before making this change.
 
 Previously set cookies are automatically deleted. If you use JavaScript tracking, also set:
 
 ```javascript
 ahoy.configure({cookies: false});
 ```
-
-Note: With anonymity sets, visits no longer expire after 4 hours of inactivity. A new visit is only created when the IP mask or user agent changes (for instance, when a user updates their browser). There are plans to address this in the next major version.
 
 ## Data Retention
 
@@ -771,19 +771,29 @@ Send a `POST` request to `/ahoy/events` with `Content-Type: application/json` an
 
 ## Upgrading
 
-### 4.0
+### 5.0
 
-There are two notable changes to geocoding:
+Visits now expire with anonymity sets. If using `Ahoy.cookies = false`, a new index is needed.
 
-1. Geocoding is now disabled by default (this was already the case for new installations with 3.2.0+). Check out the instructions for [how to enable it](#geocoding).
+For Active Record, create a migration with:
 
-2. The `geocoder` gem is now an optional dependency. To use geocoding, add it to your Gemfile:
+```ruby
+add_index :ahoy_visits, [:visitor_token, :started_at]
+```
 
-  ```ruby
-  gem "geocoder"
-  ```
+For Mongoid, set:
 
-Also, check out the [upgrade notes](https://github.com/ankane/ahoy.js#upgrading) for Ahoy.js.
+```ruby
+class Ahoy::Visit
+  index({visitor_token: 1, started_at: 1})
+end
+```
+
+Create the index before upgrading, and set:
+
+```ruby
+Ahoy.cookies = :none
+```
 
 ## History
 
