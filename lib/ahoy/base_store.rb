@@ -37,7 +37,9 @@ module Ahoy
     end
 
     def exclude?
-      (!Ahoy.track_bots && bot?) || exclude_by_method?
+      (!Ahoy.track_bots && bot?) ||
+        exclude_by_method? ||
+        (defined?(Rails::HealthController) && controller.is_a?(Rails::HealthController))
     end
 
     def generate_id

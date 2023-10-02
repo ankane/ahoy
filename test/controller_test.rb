@@ -147,6 +147,13 @@ class ControllerTest < ActionDispatch::IntegrationTest
     assert_equal ahoy.visitor_token, "badtoken"
   end
 
+  def test_rails_health_check
+    skip if Rails::VERSION::STRING.to_f < 7.1
+
+    get rails_health_check_path
+    assert_equal 0, Ahoy::Visit.count
+  end
+
   private
 
   def make_request(cookies: {}, headers: {})

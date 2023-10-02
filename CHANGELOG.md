@@ -1,3 +1,7 @@
+## 5.0.2 (unreleased)
+
+- Excluded visits from Rails health check
+
 ## 5.0.1 (2023-10-01)
 
 - Fixed error with geocoding with anonymity sets
