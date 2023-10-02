@@ -633,7 +633,7 @@ end
 
 [Blazer](https://github.com/ankane/blazer) is a great tool for exploring your data.
 
-With ActiveRecord, you can do:
+With Active Record, you can do:
 
 ```ruby
 Ahoy::Visit.group(:search_keyword).count
