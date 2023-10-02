@@ -46,4 +46,5 @@ class Ahoy::Visit
   field :started_at, type: Time
 
   index({visit_token: 1}, {unique: true})
+  index({visitor_token: 1, started_at: 1})
 end

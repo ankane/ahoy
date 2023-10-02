@@ -45,6 +45,7 @@ class <%= migration_class_name %> < ActiveRecord::Migration<%= migration_version
     end
 
     add_index :ahoy_visits, :visit_token, unique: true
+    add_index :ahoy_visits, [:visitor_token, :started_at]
 
     create_table :ahoy_events<%= primary_key_type %> do |t|
       t.references :visit<%= foreign_key_type %>
