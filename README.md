@@ -4,6 +4,8 @@
 
 Track visits and events in Ruby, JavaScript, and native apps. Data is stored in your database by default, and you can customize it for any data store as you grow.
 
+**Ahoy 5.0 was recently released** - see [how to upgrade](#upgrading)
+
 :postbox: Check out [Ahoy Email](https://github.com/ankane/ahoy_email) for emails and [Field Test](https://github.com/ankane/field_test) for A/B testing
 
 :tangerine: Battle-tested at [Instacart](https://www.instacart.com/opensource)
