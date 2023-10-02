@@ -1,11 +1,33 @@
 require_relative "test_helper"
 
+module Geocoder
+  def self.search(ip)
+    require "ostruct"
+
+    [OpenStruct.new(
+      country: "Test"
+    )]
+  end
+end
+
 class GeocodeTest < ActionDispatch::IntegrationTest
   def test_geocode_true
     with_options(geocode: true) do
       assert_enqueued_with(job: Ahoy::GeocodeV2Job, queue: "ahoy") do
         get products_url
       end
+      perform_enqueued_jobs
+      assert_equal "Test", Ahoy::Visit.last.country
+    end
+  end
+
+  def test_geocode_true_cookies_none
+    with_options(geocode: true, cookies: :none) do
+      assert_enqueued_with(job: Ahoy::GeocodeV2Job, queue: "ahoy") do
+        get products_url
+      end
+      perform_enqueued_jobs
+      assert_equal "Test", Ahoy::Visit.last.country
     end
   end
 
