@@ -197,7 +197,7 @@ Order.joins(:ahoy_visit).group("device_type").count
 Here’s what the migration to add the `ahoy_visit_id` column should look like:
 
 ```ruby
-class AddAhoyVisitToOrders < ActiveRecord::Migration[7.0]
+class AddAhoyVisitToOrders < ActiveRecord::Migration[7.1]
   def change
     add_reference :orders, :ahoy_visit
   end
