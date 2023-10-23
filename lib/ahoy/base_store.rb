@@ -59,9 +59,9 @@ module Ahoy
             if Ahoy.user_agent_parser == :device_detector
               detector = DeviceDetector.new(request.user_agent)
               if Ahoy.bot_detection_version == 2
-                detector.bot? || (detector.device_type.nil? && detector.os_name.nil?)
+                detector.bot? || (detector.device_type.nil? && detector.os_name.nil?) || not_listed_bot?
               else
-                detector.bot?
+                detector.bot? || not_listed_bot?
               end
             else
               # no need to throw friendly error if browser isn't defined
@@ -99,6 +99,12 @@ module Ahoy
 
     def ahoy
       @ahoy ||= @options[:ahoy]
+    end
+
+    private
+
+    def not_listed_bot?
+      request.user_agent =~ /.com|bot/
     end
   end
 end

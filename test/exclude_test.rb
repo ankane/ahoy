@@ -29,6 +29,13 @@ class ExcludeTest < ActionDispatch::IntegrationTest
     end
   end
 
+  def test_not_listed_bot_detection
+    with_options(track_bots: false) do
+      get products_url, headers: {"User-Agent" => not_listed_bot_user_agent}
+      assert_equal 0, Ahoy::Visit.count
+    end
+  end
+
   def test_exclude_method
     calls = 0
     exclude_method = lambda do |controller, request|
@@ -65,5 +72,9 @@ class ExcludeTest < ActionDispatch::IntegrationTest
 
   def bot_user_agent
     "Mozilla/5.0 (compatible; DuckDuckBot-Https/1.1; https://duckduckgo.com/duckduckbot)"
+  end
+
+  def not_listed_bot_user_agent
+    'Mozilla/5.0 (netping.com; Linux x86_64) netping.com/1.25 python-httpx/0.14.3'
   end
 end
