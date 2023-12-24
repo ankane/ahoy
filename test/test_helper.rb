@@ -31,12 +31,10 @@ end
 
 Combustion.path = "test/internal"
 Combustion.initialize!(*frameworks) do
+  config.load_defaults Rails::VERSION::STRING.to_f
+
   if ENV["ADAPTER"] != "mongoid"
     config.active_record.logger = logger
-  end
-
-  if ActiveSupport::VERSION::MAJOR >= 7
-    config.active_support.use_rfc4122_namespaced_uuids = true
   end
 
   config.action_controller.logger = logger
