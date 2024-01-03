@@ -49,4 +49,18 @@ class TrackerTest < Minitest::Test
     event = Ahoy::Event.last
     assert_equal user.user_prop, event.properties["user_prop"]
   end
+
+  def test_with_store
+    other_store = Class.new(Ahoy::BaseStore)
+    user = OpenStruct.new(id: 123, user_prop: 42)
+    ahoy = Ahoy::Tracker.new(user: user)
+
+    assert_kind_of Ahoy::Store, ahoy.store
+
+    ahoy.with_store other_store do |store|
+      assert_kind_of other_store, store
+      assert_kind_of other_store, ahoy.store
+      assert_equal ahoy.store, store
+    end
+  end
 end

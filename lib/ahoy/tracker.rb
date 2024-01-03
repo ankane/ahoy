@@ -4,7 +4,7 @@ module Ahoy
   class Tracker
     UUID_NAMESPACE = "a82ae811-5011-45ab-a728-569df7499c5f"
 
-    attr_reader :request, :controller
+    attr_reader :request, :controller, :store
 
     def initialize(**options)
       @store = Ahoy::Store.new(options.merge(ahoy: self))
@@ -150,6 +150,18 @@ module Ahoy
         @exclude = @store.exclude?
       end
       @exclude
+    end
+
+    def with_store(store, &block)
+      if store.is_a?(Class)
+        store = store.new(@store.instance_variable_get(:@options))
+      end
+
+      @store, original = store, @store
+
+      @store.yield_self(&block)
+    ensure
+      @store = original
     end
 
     protected

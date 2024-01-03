@@ -1,3 +1,7 @@
+## Unreleased
+
+- Introduce `Ahoy::Tracker#with_store` to temporarily swap stores
+
 ## 5.0.2 (2023-10-05)
 
 - Excluded visits from Rails health check

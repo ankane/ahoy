@@ -587,6 +587,14 @@ end
 
 Data stores are designed to be highly customizable so you can scale as you grow. Check out [examples](docs/Data-Store-Examples.md) for Kafka, RabbitMQ, Fluentd, NATS, NSQ, and Amazon Kinesis Firehose.
 
+To temporarily switch to another store, call `ahoy.with_store(store_class, &block)`:
+
+```ruby
+ahoy.with_store Ahoy::CustomStore do |custom_store|
+  # use a different store
+end
+```
+
 ### Track Additional Data
 
 ```ruby
