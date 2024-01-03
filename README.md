@@ -621,11 +621,11 @@ end
 
 ```ruby
 class Ahoy::Store < Ahoy::DatabaseStore
-  def visit_model
+  def visit_model(**data)
     MyVisit
   end
 
-  def event_model
+  def event_model(**data)
     MyEvent
   end
 end

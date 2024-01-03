@@ -1,3 +1,7 @@
+## Unreleased
+
+- Pass `data` to `Ahoy::DatabaseStore#visit_model` and `Ahoy::DatabaseStore#event_model`
+
 ## 5.0.2 (2023-10-05)
 
 - Excluded visits from Rails health check
