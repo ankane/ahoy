@@ -212,12 +212,18 @@ visitable :sign_up_visit
 
 ### Users
 
-Ahoy automatically attaches the `current_user` to the visit. With [Devise](https://github.com/heartcombo/devise), it attaches the user even if they sign in after the visit starts.
+Ahoy automatically attaches the `current_user` to the visit. With [Devise](https://github.com/heartcombo/devise), it attaches the user even if they sign in after the visit starts. It also resets the tracker's associated user after they sign out.
 
 With other authentication frameworks, add this to the end of your sign in method:
 
 ```ruby
 ahoy.authenticate(user)
+```
+
+Add this to the end of your sign out method:
+
+```ruby
+ahoy.reset
 ```
 
 To see the visits for a given user, create an association:

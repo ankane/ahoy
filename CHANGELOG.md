@@ -1,3 +1,7 @@
+## Unreleased
+
+- Add `before_logout` hook to Warden that calls `ahoy.reset`
+
 ## 5.0.2 (2023-10-05)
 
 - Excluded visits from Rails health check
