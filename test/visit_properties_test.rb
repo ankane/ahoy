@@ -37,6 +37,7 @@ class VisitPropertiesTest < ActionDispatch::IntegrationTest
     assert_equal user_agent, visit.user_agent
     assert_equal "Firefox", visit.browser
     assert_equal "Mac", visit.os
+    assert_equal "10.15", visit.os_version
     assert_equal "Desktop", visit.device_type
   end
 
@@ -49,6 +50,7 @@ class VisitPropertiesTest < ActionDispatch::IntegrationTest
       assert_equal user_agent, visit.user_agent
       assert_equal "Firefox", visit.browser
       assert_equal "Mac OS X", visit.os
+      assert_equal "10.15", visit.os_version
       assert_equal "Desktop", visit.device_type
     end
   end

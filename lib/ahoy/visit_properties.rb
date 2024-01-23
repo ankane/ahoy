@@ -59,6 +59,7 @@ module Ahoy
         {
           browser: client.name,
           os: client.os_name,
+          os_version: client.os_full_version,
           device_type: device_type
         }
       else
@@ -89,6 +90,7 @@ module Ahoy
         {
           browser: agent.name,
           os: agent.os.name,
+          os_version: agent.os.version,
           device_type: device_type
         }
       end

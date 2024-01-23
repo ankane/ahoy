@@ -1,3 +1,7 @@
+## Unreleased
+
+- Infer OS version from User Agent string when available
+
 ## 5.0.2 (2023-10-05)
 
 - Excluded visits from Rails health check
