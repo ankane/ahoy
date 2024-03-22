@@ -18,7 +18,7 @@ module Ahoy
     end
 
     def set_ahoy_cookies
-      if Ahoy.cookies?
+      if ahoy.cookies?
         ahoy.set_visitor_cookie
         ahoy.set_visit_cookie
       else
@@ -30,9 +30,9 @@ module Ahoy
     def track_ahoy_visit
       defer = Ahoy.server_side_visits != true
 
-      if defer && !Ahoy.cookies?
+      if defer && !ahoy.cookies?
         # avoid calling new_visit?, which triggers a database call
-      elsif !Ahoy.cookies? && ahoy.exclude?
+      elsif !ahoy.cookies? && ahoy.exclude?
         # avoid calling new_visit?, which triggers a database call
         # may or may not be a new visit
         Ahoy.log("Request excluded")

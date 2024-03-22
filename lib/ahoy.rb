@@ -62,6 +62,8 @@ module Ahoy
   mattr_reader :cookies
   self.cookies = true
 
+  mattr_accessor :cookies_method
+
   # TODO deprecate in favor of cookie_options
   mattr_accessor :cookie_domain
 
