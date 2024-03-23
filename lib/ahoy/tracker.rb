@@ -76,6 +76,8 @@ module Ahoy
     def authenticate(user)
       if exclude?
         debug "Authentication excluded"
+      elsif !cookies?
+        debug "Authentication not possible for anonymity set"
       else
         @store.user = user
 
