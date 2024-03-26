@@ -21,7 +21,7 @@ module Ahoy
         case adapter
         when /postg/i # postgres, postgis
           "jsonb"
-        when /mysql/i
+        when /mysql|trilogy/i
           "json"
         else
           "text"

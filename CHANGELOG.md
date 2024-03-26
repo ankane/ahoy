@@ -1,3 +1,7 @@
+## 5.0.3 (unreleased)
+
+- Added support for Trilogy
+
 ## 5.0.2 (2023-10-05)
 
 - Excluded visits from Rails health check

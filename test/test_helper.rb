@@ -29,6 +29,10 @@ else
   frameworks << :active_record
 end
 
+if ENV["ADAPTER"] == "trilogy"
+  Combustion::Database::Reset::OPERATOR_PATTERNS[Combustion::Databases::MySQL] << /trilogy/
+end
+
 Combustion.path = "test/internal"
 Combustion.initialize!(*frameworks) do
   config.load_defaults Rails::VERSION::STRING.to_f

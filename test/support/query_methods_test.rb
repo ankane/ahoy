@@ -174,11 +174,11 @@ module QueryMethodsTest
   end
 
   def mysql?
-    self.class.name =~ /mysql/i && !model.connection.try(:mariadb?)
+    self.class.name =~ /mysql|trilogy/i && !model.connection.try(:mariadb?)
   end
 
   def mariadb?
-    self.class.name =~ /mysql/i && model.connection.try(:mariadb?)
+    self.class.name =~ /mysql|trilogy/i && model.connection.try(:mariadb?)
   end
 
   def hstore?

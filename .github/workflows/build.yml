@@ -35,11 +35,13 @@ jobs:
         with:
           database: ahoy_test
       - run: ADAPTER=mysql2 bundle exec rake test
+      - run: ADAPTER=trilogy bundle exec rake test
 
       - uses: ankane/setup-mariadb@v1
         with:
           database: ahoy_test
       - run: ADAPTER=mysql2 bundle exec rake test
+      - run: ADAPTER=trilogy bundle exec rake test
 
       - uses: ankane/setup-mongodb@v1
       - run: ADAPTER=mongoid bundle exec rake test

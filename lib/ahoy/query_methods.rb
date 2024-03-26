@@ -14,7 +14,7 @@ module Ahoy
         case adapter_name
         when "mongoid"
           where(properties.to_h { |k, v| ["properties.#{k}", v] })
-        when /mysql/
+        when /mysql|trilogy/
           where("JSON_CONTAINS(properties, ?, '$') = 1", properties.to_json)
         when /postgres|postgis/
           case columns_hash["properties"].type
@@ -54,7 +54,7 @@ module Ahoy
         case adapter_name
         when "mongoid"
           raise "Adapter not supported: #{adapter_name}"
-        when /mysql/
+        when /mysql|trilogy/
           props.each do |prop|
             quoted_prop = connection.quote("$.#{prop}")
             relation = relation.group("JSON_UNQUOTE(JSON_EXTRACT(properties, #{quoted_prop}))")
