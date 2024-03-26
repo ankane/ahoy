@@ -1,5 +1,5 @@
 /*!
- * Ahoy.js v0.4.2
+ * Ahoy.js v0.4.4
  * Simple, powerful JavaScript analytics
  * https://github.com/ankane/ahoy.js
  * MIT License
@@ -188,6 +188,10 @@
 
   // https://stackoverflow.com/a/2117523/1177228
   function generateId() {
+    if (window.crypto && window.crypto.randomUUID) {
+      return window.crypto.randomUUID();
+    }
+
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
       var r = Math.random() * 16 | 0;
       var v = c === 'x' ? r : (r & 0x3 | 0x8);
