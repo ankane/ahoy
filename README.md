@@ -439,21 +439,14 @@ Ahoy provides a number of options to help with [GDPR compliance](https://en.wiki
 Update `config/initializers/ahoy.rb` with:
 
 ```ruby
-class Ahoy::Store < Ahoy::DatabaseStore
-  def authenticate(data)
-    # disables automatic linking of visits and users
-  end
-end
-
 Ahoy.mask_ips = true
 Ahoy.cookies = :none
 ```
 
 This:
-
 - Masks IP addresses
 - Switches from cookies to anonymity sets
-- Disables automatic linking of visits and users
+- Ahoy will not link visits and users, because anonymity visits could belong to many users.
 
 If you use JavaScript tracking, also set:
 
@@ -497,6 +490,34 @@ Previously set cookies are automatically deleted. If you use JavaScript tracking
 ```javascript
 ahoy.configure({cookies: false});
 ```
+
+#### Allow cookies if consent given
+
+This flow allows to track user data when consent is given.
+In the first visit, the visit is not linked to the user, and data is anonymous.
+When the user accepts analytics consent, then we can create a new visit that is automatically linked to the user.
+
+```javascript
+const cookie_analytics_consent = document.cookie.split(';').map(cookie => cookie.trim().split('=')[0]).includes('cookie_analytics_consent')
+
+ahoy.configure({cookies: cookie_analytics_consent});
+```
+
+```ruby
+# config/initializers/ahoy.rb
+
+Ahoy.cookies_method = lambda do |_controller, request|
+  request.cookies["cookie_analytics_consent"]
+end
+```
+
+When the user consents, trigger a new visit:
+```
+ahoy.configure({cookies: cookie_analytics_consent});
+ahoy.trackView({"cookie_analytics_consent": cookie_analytics_consent})
+```
+
+Ahoy will automatically authenticate users which have given cookie consent.
 
 ## Data Retention
 
