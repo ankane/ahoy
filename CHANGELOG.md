@@ -1,4 +1,4 @@
-## 5.1.0 (unreleased)
+## 5.1.0 (2024-03-26)
 
 - Added support for Trilogy
 - Updated Ahoy.js to 0.4.4
