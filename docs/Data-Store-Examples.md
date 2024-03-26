@@ -238,3 +238,41 @@ class Ahoy::Store < Ahoy::BaseStore
   end
 end
 ```
+
+### Amazon SQS
+
+Add [aws-sdk-sqs](https://github.com/aws/aws-sdk-ruby) to your Gemfile.
+
+```ruby
+class Ahoy::Store < Ahoy::BaseStore
+  def track_visit(data)
+    post("ahoy_visits", data)
+  end
+
+  def track_event(data)
+    post("ahoy_events", data)
+  end
+
+  def geocode(data)
+    post("ahoy_geocode", data)
+  end
+
+  def authenticate(data)
+    post("ahoy_auth", data)
+  end
+
+  private
+
+  def post(queue_name, data)
+    sqs.send_message(queue_url: queue_url(queue_name), message_body: data.to_json)
+  end
+
+  def sqs
+    @sqs ||= Aws::SQS::Client.new
+  end
+
+  def queue_url(queue_name)
+    ENV["SQS_QUEUE_URL_#{queue_name.upcase}"] || "https://sqs.YOUR_REGION.amazonaws.com/YOUR_ACCOUNT_ID/#{queue_name}"
+  end
+end
+
