@@ -11,5 +11,7 @@ module Ahoy
         visitor_id: ahoy.visitor_token
       }
     end
+
+    ActiveSupport.run_load_hooks(:ahoy_visits_controller, self)
   end
 end

@@ -39,5 +39,7 @@ module Ahoy
         render plain: "Payload too large\n", status: :payload_too_large
       end
     end
+
+    ActiveSupport.run_load_hooks(:ahoy_base_controller, self)
   end
 end
