@@ -10,7 +10,7 @@ gem "sqlite3", "< 2"
 gem "pg"
 gem "mysql2"
 gem "activerecord-trilogy-adapter"
-gem "mongoid"
+gem "mongoid", "~> 8"
 gem "browser", "~> 2.0"
 gem "user_agent_parser"
 
