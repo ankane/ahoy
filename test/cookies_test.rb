@@ -49,7 +49,7 @@ class CookiesTest < ActionDispatch::IntegrationTest
   def test_cookie_options
     with_options(cookie_options: {same_site: :lax}) do
       get products_url
-      assert_match /SameSite=Lax/i, set_cookie_header
+      assert_match /samesite=lax/i, set_cookie_header
     end
   end
 
