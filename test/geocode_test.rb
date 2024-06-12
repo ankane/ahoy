@@ -1,10 +1,10 @@
 require_relative "test_helper"
 
 module Geocoder
-  def self.search(ip)
-    require "ostruct"
+  Result = Struct.new(:country, :state, :city, :latitude, :longitude, keyword_init: true)
 
-    [OpenStruct.new(
+  def self.search(ip)
+    [Result.new(
       country: "Country",
       state: "Region",
       city: "City",
