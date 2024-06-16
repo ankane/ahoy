@@ -121,6 +121,12 @@ class ApiTest < ActionDispatch::IntegrationTest
     end
   end
 
+  def test_missing_params
+    post ahoy_engine.events_url
+    assert_response :bad_request
+    assert_equal "Missing required parameters\n", response.body
+  end
+
   def random_visit(started_at: nil)
     Ahoy::Visit.create!(
       visit_token: random_token,
