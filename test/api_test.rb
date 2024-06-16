@@ -79,7 +79,7 @@ class ApiTest < ActionDispatch::IntegrationTest
     assert_equal name, event.name
   end
 
-  def test_time
+  def test_event_time
     freeze_time
 
     visit = random_visit(started_at: 1.hour.ago)
