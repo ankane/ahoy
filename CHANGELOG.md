@@ -1,3 +1,7 @@
+## 5.2.0 (unreleased)
+
+- Improved error handling for invalid API parameters
+
 ## 5.1.0 (2024-03-26)
 
 - Added support for Trilogy
