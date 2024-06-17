@@ -103,6 +103,20 @@ class ApiTest < ActionDispatch::IntegrationTest
     assert_equal Time.current, event.time
   end
 
+  def test_event_bad_json
+    visit = random_visit
+
+    event_params = {
+      visit_token: visit.visit_token,
+      visitor_token: visit.visitor_token,
+      events_json: "bad"
+    }
+    post ahoy_engine.events_url, params: event_params
+    assert_response :success
+
+    assert_equal 0, Ahoy::Event.count
+  end
+
   def test_before_action
     post ahoy_engine.visits_url, params: {visit_token: random_token, visitor_token: random_token}
     assert_nil controller.ran_before_action
