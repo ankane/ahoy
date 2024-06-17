@@ -135,6 +135,23 @@ class ApiTest < ActionDispatch::IntegrationTest
     end
   end
 
+  def test_max_events_per_request
+    visit = random_visit
+    events = 10.times.map { random_event }
+
+    with_options(max_events_per_request: 5) do
+      event_params = {
+        visit_token: visit.visit_token,
+        visitor_token: visit.visitor_token,
+        events_json: events.to_json
+      }
+      post ahoy_engine.events_url, params: event_params
+      assert_response :success
+
+      assert_equal 5, Ahoy::Event.count
+    end
+  end
+
   def test_missing_params
     post ahoy_engine.events_url
     assert_response :bad_request
@@ -147,6 +164,15 @@ class ApiTest < ActionDispatch::IntegrationTest
       visitor_token: random_token,
       started_at: started_at || Time.current.round # so it's not ahead of event
     )
+  end
+
+  def random_event
+    {
+      id: random_token,
+      name: "Test",
+      properties: {},
+      time: Time.current.round
+    }
   end
 
   def random_token
