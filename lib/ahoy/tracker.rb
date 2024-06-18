@@ -49,7 +49,7 @@ module Ahoy
             visit_token: visit_token,
             visitor_token: visitor_token,
             user_id: user.try(:id),
-            started_at: trusted_time(started_at),
+            started_at: trusted_time(started_at)
           }.merge(visit_properties).select { |_, v| v }
 
           @store.track_visit(data)
