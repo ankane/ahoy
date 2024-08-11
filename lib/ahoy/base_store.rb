@@ -57,7 +57,7 @@ module Ahoy
         @bot = begin
           if request
             if Ahoy.user_agent_parser == :device_detector
-              detector = DeviceDetector.new(request.user_agent)
+              detector = DeviceDetector.new(request.user_agent, request.headers)
               if Ahoy.bot_detection_version == 2
                 detector.bot? || (detector.device_type.nil? && detector.os_name.nil?)
               else

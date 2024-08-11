@@ -45,7 +45,7 @@ module Ahoy
 
     def tech_properties
       if Ahoy.user_agent_parser == :device_detector
-        client = DeviceDetector.new(request.user_agent)
+        client = DeviceDetector.new(request.user_agent, request.headers)
         device_type =
           case client.device_type
           when "smartphone"
