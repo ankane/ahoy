@@ -1,4 +1,4 @@
-## 5.2.0 (unreleased)
+## 5.2.0 (2024-09-04)
 
 - Improved error handling for invalid API parameters
 
