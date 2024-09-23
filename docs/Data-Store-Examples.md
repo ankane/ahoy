@@ -238,3 +238,46 @@ class Ahoy::Store < Ahoy::BaseStore
   end
 end
 ```
+
+### OpenSearch
+
+Add [opensearch-ruby](https://github.com/opensearch-project/opensearch-ruby) to your Gemfile.
+
+```ruby
+class Ahoy::Store < Ahoy::BaseStore
+  def track_visit(data)
+    post("ahoy_visits", data)
+  end
+
+  def track_event(data)
+    post("ahoy_events", data)
+  end
+
+  def geocode(data)
+    post("ahoy_geocode", data)
+  end
+
+  def authenticate(data)
+    post("ahoy_auth", data)
+  end
+
+  private
+
+  def post(topic, data)
+    response = client.index(
+      index: topic,
+      body: data.to_json,
+      refresh: true
+    )
+  end
+
+  def client
+    @client ||= OpenSearch::Client.new(
+      host: OPENSEARCH_HOST,
+      user: OPENSEARCH_USER,
+      password: OPENSEARCH_PASSWORD,
+      transport_argss: { ssl: { verify: true } }  # For testing only. Use certificate for validation.
+    )
+  end
+end
+```
