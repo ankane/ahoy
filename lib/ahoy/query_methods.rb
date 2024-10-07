@@ -10,13 +10,13 @@ module Ahoy
       def where_props(properties)
         return all if properties.empty?
 
-        adapter_name = respond_to?(:connection) ? connection.adapter_name.downcase : "mongoid"
+        adapter_name = respond_to?(:connection_db_config) ? connection_db_config.adapter.to_s : "mongoid"
         case adapter_name
         when "mongoid"
           where(properties.to_h { |k, v| ["properties.#{k}", v] })
-        when /mysql|trilogy/
+        when /mysql|trilogy/i
           where("JSON_CONTAINS(properties, ?, '$') = 1", properties.to_json)
-        when /postgres|postgis/
+        when /postg/i
           case columns_hash["properties"].type
           when :hstore
             properties.inject(all) do |relation, (k, v)|
@@ -31,7 +31,7 @@ module Ahoy
           else
             where("properties::jsonb @> ?", properties.to_json)
           end
-        when /sqlite/
+        when /sqlite/i
           properties.inject(all) do |relation, (k, v)|
             if v.nil?
               relation.where("JSON_EXTRACT(properties, ?) IS NULL", "$.#{k}")
@@ -50,16 +50,16 @@ module Ahoy
         props.flatten!
 
         relation = all
-        adapter_name = respond_to?(:connection) ? connection.adapter_name.downcase : "mongoid"
+        adapter_name = respond_to?(:connection_db_config) ? connection_db_config.adapter.to_s : "mongoid"
         case adapter_name
         when "mongoid"
           raise "Adapter not supported: #{adapter_name}"
-        when /mysql|trilogy/
+        when /mysql|trilogy/i
           props.each do |prop|
-            quoted_prop = connection.quote("$.#{prop}")
+            quoted_prop = connection_pool.with_connection { |c| c.quote("$.#{prop}") }
             relation = relation.group("JSON_UNQUOTE(JSON_EXTRACT(properties, #{quoted_prop}))")
           end
-        when /postgres|postgis/
+        when /postg/i
           # convert to jsonb to fix
           # could not identify an equality operator for type json
           # and for text columns
@@ -67,12 +67,12 @@ module Ahoy
           cast = [:jsonb, :hstore].include?(column_type) ? "" : "::jsonb"
 
           props.each do |prop|
-            quoted_prop = connection.quote(prop)
+            quoted_prop = connection_pool.with_connection { |c| c.quote(prop) }
             relation = relation.group("properties#{cast} -> #{quoted_prop}")
           end
-        when /sqlite/
+        when /sqlite/i
           props.each do |prop|
-            quoted_prop = connection.quote("$.#{prop}")
+            quoted_prop = connection_pool.with_connection { |c| c.quote("$.#{prop}") }
             relation = relation.group("JSON_EXTRACT(properties, #{quoted_prop})")
           end
         else

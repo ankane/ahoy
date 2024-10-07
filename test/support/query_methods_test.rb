@@ -157,6 +157,18 @@ module QueryMethodsTest
     end
   end
 
+  def test_connection_leasing
+    skip if mongoid?
+
+    ActiveRecord::Base.connection_handler.clear_active_connections!
+    assert_nil ActiveRecord::Base.connection_pool.active_connection?
+    ActiveRecord::Base.connection_pool.with_connection do
+      count_events(value: 1)
+      group_events
+    end
+    assert_nil ActiveRecord::Base.connection_pool.active_connection?
+  end
+
   def create_event(properties)
     model.create(properties: properties)
   end
@@ -185,7 +197,11 @@ module QueryMethodsTest
     self.class.name == "PostgresqlHstoreTest"
   end
 
+  def mongoid?
+    self.class.name == "MongoidTest"
+  end
+
   def group_supported?
-    self.class.name != "MongoidTest"
+    !mongoid?
   end
 end

@@ -1,3 +1,7 @@
+## 5.2.1 (unreleased)
+
+- Fixed connection leasing for Active Record 7.2+
+
 ## 5.2.0 (2024-09-04)
 
 - Improved error handling for invalid API parameters
