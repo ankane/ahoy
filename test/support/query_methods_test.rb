@@ -160,13 +160,13 @@ module QueryMethodsTest
   def test_connection_leasing
     skip if mongoid?
 
-    ActiveRecord::Base.connection_handler.clear_active_connections!
-    assert_nil ActiveRecord::Base.connection_pool.active_connection?
-    ActiveRecord::Base.connection_pool.with_connection do
+    model.connection_handler.clear_active_connections!
+    assert_nil model.connection_pool.active_connection?
+    model.connection_pool.with_connection do
       count_events(value: 1)
       group_events
     end
-    assert_nil ActiveRecord::Base.connection_pool.active_connection?
+    assert_nil model.connection_pool.active_connection?
   end
 
   def create_event(properties)
