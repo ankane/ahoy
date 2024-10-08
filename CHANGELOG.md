@@ -1,4 +1,4 @@
-## 5.2.1 (unreleased)
+## 5.2.1 (2024-10-07)
 
 - Fixed connection leasing for Active Record 7.2+
 
