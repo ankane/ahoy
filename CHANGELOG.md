@@ -362,3 +362,19 @@ Breaking changes
 ## 0.1.0 (2014-03-19)
 
 - First major release
+
+## 0.0.4 (2014-03-01)
+
+- Added UTM parameters
+
+## 0.0.3 (2014-02-26)
+
+- Renamed `ahoy_visit` method to `current_visit`
+
+## 0.0.2 (2014-02-26)
+
+- Added `ahoy_visit` method to controllers
+
+## 0.0.1 (2014-02-26)
+
+- First release
