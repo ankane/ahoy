@@ -8,6 +8,8 @@ jobs:
         include:
           - ruby: 3.3
             gemfile: Gemfile
+          - ruby: 3.3
+            gemfile: gemfiles/rails72.gemfile
           - ruby: 3.2
             gemfile: gemfiles/rails71.gemfile
           - ruby: 3.1
@@ -45,3 +47,4 @@ jobs:
 
       - uses: ankane/setup-mongodb@v1
       - run: ADAPTER=mongoid bundle exec rake test
+      - if: ${{ matrix.gemfile != 'Gemfile' }}

@@ -3,6 +3,7 @@ require "combustion"
 Bundler.require(:default)
 require "minitest/autorun"
 require "minitest/pride"
+require "ostruct"
 
 ENV["ADAPTER"] ||= "sqlite3"
 puts "Using #{ENV["ADAPTER"]}"
