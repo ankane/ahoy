@@ -58,13 +58,15 @@ And add to `app/javascript/application.js`:
 import "ahoy"
 ```
 
-For Webpacker (Rails 6 default), run:
+For Bun, esbuild, rollup.js, or Webpack, run:
 
 ```sh
+bun add ahoy.js
+# or
 yarn add ahoy.js
 ```
 
-And add to `app/javascript/packs/application.js`:
+And add to `app/javascript/application.js`:
 
 ```javascript
 import ahoy from "ahoy.js"
