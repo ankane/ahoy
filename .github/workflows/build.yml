@@ -47,4 +47,4 @@ jobs:
 
       - uses: ankane/setup-mongodb@v1
       - run: ADAPTER=mongoid bundle exec rake test
-      - if: ${{ matrix.gemfile != 'Gemfile' }}
+        if: ${{ matrix.gemfile != 'Gemfile' }}
