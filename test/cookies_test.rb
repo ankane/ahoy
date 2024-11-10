@@ -18,15 +18,9 @@ class CookiesTest < ActionDispatch::IntegrationTest
       get products_url
       assert_empty response.cookies
       visit = Ahoy::Visit.last
-      # deterministic tokens
-      # difference due to Rails 7 bugfix
-      # https://github.com/rails/rails/issues/37681
-      # https://github.com/rails/rails/pull/37682
-      if Rails::VERSION::MAJOR >= 7
-        assert_equal "93dc5253-3a3b-561d-8d53-fb5476f02eca", visit.visitor_token
-      else
-        assert_equal "64dcde66-9659-5473-897e-5abd59f8b89f", visit.visitor_token
-      end
+
+      # deterministic token
+      assert_equal "93dc5253-3a3b-561d-8d53-fb5476f02eca", visit.visitor_token
 
       get products_url
       assert_equal 1, Ahoy::Visit.count
