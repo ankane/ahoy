@@ -46,7 +46,7 @@ And restart your web server.
 
 ### JavaScript
 
-For Importmap (Rails 7 default), add to `config/importmap.rb`:
+For Importmap (Rails 7+ default), add to `config/importmap.rb`:
 
 ```ruby
 pin "ahoy", to: "ahoy.js"
