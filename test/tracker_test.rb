@@ -26,7 +26,7 @@ class TrackerTest < Minitest::Test
   end
 
   def test_user_option
-    user = Struct.new(:id, keyword_init: true).new(id: 123)
+    user = Struct.new(:id).new(123)
     ahoy = Ahoy::Tracker.new(user: user)
     assert_equal ahoy.user.id, user.id
 
@@ -37,7 +37,7 @@ class TrackerTest < Minitest::Test
   end
 
   def test_user_option_in_store
-    user = Struct.new(:id, :user_prop, keyword_init: true).new(id: 123, user_prop: 42)
+    user = Struct.new(:id, :user_prop).new(123, 42)
     ahoy = Ahoy::Tracker.new(user: user)
     ahoy.instance_variable_get(:@store).define_singleton_method(:track_event) do |data|
       data[:properties][:user_prop] = user.try(:user_prop)
