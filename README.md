@@ -765,7 +765,7 @@ Send a `POST` request to `/ahoy/events` with `Content-Type: application/json` an
       "properties": {
         "item_id": 123
       },
-      "time": "2018-01-01T00:00:00-07:00"
+      "time": "2025-01-01T00:00:00-07:00"
     }
   ]
 }
