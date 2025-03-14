@@ -26,5 +26,12 @@ module Ahoy
         alias_method :call, :call_with_quiet_ahoy
       end
     end
+
+    # for importmap
+    initializer "ahoy.importmap" do |app|
+      if app.config.respond_to?(:assets) && defined?(Importmap) && defined?(Sprockets)
+        app.config.assets.precompile << "ahoy.js"
+      end
+    end
   end
 end

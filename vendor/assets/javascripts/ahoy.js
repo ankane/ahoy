@@ -1,18 +1,15 @@
-/*
- * Ahoy.js
+/*!
+ * Ahoy.js v0.4.4
  * Simple, powerful JavaScript analytics
  * https://github.com/ankane/ahoy.js
- * v0.3.6
  * MIT License
  */
 
 (function (global, factory) {
   typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory() :
   typeof define === 'function' && define.amd ? define(factory) :
-  (global = global || self, global.ahoy = factory());
-}(this, (function () { 'use strict';
-
-  var n=function(n){return void 0===n},e=function(n){return Array.isArray(n)},t=function(n){return n&&"number"==typeof n.size&&"string"==typeof n.type&&"function"==typeof n.slice},s=function(o,i,r,f){return (i=i||{}).indices=!n(i.indices)&&i.indices,i.nullsAsUndefineds=!n(i.nullsAsUndefineds)&&i.nullsAsUndefineds,i.booleansAsIntegers=!n(i.booleansAsIntegers)&&i.booleansAsIntegers,r=r||new FormData,n(o)?r:(null===o?i.nullsAsUndefineds||r.append(f,""):"boolean"!=typeof o?e(o)?o.length&&o.forEach(function(n,e){s(n,i,r,f+"["+(i.indices?e:"")+"]");}):o instanceof Date?r.append(f,o.toISOString()):o!==Object(o)||function(n){return t(n)&&"string"==typeof n.name&&("object"==typeof n.lastModifiedDate||"number"==typeof n.lastModified)}(o)||t(o)?r.append(f,o):Object.keys(o).forEach(function(n){var t=o[n];if(e(t)){ for(;n.length>2&&n.lastIndexOf("[]")===n.length-2;){ n=n.substring(0,n.length-2); } }s(t,i,r,f?f+"["+n+"]":n);}):r.append(f,i.booleansAsIntegers?o?1:0:o),r)};
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.ahoy = factory());
+})(this, (function () { 'use strict';
 
   // https://www.quirksmode.org/js/cookies.html
 
@@ -28,7 +25,7 @@
       if (domain) {
         cookieDomain = "; domain=" + domain;
       }
-      document.cookie = name + "=" + escape(value) + expires + cookieDomain + "; path=/";
+      document.cookie = name + "=" + escape(value) + expires + cookieDomain + "; path=/; samesite=lax";
     },
     get: function (name) {
       var i, c;
@@ -69,7 +66,7 @@
 
   ahoy.configure = function (options) {
     for (var key in options) {
-      if (options.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(options, key)) {
         config[key] = options[key];
       }
     }
@@ -99,6 +96,16 @@
 
   function canTrackNow() {
     return (config.useBeacon || config.trackNow) && isEmpty(config.headers) && canStringify && typeof(window.navigator.sendBeacon) !== "undefined" && !config.withCredentials;
+  }
+
+  function serialize(object) {
+    var data = new FormData();
+    for (var key in object) {
+      if (Object.prototype.hasOwnProperty.call(object, key)) {
+        data.append(key, object[key]);
+      }
+    }
+    return data;
   }
 
   // cookies
@@ -146,17 +153,26 @@
       element.webkitMatchesSelector;
 
     if (matches) {
-      return matches.apply(element, [selector]);
+      if (matches.apply(element, [selector])) {
+        return element;
+      } else if (element.parentElement) {
+        return matchesSelector(element.parentElement, selector);
+      }
+      return null;
     } else {
       log("Unable to match");
-      return false;
+      return null;
     }
   }
 
   function onEvent(eventName, selector, callback) {
     document.addEventListener(eventName, function (e) {
-      if (matchesSelector(e.target, selector)) {
-        callback(e);
+      var matchedElement = matchesSelector(e.target, selector);
+      if (matchedElement) {
+        var skip = getClosest(matchedElement, "data-ahoy-skip");
+        if (skip !== null && skip !== "false") { return; }
+
+        callback.call(matchedElement, e);
       }
     });
   }
@@ -172,8 +188,13 @@
 
   // https://stackoverflow.com/a/2117523/1177228
   function generateId() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-      var r = Math.random()*16|0, v = c == 'x' ? r : (r&0x3|0x8);
+    if (window.crypto && window.crypto.randomUUID) {
+      return window.crypto.randomUUID();
+    }
+
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+      var r = Math.random() * 16 | 0;
+      var v = c === 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
     });
   }
@@ -223,11 +244,11 @@
         xhr.withCredentials = config.withCredentials;
         xhr.setRequestHeader("Content-Type", "application/json");
         for (var header in config.headers) {
-          if (config.headers.hasOwnProperty(header)) {
+          if (Object.prototype.hasOwnProperty.call(config.headers, header)) {
             xhr.setRequestHeader(header, config.headers[header]);
           }
         }
-        xhr.onload = function() {
+        xhr.onload = function () {
           if (xhr.status === 200) {
             success();
           }
@@ -252,11 +273,11 @@
   }
 
   function trackEvent(event) {
-    ahoy.ready( function () {
-      sendRequest(eventsUrl(), eventData(event), function() {
+    ahoy.ready(function () {
+      sendRequest(eventsUrl(), eventData(event), function () {
         // remove from queue
         for (var i = 0; i < eventQueue.length; i++) {
-          if (eventQueue[i].id == event.id) {
+          if (eventQueue[i].id === event.id) {
             eventQueue.splice(i, 1);
             break;
           }
@@ -267,7 +288,7 @@
   }
 
   function trackEventNow(event) {
-    ahoy.ready( function () {
+    ahoy.ready(function () {
       var data = eventData(event);
       var param = csrfParam();
       var token = csrfToken();
@@ -275,7 +296,7 @@
       // stringify so we keep the type
       data.events_json = JSON.stringify(data.events);
       delete data.events;
-      window.navigator.sendBeacon(eventsUrl(), s(data));
+      window.navigator.sendBeacon(eventsUrl(), serialize(data));
     });
   }
 
@@ -289,7 +310,7 @@
 
   function cleanObject(obj) {
     for (var key in obj) {
-      if (obj.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
         if (obj[key] === null) {
           delete obj[key];
         }
@@ -298,21 +319,20 @@
     return obj;
   }
 
-  function eventProperties(e) {
-    var target = e.target;
+  function eventProperties() {
     return cleanObject({
-      tag: target.tagName.toLowerCase(),
-      id: presence(target.id),
-      "class": presence(target.className),
+      tag: this.tagName.toLowerCase(),
+      id: presence(this.id),
+      "class": presence(this.className),
       page: page(),
-      section: getClosestSection(target)
+      section: getClosest(this, "data-section")
     });
   }
 
-  function getClosestSection(element) {
-    for ( ; element && element !== document; element = element.parentNode) {
-      if (element.hasAttribute('data-section')) {
-        return element.getAttribute('data-section');
+  function getClosest(element, attribute) {
+    for (; element && element !== document; element = element.parentNode) {
+      if (element.hasAttribute(attribute)) {
+        return element.getAttribute(attribute);
       }
     }
 
@@ -364,7 +384,7 @@
         }
 
         for (var key in config.visitParams) {
-          if (config.visitParams.hasOwnProperty(key)) {
+          if (Object.prototype.hasOwnProperty.call(config.visitParams, key)) {
             data[key] = config.visitParams[key];
           }
         }
@@ -418,12 +438,12 @@
       js: true
     };
 
-    ahoy.ready( function () {
+    ahoy.ready(function () {
       if (config.cookies && !ahoy.getVisitId()) {
         createVisit();
       }
 
-      ahoy.ready( function () {
+      ahoy.ready(function () {
         log(event);
 
         event.visit_token = ahoy.getVisitId();
@@ -436,7 +456,7 @@
           saveEventQueue();
 
           // wait in case navigating to reduce duplicate events
-          setTimeout( function () {
+          setTimeout(function () {
             trackEvent(event);
           }, 1000);
         }
@@ -454,8 +474,8 @@
     };
 
     if (additionalProperties) {
-      for(var propName in additionalProperties) {
-        if (additionalProperties.hasOwnProperty(propName)) {
+      for (var propName in additionalProperties) {
+        if (Object.prototype.hasOwnProperty.call(additionalProperties, propName)) {
           properties[propName] = additionalProperties[propName];
         }
       }
@@ -463,35 +483,37 @@
     ahoy.track("$view", properties);
   };
 
-  ahoy.trackClicks = function () {
-    onEvent("click", "a, button, input[type=submit]", function (e) {
-      var target = e.target;
-      var properties = eventProperties(e);
-      properties.text = properties.tag == "input" ? target.value : (target.textContent || target.innerText || target.innerHTML).replace(/[\s\r\n]+/g, " ").trim();
-      properties.href = target.href;
+  ahoy.trackClicks = function (selector) {
+    if (selector === undefined) {
+      throw new Error("Missing selector");
+    }
+    onEvent("click", selector, function (e) {
+      var properties = eventProperties.call(this, e);
+      properties.text = properties.tag === "input" ? this.value : (this.textContent || this.innerText || this.innerHTML).replace(/[\s\r\n]+/g, " ").trim();
+      properties.href = this.href;
       ahoy.track("$click", properties);
     });
   };
 
-  ahoy.trackSubmits = function () {
-    onEvent("submit", "form", function (e) {
-      var properties = eventProperties(e);
+  ahoy.trackSubmits = function (selector) {
+    if (selector === undefined) {
+      throw new Error("Missing selector");
+    }
+    onEvent("submit", selector, function (e) {
+      var properties = eventProperties.call(this, e);
       ahoy.track("$submit", properties);
     });
   };
 
-  ahoy.trackChanges = function () {
-    onEvent("change", "input, textarea, select", function (e) {
-      var properties = eventProperties(e);
+  ahoy.trackChanges = function (selector) {
+    log("trackChanges is deprecated and will be removed in 0.5.0");
+    if (selector === undefined) {
+      throw new Error("Missing selector");
+    }
+    onEvent("change", selector, function (e) {
+      var properties = eventProperties.call(this, e);
       ahoy.track("$change", properties);
     });
-  };
-
-  ahoy.trackAll = function() {
-    ahoy.trackView();
-    ahoy.trackClicks();
-    ahoy.trackSubmits();
-    ahoy.trackChanges();
   };
 
   // push events from queue
@@ -511,7 +533,7 @@
     ahoy.start = function () {};
   };
 
-  documentReady(function() {
+  documentReady(function () {
     if (config.startOnReady) {
       ahoy.start();
     }
@@ -519,4 +541,4 @@
 
   return ahoy;
 
-})));
+}));

@@ -5,9 +5,8 @@ module Ahoy
         base.helper_method :current_visit
         base.helper_method :ahoy
       end
-      base.before_action :set_ahoy_cookies, unless: -> { Ahoy.api_only }
       base.before_action :track_ahoy_visit, unless: -> { Ahoy.api_only }
-      base.around_action :set_ahoy_request_store
+      base.around_action :set_ahoy_request_store, unless: -> { Ahoy.api_only }
     end
 
     def ahoy
@@ -19,7 +18,7 @@ module Ahoy
     end
 
     def set_ahoy_cookies
-      if Ahoy.cookies
+      if Ahoy.cookies?
         ahoy.set_visitor_cookie
         ahoy.set_visit_cookie
       else
@@ -31,20 +30,26 @@ module Ahoy
     def track_ahoy_visit
       defer = Ahoy.server_side_visits != true
 
-      if defer && !Ahoy.cookies
+      if defer && !Ahoy.cookies?
         # avoid calling new_visit?, which triggers a database call
+      elsif !Ahoy.cookies? && ahoy.exclude?
+        # avoid calling new_visit?, which triggers a database call
+        # may or may not be a new visit
+        Ahoy.log("Request excluded")
       elsif ahoy.new_visit?
         ahoy.track_visit(defer: defer)
       end
+
+      set_ahoy_cookies
     end
 
     def set_ahoy_request_store
-      previous_value = Thread.current[:ahoy]
+      previous_value = Ahoy.instance
       begin
-        Thread.current[:ahoy] = ahoy
+        Ahoy.instance = ahoy
         yield
       ensure
-        Thread.current[:ahoy] = previous_value
+        Ahoy.instance = previous_value
       end
     end
   end

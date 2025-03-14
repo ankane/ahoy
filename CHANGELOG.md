@@ -1,3 +1,93 @@
+## 5.3.0 (2025-02-01)
+
+- Dropped support for Ruby < 3.1 and Rails < 7
+- Dropped support for Mongoid < 8
+
+## 5.2.1 (2024-10-07)
+
+- Fixed connection leasing for Active Record 7.2+
+
+## 5.2.0 (2024-09-04)
+
+- Improved error handling for invalid API parameters
+
+## 5.1.0 (2024-03-26)
+
+- Added support for Trilogy
+- Updated Ahoy.js to 0.4.4
+
+## 5.0.2 (2023-10-05)
+
+- Excluded visits from Rails health check
+
+## 5.0.1 (2023-10-01)
+
+- Fixed error with geocoding with anonymity sets
+
+## 5.0.0 (2023-10-01)
+
+- Changed visits to expire with anonymity sets
+- Fixed error when Active Job is not available
+- Fixed deprecation warning with Rails 7.1
+- Dropped support for Ruby < 3 and Rails < 6.1
+- Dropped support for Mongoid 6
+
+## 4.2.1 (2023-02-23)
+
+- Updated Ahoy.js to 0.4.2
+
+## 4.2.0 (2023-02-07)
+
+- Added primary key type to generated migration
+- Updated Ahoy.js to 0.4.1
+
+## 4.1.0 (2022-06-12)
+
+- Ensure `exclude_method` is only called once per request
+- Fixed error with Mongoid when `Mongoid.raise_not_found_error` is `true`
+- Fixed association for Mongoid
+
+## 4.0.3 (2022-01-15)
+
+- Support for `importmap-rails` is no longer experimental
+- Fixed asset precompilation error with `importmap-rails`
+
+## 4.0.2 (2021-11-06)
+
+- Added experimental support for `importmap-rails`
+
+## 4.0.1 (2021-08-18)
+
+- Added support for `where_event`, `where_props`, and `where_group` for SQLite
+- Fixed results with `where_event` for MySQL, MariaDB, and Postgres `hstore`
+- Fixed results with `where_props` and `where_group` when used with other scopes for MySQL, MariaDB, and Postgres `hstore`
+
+## 4.0.0 (2021-08-14)
+
+- Disabled geocoding by default (this was already the case for new installations with 3.2.0+)
+- Made the `geocoder` gem an optional dependency
+- Updated Ahoy.js to 0.4.0
+- Updated API to return 400 status code when missing required parameters
+- Dropped support for Ruby < 2.6 and Rails < 5.2
+
+## 3.3.0 (2021-08-13)
+
+- Added `country_code` to geocoding
+- Updated Ahoy.js to 0.3.9
+- Fixed install generator for MariaDB
+
+## 3.2.0 (2021-03-01)
+
+- Disabled geocoding by default for new installations
+- Fixed deprecation warning with Active Record 6.1
+
+## 3.1.0 (2020-12-04)
+
+- Added `instance` method
+- Added `request` argument to `user_method`
+- Updated Ahoy.js to 0.3.8
+- Removed `exclude_method` call when geocoding
+
 ## 3.0.5 (2020-09-09)
 
 - Added `group_prop` method
@@ -277,3 +367,19 @@ Breaking changes
 ## 0.1.0 (2014-03-19)
 
 - First major release
+
+## 0.0.4 (2014-03-01)
+
+- Added UTM parameters
+
+## 0.0.3 (2014-02-26)
+
+- Renamed `ahoy_visit` method to `current_visit`
+
+## 0.0.2 (2014-02-26)
+
+- Added `ahoy_visit` method to controllers
+
+## 0.0.1 (2014-02-26)
+
+- First release

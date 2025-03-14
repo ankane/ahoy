@@ -2,20 +2,20 @@
 
 :fire: Simple, powerful, first-party analytics for Rails
 
-Track visits and events in Ruby, JavaScript, and native apps. Data is stored in your database by default so you can easily combine it with other data.
+Track visits and events in Ruby, JavaScript, and native apps. Data is stored in your database by default, and you can customize it for any data store as you grow.
 
 :postbox: Check out [Ahoy Email](https://github.com/ankane/ahoy_email) for emails and [Field Test](https://github.com/ankane/field_test) for A/B testing
 
 :tangerine: Battle-tested at [Instacart](https://www.instacart.com/opensource)
 
-[![Build Status](https://travis-ci.org/ankane/ahoy.svg?branch=master)](https://travis-ci.org/ankane/ahoy)
+[![Build Status](https://github.com/ankane/ahoy/actions/workflows/build.yml/badge.svg)](https://github.com/ankane/ahoy/actions)
 
 ## Installation
 
 Add this line to your application’s Gemfile:
 
 ```ruby
-gem 'ahoy_matey'
+gem "ahoy_matey"
 ```
 
 And run:
@@ -46,19 +46,33 @@ And restart your web server.
 
 ### JavaScript
 
-For Rails 6 / Webpacker, run:
+For Importmap (Rails 7+ default), add to `config/importmap.rb`:
+
+```ruby
+pin "ahoy", to: "ahoy.js"
+```
+
+And add to `app/javascript/application.js`:
+
+```javascript
+import "ahoy"
+```
+
+For Bun, esbuild, rollup.js, or Webpack, run:
 
 ```sh
+bun add ahoy.js
+# or
 yarn add ahoy.js
 ```
 
-And add to `app/javascript/packs/application.js`:
+And add to `app/javascript/application.js`:
 
 ```javascript
-import ahoy from "ahoy.js";
+import ahoy from "ahoy.js"
 ```
 
-For Rails 5 / Sprockets, add to `app/assets/javascripts/application.js`:
+For Sprockets, add to `app/assets/javascripts/application.js`:
 
 ```javascript
 //= require ahoy
@@ -73,6 +87,10 @@ ahoy.track("My second event", {language: "JavaScript"});
 ### Native Apps
 
 Check out [Ahoy iOS](https://github.com/namolnad/ahoy-ios) and [Ahoy Android](https://github.com/instacart/ahoy-android).
+
+### Geocoding Setup
+
+To enable geocoding, see the [Geocoding section](#geocoding).
 
 ### GDPR Compliance
 
@@ -139,12 +157,6 @@ end
 ahoy.track("Viewed book", {title: "The World is Flat"});
 ```
 
-Track events automatically with:
-
-```javascript
-ahoy.trackAll();
-```
-
 See [Ahoy.js](https://github.com/ankane/ahoy.js) for a complete list of features.
 
 #### Native Apps
@@ -185,9 +197,9 @@ Order.joins(:ahoy_visit).group("device_type").count
 Here’s what the migration to add the `ahoy_visit_id` column should look like:
 
 ```ruby
-class AddVisitIdToOrders < ActiveRecord::Migration[6.0]
+class AddAhoyVisitToOrders < ActiveRecord::Migration[8.0]
   def change
-    add_column :orders, :ahoy_visit_id, :bigint
+    add_reference :orders, :ahoy_visit
   end
 end
 ```
@@ -200,7 +212,7 @@ visitable :sign_up_visit
 
 ### Users
 
-Ahoy automatically attaches the `current_user` to the visit. With [Devise](https://github.com/plataformatec/devise), it attaches the user even if he or she signs in after the visit starts.
+Ahoy automatically attaches the `current_user` to the visit. With [Devise](https://github.com/heartcombo/devise), it attaches the user even if they sign in after the visit starts.
 
 With other authentication frameworks, add this to the end of your sign in method:
 
@@ -250,28 +262,6 @@ class ApplicationController < ActionController::Base
 end
 ```
 
-#### Knock
-
-To attach the user with [Knock](https://github.com/nsarno/knock), either include `Knock::Authenticable`in `ApplicationController`:
-
-```ruby
-class ApplicationController < ActionController::API
-  include Knock::Authenticable
-end
-```
-
-Or include it in Ahoy:
-
-```ruby
-Ahoy::BaseController.include Knock::Authenticable
-```
-
-And use:
-
-```ruby
-Ahoy.user_method = ->(controller) { controller.send(:authenticate_entity, "user") }
-```
-
 ### Exclusions
 
 Bots are excluded from tracking by default. To include them, use:
@@ -296,6 +286,14 @@ By default, a new visit is created after 4 hours of inactivity. Change this with
 Ahoy.visit_duration = 30.minutes
 ```
 
+### Visitor Duration
+
+By default, a new `visitor_token` is generated after 2 years. Change this with:
+
+```ruby
+Ahoy.visitor_duration = 30.days
+```
+
 ### Cookies
 
 To track visits across multiple subdomains, use:
@@ -310,54 +308,19 @@ Set other [cookie options](https://api.rubyonrails.org/classes/ActionDispatch/Co
 Ahoy.cookie_options = {same_site: :lax}
 ```
 
-### Geocoding
-
-Disable geocoding with:
-
-```ruby
-Ahoy.geocode = false
-```
-
-The default job queue is `:ahoy`. Change this with:
-
-```ruby
-Ahoy.job_queue = :low_priority
-```
-
-#### Geocoding Performance
-
-To avoid calls to a remote API, download the [GeoLite2 City database](https://dev.maxmind.com/geoip/geoip2/geolite2/) and configure Geocoder to use it.
-
-Add this line to your application’s Gemfile:
-
-```ruby
-gem 'maxminddb'
-```
-
-And create an initializer at `config/initializers/geocoder.rb` with:
-
-```ruby
-Geocoder.configure(
-  ip_lookup: :geoip2,
-  geoip2: {
-    file: Rails.root.join("lib", "GeoLite2-City.mmdb")
-  }
-)
-```
-
-If you use Heroku, you can use an unofficial buildpack like [this one](https://github.com/temedica/heroku-buildpack-maxmind-geolite2) to avoid including the database in your repo.
+You can also [disable cookies](#anonymity-sets--cookies)
 
 ### Token Generation
 
-Ahoy uses random UUIDs for visit and visitor tokens by default, but you can use your own generator like [Druuid](https://github.com/recurly/druuid).
+Ahoy uses random UUIDs for visit and visitor tokens by default, but you can use your own generator like [ULID](https://github.com/rafaelsales/ulid).
 
 ```ruby
-Ahoy.token_generator = -> { Druuid.gen }
+Ahoy.token_generator = -> { ULID.generate }
 ```
 
 ### Throttling
 
-You can use [Rack::Attack](https://github.com/kickstarter/rack-attack) to throttle requests to the API.
+You can use [Rack::Attack](https://github.com/rack/rack-attack) to throttle requests to the API.
 
 ```ruby
 class Rack::Attack
@@ -377,6 +340,98 @@ Exceptions are rescued so analytics do not break your app. Ahoy uses [Safely](ht
 Safely.report_exception_method = ->(e) { Rollbar.error(e) }
 ```
 
+## Geocoding
+
+Ahoy uses [Geocoder](https://github.com/alexreisner/geocoder) for geocoding. We recommend configuring [local geocoding](#local-geocoding) or [load balancer geocoding](#load-balancer-geocoding) so IP addresses are not sent to a 3rd party service. If you do use a 3rd party service and adhere to GDPR, be sure to add it to your subprocessor list. If Ahoy is configured to [mask IPs](#ip-masking), the masked IP is used (this can reduce accuracy but is better for privacy).
+
+To enable geocoding, add this line to your application’s Gemfile:
+
+```ruby
+gem "geocoder"
+```
+
+And update `config/initializers/ahoy.rb`:
+
+```ruby
+Ahoy.geocode = true
+```
+
+Geocoding is performed in a background job so it doesn’t slow down web requests. The default job queue is `:ahoy`. Change this with:
+
+```ruby
+Ahoy.job_queue = :low_priority
+```
+
+### Local Geocoding
+
+For privacy and performance, we recommend geocoding locally.
+
+For city-level geocoding, download the [GeoLite2 City database](https://dev.maxmind.com/geoip/geolite2-free-geolocation-data).
+
+Add this line to your application’s Gemfile:
+
+```ruby
+gem "maxminddb"
+```
+
+And create `config/initializers/geocoder.rb` with:
+
+```ruby
+Geocoder.configure(
+  ip_lookup: :geoip2,
+  geoip2: {
+    file: "path/to/GeoLite2-City.mmdb"
+  }
+)
+```
+
+For country-level geocoding, install the `geoip-database` package. It’s preinstalled on Heroku. For Ubuntu, use:
+
+```sh
+sudo apt-get install geoip-database
+```
+
+Add this line to your application’s Gemfile:
+
+```ruby
+gem "geoip"
+```
+
+And create `config/initializers/geocoder.rb` with:
+
+```ruby
+Geocoder.configure(
+  ip_lookup: :maxmind_local,
+  maxmind_local: {
+    file: "/usr/share/GeoIP/GeoIP.dat",
+    package: :country
+  }
+)
+```
+
+### Load Balancer Geocoding
+
+Some load balancers can add geocoding information to request headers.
+
+- [nginx](https://nginx.org/en/docs/http/ngx_http_geoip_module.html)
+- [Google Cloud](https://cloud.google.com/load-balancing/docs/custom-headers)
+- [Cloudflare](https://support.cloudflare.com/hc/en-us/articles/200168236-Configuring-Cloudflare-IP-Geolocation)
+
+Update `config/initializers/ahoy.rb` with:
+
+```ruby
+Ahoy.geocode = false
+
+class Ahoy::Store < Ahoy::DatabaseStore
+  def track_visit(data)
+    data[:country] = request.headers["<country-header>"]
+    data[:region] = request.headers["<region-header>"]
+    data[:city] = request.headers["<city-header>"]
+    super(data)
+  end
+end
+```
+
 ## GDPR Compliance
 
 Ahoy provides a number of options to help with [GDPR compliance](https://en.wikipedia.org/wiki/General_Data_Protection_Regulation).
@@ -391,7 +446,7 @@ class Ahoy::Store < Ahoy::DatabaseStore
 end
 
 Ahoy.mask_ips = true
-Ahoy.cookies = false
+Ahoy.cookies = :none
 ```
 
 This:
@@ -429,13 +484,19 @@ end
 
 ### Anonymity Sets & Cookies
 
-Ahoy can switch from cookies to [anonymity sets](https://privacypatterns.org/patterns/Anonymity-set). Instead of cookies, visitors with the same IP mask and user agent are grouped together in an anonymity set.
+Ahoy can switch from cookies to [anonymity sets](https://privacypatterns.org/patterns/Anonymity-set). Instead of cookies, visitors with the same IP mask and user agent are grouped together in an anonymity set.
 
 ```ruby
-Ahoy.cookies = false
+Ahoy.cookies = :none
 ```
 
-Previously set cookies are automatically deleted.
+Note: If Ahoy was installed before v5, [add an index](#50) before making this change.
+
+Previously set cookies are automatically deleted. If you use JavaScript tracking, also set:
+
+```javascript
+ahoy.configure({cookies: false});
+```
 
 ## Data Retention
 
@@ -574,7 +635,7 @@ end
 
 [Blazer](https://github.com/ankane/blazer) is a great tool for exploring your data.
 
-With ActiveRecord, you can do:
+With Active Record, you can do:
 
 ```ruby
 Ahoy::Visit.group(:search_keyword).count
@@ -610,7 +671,7 @@ Group by properties with:
 Ahoy::Event.group_prop(:product_id, :category).count
 ```
 
-Note: MySQL and MariaDB always return string keys (include `"null"` for `nil`) for `group_prop`.
+Note: MySQL and MariaDB always return string keys (including `"null"` for `nil`) for `group_prop`.
 
 ### Funnels
 
@@ -641,6 +702,24 @@ To forecast future visits and events, check out [Prophet](https://github.com/ank
 ```ruby
 daily_visits = Ahoy::Visit.group_by_day(:started_at).count # uses Groupdate
 Prophet.forecast(daily_visits)
+```
+
+### Anomaly Detection
+
+To detect anomalies in visits and events, check out [AnomalyDetection.rb](https://github.com/ankane/AnomalyDetection.rb).
+
+```ruby
+daily_visits = Ahoy::Visit.group_by_day(:started_at).count # uses Groupdate
+AnomalyDetection.detect(daily_visits, period: 7)
+```
+
+### Breakout Detection
+
+To detect breakouts in visits and events, check out [Breakout](https://github.com/ankane/breakout).
+
+```ruby
+daily_visits = Ahoy::Visit.group_by_day(:started_at).count # uses Groupdate
+Breakout.detect(daily_visits)
 ```
 
 ### Recommendations
@@ -686,7 +765,7 @@ Send a `POST` request to `/ahoy/events` with `Content-Type: application/json` an
       "properties": {
         "item_id": 123
       },
-      "time": "2018-01-01T00:00:00-07:00"
+      "time": "2025-01-01T00:00:00-07:00"
     }
   ]
 }
@@ -694,62 +773,29 @@ Send a `POST` request to `/ahoy/events` with `Content-Type: application/json` an
 
 ## Upgrading
 
-### 3.0
+### 5.0
 
-If you installed Ahoy before 2.1 and want to keep legacy user agent parsing and bot detection, add to your Gemfile:
+Visits now expire with anonymity sets. If using `Ahoy.cookies = false`, a new index is needed.
+
+For Active Record, create a migration with:
 
 ```ruby
-gem "browser", "~> 2.0"
-gem "user_agent_parser"
+add_index :ahoy_visits, [:visitor_token, :started_at]
 ```
 
-And add to `config/initializers/ahoy.rb`:
+For Mongoid, set:
 
 ```ruby
-Ahoy.user_agent_parser = :legacy
-```
-
-### 2.2
-
-Ahoy now ships with better bot detection if you use Device Detector. This should be more accurate but can significantly reduce the number of visits recorded. For existing installs, it’s opt-in to start. To use it, add to `config/initializers/ahoy.rb`:
-
-```ruby
-Ahoy.bot_detection_version = 2
-```
-
-### 2.1
-
-Ahoy recommends [Device Detector](https://github.com/podigee/device_detector) for user agent parsing and makes it the default for new installations. To switch, add to `config/initializers/ahoy.rb`:
-
-```ruby
-Ahoy.user_agent_parser = :device_detector
-```
-
-Backfill existing records with:
-
-```ruby
-Ahoy::Visit.find_each do |visit|
-  client = DeviceDetector.new(visit.user_agent)
-  device_type =
-    case client.device_type
-    when "smartphone"
-      "Mobile"
-    when "tv"
-      "TV"
-    else
-      client.device_type.try(:titleize)
-    end
-
-  visit.browser = client.name
-  visit.os = client.os_name
-  visit.device_type = device_type
-  visit.save(validate: false) if visit.changed?
+class Ahoy::Visit
+  index({visitor_token: 1, started_at: 1})
 end
 ```
 
-### 2.0
+Create the index before upgrading, and set:
 
-See the [upgrade guide](docs/Ahoy-2-Upgrade.md)
+```ruby
+Ahoy.cookies = :none
+```
 
 ## History
 
@@ -773,10 +819,10 @@ bundle install
 bundle exec rake test
 ```
 
-To test query methods, start PostgreSQL, MySQL, and MongoDB and use:
+To test different adapters, use:
 
 ```sh
-createdb ahoy_test
-mysqladmin create ahoy_test
-bundle exec rake test:query_methods
+ADAPTER=postgresql bundle exec rake test
+ADAPTER=mysql2 bundle exec rake test
+ADAPTER=mongoid bundle exec rake test
 ```

@@ -1,1 +1,1 @@
-require "ahoy"
+require_relative "ahoy"

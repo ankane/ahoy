@@ -44,6 +44,7 @@ ActiveRecord::Schema.define do
   end
 
   add_index :ahoy_visits, [:visit_token], unique: true
+  add_index :ahoy_visits, [:visitor_token, :started_at]
 
   create_table :ahoy_events do |t|
     t.references :visit

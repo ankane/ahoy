@@ -1,3 +1,4 @@
+require "rails/generators"
 require "rails/generators/active_record"
 
 module Ahoy
@@ -17,24 +18,45 @@ module Ahoy
       end
 
       def properties_type
-        # use connection_config instead of connection.adapter
-        # so database connection isn't needed
-        case ActiveRecord::Base.connection_config[:adapter].to_s
+        case adapter
         when /postg/i # postgres, postgis
           "jsonb"
-        when /mysql/i
+        when /mysql|trilogy/i
           "json"
         else
           "text"
         end
       end
 
-      def rails52?
-        ActiveRecord::VERSION::STRING >= "5.2"
+      # requires database connection to check for MariaDB
+      def serialize_properties?
+        properties_type == "text" || (properties_type == "json" && ActiveRecord::Base.connection.try(:mariadb?))
+      end
+
+      def serialize_options
+        ActiveRecord::VERSION::STRING.to_f >= 7.1 ? "coder: JSON" : "JSON"
+      end
+
+      # use connection_db_config instead of connection.adapter
+      # so database connection isn't needed
+      def adapter
+        ActiveRecord::Base.connection_db_config.adapter.to_s
       end
 
       def migration_version
         "[#{ActiveRecord::VERSION::MAJOR}.#{ActiveRecord::VERSION::MINOR}]"
+      end
+
+      def primary_key_type
+        ", id: :#{key_type}" if key_type
+      end
+
+      def foreign_key_type
+        ", type: :#{key_type}" if key_type
+      end
+
+      def key_type
+        Rails.configuration.generators.options.dig(:active_record, :primary_key_type)
       end
     end
   end

@@ -1,34 +1,55 @@
 require "bundler/setup"
-Bundler.require(:development)
+require "combustion"
+Bundler.require(:default)
 require "minitest/autorun"
 require "minitest/pride"
 
+ENV["ADAPTER"] ||= "sqlite3"
+puts "Using #{ENV["ADAPTER"]}"
+
 logger = ActiveSupport::Logger.new(ENV["VERBOSE"] ? STDOUT : nil)
 
+frameworks = [:action_controller, :active_job]
+
+if ENV["ADAPTER"] == "mongoid"
+  require_relative "support/mongoid"
+
+  Dir.glob("support/mongoid_models/**/*.rb", base: __dir__) do |file|
+    require_relative file
+  end
+
+  Mongoid.logger = logger
+  Mongo::Logger.logger = logger
+
+  [Ahoy::Visit, Ahoy::Event].each do |model|
+    model.collection.drop
+    model.create_indexes
+  end
+else
+  frameworks << :active_record
+end
+
 Combustion.path = "test/internal"
-Combustion.initialize! :active_record, :action_controller, :active_job do
-  if ActiveRecord::VERSION::MAJOR < 6 && config.active_record.sqlite3.respond_to?(:represent_boolean_as_integer)
-    config.active_record.sqlite3.represent_boolean_as_integer = true
+Combustion.initialize!(*frameworks) do
+  config.load_defaults Rails::VERSION::STRING.to_f
+
+  if ENV["ADAPTER"] != "mongoid"
+    config.active_record.logger = logger
   end
 
   config.action_controller.logger = logger
-  config.active_record.logger = logger
   config.active_job.logger = logger
 end
 
 Ahoy.logger = logger
 
-# run setup / migrations
-require_relative "support/mysql"
-require_relative "support/postgresql"
-require_relative "support/mongoid"
-
-# restore connection
-ActiveRecord::Base.establish_connection(:test)
-
-require_relative "support/query_methods_test"
-
 class Minitest::Test
+  def setup
+    Ahoy::Visit.delete_all
+    Ahoy::Event.delete_all
+    User.delete_all
+  end
+
   def with_options(options)
     previous_options = {}
     options.each_key do |k|

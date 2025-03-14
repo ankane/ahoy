@@ -1,3 +1,3 @@
 module Ahoy
-  VERSION = "3.0.6"
+  VERSION = "5.3.0"
 end

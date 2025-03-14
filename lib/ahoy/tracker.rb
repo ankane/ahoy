@@ -19,8 +19,6 @@ module Ahoy
     def track(name, properties = {}, options = {})
       if exclude?
         debug "Event excluded"
-      elsif missing_params?
-        debug "Missing required parameters"
       else
         data = {
           visit_token: visit_token,
@@ -41,8 +39,6 @@ module Ahoy
     def track_visit(defer: false, started_at: nil)
       if exclude?
         debug "Visit excluded"
-      elsif missing_params?
-        debug "Missing required parameters"
       else
         if defer
           set_cookie("ahoy_track", true, nil, false)
@@ -53,7 +49,7 @@ module Ahoy
             visit_token: visit_token,
             visitor_token: visitor_token,
             user_id: user.try(:id),
-            started_at: trusted_time(started_at),
+            started_at: trusted_time(started_at)
           }.merge(visit_properties).select { |_, v| v }
 
           @store.track_visit(data)
@@ -67,16 +63,12 @@ module Ahoy
     end
 
     def geocode(data)
-      if exclude?
-        debug "Geocode excluded"
-      else
-        data = {
-          visit_token: visit_token
-          }.merge(data).select { |_, v| v }
+      data = {
+        visit_token: visit_token
+      }.merge(data).select { |_, v| v }
 
-        @store.geocode(data)
-        true
-      end
+      @store.geocode(data)
+      true
     rescue => e
       report_exception(e)
     end
@@ -107,7 +99,7 @@ module Ahoy
     end
 
     def new_visit?
-      Ahoy.cookies ? !existing_visit_token : visit.nil?
+      Ahoy.cookies? ? !existing_visit_token : visit.nil?
     end
 
     def new_visitor?
@@ -153,14 +145,22 @@ module Ahoy
       delete_cookie("ahoy_track")
     end
 
+    def exclude?
+      unless defined?(@exclude)
+        @exclude = @store.exclude?
+      end
+      @exclude
+    end
+
     protected
 
     def api?
       @options[:api]
     end
 
+    # private, but used by API
     def missing_params?
-      if Ahoy.cookies && api? && Ahoy.protect_from_forgery
+      if Ahoy.cookies? && api? && Ahoy.protect_from_forgery
         !(existing_visit_token && existing_visitor_token)
       else
         false
@@ -169,7 +169,7 @@ module Ahoy
 
     def set_cookie(name, value, duration = nil, use_domain = true)
       # safety net
-      return unless Ahoy.cookies && request
+      return unless Ahoy.cookies? && request
 
       cookie = Ahoy.cookie_options.merge(value: value)
       cookie[:expires] = duration.from_now if duration
@@ -191,10 +191,6 @@ module Ahoy
       end
     end
 
-    def exclude?
-      @store.exclude?
-    end
-
     def report_exception(e)
       if defined?(ActionDispatch::RemoteIp::IpSpoofAttackError) && e.is_a?(ActionDispatch::RemoteIp::IpSpoofAttackError)
         debug "Tracking excluded due to IP spoofing"
@@ -211,7 +207,7 @@ module Ahoy
     def visit_token_helper
       @visit_token_helper ||= begin
         token = existing_visit_token
-        token ||= visit_anonymity_set unless Ahoy.cookies
+        token ||= visit&.visit_token unless Ahoy.cookies?
         token ||= generate_id unless Ahoy.api_only
         token
       end
@@ -220,7 +216,7 @@ module Ahoy
     def visitor_token_helper
       @visitor_token_helper ||= begin
         token = existing_visitor_token
-        token ||= visitor_anonymity_set unless Ahoy.cookies
+        token ||= visitor_anonymity_set unless Ahoy.cookies?
         token ||= generate_id unless Ahoy.api_only
         token
       end
@@ -229,7 +225,7 @@ module Ahoy
     def existing_visit_token
       @existing_visit_token ||= begin
         token = visit_header
-        token ||= visit_cookie if Ahoy.cookies && !(api? && Ahoy.protect_from_forgery)
+        token ||= visit_cookie if Ahoy.cookies? && !(api? && Ahoy.protect_from_forgery)
         token ||= visit_param if api?
         token
       end
@@ -238,14 +234,10 @@ module Ahoy
     def existing_visitor_token
       @existing_visitor_token ||= begin
         token = visitor_header
-        token ||= visitor_cookie if Ahoy.cookies && !(api? && Ahoy.protect_from_forgery)
+        token ||= visitor_cookie if Ahoy.cookies? && !(api? && Ahoy.protect_from_forgery)
         token ||= visitor_param if api?
         token
       end
-    end
-
-    def visit_anonymity_set
-      @visit_anonymity_set ||= Digest::UUID.uuid_v5(UUID_NAMESPACE, ["visit", Ahoy.mask_ip(request.remote_ip), request.user_agent].join("/"))
     end
 
     def visitor_anonymity_set

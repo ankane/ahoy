@@ -1,33 +1,65 @@
+# stdlib
 require "ipaddr"
 
 # dependencies
 require "active_support"
 require "active_support/core_ext"
-require "geocoder"
 require "safely/core"
 
 # modules
-require "ahoy/utils"
-require "ahoy/base_store"
-require "ahoy/controller"
-require "ahoy/database_store"
-require "ahoy/helper"
-require "ahoy/model"
-require "ahoy/query_methods"
-require "ahoy/tracker"
-require "ahoy/version"
-require "ahoy/visit_properties"
+require_relative "ahoy/utils"
+require_relative "ahoy/base_store"
+require_relative "ahoy/controller"
+require_relative "ahoy/database_store"
+require_relative "ahoy/helper"
+require_relative "ahoy/model"
+require_relative "ahoy/query_methods"
+require_relative "ahoy/tracker"
+require_relative "ahoy/version"
+require_relative "ahoy/visit_properties"
 
-require "ahoy/engine" if defined?(Rails)
+require_relative "ahoy/engine" if defined?(Rails)
 
 module Ahoy
+  # activejob optional
+  autoload :GeocodeV2Job, "ahoy/geocode_v2_job"
+
   mattr_accessor :visit_duration
   self.visit_duration = 4.hours
 
   mattr_accessor :visitor_duration
   self.visitor_duration = 2.years
 
-  mattr_accessor :cookies
+  def self.cookies=(value)
+    if value == false
+      if defined?(Mongoid::Document) && defined?(Ahoy::Visit) && Ahoy::Visit < Mongoid::Document
+        raise <<~EOS
+          This feature requires a new index in Ahoy 5. Set:
+
+            class Ahoy::Visit
+              index({visitor_token: 1, started_at: 1})
+            end
+
+          Create the index before upgrading, and set:
+
+            Ahoy.cookies = :none
+        EOS
+      else
+        raise <<~EOS
+          This feature requires a new index in Ahoy 5. Create a migration with:
+
+            add_index :ahoy_visits, [:visitor_token, :started_at]
+
+          Run it before upgrading, and set:
+
+            Ahoy.cookies = :none
+        EOS
+      end
+    end
+    @@cookies = value
+  end
+
+  mattr_reader :cookies
   self.cookies = true
 
   # TODO deprecate in favor of cookie_options
@@ -43,7 +75,7 @@ module Ahoy
   self.quiet = true
 
   mattr_accessor :geocode
-  self.geocode = true
+  self.geocode = false
 
   mattr_accessor :max_content_length
   self.max_content_length = 8192
@@ -103,6 +135,10 @@ module Ahoy
     logger.info { "[ahoy] #{message}" } if logger
   end
 
+  def self.cookies?
+    cookies && cookies != :none
+  end
+
   def self.mask_ip(ip)
     addr = IPAddr.new(ip)
     if addr.ipv4?
@@ -112,6 +148,14 @@ module Ahoy
       # set last 80 bits to zeros
       addr.mask(48).to_s
     end
+  end
+
+  def self.instance
+    Thread.current[:ahoy]
+  end
+
+  def self.instance=(value)
+    Thread.current[:ahoy] = value
   end
 end
 
@@ -127,11 +171,6 @@ ActiveSupport.on_load(:action_view) do
   include Ahoy::Helper
 end
 
-# Mongoid
-# TODO use
-# ActiveSupport.on_load(:mongoid) do
-#   Mongoid::Document::ClassMethods.include(Ahoy::Model)
-# end
-if defined?(ActiveModel)
-  ActiveModel::Callbacks.include(Ahoy::Model)
+ActiveSupport.on_load(:mongoid) do
+  Mongoid::Document::ClassMethods.include(Ahoy::Model)
 end

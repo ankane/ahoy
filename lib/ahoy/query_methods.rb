@@ -8,64 +8,40 @@ module Ahoy
       end
 
       def where_props(properties)
-        relation = self
-        if respond_to?(:columns_hash)
-          column_type = columns_hash["properties"].type
-          adapter_name = connection.adapter_name.downcase
-        else
-          adapter_name = "mongoid"
-        end
+        return all if properties.empty?
+
+        adapter_name = respond_to?(:connection_db_config) ? connection_db_config.adapter.to_s : "mongoid"
         case adapter_name
         when "mongoid"
-          relation = where(Hash[properties.map { |k, v| ["properties.#{k}", v] }])
-        when /mysql/
-          if column_type == :json
-            properties.each do |k, v|
+          where(properties.to_h { |k, v| ["properties.#{k}", v] })
+        when /mysql|trilogy/i
+          where("JSON_CONTAINS(properties, ?, '$') = 1", properties.to_json)
+        when /postg/i
+          case columns_hash["properties"].type
+          when :hstore
+            properties.inject(all) do |relation, (k, v)|
               if v.nil?
-                v = "null"
-              elsif v == true
-                v = "true"
+                relation.where("properties -> ? IS NULL", k.to_s)
+              else
+                relation.where("properties -> ? = ?", k.to_s, v.to_s)
               end
-
-              relation = relation.where("JSON_UNQUOTE(properties -> ?) = ?", "$.#{k}", v.as_json)
             end
+          when :jsonb
+            where("properties @> ?", properties.to_json)
           else
-            properties.each do |k, v|
-              # TODO cast to json instead
-              relation = relation.where("properties REGEXP ?", "[{,]#{{k.to_s => v}.to_json.sub(/\A\{/, "").sub(/\}\z/, "").gsub("+", "\\\\+")}[,}]")
-            end
+            where("properties::jsonb @> ?", properties.to_json)
           end
-        when /postgres|postgis/
-          if column_type == :jsonb
-            relation = relation.where("properties @> ?", properties.to_json)
-          elsif column_type == :json
-            properties.each do |k, v|
-              relation =
-                if v.nil?
-                  relation.where("properties ->> ? IS NULL", k.to_s)
-                else
-                  relation.where("properties ->> ? = ?", k.to_s, v.as_json.to_s)
-                end
-            end
-          elsif column_type == :hstore
-            properties.each do |k, v|
-              relation =
-                if v.nil?
-                  relation.where("properties -> ? IS NULL", k.to_s)
-                else
-                  relation.where("properties -> ? = ?", k.to_s, v.to_s)
-                end
-            end
-          else
-            properties.each do |k, v|
-              # TODO cast to jsonb instead
-              relation = relation.where("properties SIMILAR TO ?", "%[{,]#{{k.to_s => v}.to_json.sub(/\A\{/, "").sub(/\}\z/, "").gsub("+", "\\\\+")}[,}]%")
+        when /sqlite/i
+          properties.inject(all) do |relation, (k, v)|
+            if v.nil?
+              relation.where("JSON_EXTRACT(properties, ?) IS NULL", "$.#{k}")
+            else
+              relation.where("JSON_EXTRACT(properties, ?) = ?", "$.#{k}", v.as_json)
             end
           end
         else
           raise "Adapter not supported: #{adapter_name}"
         end
-        relation
       end
       alias_method :where_properties, :where_props
 
@@ -73,38 +49,31 @@ module Ahoy
         # like with group
         props.flatten!
 
-        relation = self
-        if respond_to?(:columns_hash)
-          column_type = columns_hash["properties"].type
-          adapter_name = connection.adapter_name.downcase
-        else
-          adapter_name = "mongoid"
-        end
+        relation = all
+        adapter_name = respond_to?(:connection_db_config) ? connection_db_config.adapter.to_s : "mongoid"
         case adapter_name
         when "mongoid"
           raise "Adapter not supported: #{adapter_name}"
-        when /mysql/
-          if connection.try(:mariadb?)
-            props.each do |prop|
-              quoted_prop = connection.quote("$.#{prop}")
-              relation = relation.group("JSON_UNQUOTE(JSON_EXTRACT(properties, #{quoted_prop}))")
-            end
-          else
-            column = column_type == :json ? "properties" : "CAST(properties AS JSON)"
-            props.each do |prop|
-              quoted_prop = connection.quote("$.#{prop}")
-              relation = relation.group("JSON_UNQUOTE(JSON_EXTRACT(#{column}, #{quoted_prop}))")
-            end
+        when /mysql|trilogy/i
+          props.each do |prop|
+            quoted_prop = connection_pool.with_connection { |c| c.quote("$.#{prop}") }
+            relation = relation.group("JSON_UNQUOTE(JSON_EXTRACT(properties, #{quoted_prop}))")
           end
-        when /postgres|postgis/
+        when /postg/i
           # convert to jsonb to fix
           # could not identify an equality operator for type json
           # and for text columns
+          column_type = columns_hash["properties"].type
           cast = [:jsonb, :hstore].include?(column_type) ? "" : "::jsonb"
 
           props.each do |prop|
-            quoted_prop = connection.quote(prop)
+            quoted_prop = connection_pool.with_connection { |c| c.quote(prop) }
             relation = relation.group("properties#{cast} -> #{quoted_prop}")
+          end
+        when /sqlite/i
+          props.each do |prop|
+            quoted_prop = connection_pool.with_connection { |c| c.quote("$.#{prop}") }
+            relation = relation.group("JSON_EXTRACT(properties, #{quoted_prop})")
           end
         else
           raise "Adapter not supported: #{adapter_name}"

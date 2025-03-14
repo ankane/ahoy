@@ -3,6 +3,7 @@ module Ahoy
     attr_writer :user
 
     def initialize(options)
+      @user = options[:user]
       @options = options
     end
 
@@ -24,7 +25,11 @@ module Ahoy
     def user
       @user ||= begin
         if Ahoy.user_method.respond_to?(:call)
-          Ahoy.user_method.call(controller)
+          if Ahoy.user_method.arity == 1
+            Ahoy.user_method.call(controller)
+          else
+            Ahoy.user_method.call(controller, request)
+          end
         else
           controller.send(Ahoy.user_method) if controller.respond_to?(Ahoy.user_method, true)
         end
@@ -32,7 +37,9 @@ module Ahoy
     end
 
     def exclude?
-      (!Ahoy.track_bots && bot?) || exclude_by_method?
+      (!Ahoy.track_bots && bot?) ||
+        exclude_by_method? ||
+        (defined?(Rails::HealthController) && controller.is_a?(Rails::HealthController))
     end
 
     def generate_id
