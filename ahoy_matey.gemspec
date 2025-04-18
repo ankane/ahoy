@@ -13,9 +13,9 @@ Gem::Specification.new do |spec|
   spec.files         = Dir["*.{md,txt}", "{app,config,lib,vendor}/**/*"]
   spec.require_path  = "lib"
 
-  spec.required_ruby_version = ">= 3.1"
+  spec.required_ruby_version = ">= 3.2"
 
-  spec.add_dependency "activesupport", ">= 7"
+  spec.add_dependency "activesupport", ">= 7.1"
   spec.add_dependency "device_detector", ">= 1"
   spec.add_dependency "safely_block", ">= 0.4"
 end
