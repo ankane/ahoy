@@ -148,8 +148,6 @@ class ControllerTest < ActionDispatch::IntegrationTest
   end
 
   def test_rails_health_check
-    skip if Rails::VERSION::STRING.to_f < 7.1
-
     get rails_health_check_path
     assert_equal 0, Ahoy::Visit.count
   end

@@ -1,11 +1,7 @@
 require_relative "query_methods_helper"
 
 class MysqlTextEvent < MysqlBase
-  if ActiveRecord::VERSION::STRING.to_f >= 7.1
-    serialize :properties, coder: JSON
-  else
-    serialize :properties, JSON
-  end
+  serialize :properties, coder: JSON
 end
 
 class MysqlTextTest < Minitest::Test

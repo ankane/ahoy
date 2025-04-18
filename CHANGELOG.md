@@ -1,3 +1,7 @@
+## 5.4.0 (unreleased)
+
+- Dropped support for Ruby < 3.2 and Rails < 7.1
+
 ## 5.3.0 (2025-02-01)
 
 - Dropped support for Ruby < 3.1 and Rails < 7

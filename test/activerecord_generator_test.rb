@@ -24,11 +24,7 @@ class ActiverecordGeneratorTest < Rails::Generators::TestCase
     skip if ENV["ADAPTER"] != "sqlite3"
 
     run_generator
-    if ActiveRecord::VERSION::STRING.to_f >= 7.1
-      assert_file "app/models/ahoy/event.rb", /serialize :properties, coder: JSON/
-    else
-      assert_file "app/models/ahoy/event.rb", /serialize :properties, JSON/
-    end
+    assert_file "app/models/ahoy/event.rb", /serialize :properties, coder: JSON/
   end
 
   def test_primary_key_type
