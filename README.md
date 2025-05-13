@@ -771,32 +771,6 @@ Send a `POST` request to `/ahoy/events` with `Content-Type: application/json` an
 }
 ```
 
-## Upgrading
-
-### 5.0
-
-Visits now expire with anonymity sets. If using `Ahoy.cookies = false`, a new index is needed.
-
-For Active Record, create a migration with:
-
-```ruby
-add_index :ahoy_visits, [:visitor_token, :started_at]
-```
-
-For Mongoid, set:
-
-```ruby
-class Ahoy::Visit
-  index({visitor_token: 1, started_at: 1})
-end
-```
-
-Create the index before upgrading, and set:
-
-```ruby
-Ahoy.cookies = :none
-```
-
 ## History
 
 View the [changelog](https://github.com/ankane/ahoy/blob/master/CHANGELOG.md)
