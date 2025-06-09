@@ -490,7 +490,7 @@ Ahoy can switch from cookies to [anonymity sets](https://privacypatterns.org/pat
 Ahoy.cookies = :none
 ```
 
-Note: If Ahoy was installed before v5, [add an index](#50) before making this change.
+Note: If Ahoy was installed before v5, [add an index](https://github.com/ankane/ahoy/tree/v5.0.0?tab=readme-ov-file#50) before making this change.
 
 Previously set cookies are automatically deleted. If you use JavaScript tracking, also set:
 
