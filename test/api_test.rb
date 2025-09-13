@@ -156,7 +156,7 @@ class ApiTest < ActionDispatch::IntegrationTest
   def test_max_content_length
     with_options(max_content_length: 1) do
       post ahoy_engine.visits_url, params: {visit_token: random_token, visitor_token: random_token}
-      assert_response :payload_too_large
+      assert_response :content_too_large
       assert_equal "Payload too large\n", response.body
     end
   end

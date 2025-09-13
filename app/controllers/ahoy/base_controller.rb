@@ -36,7 +36,8 @@ module Ahoy
     def verify_request_size
       if request.content_length > Ahoy.max_content_length
         logger.info "[ahoy] Payload too large"
-        render plain: "Payload too large\n", status: :payload_too_large
+        status = Rack::VERSION.to_f >= 3.1 ? :content_too_large : :payload_too_large
+        render plain: "Payload too large\n", status: status
       end
     end
   end
