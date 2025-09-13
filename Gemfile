@@ -15,6 +15,7 @@ platform :ruby do
   gem "mysql2"
   gem "trilogy"
   gem "mongoid"
+  gem "ostruct" # for mongoid
 end
 
 platform :jruby do
