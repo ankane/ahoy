@@ -1,3 +1,7 @@
+## 5.4.1 (unreleased)
+
+- Fixed deprecation warning with Rack 3.1+
+
 ## 5.4.0 (2025-05-04)
 
 - Dropped support for Ruby < 3.2 and Rails < 7.1
