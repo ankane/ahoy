@@ -43,7 +43,7 @@ class CookiesTest < ActionDispatch::IntegrationTest
   def test_cookie_options
     with_options(cookie_options: {same_site: :lax}) do
       get products_url
-      assert_match /samesite=lax/i, set_cookie_header
+      assert_match(/samesite=lax/i, set_cookie_header)
     end
   end
 
@@ -52,7 +52,7 @@ class CookiesTest < ActionDispatch::IntegrationTest
       get products_url
       # leading dot removed in Rails 7.1
       # https://github.com/rails/rails/pull/48036
-      assert_match /domain=.?example\.com/, set_cookie_header
+      assert_match(/domain=.?example\.com/, set_cookie_header)
     end
   end
 
