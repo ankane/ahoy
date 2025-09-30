@@ -1,4 +1,4 @@
-## 5.4.1 (unreleased)
+## 5.4.1 (2025-09-30)
 
 - Fixed deprecation warning with Rack 3.1+
 
