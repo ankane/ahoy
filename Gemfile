@@ -2,9 +2,9 @@ source "https://rubygems.org"
 
 gemspec
 
-gem "rails", "~> 8.0.0"
 gem "rake"
 gem "minitest"
+gem "rails", "~> 8.0.0"
 gem "combustion"
 gem "browser", "~> 2.0"
 gem "user_agent_parser"

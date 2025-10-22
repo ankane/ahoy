@@ -2,9 +2,9 @@ source "https://rubygems.org"
 
 gemspec path: ".."
 
-gem "rails", "~> 7.2.0"
 gem "rake"
 gem "minitest"
+gem "rails", "~> 7.2.0"
 gem "combustion"
 gem "sqlite3"
 gem "pg"
