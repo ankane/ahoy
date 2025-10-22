@@ -4,7 +4,7 @@ gemspec
 
 gem "rake"
 gem "minitest"
-gem "rails", "~> 8.0.0"
+gem "rails", "~> 8.1.0"
 gem "combustion"
 gem "browser", "~> 2.0"
 gem "user_agent_parser"
@@ -14,7 +14,7 @@ platform :ruby do
   gem "pg"
   gem "mysql2"
   gem "trilogy"
-  gem "mongoid"
+  # gem "mongoid"
   gem "ostruct" # for mongoid
 end
 
