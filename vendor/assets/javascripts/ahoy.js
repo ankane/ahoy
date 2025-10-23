@@ -18,6 +18,7 @@
     set: function (name, value, ttl, domain) {
       var expires = "";
       var cookieDomain = "";
+      var path = "; path=/";
       if (ttl) {
         var date = new Date();
         date.setTime(date.getTime() + (ttl * 60 * 1000));
@@ -26,7 +27,10 @@
       if (domain) {
         cookieDomain = "; domain=" + domain;
       }
-      document.cookie = name + "=" + escape(value) + expires + cookieDomain + "; path=/";
+      if (name === "ahoy_events") {
+        path = "; path=/ahoy";
+      }
+      document.cookie = name + "=" + escape(value) + expires + cookieDomain + path;
     },
     get: function (name) {
       var i, c;
