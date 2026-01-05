@@ -53,7 +53,7 @@ class GeocodeTest < ActionDispatch::IntegrationTest
         get products_url
       end
       visit = Ahoy::Visit.last
-      Geocoder.stub(:search, []) do
+      stub_method(Geocoder, :search, []) do
         perform_enqueued_jobs
       end
       visit.reload

@@ -65,4 +65,16 @@ class Minitest::Test
       end
     end
   end
+
+  def stub_method(cls, method, code)
+    original_code = cls.method(method)
+    begin
+      cls.singleton_class.undef_method(method)
+      cls.define_singleton_method(method, code.respond_to?(:call) ? code : ->(*) { code })
+      yield
+    ensure
+      cls.singleton_class.undef_method(method) if cls.singleton_class.method_defined?(method)
+      cls.define_singleton_method(method, original_code)
+    end
+  end
 end

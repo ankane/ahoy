@@ -28,7 +28,7 @@ class ActiverecordGeneratorTest < Rails::Generators::TestCase
   end
 
   def test_primary_key_type
-    Rails.configuration.generators.stub(:options, {active_record: {primary_key_type: :uuid}}) do
+    stub_method(Rails.configuration.generators, :options, {active_record: {primary_key_type: :uuid}}) do
       run_generator
     end
     assert_migration "db/migrate/create_ahoy_visits_and_events.rb", /id: :uuid/
