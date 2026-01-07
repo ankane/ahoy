@@ -19,6 +19,7 @@ module Ahoy
         event.time = visit.started_at if event.time < visit.started_at
         begin
           event.save!
+          event
         rescue => e
           raise e unless unique_exception?(e)
         end

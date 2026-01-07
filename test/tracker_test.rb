@@ -36,6 +36,12 @@ class TrackerTest < Minitest::Test
     assert_equal user.id, event.user_id
   end
 
+  def test_track_return_value
+    ahoy = Ahoy::Tracker.new
+    event = ahoy.track("Some event", some_prop: true)
+    assert_instance_of Ahoy::Event, event
+  end
+
   def test_user_option_in_store
     user = Struct.new(:id, :user_prop).new(123, 42)
     ahoy = Ahoy::Tracker.new(user: user)

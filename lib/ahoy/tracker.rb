@@ -31,7 +31,6 @@ module Ahoy
 
         @store.track_event(data)
       end
-      true
     rescue => e
       report_exception(e)
     end
