@@ -1,3 +1,7 @@
+## 5.4.2 (unreleased)
+
+- Updated Ahoy.js to 0.4.5
+
 ## 5.4.1 (2025-09-30)
 
 - Fixed deprecation warning with Rack 3.1+
