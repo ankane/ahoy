@@ -181,7 +181,7 @@ module Ahoy
 
     def delete_cookie(name, use_domain = true)
       if request && request.cookie_jar[name]
-        options = {}
+        options = Ahoy.cookie_options.slice(:path)
         if use_domain
           domain = Ahoy.cookie_options[:domain] || Ahoy.cookie_domain
           options[:domain] = domain if domain
