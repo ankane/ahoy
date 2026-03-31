@@ -1,4 +1,4 @@
-## 5.4.2 (unreleased)
+## 5.4.2 (2026-03-31)
 
 - Fixed cookie deletion with `cookie_domain` and `cookie_options` options
 - Updated Ahoy.js to 0.4.5
