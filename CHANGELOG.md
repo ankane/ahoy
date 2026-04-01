@@ -1,3 +1,7 @@
+## 5.5.0 (unreleased)
+
+- Dropped support for Ruby < 3.3 and Rails < 7.2
+
 ## 5.4.2 (2026-03-31)
 
 - Fixed cookie deletion with `cookie_domain` and `cookie_options` options
