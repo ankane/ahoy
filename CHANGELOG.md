@@ -1,4 +1,4 @@
-## 5.5.0 (unreleased)
+## 5.5.0 (2026-04-08)
 
 - Fixed error with `Ahoy::Tracker` outside of requests
 - Dropped support for Ruby < 3.3 and Rails < 7.2
