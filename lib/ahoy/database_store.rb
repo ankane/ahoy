@@ -1,7 +1,9 @@
 module Ahoy
   class DatabaseStore < BaseStore
     def track_visit(data)
-      @visit = visit_model.create!(slice_data(visit_model, data))
+      visit = visit_model.new(slice_data(visit_model, data))
+      save_record!(visit)
+      @visit = visit
     rescue => e
       raise e unless unique_exception?(e)
 
@@ -18,7 +20,7 @@ module Ahoy
         event.visit = visit
         event.time = visit.started_at if event.time < visit.started_at
         begin
-          event.save!
+          save_record!(event)
         rescue => e
           raise e unless unique_exception?(e)
         end
@@ -30,7 +32,7 @@ module Ahoy
     def geocode(data)
       visit_token = data.delete(:visit_token)
       data = slice_data(visit_model, data)
-      if defined?(Mongoid::Document) && visit_model < Mongoid::Document
+      if mongoid?(visit_model)
         # upsert since visit might not be found due to eventual consistency
         visit_model.where(visit_token: visit_token).find_one_and_update({"$set": data}, {upsert: true})
       elsif visit
@@ -72,6 +74,28 @@ module Ahoy
     end
 
     protected
+
+    # Postgres aborts the entire transaction when a statement fails, so rescuing
+    # the unique violation is not enough when the caller is already inside a
+    # transaction -- the `visitable` macro creates visits from a before_create
+    # hook, and events are often tracked from model callbacks. Save inside a
+    # savepoint so the failed insert can be rolled back on its own.
+    #
+    # The exception has to escape the block for Active Record to issue
+    # ROLLBACK TO SAVEPOINT, so callers rescue outside of it.
+    def save_record!(record)
+      if mongoid?(record.class)
+        record.save!
+      else
+        record.class.transaction(requires_new: true) do
+          record.save!
+        end
+      end
+    end
+
+    def mongoid?(model)
+      defined?(Mongoid::Document) && model < Mongoid::Document
+    end
 
     def visit_model
       ::Ahoy::Visit
