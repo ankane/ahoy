@@ -13,5 +13,4 @@ gem "pg", platform: :ruby
 gem "mysql2", platform: :ruby
 gem "trilogy", platform: :ruby
 gem "mongoid", platform: :ruby
-gem "ostruct", platform: :ruby # for mongoid
 gem "sqlite3-ffi", platform: :jruby
