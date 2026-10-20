@@ -37,6 +37,26 @@ class TrackerTest < Minitest::Test
     assert_nil event.user_id
   end
 
+  # Postgres aborts the entire transaction when a statement fails, so rescuing
+  # the unique violation in Ruby is not enough to leave the transaction usable.
+  # The `visitable` macro creates visits from a before_create hook, i.e. inside
+  # the record's own transaction.
+  def test_duplicate_visit_token_does_not_abort_transaction
+    skip if ENV["ADAPTER"] == "mongoid"
+
+    visit_token = SecureRandom.uuid
+    Ahoy::Visit.create!(visit_token: visit_token, started_at: Time.current)
+
+    ActiveRecord::Base.transaction do
+      # A concurrent request already created this visit.
+      Ahoy::Tracker.new(visit_token: visit_token).track_visit
+      User.create!(name: "Test")
+    end
+
+    assert_equal 1, Ahoy::Visit.count
+    assert_equal 1, User.count
+  end
+
   def test_user_option
     user = Struct.new(:id).new(123)
     ahoy = Ahoy::Tracker.new(user: user)
