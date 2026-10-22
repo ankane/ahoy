@@ -6,7 +6,19 @@ require "minitest/autorun"
 ENV["ADAPTER"] ||= "sqlite3"
 puts "Using #{ENV["ADAPTER"]}"
 
-logger = ActiveSupport::Logger.new(ENV["VERBOSE"] ? STDOUT : nil)
+def ractorize?
+  ENV["RACTORIZE"]
+end
+
+if ractorize?
+  ActiveSupport::Ractors.unshareable_proc_action = :warn
+
+  # https://github.com/rails/rails/issues/59152
+  Ahoy::Engine.instance.env_config
+end
+
+logger_class = ractorize? ? ActiveSupport::Ractors::Logger : ActiveSupport::Logger
+logger = logger_class.new(ENV["VERBOSE"] ? STDOUT : nil)
 
 frameworks = [:action_controller, :active_job]
 
@@ -38,6 +50,21 @@ Combustion.initialize!(*frameworks) do
 
   config.action_controller.logger = logger
   config.active_job.logger = logger
+
+  if ractorize?
+    config.eager_load = true
+    config.logger = logger
+    config.consider_all_requests_local = false
+  end
+end
+
+if ractorize?
+  # https://github.com/rails/rails/issues/59168
+  Rails.application.singleton_class.class_eval do
+    def reload_routes_unless_loaded = true
+  end
+
+  Rails.application.ractorize!
 end
 
 Ahoy.logger = logger
