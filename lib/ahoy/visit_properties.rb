@@ -1,4 +1,3 @@
-require "cgi"
 require "device_detector"
 require "uri"
 
@@ -20,18 +19,18 @@ module Ahoy
     private
 
     def utm_properties
-      landing_params = {}
+      landing_params = []
       begin
         landing_uri = URI.parse(landing_page)
         # could also use Rack::Utils.parse_nested_query
-        landing_params = CGI.parse(landing_uri.query) if landing_uri
+        landing_params = URI.decode_www_form(landing_uri.query) if landing_uri
       rescue
         # do nothing
       end
 
       props = {}
       %w(utm_source utm_medium utm_term utm_content utm_campaign).each do |name|
-        props[name.to_sym] = params[name] || landing_params[name].try(:first)
+        props[name.to_sym] = params[name] || landing_params.assoc(name).try(:last)
       end
       props
     end

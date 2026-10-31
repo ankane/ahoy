@@ -178,6 +178,42 @@ class ApiTest < ActionDispatch::IntegrationTest
     end
   end
 
+  def test_visit_utm_params_from_landing_page
+    landing_page = "http://www.example.com/products?utm_source=test-source&utm_medium=test-medium&utm_term=test-term&utm_content=test-content&utm_campaign=test-campaign"
+    post ahoy_engine.visits_url, params: {visit_token: random_token, visitor_token: random_token, landing_page: landing_page}
+    assert_response :success
+
+    visit = Ahoy::Visit.last
+    assert_equal "test-source", visit.utm_source
+    assert_equal "test-medium", visit.utm_medium
+    assert_equal "test-term", visit.utm_term
+    assert_equal "test-content", visit.utm_content
+    assert_equal "test-campaign", visit.utm_campaign
+  end
+
+  def test_visit_utm_params_from_landing_page_decoding
+    landing_page = "http://www.example.com/?utm_source=first&utm_source=second&utm_medium=&utm_term=%E6%98%A5&utm_campaign=spring+sale&q=100%"
+    post ahoy_engine.visits_url, params: {visit_token: random_token, visitor_token: random_token, landing_page: landing_page}
+    assert_response :success
+
+    visit = Ahoy::Visit.last
+    assert_equal "first", visit.utm_source
+    assert_equal "", visit.utm_medium
+    assert_equal "春", visit.utm_term
+    assert_nil visit.utm_content
+    assert_equal "spring sale", visit.utm_campaign
+  end
+
+  def test_visit_utm_params_from_landing_page_invalid_utf8
+    landing_page = "http://www.example.com/?utm_source=%FF&utm_medium=test-medium"
+    post ahoy_engine.visits_url, params: {visit_token: random_token, visitor_token: random_token, landing_page: landing_page}
+    assert_response :success
+
+    visit = Ahoy::Visit.last
+    assert visit.utm_source.valid_encoding?
+    assert_equal "test-medium", visit.utm_medium
+  end
+
   def test_missing_params
     post ahoy_engine.events_url
     assert_response :bad_request
